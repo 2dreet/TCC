@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="META-INF"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="E:/Desenvolvimento/Projeto/libs/mysql-connector-java-5.1.22-bin.jar"/>
-	<classpathentry kind="lib" path="E:/Desenvolvimento/Projeto/libs/EclipseLink2.4.1/eclipselink.jar"/>
-	<classpathentry kind="lib" path="E:/Desenvolvimento/Projeto/libs/EclipseLink2.4.1/javax.persistence_2.0.4.v201112161009.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/EclipseLink">
+		<attributes>
+			<attribute name="owner.project.facets" value="jpt.jpa"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.datatools.connectivity.jdt.DRIVERLIBRARY/MySQL JDBC"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

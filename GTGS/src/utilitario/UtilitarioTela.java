@@ -1,0 +1,16 @@
+package utilitario;
+
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
+public class UtilitarioTela {
+
+	public static Dimension getTamanhoMunitor(){
+		Dimension dm = Toolkit.getDefaultToolkit().getScreenSize();
+		Double height = dm.getHeight() - (dm.getHeight() * 0.1) ;
+		Double width = dm.getWidth() - (dm.getWidth() * 0.1);
+		dm.setSize(width, height);
+		return dm;
+	}
+	
+}
