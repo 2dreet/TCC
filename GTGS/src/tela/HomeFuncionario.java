@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
+import utilitario.DropShadowBorder;
 import utilitario.UtilitarioTela;
 
 import javax.swing.border.LineBorder;
@@ -49,19 +50,25 @@ public class HomeFuncionario extends JPanel {
 		setLayout(null);
 		setBackground(new Color(102, 102, 102));
 		
+		DropShadowBorder shadow = new DropShadowBorder();
+		
 		JPanel topo = new JPanel();
 		topo.setBackground(new Color(46, 49, 56));
-		topo.setBorder(new EmptyBorder(20, 20, 20, 20));
+		topo.setBorder(shadow);
 		topo.setBounds(0, 0, getWidth(), 51);
 		add(topo);
 
+		
+        
+		
 		JPanel menuTopo = new JPanel();
 		menuTopo.setBackground(new Color(46, 49, 56));
 		menuTopo.setBorder(new MatteBorder(0, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		menuTopo.setBounds(0, 51, getWidth(), 62);
 		add(menuTopo);
 		menuTopo.setLayout(null);
-
+		
+		
 		JPanel menuIconesTopo = new JPanel();
 		menuIconesTopo.setBackground(new Color(45, 49, 56));
 		menuIconesTopo.setBounds((getWidth()/2)-229, 0, 458, 61);
@@ -109,7 +116,7 @@ public class HomeFuncionario extends JPanel {
 		menuIconesTopo.add(btDriver);
 		
 		btRelatorio = new JButton("");
-		btRelatorio.setBounds(330, 10, 42, 42);
+		btRelatorio.setBounds(330, 10, 42, 42); 
 		btRelatorio.setName("relatorio");
 		btRelatorio.setBorderPainted(false);
 		getIcon(btRelatorio, false);
