@@ -1,0 +1,30 @@
+package main;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Queue;
+import javax.naming.InitialContext;
+import javax.jms.Queue;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import javax.jms.QueueSender;
+import javax.jms.DeliveryMode;
+import javax.jms.QueueSession;
+import javax.jms.QueueConnection;
+import javax.jms.QueueConnectionFactory;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
+public class Soctec {
+
+	public static void main(String[] args) throws IOException {
+		
+	}
+	
+	public void verificaLogado() throws Throwable{
+		
+		
+	}
+
+}

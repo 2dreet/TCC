@@ -1,0 +1,22 @@
+package main;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Queue;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
+public class Soctec {
+
+	public static void main(String[] args) throws IOException {
+		
+	}
+	
+	public void verificaLogado() throws Throwable{
+		
+		
+	}
+
+}

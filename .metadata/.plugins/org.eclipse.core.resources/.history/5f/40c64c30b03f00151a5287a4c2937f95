@@ -1,0 +1,45 @@
+package main;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.logging.Logger;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
+import tela.Home;
+import dao.EntityManagerLocal;
+
+public class Main {
+
+	public static void main(String[] args) {
+		//EntityManagerLocal.openEntityManager();
+		//Home home = new Home();
+		//home.setVisible(true);
+		new Thread() {
+			@Override public void run() {
+				while(true)
+				{
+					try {
+						sleep(5000);
+					
+					Process p = Runtime.getRuntime(); 
+				      BufferedReader resultado = new BufferedReader(new InputStreamReader(p.getInputStream()));  
+				  
+				      String s;  
+				      while ((s = resultado.readLine()) != null)  
+				        System.out.println(s);  
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} 
+			}}.start();
+		
+		
+	    
+	}
+
+}

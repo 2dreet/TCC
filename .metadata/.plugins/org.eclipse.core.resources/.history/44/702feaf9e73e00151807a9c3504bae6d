@@ -1,0 +1,315 @@
+package tela;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+
+import utilitario.BordaBaixo;
+import utilitario.UtilitarioTela;
+
+import javax.swing.border.LineBorder;
+
+import java.awt.Color;
+import java.awt.image.ImageObserver;
+import java.awt.image.ImageProducer;
+
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.JButton;
+
+import java.awt.Font;
+
+import javax.swing.border.MatteBorder;
+import javax.swing.JToggleButton;
+
+import java.awt.GridLayout;
+
+import javax.swing.border.EtchedBorder;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class HomeFuncionario extends JPanel {
+
+	/**
+	 * Create the panel.
+	 * 
+	 */
+
+	private JButton btInicio;
+	private JButton btCampeonato;
+	private JButton btTime;
+	private JButton btJogador;
+	private JButton btDriver;
+	private JButton btRelatorio;
+	private JButton btPc;
+	private JLabel baner2;
+
+	public HomeFuncionario() {
+		setSize(UtilitarioTela.getTamanhoMunitorJpanel());
+		setLocation(5, 5);
+		setLayout(null);
+		setBackground(new Color(102, 102, 102));
+
+		JPanel topo = new JPanel();
+		topo.setBorder(new BordaBaixo(false,false,false,true));
+		topo.setBackground(new Color(46, 49, 56));
+		topo.setBounds(0, 0, getWidth(), 51);
+		add(topo);
+		topo.setLayout(null);
+		
+		JLabel baner = new JLabel("");
+		baner.setIcon(new ImageIcon(HomeFuncionario.class.getResource("/imagem/baner.png")));
+		baner.setBounds(100, 0, 100, 48);
+		baner.setBorder(null);
+		topo.add(baner);
+		
+		baner2 = new JLabel("");
+		baner2.setIcon(new ImageIcon(HomeFuncionario.class.getResource("/imagem/baner2.png")));
+		baner2.setBorder(null);
+		baner2.setBounds(210, 0, 600, 48);
+		topo.add(baner2);
+		
+		JPanel menuTopo = new JPanel();
+		menuTopo.setBackground(new Color(46, 49, 56));
+		menuTopo.setBorder(null);
+		menuTopo.setBounds(0, 51, getWidth(), 62);
+		add(menuTopo);
+		menuTopo.setLayout(null);
+		
+		
+		JPanel menuIconesTopo = new JPanel();
+		menuIconesTopo.setBackground(new Color(45, 49, 56));
+		menuIconesTopo.setBounds((getWidth()/2)-229, 0, 458, 61);
+		menuTopo.add(menuIconesTopo);
+		menuIconesTopo.setLayout(null);
+
+		JButton btSair = new JButton("");
+		btSair.setIcon(new ImageIcon(HomeFuncionario.class.getResource("/imagem/power.png")));
+		btSair.setName("inicio");
+		btSair.setBounds(getWidth() - 45, 3, 42, 42);
+		btSair.setBorderPainted(false);
+		btSair.setBackground(new Color(46, 49, 56));
+		btSair.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
+			}
+		});
+		topo.add(btSair);
+		
+		btInicio = new JButton("");
+		btInicio.setBounds(20, 10, 42, 42);
+		btInicio.setName("inicio");
+		getIcon(btInicio, true);
+		btInicio.setBorderPainted(false);
+		btInicio.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				zeraSelecao();
+				getIcon(btInicio, true);
+			}
+		});
+		menuIconesTopo.add(btInicio);
+		
+		btCampeonato = new JButton("");
+		btCampeonato.setBounds(82, 10, 42, 42);
+		btCampeonato.setName("campeonato");
+		btCampeonato.setBorderPainted(false);
+		getIcon(btCampeonato, false);
+		btCampeonato.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				zeraSelecao();
+				getIcon(btCampeonato, true);
+			}
+		});
+		menuIconesTopo.add(btCampeonato);
+		
+		
+		btTime = new JButton("");
+		btTime.setBounds(144, 10, 42, 42);
+		btTime.setName("time");
+		btTime.setBorderPainted(false);
+		getIcon(btTime, false);
+		btTime.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				zeraSelecao();
+				getIcon(btTime, true);
+			}
+		});
+		menuIconesTopo.add(btTime);
+		
+		
+		btJogador = new JButton("");
+		btJogador.setBounds(206, 10, 42, 42);
+		btJogador.setName("jogador");
+		btJogador.setBorderPainted(false);
+		getIcon(btJogador, false);
+		btJogador.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				zeraSelecao();
+				getIcon(btJogador, true);
+			}
+		});
+		menuIconesTopo.add(btJogador);
+		
+		
+		btDriver = new JButton("");
+		btDriver.setBounds(268, 10, 42, 42);
+		btDriver.setName("driver");
+		btDriver.setBorderPainted(false);
+		getIcon(btDriver, false);
+		btDriver.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				zeraSelecao();
+				getIcon(btDriver, true);
+			}
+		});
+		menuIconesTopo.add(btDriver);
+		
+		
+		btRelatorio = new JButton("");
+		btRelatorio.setBounds(330, 10, 42, 42);
+		btRelatorio.setName("relatorio");
+		btRelatorio.setBorderPainted(false);
+		getIcon(btRelatorio, false);
+		btRelatorio.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				zeraSelecao();
+				getIcon(btRelatorio, true);
+			}
+		});
+		menuIconesTopo.add(btRelatorio);
+		
+		
+		btPc = new JButton("");
+		btPc.setBounds(392, 10, 42, 42);
+		btPc.setName("pc");
+		btPc.setBorderPainted(false);
+		getIcon(btPc, false);
+		btPc.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				zeraSelecao();
+				getIcon(btPc, true);
+			}
+		});
+		menuIconesTopo.add(btPc);
+		
+		JPanel menuLateral = new JPanel();
+		menuLateral.setBounds(0, 120, 240, getHeight() - 160);
+		add(menuLateral);
+		menuLateral.setLayout(null);
+		
+		JPanel menuLateralTopo = new JPanel();
+		menuLateralTopo.setBounds(0, 0, 250, 30);
+		menuLateralTopo.setBorder(new Borda(false,false,false,true));
+		menuLateralTopo.setBackground(new Color(46, 49, 56));
+		menuLateral.add(menuLateralTopo);
+		
+		JPanel menuLateralBaixo = new JPanel();
+		menuLateralBaixo.setBounds(0, 30, 250, menuLateral.getHeight()-30);
+		menuLateralBaixo.setBackground(new Color(46, 49, 56));
+		menuLateral.add(menuLateralBaixo);
+		
+		
+	}
+
+	public void zeraSelecao(){
+		btInicio.setIcon(new ImageIcon(HomeFuncionario.class.getResource("/imagem/home.png")));
+		btInicio.setBackground(getBtnFundo(false));
+		
+		btCampeonato.setIcon(new ImageIcon(HomeFuncionario.class.getResource("/imagem/camp.png")));
+		btCampeonato.setBackground(getBtnFundo(false));
+		
+		btJogador.setIcon(new ImageIcon(HomeFuncionario.class.getResource("/imagem/jogador.png")));
+		btJogador.setBackground(getBtnFundo(false));
+		
+		btTime.setIcon(new ImageIcon(HomeFuncionario.class.getResource("/imagem/time.png")));
+		btTime.setBackground(getBtnFundo(false));
+		
+		btRelatorio.setIcon(new ImageIcon(HomeFuncionario.class.getResource("/imagem/relatorio.png")));
+		btRelatorio.setBackground(getBtnFundo(false));
+		
+		btDriver.setIcon(new ImageIcon(HomeFuncionario.class.getResource("/imagem/controle.png")));
+		btDriver.setBackground(getBtnFundo(false));
+		
+		btPc.setIcon(new ImageIcon(HomeFuncionario.class.getResource("/imagem/pc.png")));
+		btPc.setBackground(getBtnFundo(false));
+		repaint();
+	}
+	
+	public void getIcon(JButton botao, boolean selecionado) {
+		String url = "";
+		if (botao.getName() != null) {
+			if (botao.getName().equals("inicio")) {
+				if (selecionado) {
+					url = "/imagem/home_select.png";
+				} else {
+					url = "/imagem/home.png";
+				}
+			} else if (botao.getName().equals("campeonato")) {
+				if (selecionado) {
+					url = "/imagem/camp_select.png";
+				} else {
+					url = "/imagem/camp.png";
+				}
+			} else if (botao.getName().equals("time")) {
+				if (selecionado) {
+					url = "/imagem/time_select.png";
+				} else {
+					url = "/imagem/time.png";
+				}
+			} else if (botao.getName().equals("jogador")) {
+				if (selecionado) {
+					url = "/imagem/jogador_select.png";
+				} else {
+					url = "/imagem/jogador.png";
+				}
+			} else if (botao.getName().equals("driver")) {
+				if (selecionado) {
+					url = "/imagem/controle_select.png";
+				} else {
+					url = "/imagem/controle.png";
+				}
+			} else if (botao.getName().equals("relatorio")) {
+				if (selecionado) {
+					url = "/imagem/relatorio_select.png";
+				} else {
+					url = "/imagem/relatorio.png";
+				}
+			} else if (botao.getName().equals("pc")) {
+				if (selecionado) {
+					url = "/imagem/pc_select.png";
+				} else {
+					url = "/imagem/pc.png";
+				}
+			}
+		
+			botao.setBackground(getBtnFundo(selecionado));
+			botao.setIcon(new ImageIcon(HomeFuncionario.class.getResource(url)));
+			repaint();
+		}
+	}
+
+	public Color getBtnFundo(boolean selecionado) {
+		int r = 0, g = 0, b = 0;
+
+		if (selecionado) {
+			r = 252;
+			g = 79;
+			b = 63;
+		} else {
+			r = 46;
+			g = 49;
+			b = 56;
+		}
+
+		return new Color(r, g, b);
+	}
+}

@@ -1,0 +1,13 @@
+package main;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+
+public class Soctec {
+
+	public static void main(String[] args) throws IOException {
+		ServerSocket server = new ServerSocket(12345);
+
+	}
+
+}
