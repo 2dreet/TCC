@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Libs"/>
+	<classpathentry kind="lib" path="libs/EclipseLink/eclipselink.jar"/>
+	<classpathentry kind="lib" path="libs/EclipseLink/javax.persistence_2.1.0.v201304241213.jar"/>
+	<classpathentry kind="lib" path="libs/EclipseLink/javax.persistence.source_2.1.0.v201304241213.jar"/>
+	<classpathentry kind="lib" path="libs/EclipseLink/mysql-connector-java-5.1.22-bin.jar"/>
+	<classpathentry kind="lib" path="libs/EclipseLink/org.eclipse.persistence.jpa.modelgen_2.6.0.v20150309-bf26070.jar"/>
+	<classpathentry kind="lib" path="libs/EclipseLink/org.eclipse.persistence.jpa.modelgen.source_2.6.0.v20150309-bf26070.jar"/>
+	<classpathentry kind="lib" path="libs/EclipseLink/org.eclipse.persistence.jpars_2.6.0.v20150309-bf26070.jar"/>
+	<classpathentry kind="lib" path="libs/EclipseLink/org.eclipse.persistence.jpars.source_2.6.0.v20150309-bf26070.jar"/>
+	<classpathentry kind="lib" path="miglayout15-swing.jar" sourcepath="miglayout-src.zip"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
