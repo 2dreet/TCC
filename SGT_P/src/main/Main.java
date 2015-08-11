@@ -1,0 +1,32 @@
+package main;
+
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class Main {
+
+	public static void main(String[] args) {
+		try {
+			ServerSocket listener = new ServerSocket(2000);
+			try {
+				while (true) {
+					Socket socket = listener.accept();
+					try {
+						PrintWriter out = new PrintWriter(
+								socket.getOutputStream(), true);
+						out.println(true);
+						System.out.print(socket.getOutputStream());
+					} finally {
+						socket.close();
+					}
+				}
+			} finally {
+				listener.close();
+			}
+		} catch (Exception e) {
+			System.out.print(e);
+		}
+	}
+
+}
