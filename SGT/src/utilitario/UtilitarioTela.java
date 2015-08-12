@@ -21,4 +21,21 @@ public class UtilitarioTela {
 		return dm;
 	}
 	
+	public static Dimension getTamanhoMenuLateral(){
+		Dimension dm = Toolkit.getDefaultToolkit().getScreenSize();
+		Double height = (dm.getHeight() - (dm.getHeight() * 0.1) - (10)) - 190;
+		Double width = 240.0;
+		dm.setSize(width, height);
+		return dm;
+	}
+	
+	public static Dimension getTamanhoMeio(){
+		Dimension dm = Toolkit.getDefaultToolkit().getScreenSize();
+		Double height = (dm.getHeight() - (dm.getHeight() * 0.1) - (10)) - 160 ;
+		Double width = (dm.getWidth() - (dm.getWidth() * 0.1) - (10)) - 250;
+		dm.setSize(width, height);
+		return dm;
+	}
+	
+	
 }

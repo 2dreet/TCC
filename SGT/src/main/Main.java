@@ -17,8 +17,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		//EntityManagerLocal.openEntityManager();
-		//Home home = new Home();
-		//home.setVisible(true);
+		Home home = new Home();
+		home.setVisible(true);
 		
 		
 	}

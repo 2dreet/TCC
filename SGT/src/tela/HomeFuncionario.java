@@ -11,7 +11,8 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import utilitario.Borda;
+import utilitario.BordaClara;
+import utilitario.BordaEscura;
 import utilitario.UtilitarioTela;
 
 import javax.swing.border.LineBorder;
@@ -36,6 +37,19 @@ import javax.swing.border.EtchedBorder;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JTextField;
+import javax.swing.JTextArea;
+
+import menuLateral.MenuCampeonato;
+import menuLateral.MenuDriver;
+import menuLateral.MenuHome;
+import menuLateral.MenuJogador;
+import menuLateral.MenuPc;
+import menuLateral.MenuRelatorio;
+import menuLateral.MenuTime;
 
 public class HomeFuncionario extends JPanel {
 
@@ -52,6 +66,8 @@ public class HomeFuncionario extends JPanel {
 	private JButton btRelatorio;
 	private JButton btPc;
 	private JLabel baner2;
+	private JLabel tituloMenu;
+	private JPanel menuLateralBaixo;
 
 	public HomeFuncionario() {
 		setSize(UtilitarioTela.getTamanhoMunitorJpanel());
@@ -60,40 +76,75 @@ public class HomeFuncionario extends JPanel {
 		setBackground(new Color(102, 102, 102));
 
 		JPanel topo = new JPanel();
-		topo.setBorder(new Borda());
+		topo.setBorder(new BordaEscura());
 		topo.setBackground(new Color(46, 49, 56));
 		topo.setBounds(0, 0, getWidth(), 51);
 		add(topo);
 		topo.setLayout(null);
-		
+
 		JLabel baner = new JLabel("");
-		baner.setIcon(new ImageIcon(HomeFuncionario.class.getResource("/imagem/baner.png")));
+		baner.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/baner.png")));
 		baner.setBounds(100, 0, 100, 48);
 		baner.setBorder(null);
 		topo.add(baner);
-		
+
 		baner2 = new JLabel("");
-		baner2.setIcon(new ImageIcon(HomeFuncionario.class.getResource("/imagem/baner2.png")));
+		baner2.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/baner2.png")));
 		baner2.setBorder(null);
 		baner2.setBounds(210, 0, 600, 48);
 		topo.add(baner2);
-		
+
 		JPanel menuTopo = new JPanel();
 		menuTopo.setBackground(new Color(46, 49, 56));
 		menuTopo.setBorder(null);
 		menuTopo.setBounds(0, 51, getWidth(), 62);
 		add(menuTopo);
 		menuTopo.setLayout(null);
-		
-		
+
 		JPanel menuIconesTopo = new JPanel();
 		menuIconesTopo.setBackground(new Color(45, 49, 56));
-		menuIconesTopo.setBounds((getWidth()/2)-229, 0, 458, 61);
+		menuIconesTopo.setBounds((getWidth() / 2) - 229, 0, 458, 61);
 		menuTopo.add(menuIconesTopo);
 		menuIconesTopo.setLayout(null);
 
+		JPanel menuLateral = new JPanel();
+		menuLateral.setBounds(0, 120, 240, getHeight() - 160);
+		add(menuLateral);
+		menuLateral.setLayout(null);
+
+		JPanel menuLateralTopo = new JPanel();
+		menuLateralTopo.setBounds(0, 0, menuLateral.getWidth(), 30);
+		menuLateralTopo.setBorder(new BordaEscura());
+		menuLateralTopo.setBackground(new Color(46, 49, 56));
+		menuLateral.add(menuLateralTopo);
+		menuLateralTopo.setLayout(null);
+
+		tituloMenu = new JLabel("");
+		tituloMenu.setHorizontalAlignment(SwingConstants.CENTER);
+		tituloMenu.setBounds(0, 0, 240, 25);
+		tituloMenu.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/home.png")));
+		menuLateralTopo.add(tituloMenu);
+
+		menuLateralBaixo = new JPanel();
+		menuLateralBaixo.setBounds(0, 30, menuLateral.getWidth(),
+				menuLateral.getHeight() - 30);
+		menuLateralBaixo.setBackground(new Color(46, 49, 56));
+		menuLateral.add(menuLateralBaixo);
+
+		JPanel meio = new JPanel();
+		meio.setBackground(new Color(176, 177, 184));
+		meio.setBorder(new BevelBorder(BevelBorder.LOWERED, new Color(102, 102,
+				102), new Color(102, 102, 102)));
+		meio.setBounds(250, 120, getWidth() - 250, getHeight() - 160);
+		add(meio);
+		meio.setLayout(null);
+
 		JButton btSair = new JButton("");
-		btSair.setIcon(new ImageIcon(HomeFuncionario.class.getResource("/imagem/power.png")));
+		btSair.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/power.png")));
 		btSair.setName("inicio");
 		btSair.setBounds(getWidth() - 45, 3, 42, 42);
 		btSair.setBorderPainted(false);
@@ -104,20 +155,22 @@ public class HomeFuncionario extends JPanel {
 			}
 		});
 		topo.add(btSair);
-		
+
 		btInicio = new JButton("");
-		btInicio.setBounds(20, 10, 42, 42);
-		btInicio.setName("inicio");
-		getIcon(btInicio, true);
-		btInicio.setBorderPainted(false);
 		btInicio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btInicio, true);
+				abrirDialog(new MenuHome());
 			}
 		});
+		btInicio.setBounds(20, 10, 42, 42);
+		btInicio.setName("inicio");
+		getIcon(btInicio, true);
+		btInicio.setBorderPainted(false);
+
 		menuIconesTopo.add(btInicio);
-		
+
 		btCampeonato = new JButton("");
 		btCampeonato.setBounds(82, 10, 42, 42);
 		btCampeonato.setName("campeonato");
@@ -127,11 +180,11 @@ public class HomeFuncionario extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btCampeonato, true);
+				abrirDialog(new MenuCampeonato());
 			}
 		});
 		menuIconesTopo.add(btCampeonato);
-		
-		
+
 		btTime = new JButton("");
 		btTime.setBounds(144, 10, 42, 42);
 		btTime.setName("time");
@@ -141,11 +194,11 @@ public class HomeFuncionario extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btTime, true);
+				abrirDialog(new MenuTime());
 			}
 		});
 		menuIconesTopo.add(btTime);
-		
-		
+
 		btJogador = new JButton("");
 		btJogador.setBounds(206, 10, 42, 42);
 		btJogador.setName("jogador");
@@ -155,11 +208,11 @@ public class HomeFuncionario extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btJogador, true);
+				abrirDialog(new MenuJogador());
 			}
 		});
 		menuIconesTopo.add(btJogador);
-		
-		
+
 		btDriver = new JButton("");
 		btDriver.setBounds(268, 10, 42, 42);
 		btDriver.setName("driver");
@@ -169,11 +222,11 @@ public class HomeFuncionario extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btDriver, true);
+				abrirDialog(new MenuDriver());
 			}
 		});
 		menuIconesTopo.add(btDriver);
-		
-		
+
 		btRelatorio = new JButton("");
 		btRelatorio.setBounds(330, 10, 42, 42);
 		btRelatorio.setName("relatorio");
@@ -183,11 +236,11 @@ public class HomeFuncionario extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btRelatorio, true);
+				abrirDialog(new MenuRelatorio());
 			}
 		});
 		menuIconesTopo.add(btRelatorio);
-		
-		
+
 		btPc = new JButton("");
 		btPc.setBounds(392, 10, 42, 42);
 		btPc.setName("pc");
@@ -197,53 +250,50 @@ public class HomeFuncionario extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btPc, true);
+				abrirDialog(new MenuPc());
 			}
 		});
 		menuIconesTopo.add(btPc);
-		
-		JPanel menuLateral = new JPanel();
-		menuLateral.setBounds(0, 120, 240, getHeight() - 160);
-		add(menuLateral);
-		menuLateral.setLayout(null);
-		
-		JPanel menuLateralTopo = new JPanel();
-		menuLateralTopo.setBounds(0, 0, menuLateral.getWidth(), 30);
-		menuLateralTopo.setBorder(new Borda());
-		menuLateralTopo.setBackground(new Color(46, 49, 56));
-		menuLateral.add(menuLateralTopo);
-		
-		JPanel menuLateralBaixo = new JPanel();
-		menuLateralBaixo.setBounds(0, 30, menuLateral.getWidth(), menuLateral.getHeight()-30);
-		menuLateralBaixo.setBackground(new Color(46, 49, 56));
-		menuLateral.add(menuLateralBaixo);
-		
-		
+
 	}
 
-	public void zeraSelecao(){
-		btInicio.setIcon(new ImageIcon(HomeFuncionario.class.getResource("/imagem/home.png")));
+	public void abrirDialog(JPanel painel){
+		menuLateralBaixo.removeAll();
+		menuLateralBaixo.repaint();
+		menuLateralBaixo.add(painel);
+	}
+	
+	public void zeraSelecao() {
+		btInicio.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/home.png")));
 		btInicio.setBackground(getBtnFundo(false));
-		
-		btCampeonato.setIcon(new ImageIcon(HomeFuncionario.class.getResource("/imagem/camp.png")));
+
+		btCampeonato.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/camp.png")));
 		btCampeonato.setBackground(getBtnFundo(false));
-		
-		btJogador.setIcon(new ImageIcon(HomeFuncionario.class.getResource("/imagem/jogador.png")));
+
+		btJogador.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/jogador.png")));
 		btJogador.setBackground(getBtnFundo(false));
-		
-		btTime.setIcon(new ImageIcon(HomeFuncionario.class.getResource("/imagem/time.png")));
+
+		btTime.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/time.png")));
 		btTime.setBackground(getBtnFundo(false));
-		
-		btRelatorio.setIcon(new ImageIcon(HomeFuncionario.class.getResource("/imagem/relatorio.png")));
+
+		btRelatorio.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/relatorio.png")));
 		btRelatorio.setBackground(getBtnFundo(false));
-		
-		btDriver.setIcon(new ImageIcon(HomeFuncionario.class.getResource("/imagem/controle.png")));
+
+		btDriver.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/controle.png")));
 		btDriver.setBackground(getBtnFundo(false));
-		
-		btPc.setIcon(new ImageIcon(HomeFuncionario.class.getResource("/imagem/pc.png")));
+
+		btPc.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/pc.png")));
 		btPc.setBackground(getBtnFundo(false));
 		repaint();
 	}
-	
+
 	public void getIcon(JButton botao, boolean selecionado) {
 		String url = "";
 		if (botao.getName() != null) {
@@ -290,7 +340,7 @@ public class HomeFuncionario extends JPanel {
 					url = "/imagem/pc.png";
 				}
 			}
-		
+
 			botao.setBackground(getBtnFundo(selecionado));
 			botao.setIcon(new ImageIcon(HomeFuncionario.class.getResource(url)));
 			repaint();

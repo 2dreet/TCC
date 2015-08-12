@@ -7,8 +7,7 @@ import java.awt.Insets;
 
 import javax.swing.border.Border;
 
-public class Borda implements Border {
-
+public class BordaEscura implements Border {
 
 	public void paintBorder(Component c, Graphics g, int x, int y, int width,
 			int height) {
