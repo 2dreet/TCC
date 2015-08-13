@@ -13,7 +13,6 @@ import javax.swing.SwingConstants;
 import tela.HomeFuncionario;
 import utilitario.BordaEscura;
 import utilitario.BordaSombreada;
-import utilitario.DropShadowBorder;
 import utilitario.UtilitarioTela;
 
 import javax.swing.border.BevelBorder;
@@ -51,7 +50,7 @@ public class MenuHome extends JPanel {
 		JPanel menuLateralTopo = new JPanel();
 		menuLateralTopo.setBounds(0, 0, 240, 30);
 		menuLateralTopo.setBorder(new BordaEscura());
-		menuLateralTopo.setBackground(new Color(252, 79, 63));
+		menuLateralTopo.setBackground(new Color(232,234,239));
 		menuLateral.add(menuLateralTopo);
 		menuLateralTopo.setLayout(null);
 
@@ -83,16 +82,16 @@ public class MenuHome extends JPanel {
 		txLocalizar.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				txLocalizar.setBorder(new LineBorder(Color.blue, 2));
+				txLocalizar.setBorder(UtilitarioTela.jTextFieldComFocus());
 			}
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				txLocalizar.setBorder(new LineBorder(Color.gray, 2));
+				txLocalizar.setBorder(UtilitarioTela.jTextFieldNormal());
 			}
 		});
 		txLocalizar.setBounds(5, 5, 200, 24);
 		txLocalizar.setLayout(null);
-		txLocalizar.setBorder(new LineBorder(Color.gray, 2));
+		txLocalizar.setBorder(UtilitarioTela.jTextFieldNormal());
 		
 		jp1.add(txLocalizar);
 		
