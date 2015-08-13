@@ -19,7 +19,7 @@ public class Main {
 		//EntityManagerLocal.openEntityManager();
 		Home home = new Home();
 		home.setVisible(true);
-		
+//		
 		
 	}
 
