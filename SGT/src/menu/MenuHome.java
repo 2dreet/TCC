@@ -21,6 +21,8 @@ import javax.swing.JTextField;
 
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 public class MenuHome extends JPanel {
