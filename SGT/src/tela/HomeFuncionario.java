@@ -11,7 +11,6 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import utilitario.BordaClara;
 import utilitario.BordaEscura;
 import utilitario.UtilitarioTela;
 

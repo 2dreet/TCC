@@ -12,9 +12,13 @@ import javax.swing.SwingConstants;
 
 import tela.HomeFuncionario;
 import utilitario.BordaEscura;
+import utilitario.BordaSombreada;
+import utilitario.DropShadowBorder;
 import utilitario.UtilitarioTela;
+
 import javax.swing.border.BevelBorder;
 import javax.swing.JTextField;
+
 
 public class MenuHome extends JPanel {
 
@@ -70,8 +74,11 @@ public class MenuHome extends JPanel {
 		jp1.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp1);
 		
+		
 		txLocalizar = new JTextField();
-		txLocalizar.setBounds(5, 5, jp1.getWidth()-40, 24);
+		txLocalizar.setBounds(0, 0, jp1.getWidth()-30, 24);
+		txLocalizar.setLayout(null);
+		txLocalizar.setBorder(null);
 		jp1.add(txLocalizar);
 		
 		
@@ -172,4 +179,6 @@ public class MenuHome extends JPanel {
 
 		return new Color(r, g, b);
 	}
+	
+	
 }

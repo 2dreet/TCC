@@ -17,7 +17,7 @@ public class BordaEscura implements Border {
 			g.drawRect(-2, y + height + -3, width + 4, 1);
 
 			g.setColor(new Color(53, 56, 64));
-			g.fillRect(0, y + height + -2, width + 4, 4);
+			g.fillRect(0, y + height - 2, width + 4, 4);
 		
 	}
 
