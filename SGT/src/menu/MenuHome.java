@@ -17,7 +17,11 @@ import utilitario.DropShadowBorder;
 import utilitario.UtilitarioTela;
 
 import javax.swing.border.BevelBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.JTextField;
+
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 
 public class MenuHome extends JPanel {
@@ -76,9 +80,20 @@ public class MenuHome extends JPanel {
 		
 		
 		txLocalizar = new JTextField();
-		txLocalizar.setBounds(0, 0, jp1.getWidth()-30, 24);
+		txLocalizar.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				txLocalizar.setBorder(new LineBorder(Color.blue, 2));
+			}
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				txLocalizar.setBorder(new LineBorder(Color.gray, 2));
+			}
+		});
+		txLocalizar.setBounds(5, 5, 200, 24);
 		txLocalizar.setLayout(null);
-		txLocalizar.setBorder(null);
+		txLocalizar.setBorder(new LineBorder(Color.gray, 2));
+		
 		jp1.add(txLocalizar);
 		
 		
