@@ -13,6 +13,8 @@ import javax.swing.SwingConstants;
 import tela.HomeFuncionario;
 import utilitario.BordaEscura;
 import utilitario.UtilitarioTela;
+import javax.swing.border.BevelBorder;
+import javax.swing.JTextField;
 
 public class MenuHome extends JPanel {
 
@@ -21,6 +23,7 @@ public class MenuHome extends JPanel {
 	 */
 	
 	private JButton btLocalizar; 
+	private JTextField txLocalizar;
 	
 	public MenuHome() {
 		setSize(UtilitarioTela.getTamanhoMenuBaixo());
@@ -67,15 +70,22 @@ public class MenuHome extends JPanel {
 		jp1.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp1);
 		
+		txLocalizar = new JTextField();
+		txLocalizar.setBounds(5, 5, jp1.getWidth()-40, 24);
+		jp1.add(txLocalizar);
+		
+		
 		btLocalizar = new JButton("");
 		btLocalizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 		
 			}
 		});
-		btLocalizar.setBounds(0, 0, 42, 42);
+		btLocalizar.setBounds(jp1.getWidth()-30, 5, 24, 24);
 		btLocalizar.setName("localizar");
-		getIcon(btLocalizar, true);
+		btLocalizar.setBorderPainted(false);
+		
+		getIcon(btLocalizar, false);
 		jp1.add(btLocalizar);
 		
 		
