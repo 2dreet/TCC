@@ -33,6 +33,7 @@ public class MenuHome extends JPanel {
 	
 	private JButton btLocalizar; 
 	private JTextField txLocalizar;
+	private JButton btExemplo;
 	
 	public MenuHome() {
 		setSize(UtilitarioTela.getTamanhoMenuBaixo());
@@ -119,6 +120,20 @@ public class MenuHome extends JPanel {
 		jp2.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp2);
 		
+		btExemplo = new JButton("New button");
+		btExemplo.setBounds(5, 5, 230, 30);
+		btExemplo.setBorderPainted(false);
+		btExemplo.setBackground(null);
+		btExemplo.setLayout(null);
+		btExemplo.setName("btExemplo");
+		btExemplo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//zeraSelecao();
+				getSelecao(btExemplo, true);
+			}
+		});
+		jp2.add(btExemplo);
+		
 		JPanel jp3 = new JPanel();
 		jp3.setBounds(0, 80, 240, 40);
 		jp3.setBackground(null);
@@ -157,13 +172,23 @@ public class MenuHome extends JPanel {
 	}
 	
 	public void zeraSelecao() {
-		btLocalizar.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/localizar.png")));
-		btLocalizar.setBackground(getBtnFundo(false));
-
-		repaint();
+		btExemplo.setBorder(null);
+		//repaint();
 	}
 
+	public void getSelecao(JButton botao, boolean selecionado){
+		if (botao.getName() != null) {
+			if (botao.getName().equals("btExemplo")) {
+				if (selecionado) {
+					botao.setBackground(new Color(176, 177, 184));
+				} else {
+					botao.setBackground(null);
+				}
+			}
+			//repaint();
+		}
+	}
+	
 	public void getIcon(JButton botao, boolean selecionado) {
 		String url = "";
 		if (botao.getName() != null) {
@@ -180,6 +205,7 @@ public class MenuHome extends JPanel {
 		}
 	}
 
+	
 	public Color getBtnFundo(boolean selecionado) {
 		int r = 0, g = 0, b = 0;
 
@@ -195,6 +221,4 @@ public class MenuHome extends JPanel {
 
 		return new Color(r, g, b);
 	}
-	
-	
 }

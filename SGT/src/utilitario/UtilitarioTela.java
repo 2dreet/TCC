@@ -49,7 +49,7 @@ public class UtilitarioTela {
 	}
 	
 	public static LineBorder jTextFieldComFocus(){
-		return new LineBorder(new Color( 252, 79, 63), 1);
+		return new LineBorder(new Color( 255, 119, 0), 1);
 	}
 	
 	public static LineBorder jTextFieldNormal(){
