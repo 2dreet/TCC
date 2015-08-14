@@ -15,6 +15,7 @@ import javax.swing.SwingConstants;
 
 import tela.HomeFuncionario;
 import utilitario.BordaEscura;
+import utilitario.UtilitarioIcone;
 import utilitario.UtilitarioTela;
 
 public class MenuCampeonato extends JPanel {
@@ -22,20 +23,19 @@ public class MenuCampeonato extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	
-	private JButton btLocalizar; 
+
+	private JButton btLocalizar;
 	private JTextField txLocalizar;
-	private JButton btNovoCampeonato;
-	private JButton btAlterarCampeonato;
-	private JButton btDeletarCampeonato;
-	
+	private JButton btAdd;
+	private JButton btAlt;
+	private JButton btDel;
+
 	public MenuCampeonato() {
 		setSize(UtilitarioTela.getTamanhoMenuBaixo());
 		setBackground(null);
 		setLayout(null);
 		setVisible(true);
 
-		
 		JPanel menuLateral = new JPanel();
 		menuLateral.setSize(UtilitarioTela.getTamanhoMenuLateral());
 		menuLateral.setBorder(new BordaEscura());
@@ -43,11 +43,11 @@ public class MenuCampeonato extends JPanel {
 		menuLateral.setLocation(0, 0);
 		add(menuLateral);
 		menuLateral.setLayout(null);
-		
+
 		JPanel menuLateralTopo = new JPanel();
 		menuLateralTopo.setBounds(0, 0, 240, 30);
 		menuLateralTopo.setBorder(new BordaEscura());
-		menuLateralTopo.setBackground(new Color(232,234,239));
+		menuLateralTopo.setBackground(new Color(232, 234, 239));
 		menuLateral.add(menuLateralTopo);
 		menuLateralTopo.setLayout(null);
 
@@ -61,7 +61,7 @@ public class MenuCampeonato extends JPanel {
 		menuMeio.setLocation(250, 0);
 		menuMeio.setBackground(new Color(46, 49, 56));
 		add(menuMeio);
-		
+
 		JPanel menuLateralBaixo = new JPanel();
 		menuLateralBaixo.setBounds(0, 30, 240, getHeight() - 30);
 		menuLateralBaixo.setBackground(new Color(46, 49, 56));
@@ -73,14 +73,14 @@ public class MenuCampeonato extends JPanel {
 		jp1.setLayout(null);
 		jp1.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp1);
-		
-		
+
 		txLocalizar = new JTextField();
 		txLocalizar.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
 				txLocalizar.setBorder(UtilitarioTela.jTextFieldComFocus());
 			}
+
 			@Override
 			public void focusLost(FocusEvent arg0) {
 				txLocalizar.setBorder(UtilitarioTela.jTextFieldNormal());
@@ -89,46 +89,45 @@ public class MenuCampeonato extends JPanel {
 		txLocalizar.setBounds(5, 5, 200, 24);
 		txLocalizar.setLayout(null);
 		txLocalizar.setBorder(UtilitarioTela.jTextFieldNormal());
-		
+
 		jp1.add(txLocalizar);
-		
-		
+
 		btLocalizar = new JButton("");
 		btLocalizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-		
+
 			}
 		});
-		btLocalizar.setBounds(jp1.getWidth()-30, 5, 24, 24);
+		btLocalizar.setBounds(jp1.getWidth() - 30, 5, 24, 24);
 		btLocalizar.setName("localizar");
 		btLocalizar.setBorderPainted(false);
-		
-		getIcon(btLocalizar, false);
+		btLocalizar.setBackground(getBtnFundo(false));
+		btLocalizar.setIcon(new ImageIcon(MenuCampeonato.class.getResource("/imagem/localizar.png")));
 		jp1.add(btLocalizar);
-		
-		
+
 		JPanel jp2 = new JPanel();
 		jp2.setBounds(0, 40, 240, 40);
 		jp2.setBackground(null);
 		jp2.setLayout(null);
 		jp2.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp2);
-		
-		btNovoCampeonato = new JButton("");
-		btNovoCampeonato.setBounds(5, 5, 230, 30);
-		btNovoCampeonato.setBorderPainted(false);
-		btNovoCampeonato.setBackground(null);
-		btNovoCampeonato.setLayout(null);
-		btNovoCampeonato.setName("cadastrarCampeonato");
-		btNovoCampeonato.addActionListener(new ActionListener() {
+
+		btAdd = new JButton("");
+		btAdd.setBounds(5, 5, 230, 30);
+		btAdd.setName("cadastrarCampeonato");
+		btAdd.setFocusPainted(false);
+		btAdd.setBorderPainted(false);
+		btAdd.setBackground(null);
+		btAdd.setLayout(null);
+		btAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
-				getIcon(btNovoCampeonato, true);
+				getIcone(btAdd, true);
 			}
 		});
-		getIcon(btNovoCampeonato, false);
-		jp2.add(btNovoCampeonato);
-		
+		getIcone(btAdd, true);
+		jp2.add(btAdd);
+
 		JPanel jp3 = new JPanel();
 		jp3.setBounds(0, 80, 240, 40);
 		jp3.setBackground(null);
@@ -136,58 +135,27 @@ public class MenuCampeonato extends JPanel {
 		jp3.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp3);
 
-		btAlterarCampeonato = new JButton("");
-		btAlterarCampeonato.setBounds(5, 5, 230, 30);
-		btAlterarCampeonato.setBorderPainted(false);
-		btAlterarCampeonato.setBackground(null);
-		btAlterarCampeonato.setLayout(null);
-		btAlterarCampeonato.setName("alterarCampeonato");
-		btAlterarCampeonato.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				zeraSelecao();
-				getIcon(btAlterarCampeonato, true);
-			}
-		});
-		getIcon(btAlterarCampeonato, false);
-		jp3.add(btAlterarCampeonato);
-		
-		
 		JPanel jp4 = new JPanel();
 		jp4.setBounds(0, 120, 240, 40);
 		jp4.setBackground(null);
 		jp4.setLayout(null);
 		jp4.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp4);
-		
-		btDeletarCampeonato = new JButton("");
-		btDeletarCampeonato.setBounds(5, 5, 230, 30);
-		btDeletarCampeonato.setBorderPainted(false);
-		btDeletarCampeonato.setBackground(null);
-		btDeletarCampeonato.setLayout(null);
-		btDeletarCampeonato.setName("deletarCampeonato");
-		btDeletarCampeonato.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				zeraSelecao();
-				getIcon(btDeletarCampeonato, true);
-			}
-		});
-		getIcon(btDeletarCampeonato, false);
-		jp4.add(btDeletarCampeonato);
-		
+
 		JPanel jp5 = new JPanel();
 		jp5.setBounds(0, 160, 240, 40);
 		jp5.setBackground(null);
 		jp5.setLayout(null);
 		jp5.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp5);
-		
+
 		JPanel jp6 = new JPanel();
 		jp6.setBounds(0, 200, 240, 40);
 		jp6.setBackground(null);
 		jp6.setLayout(null);
 		jp6.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp6);
-		
+
 		JPanel jp7 = new JPanel();
 		jp7.setBounds(0, 240, 240, 40);
 		jp7.setBackground(null);
@@ -195,60 +163,29 @@ public class MenuCampeonato extends JPanel {
 		jp7.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp7);
 	}
-	
+
 	public void zeraSelecao() {
-		btNovoCampeonato.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/cadastrarJogador.png")));
-		btNovoCampeonato.setBackground(getBtnFundo(false));
-		
-		btAlterarCampeonato.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/alterarJogador.png")));
-		btAlterarCampeonato.setBackground(getBtnFundo(false));
-		
-		btDeletarCampeonato.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/deletarJogador.png")));
-		btDeletarCampeonato.setBackground(getBtnFundo(false));
+
 	}
 
-	public void getIcon(JButton botao, boolean selecionado) {
+	public void getIcone(JButton botao, boolean selecionado) {
 		String url = "";
+		
 		if (botao.getName() != null) {
-			if (botao.getName().equals("localizar")) {
-				if (selecionado) {
-					url = "/imagem/localizar.png";
-				} else {
-					url = "/imagem/localizar.png";
-				}
-			}
 			if (botao.getName().equals("cadastrarCampeonato")) {
 				if (selecionado) {
-					url = "/imagem/cadastrarJogador_select.png";
+					url = "/imagem/addCamp.png";
 				} else {
-					url = "/imagem/cadastrarJogador.png";
+					url = "/imagem/addCamp.png";
 				}
 			}
-			if (botao.getName().equals("alterarCampeonato")) {
-				if (selecionado) {
-					url = "/imagem/alterarCampeonato_select.png";
-				} else {
-					url = "/imagem/alterarJogador.png";
-				}
-			}
-			if (botao.getName().equals("deletarCampeonato")) {
-				if (selecionado) {
-					url = "/imagem/deletarJogador_select.png";
-				} else {
-					url = "/imagem/deletarJogador.png";
-				}
-			}
-			
+
 			botao.setBackground(getBtnFundo(selecionado));
-			botao.setIcon(new ImageIcon(HomeFuncionario.class.getResource(url)));
+			botao.setIcon(new ImageIcon(MenuCampeonato.class.getResource(url)));
 			repaint();
 		}
 	}
 
-	
 	public Color getBtnFundo(boolean selecionado) {
 		int r = 0, g = 0, b = 0;
 
