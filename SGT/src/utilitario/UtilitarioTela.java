@@ -2,9 +2,14 @@ package utilitario;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Toolkit;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.border.LineBorder;
+
+import tela.HomeFuncionario;
 
 public class UtilitarioTela {
 
@@ -48,12 +53,14 @@ public class UtilitarioTela {
 		return dm;
 	}
 	
-	public static LineBorder jTextFieldComFocus(){
+		public static LineBorder jTextFieldComFocus(){
 		return new LineBorder(new Color( 255, 119, 0), 1);
 	}
 	
 	public static LineBorder jTextFieldNormal(){
 		return new LineBorder(new Color( 160, 160, 160), 1);
 	}
+	
+	
 	
 }

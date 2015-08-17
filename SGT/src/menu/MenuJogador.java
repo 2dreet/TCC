@@ -16,6 +16,7 @@ import javax.swing.SwingConstants;
 import tela.HomeFuncionario;
 import utilitario.BordaEscura;
 import utilitario.UtilitarioTela;
+import java.awt.Font;
 
 public class MenuJogador extends JPanel {
 
@@ -52,6 +53,8 @@ public class MenuJogador extends JPanel {
 		menuLateralTopo.setLayout(null);
 
 		JLabel tituloMenu = new JLabel("Jogador");
+		tituloMenu.setForeground(Color.DARK_GRAY);
+		tituloMenu.setFont(new Font("SansSerif", Font.BOLD, 18));
 		tituloMenu.setHorizontalAlignment(SwingConstants.CENTER);
 		tituloMenu.setBounds(0, 0, 240, 25);
 		menuLateralTopo.add(tituloMenu);
@@ -114,19 +117,20 @@ public class MenuJogador extends JPanel {
 		jp2.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp2);
 		
-		btNovoJogador = new JButton("");
+		btNovoJogador = new JButton("Cadastrar Jogador");
+		
 		btNovoJogador.setBounds(5, 5, 230, 30);
 		btNovoJogador.setBorderPainted(false);
 		btNovoJogador.setBackground(null);
 		btNovoJogador.setLayout(null);
 		btNovoJogador.setName("cadastrarJogador");
+		btNovoJogador.setHorizontalAlignment(SwingConstants.LEFT);
 		btNovoJogador.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btNovoJogador, true);
 			}
 		});
-		getIcon(btNovoJogador, false);
 		jp2.add(btNovoJogador);
 		
 		JPanel jp3 = new JPanel();
@@ -136,19 +140,20 @@ public class MenuJogador extends JPanel {
 		jp3.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp3);
 
-		btAlterarJogador = new JButton("");
+		btAlterarJogador = new JButton("Alterar Jogador");
 		btAlterarJogador.setBounds(5, 5, 230, 30);
 		btAlterarJogador.setBorderPainted(false);
 		btAlterarJogador.setBackground(null);
 		btAlterarJogador.setLayout(null);
 		btAlterarJogador.setName("alterarJogador");
+		btAlterarJogador.setHorizontalAlignment(SwingConstants.LEFT);
 		btAlterarJogador.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btAlterarJogador, true);
 			}
 		});
-		getIcon(btAlterarJogador, false);
+		
 		jp3.add(btAlterarJogador);
 		
 		
@@ -159,20 +164,23 @@ public class MenuJogador extends JPanel {
 		jp4.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp4);
 		
-		btDeletarJogador = new JButton("");
+		btDeletarJogador = new JButton("Deletar Jogador");
 		btDeletarJogador.setBounds(5, 5, 230, 30);
 		btDeletarJogador.setBorderPainted(false);
 		btDeletarJogador.setBackground(null);
 		btDeletarJogador.setLayout(null);
 		btDeletarJogador.setName("deletarJogador");
+		btDeletarJogador.setHorizontalAlignment(SwingConstants.LEFT);
 		btDeletarJogador.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btDeletarJogador, true);
 			}
 		});
-		getIcon(btDeletarJogador, false);
+		
 		jp4.add(btDeletarJogador);
+		
+		
 		
 		JPanel jp5 = new JPanel();
 		jp5.setBounds(0, 160, 240, 40);
@@ -195,20 +203,36 @@ public class MenuJogador extends JPanel {
 		jp7.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp7);
 
+		
+		getIcon(btNovoJogador, false);
+		getIcon(btAlterarJogador, false);
+		getIcon(btDeletarJogador, false);
+		btDeletarJogador.setForeground(getFontColorSelecao(false));
+		btAlterarJogador.setForeground(getFontColorSelecao(false));
+		btNovoJogador.setForeground(getFontColorSelecao(false));
+		btNovoJogador.setFont(new Font("SansSerif", Font.BOLD, 12));
+		btAlterarJogador.setFont(new Font("SansSerif", Font.BOLD, 12));
+		btDeletarJogador.setFont(new Font("SansSerif", Font.BOLD, 12));
+	
+		repaint();
 	}
 
 	public void zeraSelecao() {
 		btNovoJogador.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/cadastrarJogador.png")));
+				.getResource("/imagem/crud/addJog.png")));
 		btNovoJogador.setBackground(getBtnFundo(false));
+		btNovoJogador.setForeground(getFontColorSelecao(false));
 		
 		btAlterarJogador.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/alterarJogador.png")));
+				.getResource("/imagem/crud/altJog.png")));
 		btAlterarJogador.setBackground(getBtnFundo(false));
+		btAlterarJogador.setForeground(getFontColorSelecao(false));
 		
 		btDeletarJogador.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/deletarJogador.png")));
+				.getResource("/imagem/crud/delJog.png")));
 		btDeletarJogador.setBackground(getBtnFundo(false));
+		btDeletarJogador.setForeground(getFontColorSelecao(false));
+		
 	}
 
 	public void getIcon(JButton botao, boolean selecionado) {
@@ -216,35 +240,36 @@ public class MenuJogador extends JPanel {
 		if (botao.getName() != null) {
 			if (botao.getName().equals("localizar")) {
 				if (selecionado) {
-					url = "/imagem/localizar.png";
+					url = "/imagem/diverssos/localizar.png";
 				} else {
-					url = "/imagem/localizar.png";
+					url = "/imagem/diverssos/localizar.png";
 				}
 			}
 			if (botao.getName().equals("cadastrarJogador")) {
 				if (selecionado) {
-					url = "/imagem/cadastrarJogador_select.png";
+					url = "/imagem/crud/addJogSelect.png";
 				} else {
-					url = "/imagem/cadastrarJogador.png";
+					url = "/imagem/crud/addJog.png";
 				}
 			}
 			if (botao.getName().equals("alterarJogador")) {
 				if (selecionado) {
-					url = "/imagem/alterarJogador_select.png";
+					url = "/imagem/crud/altJogSelect.png";
 				} else {
-					url = "/imagem/alterarJogador.png";
+					url = "/imagem/crud/altJog.png";
 				}
 			}
 			if (botao.getName().equals("deletarJogador")) {
 				if (selecionado) {
-					url = "/imagem/deletarJogador_select.png";
+					url = "/imagem/crud/delJogSelect.png";
 				} else {
-					url = "/imagem/deletarJogador.png";
+					url = "/imagem/crud/delJog.png";
 				}
 			}
-			
+			botao.setFocusPainted(false);
 			botao.setBackground(getBtnFundo(selecionado));
 			botao.setIcon(new ImageIcon(HomeFuncionario.class.getResource(url)));
+			botao.setForeground(getFontColorSelecao(true));
 			repaint();
 		}
 	}
@@ -264,6 +289,23 @@ public class MenuJogador extends JPanel {
 		}
 
 		return new Color(r, g, b);
+	}
+	
+	public static Color getFontColorSelecao(boolean selecionado){
+		int r = 0, g = 0, b = 0;
+
+		if (!selecionado) {
+			r = 252;
+			g = 79;
+			b = 63;
+		} else {
+			r = 46;
+			g = 49;
+			b = 56;
+		}
+
+		return new Color(r, g, b);
+		
 	}
 	
 }
