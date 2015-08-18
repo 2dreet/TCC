@@ -24,6 +24,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.SwingConstants;
 
 public class CrudJogador extends JPanel {
 	private JTextField txNome;
@@ -60,7 +61,8 @@ public class CrudJogador extends JPanel {
 		}
 		
 		JLabel lblHeader = new JLabel(textoHeader);
-		lblHeader.setBounds((header.getWidth()/2) - 50, 0, 200, 30);
+		lblHeader.setHorizontalAlignment(SwingConstants.CENTER);
+		lblHeader.setBounds(0, 0, header.getWidth(), header.getHeight());
 		lblHeader.setFont(UtilitarioTela.getFontCrud());
 		lblHeader.setForeground(UtilitarioTela.getFontColorCrud());
 		header.add(lblHeader);
@@ -304,8 +306,22 @@ public class CrudJogador extends JPanel {
 				txUsuario.requestFocus();
 				return false;
 			}
-			
-			
+			if(txEmail.getText() == null || txEmail.getText().trim().isEmpty() || ValidadorCrud.validarEmail(txEmail.getText())){
+				txEmail.requestFocus();
+				return false;
+			}
+			if(txDataNascimento.getText() == null || txDataNascimento.getText().trim().isEmpty() || ValidadorCrud.validarData(txDataNascimento.getText())){
+				txDataNascimento.requestFocus();
+				return false;
+			}
+			if(txTelefone.getText() == null || txTelefone.getText().trim().isEmpty() || ValidadorCrud.validarTelefone(txTelefone.getText())){
+				txTelefone.requestFocus();
+				return false;
+			}
+			if(txRg.getText() == null || txRg.getText().trim().isEmpty() || ValidadorCrud.validarRg(txRg.getText())){
+				txRg.requestFocus();
+				return false;
+			}
 			
 			return true;	
 		}catch(Exception e){

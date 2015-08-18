@@ -30,10 +30,12 @@ public class Home extends JFrame {
 	 */
 	public Home() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(UtilitarioTela.getTamanhoMunitor()); 
-		if(getWidth() <= 1200){
+		setSize(UtilitarioTela.getTamanhoMunitor());
+		
+		if(UtilitarioTela.getTamanhoMunitor().getWidth() <= 1100){
 			setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		}
+		
 		setResizable(false);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();

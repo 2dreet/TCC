@@ -1,0 +1,80 @@
+package utilitario;
+
+import java.awt.event.KeyEvent;
+
+public class MascaraCrud {
+
+	
+	public static String mascaraTelefone(String telefone){
+		if(telefone.length() == 2){
+			telefone = "("+telefone+")";
+		} else if(telefone.length() == 8){
+			telefone += "-";
+		}
+		
+		return telefone;
+	}
+	
+	public static String mascaraData(String data){
+		
+		if(data.length() == 2){
+			if(validarDia(data)){
+				data += "/";
+			}else{
+				data = "";
+			}
+		} else if(data.length() == 5){
+			if(validarDia(data.substring(0, 2)) && validarMes(data.substring(3, 5))){
+				data += "/";
+			}else{
+				if(validarDia(data.substring(0, 2))){
+					data = data.substring(0, 2) + "/";
+				}else{
+					data = "";
+				}
+			}
+		} else if(data.length() == 10){
+			if(validarDia(data.substring(0, 2)) && validarMes(data.substring(3, 5)) && validarAno(data.substring(6, 10))){
+				
+			}else{
+				if(validarDia(data.substring(0, 2)) && validarMes(data.substring(3, 5))){
+					data = data.substring(0, 2) + "/" + data.substring(3, 5)+ "/";
+				}else{
+					if(validarDia(data.substring(0, 2))){
+						data = data.substring(0, 2) + "/";
+					}else{
+						data = "";
+					}
+				}
+			}
+			
+		}
+		System.out.println(data);
+		return data;
+	}
+	
+	public static boolean validarDia(String dia){
+		if(ValidadorCrud.isInt(dia) && Integer.parseInt(dia) > 0 && Integer.parseInt(dia) < 32){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	public static boolean validarMes(String mes){
+		if(ValidadorCrud.isInt(mes) && Integer.parseInt(mes) > 0 && Integer.parseInt(mes) < 13){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	public static boolean validarAno(String ano){
+		if(ValidadorCrud.isInt(ano) && Integer.parseInt(ano) > 1900){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+}
