@@ -1,215 +1,214 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package entidade;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
-
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * The persistent class for the campeonato database table.
- * 
+ *
+ * @author Jose
  */
 @Entity
-@NamedQuery(name="Campeonato.findAll", query="SELECT c FROM Campeonato c")
+@Table(name = "campeonato")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Campeonato.findAll", query = "SELECT c FROM Campeonato c"),
+    @NamedQuery(name = "Campeonato.findByCodigoCampeonato", query = "SELECT c FROM Campeonato c WHERE c.codigoCampeonato = :codigoCampeonato"),
+    @NamedQuery(name = "Campeonato.findByDescricao", query = "SELECT c FROM Campeonato c WHERE c.descricao = :descricao"),
+    @NamedQuery(name = "Campeonato.findByDataCadastro", query = "SELECT c FROM Campeonato c WHERE c.dataCadastro = :dataCadastro"),
+    @NamedQuery(name = "Campeonato.findByDataIncio", query = "SELECT c FROM Campeonato c WHERE c.dataIncio = :dataIncio"),
+    @NamedQuery(name = "Campeonato.findByDataFim", query = "SELECT c FROM Campeonato c WHERE c.dataFim = :dataFim"),
+    @NamedQuery(name = "Campeonato.findByAtivo", query = "SELECT c FROM Campeonato c WHERE c.ativo = :ativo")})
 public class Campeonato implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "codigoCampeonato")
+    private Integer codigoCampeonato;
+    @Column(name = "descricao")
+    private String descricao;
+    @Column(name = "dataCadastro")
+    @Temporal(TemporalType.DATE)
+    private Date dataCadastro;
+    @Column(name = "dataIncio")
+    @Temporal(TemporalType.DATE)
+    private Date dataIncio;
+    @Column(name = "dataFim")
+    @Temporal(TemporalType.DATE)
+    private Date dataFim;
+    @Basic(optional = false)
+    @Column(name = "ativo")
+    private boolean ativo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoCampeonato")
+    private Collection<Campeonatopartida> campeonatopartidaCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoCampeonato")
+    private Collection<Classificacao> classificacaoCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoCampeonato")
+    private Collection<Funcionariocampeonato> funcionariocampeonatoCollection;
+    @JoinColumn(name = "codigoModalidade", referencedColumnName = "codigoModalidade")
+    @ManyToOne(optional = false)
+    private Modalidade codigoModalidade;
+    @JoinColumn(name = "codigoChave", referencedColumnName = "codigoChave")
+    @ManyToOne(optional = false)
+    private Chave codigoChave;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoCampeonato")
+    private Collection<Campeonatotime> campeonatotimeCollection;
 
-	@Id
-	private int codigoCampeonato;
+    public Campeonato() {
+    }
 
-	private byte ativo;
+    public Campeonato(Integer codigoCampeonato) {
+        this.codigoCampeonato = codigoCampeonato;
+    }
 
-	@Temporal(TemporalType.DATE)
-	private Date dataCadastro;
+    public Campeonato(Integer codigoCampeonato, boolean ativo) {
+        this.codigoCampeonato = codigoCampeonato;
+        this.ativo = ativo;
+    }
 
-	@Temporal(TemporalType.DATE)
-	private Date dataFim;
+    public Integer getCodigoCampeonato() {
+        return codigoCampeonato;
+    }
 
-	@Temporal(TemporalType.DATE)
-	private Date dataIncio;
+    public void setCodigoCampeonato(Integer codigoCampeonato) {
+        this.codigoCampeonato = codigoCampeonato;
+    }
 
-	private String descricao;
+    public String getDescricao() {
+        return descricao;
+    }
 
-	//bi-directional many-to-one association to Chave
-	@ManyToOne
-	@JoinColumn(name="codigoChave")
-	private Chave chave;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 
-	//bi-directional many-to-one association to Modalidade
-	@ManyToOne
-	@JoinColumn(name="codigoModalidade")
-	private Modalidade modalidade;
+    public Date getDataCadastro() {
+        return dataCadastro;
+    }
 
-	//bi-directional many-to-one association to Campeonatopartida
-	@OneToMany(mappedBy="campeonato")
-	private List<Campeonatopartida> campeonatopartidas;
+    public void setDataCadastro(Date dataCadastro) {
+        this.dataCadastro = dataCadastro;
+    }
 
-	//bi-directional many-to-one association to Campeonatotime
-	@OneToMany(mappedBy="campeonato")
-	private List<Campeonatotime> campeonatotimes;
+    public Date getDataIncio() {
+        return dataIncio;
+    }
 
-	//bi-directional many-to-one association to Classificacao
-	@OneToMany(mappedBy="campeonato")
-	private List<Classificacao> classificacaos;
+    public void setDataIncio(Date dataIncio) {
+        this.dataIncio = dataIncio;
+    }
 
-	//bi-directional many-to-one association to Funcionariocampeonato
-	@OneToMany(mappedBy="campeonato")
-	private List<Funcionariocampeonato> funcionariocampeonatos;
+    public Date getDataFim() {
+        return dataFim;
+    }
 
-	public Campeonato() {
-	}
+    public void setDataFim(Date dataFim) {
+        this.dataFim = dataFim;
+    }
 
-	public int getCodigoCampeonato() {
-		return this.codigoCampeonato;
-	}
+    public boolean getAtivo() {
+        return ativo;
+    }
 
-	public void setCodigoCampeonato(int codigoCampeonato) {
-		this.codigoCampeonato = codigoCampeonato;
-	}
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
 
-	public byte getAtivo() {
-		return this.ativo;
-	}
+    @XmlTransient
+    public Collection<Campeonatopartida> getCampeonatopartidaCollection() {
+        return campeonatopartidaCollection;
+    }
 
-	public void setAtivo(byte ativo) {
-		this.ativo = ativo;
-	}
+    public void setCampeonatopartidaCollection(Collection<Campeonatopartida> campeonatopartidaCollection) {
+        this.campeonatopartidaCollection = campeonatopartidaCollection;
+    }
 
-	public Date getDataCadastro() {
-		return this.dataCadastro;
-	}
+    @XmlTransient
+    public Collection<Classificacao> getClassificacaoCollection() {
+        return classificacaoCollection;
+    }
 
-	public void setDataCadastro(Date dataCadastro) {
-		this.dataCadastro = dataCadastro;
-	}
+    public void setClassificacaoCollection(Collection<Classificacao> classificacaoCollection) {
+        this.classificacaoCollection = classificacaoCollection;
+    }
 
-	public Date getDataFim() {
-		return this.dataFim;
-	}
+    @XmlTransient
+    public Collection<Funcionariocampeonato> getFuncionariocampeonatoCollection() {
+        return funcionariocampeonatoCollection;
+    }
 
-	public void setDataFim(Date dataFim) {
-		this.dataFim = dataFim;
-	}
+    public void setFuncionariocampeonatoCollection(Collection<Funcionariocampeonato> funcionariocampeonatoCollection) {
+        this.funcionariocampeonatoCollection = funcionariocampeonatoCollection;
+    }
 
-	public Date getDataIncio() {
-		return this.dataIncio;
-	}
+    public Modalidade getCodigoModalidade() {
+        return codigoModalidade;
+    }
 
-	public void setDataIncio(Date dataIncio) {
-		this.dataIncio = dataIncio;
-	}
+    public void setCodigoModalidade(Modalidade codigoModalidade) {
+        this.codigoModalidade = codigoModalidade;
+    }
 
-	public String getDescricao() {
-		return this.descricao;
-	}
+    public Chave getCodigoChave() {
+        return codigoChave;
+    }
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
+    public void setCodigoChave(Chave codigoChave) {
+        this.codigoChave = codigoChave;
+    }
 
-	public Chave getChave() {
-		return this.chave;
-	}
+    @XmlTransient
+    public Collection<Campeonatotime> getCampeonatotimeCollection() {
+        return campeonatotimeCollection;
+    }
 
-	public void setChave(Chave chave) {
-		this.chave = chave;
-	}
+    public void setCampeonatotimeCollection(Collection<Campeonatotime> campeonatotimeCollection) {
+        this.campeonatotimeCollection = campeonatotimeCollection;
+    }
 
-	public Modalidade getModalidade() {
-		return this.modalidade;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (codigoCampeonato != null ? codigoCampeonato.hashCode() : 0);
+        return hash;
+    }
 
-	public void setModalidade(Modalidade modalidade) {
-		this.modalidade = modalidade;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Campeonato)) {
+            return false;
+        }
+        Campeonato other = (Campeonato) object;
+        if ((this.codigoCampeonato == null && other.codigoCampeonato != null) || (this.codigoCampeonato != null && !this.codigoCampeonato.equals(other.codigoCampeonato))) {
+            return false;
+        }
+        return true;
+    }
 
-	public List<Campeonatopartida> getCampeonatopartidas() {
-		return this.campeonatopartidas;
-	}
-
-	public void setCampeonatopartidas(List<Campeonatopartida> campeonatopartidas) {
-		this.campeonatopartidas = campeonatopartidas;
-	}
-
-	public Campeonatopartida addCampeonatopartida(Campeonatopartida campeonatopartida) {
-		getCampeonatopartidas().add(campeonatopartida);
-		campeonatopartida.setCampeonato(this);
-
-		return campeonatopartida;
-	}
-
-	public Campeonatopartida removeCampeonatopartida(Campeonatopartida campeonatopartida) {
-		getCampeonatopartidas().remove(campeonatopartida);
-		campeonatopartida.setCampeonato(null);
-
-		return campeonatopartida;
-	}
-
-	public List<Campeonatotime> getCampeonatotimes() {
-		return this.campeonatotimes;
-	}
-
-	public void setCampeonatotimes(List<Campeonatotime> campeonatotimes) {
-		this.campeonatotimes = campeonatotimes;
-	}
-
-	public Campeonatotime addCampeonatotime(Campeonatotime campeonatotime) {
-		getCampeonatotimes().add(campeonatotime);
-		campeonatotime.setCampeonato(this);
-
-		return campeonatotime;
-	}
-
-	public Campeonatotime removeCampeonatotime(Campeonatotime campeonatotime) {
-		getCampeonatotimes().remove(campeonatotime);
-		campeonatotime.setCampeonato(null);
-
-		return campeonatotime;
-	}
-
-	public List<Classificacao> getClassificacaos() {
-		return this.classificacaos;
-	}
-
-	public void setClassificacaos(List<Classificacao> classificacaos) {
-		this.classificacaos = classificacaos;
-	}
-
-	public Classificacao addClassificacao(Classificacao classificacao) {
-		getClassificacaos().add(classificacao);
-		classificacao.setCampeonato(this);
-
-		return classificacao;
-	}
-
-	public Classificacao removeClassificacao(Classificacao classificacao) {
-		getClassificacaos().remove(classificacao);
-		classificacao.setCampeonato(null);
-
-		return classificacao;
-	}
-
-	public List<Funcionariocampeonato> getFuncionariocampeonatos() {
-		return this.funcionariocampeonatos;
-	}
-
-	public void setFuncionariocampeonatos(List<Funcionariocampeonato> funcionariocampeonatos) {
-		this.funcionariocampeonatos = funcionariocampeonatos;
-	}
-
-	public Funcionariocampeonato addFuncionariocampeonato(Funcionariocampeonato funcionariocampeonato) {
-		getFuncionariocampeonatos().add(funcionariocampeonato);
-		funcionariocampeonato.setCampeonato(this);
-
-		return funcionariocampeonato;
-	}
-
-	public Funcionariocampeonato removeFuncionariocampeonato(Funcionariocampeonato funcionariocampeonato) {
-		getFuncionariocampeonatos().remove(funcionariocampeonato);
-		funcionariocampeonato.setCampeonato(null);
-
-		return funcionariocampeonato;
-	}
-
+    @Override
+    public String toString() {
+        return "br.com.treinoweb.model.entidade.Campeonato[ codigoCampeonato=" + codigoCampeonato + " ]";
+    }
+    
 }

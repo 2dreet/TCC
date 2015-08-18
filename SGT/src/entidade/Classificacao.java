@@ -1,82 +1,121 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package entidade;
 
 import java.io.Serializable;
-import javax.persistence.*;
-
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * The persistent class for the classificacao database table.
- * 
+ *
+ * @author Jose
  */
 @Entity
-@NamedQuery(name="Classificacao.findAll", query="SELECT c FROM Classificacao c")
+@Table(name = "classificacao")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Classificacao.findAll", query = "SELECT c FROM Classificacao c"),
+    @NamedQuery(name = "Classificacao.findByCodigoClassificacao", query = "SELECT c FROM Classificacao c WHERE c.codigoClassificacao = :codigoClassificacao")})
 public class Classificacao implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "codigoClassificacao")
+    private Integer codigoClassificacao;
+    @JoinColumn(name = "timeTerceiro", referencedColumnName = "codigoTime")
+    @ManyToOne(optional = false)
+    private Time timeTerceiro;
+    @JoinColumn(name = "timeSegundo", referencedColumnName = "codigoTime")
+    @ManyToOne(optional = false)
+    private Time timeSegundo;
+    @JoinColumn(name = "timePrimeiro", referencedColumnName = "codigoTime")
+    @ManyToOne(optional = false)
+    private Time timePrimeiro;
+    @JoinColumn(name = "codigoCampeonato", referencedColumnName = "codigoCampeonato")
+    @ManyToOne(optional = false)
+    private Campeonato codigoCampeonato;
 
-	@Id
-	private int codigoClassificacao;
+    public Classificacao() {
+    }
 
-	//bi-directional many-to-one association to Campeonato
-	@ManyToOne
-	@JoinColumn(name="codigoCampeonato")
-	private Campeonato campeonato;
+    public Classificacao(Integer codigoClassificacao) {
+        this.codigoClassificacao = codigoClassificacao;
+    }
 
-	//bi-directional many-to-one association to Time
-	@ManyToOne
-	@JoinColumn(name="timePrimeiro")
-	private Time time1;
+    public Integer getCodigoClassificacao() {
+        return codigoClassificacao;
+    }
 
-	//bi-directional many-to-one association to Time
-	@ManyToOne
-	@JoinColumn(name="timeSegundo")
-	private Time time2;
+    public void setCodigoClassificacao(Integer codigoClassificacao) {
+        this.codigoClassificacao = codigoClassificacao;
+    }
 
-	//bi-directional many-to-one association to Time
-	@ManyToOne
-	@JoinColumn(name="timeTerceiro")
-	private Time time3;
+    public Time getTimeTerceiro() {
+        return timeTerceiro;
+    }
 
-	public Classificacao() {
-	}
+    public void setTimeTerceiro(Time timeTerceiro) {
+        this.timeTerceiro = timeTerceiro;
+    }
 
-	public int getCodigoClassificacao() {
-		return this.codigoClassificacao;
-	}
+    public Time getTimeSegundo() {
+        return timeSegundo;
+    }
 
-	public void setCodigoClassificacao(int codigoClassificacao) {
-		this.codigoClassificacao = codigoClassificacao;
-	}
+    public void setTimeSegundo(Time timeSegundo) {
+        this.timeSegundo = timeSegundo;
+    }
 
-	public Campeonato getCampeonato() {
-		return this.campeonato;
-	}
+    public Time getTimePrimeiro() {
+        return timePrimeiro;
+    }
 
-	public void setCampeonato(Campeonato campeonato) {
-		this.campeonato = campeonato;
-	}
+    public void setTimePrimeiro(Time timePrimeiro) {
+        this.timePrimeiro = timePrimeiro;
+    }
 
-	public Time getTime1() {
-		return this.time1;
-	}
+    public Campeonato getCodigoCampeonato() {
+        return codigoCampeonato;
+    }
 
-	public void setTime1(Time time1) {
-		this.time1 = time1;
-	}
+    public void setCodigoCampeonato(Campeonato codigoCampeonato) {
+        this.codigoCampeonato = codigoCampeonato;
+    }
 
-	public Time getTime2() {
-		return this.time2;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (codigoClassificacao != null ? codigoClassificacao.hashCode() : 0);
+        return hash;
+    }
 
-	public void setTime2(Time time2) {
-		this.time2 = time2;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Classificacao)) {
+            return false;
+        }
+        Classificacao other = (Classificacao) object;
+        if ((this.codigoClassificacao == null && other.codigoClassificacao != null) || (this.codigoClassificacao != null && !this.codigoClassificacao.equals(other.codigoClassificacao))) {
+            return false;
+        }
+        return true;
+    }
 
-	public Time getTime3() {
-		return this.time3;
-	}
-
-	public void setTime3(Time time3) {
-		this.time3 = time3;
-	}
-
+    @Override
+    public String toString() {
+        return "br.com.treinoweb.model.entidade.Classificacao[ codigoClassificacao=" + codigoClassificacao + " ]";
+    }
+    
 }

@@ -1,121 +1,140 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package entidade;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
-
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * The persistent class for the jogador database table.
- * 
+ *
+ * @author Jose
  */
 @Entity
-@NamedQuery(name="Jogador.findAll", query="SELECT j FROM Jogador j")
+@Table(name = "jogador")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Jogador.findAll", query = "SELECT j FROM Jogador j"),
+    @NamedQuery(name = "Jogador.findByCodigoJogador", query = "SELECT j FROM Jogador j WHERE j.codigoJogador = :codigoJogador"),
+    @NamedQuery(name = "Jogador.findByDataCadastro", query = "SELECT j FROM Jogador j WHERE j.dataCadastro = :dataCadastro")})
 public class Jogador implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "codigoJogador")
+    private Integer codigoJogador;
+    @Column(name = "dataCadastro")
+    @Temporal(TemporalType.DATE)
+    private Date dataCadastro;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoJogador")
+    private Collection<Jogadorbanimento> jogadorbanimentoCollection;
+    @JoinColumn(name = "codigoUsuario", referencedColumnName = "codigoUsuario")
+    @ManyToOne(optional = false)
+    private Usuario codigoUsuario;
+    @JoinColumn(name = "codigoTime", referencedColumnName = "codigoTime")
+    @ManyToOne(optional = false)
+    private Time codigoTime;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoJogador")
+    private Collection<Jogadorperiferico> jogadorperifericoCollection;
 
-	@Id
-	private int codigoJogador;
+    public Jogador() {
+    }
 
-	@Temporal(TemporalType.DATE)
-	private Date dataCadastro;
+    public Jogador(Integer codigoJogador) {
+        this.codigoJogador = codigoJogador;
+    }
 
-	//bi-directional many-to-one association to Time
-	@ManyToOne
-	@JoinColumn(name="codigoTime")
-	private Time time;
+    public Integer getCodigoJogador() {
+        return codigoJogador;
+    }
 
-	//bi-directional many-to-one association to Usuario
-	@ManyToOne
-	@JoinColumn(name="codigoUsuario")
-	private Usuario usuario;
+    public void setCodigoJogador(Integer codigoJogador) {
+        this.codigoJogador = codigoJogador;
+    }
 
-	//bi-directional many-to-one association to Jogadorbanimento
-	@OneToMany(mappedBy="jogador")
-	private List<Jogadorbanimento> jogadorbanimentos;
+    public Date getDataCadastro() {
+        return dataCadastro;
+    }
 
-	//bi-directional many-to-one association to Jogadorperiferico
-	@OneToMany(mappedBy="jogador")
-	private List<Jogadorperiferico> jogadorperifericos;
+    public void setDataCadastro(Date dataCadastro) {
+        this.dataCadastro = dataCadastro;
+    }
 
-	public Jogador() {
-	}
+    @XmlTransient
+    public Collection<Jogadorbanimento> getJogadorbanimentoCollection() {
+        return jogadorbanimentoCollection;
+    }
 
-	public int getCodigoJogador() {
-		return this.codigoJogador;
-	}
+    public void setJogadorbanimentoCollection(Collection<Jogadorbanimento> jogadorbanimentoCollection) {
+        this.jogadorbanimentoCollection = jogadorbanimentoCollection;
+    }
 
-	public void setCodigoJogador(int codigoJogador) {
-		this.codigoJogador = codigoJogador;
-	}
+    public Usuario getCodigoUsuario() {
+        return codigoUsuario;
+    }
 
-	public Date getDataCadastro() {
-		return this.dataCadastro;
-	}
+    public void setCodigoUsuario(Usuario codigoUsuario) {
+        this.codigoUsuario = codigoUsuario;
+    }
 
-	public void setDataCadastro(Date dataCadastro) {
-		this.dataCadastro = dataCadastro;
-	}
+    public Time getCodigoTime() {
+        return codigoTime;
+    }
 
-	public Time getTime() {
-		return this.time;
-	}
+    public void setCodigoTime(Time codigoTime) {
+        this.codigoTime = codigoTime;
+    }
 
-	public void setTime(Time time) {
-		this.time = time;
-	}
+    @XmlTransient
+    public Collection<Jogadorperiferico> getJogadorperifericoCollection() {
+        return jogadorperifericoCollection;
+    }
 
-	public Usuario getUsuario() {
-		return this.usuario;
-	}
+    public void setJogadorperifericoCollection(Collection<Jogadorperiferico> jogadorperifericoCollection) {
+        this.jogadorperifericoCollection = jogadorperifericoCollection;
+    }
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (codigoJogador != null ? codigoJogador.hashCode() : 0);
+        return hash;
+    }
 
-	public List<Jogadorbanimento> getJogadorbanimentos() {
-		return this.jogadorbanimentos;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Jogador)) {
+            return false;
+        }
+        Jogador other = (Jogador) object;
+        if ((this.codigoJogador == null && other.codigoJogador != null) || (this.codigoJogador != null && !this.codigoJogador.equals(other.codigoJogador))) {
+            return false;
+        }
+        return true;
+    }
 
-	public void setJogadorbanimentos(List<Jogadorbanimento> jogadorbanimentos) {
-		this.jogadorbanimentos = jogadorbanimentos;
-	}
-
-	public Jogadorbanimento addJogadorbanimento(Jogadorbanimento jogadorbanimento) {
-		getJogadorbanimentos().add(jogadorbanimento);
-		jogadorbanimento.setJogador(this);
-
-		return jogadorbanimento;
-	}
-
-	public Jogadorbanimento removeJogadorbanimento(Jogadorbanimento jogadorbanimento) {
-		getJogadorbanimentos().remove(jogadorbanimento);
-		jogadorbanimento.setJogador(null);
-
-		return jogadorbanimento;
-	}
-
-	public List<Jogadorperiferico> getJogadorperifericos() {
-		return this.jogadorperifericos;
-	}
-
-	public void setJogadorperifericos(List<Jogadorperiferico> jogadorperifericos) {
-		this.jogadorperifericos = jogadorperifericos;
-	}
-
-	public Jogadorperiferico addJogadorperiferico(Jogadorperiferico jogadorperiferico) {
-		getJogadorperifericos().add(jogadorperiferico);
-		jogadorperiferico.setJogador(this);
-
-		return jogadorperiferico;
-	}
-
-	public Jogadorperiferico removeJogadorperiferico(Jogadorperiferico jogadorperiferico) {
-		getJogadorperifericos().remove(jogadorperiferico);
-		jogadorperiferico.setJogador(null);
-
-		return jogadorperiferico;
-	}
-
+    @Override
+    public String toString() {
+        return "br.com.treinoweb.model.entidade.Jogador[ codigoJogador=" + codigoJogador + " ]";
+    }
+    
 }

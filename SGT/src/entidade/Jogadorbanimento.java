@@ -1,76 +1,127 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package entidade;
 
 import java.io.Serializable;
-import javax.persistence.*;
-
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * The persistent class for the jogadorbanimento database table.
- * 
+ *
+ * @author Jose
  */
 @Entity
-@NamedQuery(name="Jogadorbanimento.findAll", query="SELECT j FROM Jogadorbanimento j")
+@Table(name = "jogadorbanimento")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Jogadorbanimento.findAll", query = "SELECT j FROM Jogadorbanimento j"),
+    @NamedQuery(name = "Jogadorbanimento.findByCodigoJogBan", query = "SELECT j FROM Jogadorbanimento j WHERE j.codigoJogBan = :codigoJogBan"),
+    @NamedQuery(name = "Jogadorbanimento.findByDescricao", query = "SELECT j FROM Jogadorbanimento j WHERE j.descricao = :descricao"),
+    @NamedQuery(name = "Jogadorbanimento.findByAtivo", query = "SELECT j FROM Jogadorbanimento j WHERE j.ativo = :ativo")})
 public class Jogadorbanimento implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "codigoJogBan")
+    private Integer codigoJogBan;
+    @Column(name = "descricao")
+    private String descricao;
+    @Basic(optional = false)
+    @Column(name = "ativo")
+    private boolean ativo;
+    @JoinColumn(name = "codigoJogador", referencedColumnName = "codigoJogador")
+    @ManyToOne(optional = false)
+    private Jogador codigoJogador;
+    @JoinColumn(name = "codigoBanimento", referencedColumnName = "codigoBanimento")
+    @ManyToOne(optional = false)
+    private Banimento codigoBanimento;
 
-	@Id
-	private int codigoJogBan;
+    public Jogadorbanimento() {
+    }
 
-	private byte ativo;
+    public Jogadorbanimento(Integer codigoJogBan) {
+        this.codigoJogBan = codigoJogBan;
+    }
 
-	private String descricao;
+    public Jogadorbanimento(Integer codigoJogBan, boolean ativo) {
+        this.codigoJogBan = codigoJogBan;
+        this.ativo = ativo;
+    }
 
-	//bi-directional many-to-one association to Banimento
-	@ManyToOne
-	@JoinColumn(name="codigoBanimento")
-	private Banimento banimento;
+    public Integer getCodigoJogBan() {
+        return codigoJogBan;
+    }
 
-	//bi-directional many-to-one association to Jogador
-	@ManyToOne
-	@JoinColumn(name="codigoJogador")
-	private Jogador jogador;
+    public void setCodigoJogBan(Integer codigoJogBan) {
+        this.codigoJogBan = codigoJogBan;
+    }
 
-	public Jogadorbanimento() {
-	}
+    public String getDescricao() {
+        return descricao;
+    }
 
-	public int getCodigoJogBan() {
-		return this.codigoJogBan;
-	}
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 
-	public void setCodigoJogBan(int codigoJogBan) {
-		this.codigoJogBan = codigoJogBan;
-	}
+    public boolean getAtivo() {
+        return ativo;
+    }
 
-	public byte getAtivo() {
-		return this.ativo;
-	}
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
 
-	public void setAtivo(byte ativo) {
-		this.ativo = ativo;
-	}
+    public Jogador getCodigoJogador() {
+        return codigoJogador;
+    }
 
-	public String getDescricao() {
-		return this.descricao;
-	}
+    public void setCodigoJogador(Jogador codigoJogador) {
+        this.codigoJogador = codigoJogador;
+    }
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
+    public Banimento getCodigoBanimento() {
+        return codigoBanimento;
+    }
 
-	public Banimento getBanimento() {
-		return this.banimento;
-	}
+    public void setCodigoBanimento(Banimento codigoBanimento) {
+        this.codigoBanimento = codigoBanimento;
+    }
 
-	public void setBanimento(Banimento banimento) {
-		this.banimento = banimento;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (codigoJogBan != null ? codigoJogBan.hashCode() : 0);
+        return hash;
+    }
 
-	public Jogador getJogador() {
-		return this.jogador;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Jogadorbanimento)) {
+            return false;
+        }
+        Jogadorbanimento other = (Jogadorbanimento) object;
+        if ((this.codigoJogBan == null && other.codigoJogBan != null) || (this.codigoJogBan != null && !this.codigoJogBan.equals(other.codigoJogBan))) {
+            return false;
+        }
+        return true;
+    }
 
-	public void setJogador(Jogador jogador) {
-		this.jogador = jogador;
-	}
-
+    @Override
+    public String toString() {
+        return "br.com.treinoweb.model.entidade.Jogadorbanimento[ codigoJogBan=" + codigoJogBan + " ]";
+    }
+    
 }

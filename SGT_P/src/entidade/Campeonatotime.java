@@ -1,68 +1,114 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package entidade;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.Date;
-
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * The persistent class for the campeonatotime database table.
- * 
+ *
+ * @author Jose
  */
 @Entity
-@NamedQuery(name="Campeonatotime.findAll", query="SELECT c FROM Campeonatotime c")
+@Table(name = "campeonatotime")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Campeonatotime.findAll", query = "SELECT c FROM Campeonatotime c"),
+    @NamedQuery(name = "Campeonatotime.findByCodigoCampTime", query = "SELECT c FROM Campeonatotime c WHERE c.codigoCampTime = :codigoCampTime"),
+    @NamedQuery(name = "Campeonatotime.findByDataInscricao", query = "SELECT c FROM Campeonatotime c WHERE c.dataInscricao = :dataInscricao")})
 public class Campeonatotime implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "codigoCampTime")
+    private Integer codigoCampTime;
+    @Column(name = "dataInscricao")
+    @Temporal(TemporalType.DATE)
+    private Date dataInscricao;
+    @JoinColumn(name = "codigoTime", referencedColumnName = "codigoTime")
+    @ManyToOne(optional = false)
+    private Time codigoTime;
+    @JoinColumn(name = "codigoCampeonato", referencedColumnName = "codigoCampeonato")
+    @ManyToOne(optional = false)
+    private Campeonato codigoCampeonato;
 
-	@Id
-	private int codigoCampTime;
+    public Campeonatotime() {
+    }
 
-	@Temporal(TemporalType.DATE)
-	private Date dataInscricao;
+    public Campeonatotime(Integer codigoCampTime) {
+        this.codigoCampTime = codigoCampTime;
+    }
 
-	//bi-directional many-to-one association to Campeonato
-	@ManyToOne
-	@JoinColumn(name="codigoCampeonato")
-	private Campeonato campeonato;
+    public Integer getCodigoCampTime() {
+        return codigoCampTime;
+    }
 
-	//bi-directional many-to-one association to Time
-	@ManyToOne
-	@JoinColumn(name="codigoTime")
-	private Time time;
+    public void setCodigoCampTime(Integer codigoCampTime) {
+        this.codigoCampTime = codigoCampTime;
+    }
 
-	public Campeonatotime() {
-	}
+    public Date getDataInscricao() {
+        return dataInscricao;
+    }
 
-	public int getCodigoCampTime() {
-		return this.codigoCampTime;
-	}
+    public void setDataInscricao(Date dataInscricao) {
+        this.dataInscricao = dataInscricao;
+    }
 
-	public void setCodigoCampTime(int codigoCampTime) {
-		this.codigoCampTime = codigoCampTime;
-	}
+    public Time getCodigoTime() {
+        return codigoTime;
+    }
 
-	public Date getDataInscricao() {
-		return this.dataInscricao;
-	}
+    public void setCodigoTime(Time codigoTime) {
+        this.codigoTime = codigoTime;
+    }
 
-	public void setDataInscricao(Date dataInscricao) {
-		this.dataInscricao = dataInscricao;
-	}
+    public Campeonato getCodigoCampeonato() {
+        return codigoCampeonato;
+    }
 
-	public Campeonato getCampeonato() {
-		return this.campeonato;
-	}
+    public void setCodigoCampeonato(Campeonato codigoCampeonato) {
+        this.codigoCampeonato = codigoCampeonato;
+    }
 
-	public void setCampeonato(Campeonato campeonato) {
-		this.campeonato = campeonato;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (codigoCampTime != null ? codigoCampTime.hashCode() : 0);
+        return hash;
+    }
 
-	public Time getTime() {
-		return this.time;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Campeonatotime)) {
+            return false;
+        }
+        Campeonatotime other = (Campeonatotime) object;
+        if ((this.codigoCampTime == null && other.codigoCampTime != null) || (this.codigoCampTime != null && !this.codigoCampTime.equals(other.codigoCampTime))) {
+            return false;
+        }
+        return true;
+    }
 
-	public void setTime(Time time) {
-		this.time = time;
-	}
-
+    @Override
+    public String toString() {
+        return "br.com.treinoweb.model.entidade.Campeonatotime[ codigoCampTime=" + codigoCampTime + " ]";
+    }
+    
 }

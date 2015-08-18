@@ -1,86 +1,132 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package entidade;
 
 import java.io.Serializable;
-import javax.persistence.*;
-
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * The persistent class for the timepartida database table.
- * 
+ *
+ * @author Jose
  */
 @Entity
-@NamedQuery(name="Timepartida.findAll", query="SELECT t FROM Timepartida t")
+@Table(name = "timepartida")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Timepartida.findAll", query = "SELECT t FROM Timepartida t"),
+    @NamedQuery(name = "Timepartida.findByCodigoTimePartida", query = "SELECT t FROM Timepartida t WHERE t.codigoTimePartida = :codigoTimePartida"),
+    @NamedQuery(name = "Timepartida.findByTimeVencedor", query = "SELECT t FROM Timepartida t WHERE t.timeVencedor = :timeVencedor"),
+    @NamedQuery(name = "Timepartida.findByPlacarTimeVencedor", query = "SELECT t FROM Timepartida t WHERE t.placarTimeVencedor = :placarTimeVencedor"),
+    @NamedQuery(name = "Timepartida.findByPlacarTimePerdedor", query = "SELECT t FROM Timepartida t WHERE t.placarTimePerdedor = :placarTimePerdedor")})
 public class Timepartida implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "codigoTimePartida")
+    private Integer codigoTimePartida;
+    @Column(name = "timeVencedor")
+    private Integer timeVencedor;
+    @Column(name = "placarTimeVencedor")
+    private Integer placarTimeVencedor;
+    @Column(name = "placarTimePerdedor")
+    private Integer placarTimePerdedor;
+    @JoinColumn(name = "codigoTime", referencedColumnName = "codigoTime")
+    @ManyToOne(optional = false)
+    private Time codigoTime;
+    @JoinColumn(name = "codigoPartida", referencedColumnName = "codigoPartida")
+    @ManyToOne(optional = false)
+    private Partida codigoPartida;
 
-	@Id
-	private int codigoTimePartida;
+    public Timepartida() {
+    }
 
-	private int placarTimePerdedor;
+    public Timepartida(Integer codigoTimePartida) {
+        this.codigoTimePartida = codigoTimePartida;
+    }
 
-	private int placarTimeVencedor;
+    public Integer getCodigoTimePartida() {
+        return codigoTimePartida;
+    }
 
-	private int timeVencedor;
+    public void setCodigoTimePartida(Integer codigoTimePartida) {
+        this.codigoTimePartida = codigoTimePartida;
+    }
 
-	//bi-directional many-to-one association to Partida
-	@ManyToOne
-	@JoinColumn(name="codigoPartida")
-	private Partida partida;
+    public Integer getTimeVencedor() {
+        return timeVencedor;
+    }
 
-	//bi-directional many-to-one association to Time
-	@ManyToOne
-	@JoinColumn(name="codigoTime")
-	private Time time;
+    public void setTimeVencedor(Integer timeVencedor) {
+        this.timeVencedor = timeVencedor;
+    }
 
-	public Timepartida() {
-	}
+    public Integer getPlacarTimeVencedor() {
+        return placarTimeVencedor;
+    }
 
-	public int getCodigoTimePartida() {
-		return this.codigoTimePartida;
-	}
+    public void setPlacarTimeVencedor(Integer placarTimeVencedor) {
+        this.placarTimeVencedor = placarTimeVencedor;
+    }
 
-	public void setCodigoTimePartida(int codigoTimePartida) {
-		this.codigoTimePartida = codigoTimePartida;
-	}
+    public Integer getPlacarTimePerdedor() {
+        return placarTimePerdedor;
+    }
 
-	public int getPlacarTimePerdedor() {
-		return this.placarTimePerdedor;
-	}
+    public void setPlacarTimePerdedor(Integer placarTimePerdedor) {
+        this.placarTimePerdedor = placarTimePerdedor;
+    }
 
-	public void setPlacarTimePerdedor(int placarTimePerdedor) {
-		this.placarTimePerdedor = placarTimePerdedor;
-	}
+    public Time getCodigoTime() {
+        return codigoTime;
+    }
 
-	public int getPlacarTimeVencedor() {
-		return this.placarTimeVencedor;
-	}
+    public void setCodigoTime(Time codigoTime) {
+        this.codigoTime = codigoTime;
+    }
 
-	public void setPlacarTimeVencedor(int placarTimeVencedor) {
-		this.placarTimeVencedor = placarTimeVencedor;
-	}
+    public Partida getCodigoPartida() {
+        return codigoPartida;
+    }
 
-	public int getTimeVencedor() {
-		return this.timeVencedor;
-	}
+    public void setCodigoPartida(Partida codigoPartida) {
+        this.codigoPartida = codigoPartida;
+    }
 
-	public void setTimeVencedor(int timeVencedor) {
-		this.timeVencedor = timeVencedor;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (codigoTimePartida != null ? codigoTimePartida.hashCode() : 0);
+        return hash;
+    }
 
-	public Partida getPartida() {
-		return this.partida;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Timepartida)) {
+            return false;
+        }
+        Timepartida other = (Timepartida) object;
+        if ((this.codigoTimePartida == null && other.codigoTimePartida != null) || (this.codigoTimePartida != null && !this.codigoTimePartida.equals(other.codigoTimePartida))) {
+            return false;
+        }
+        return true;
+    }
 
-	public void setPartida(Partida partida) {
-		this.partida = partida;
-	}
-
-	public Time getTime() {
-		return this.time;
-	}
-
-	public void setTime(Time time) {
-		this.time = time;
-	}
-
+    @Override
+    public String toString() {
+        return "br.com.treinoweb.model.entidade.Timepartida[ codigoTimePartida=" + codigoTimePartida + " ]";
+    }
+    
 }

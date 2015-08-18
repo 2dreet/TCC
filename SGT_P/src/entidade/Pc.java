@@ -1,87 +1,129 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package entidade;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
-
+import java.util.Collection;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * The persistent class for the pc database table.
- * 
+ *
+ * @author Jose
  */
 @Entity
-@NamedQuery(name="Pc.findAll", query="SELECT p FROM Pc p")
+@Table(name = "pc")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Pc.findAll", query = "SELECT p FROM Pc p"),
+    @NamedQuery(name = "Pc.findByCodigoPC", query = "SELECT p FROM Pc p WHERE p.codigoPC = :codigoPC"),
+    @NamedQuery(name = "Pc.findByDescricao", query = "SELECT p FROM Pc p WHERE p.descricao = :descricao"),
+    @NamedQuery(name = "Pc.findByMac", query = "SELECT p FROM Pc p WHERE p.mac = :mac"),
+    @NamedQuery(name = "Pc.findByAtivo", query = "SELECT p FROM Pc p WHERE p.ativo = :ativo")})
 public class Pc implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "codigoPC")
+    private Integer codigoPC;
+    @Column(name = "descricao")
+    private String descricao;
+    @Column(name = "mac")
+    private String mac;
+    @Basic(optional = false)
+    @Column(name = "ativo")
+    private boolean ativo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoPc")
+    private Collection<Pcpartida> pcpartidaCollection;
 
-	@Id
-	private int codigoPC;
+    public Pc() {
+    }
 
-	private byte ativo;
+    public Pc(Integer codigoPC) {
+        this.codigoPC = codigoPC;
+    }
 
-	private String descricao;
+    public Pc(Integer codigoPC, boolean ativo) {
+        this.codigoPC = codigoPC;
+        this.ativo = ativo;
+    }
 
-	private String mac;
+    public Integer getCodigoPC() {
+        return codigoPC;
+    }
 
-	//bi-directional many-to-one association to Pcpartida
-	@OneToMany(mappedBy="pc")
-	private List<Pcpartida> pcpartidas;
+    public void setCodigoPC(Integer codigoPC) {
+        this.codigoPC = codigoPC;
+    }
 
-	public Pc() {
-	}
+    public String getDescricao() {
+        return descricao;
+    }
 
-	public int getCodigoPC() {
-		return this.codigoPC;
-	}
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 
-	public void setCodigoPC(int codigoPC) {
-		this.codigoPC = codigoPC;
-	}
+    public String getMac() {
+        return mac;
+    }
 
-	public byte getAtivo() {
-		return this.ativo;
-	}
+    public void setMac(String mac) {
+        this.mac = mac;
+    }
 
-	public void setAtivo(byte ativo) {
-		this.ativo = ativo;
-	}
+    public boolean getAtivo() {
+        return ativo;
+    }
 
-	public String getDescricao() {
-		return this.descricao;
-	}
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
+    @XmlTransient
+    public Collection<Pcpartida> getPcpartidaCollection() {
+        return pcpartidaCollection;
+    }
 
-	public String getMac() {
-		return this.mac;
-	}
+    public void setPcpartidaCollection(Collection<Pcpartida> pcpartidaCollection) {
+        this.pcpartidaCollection = pcpartidaCollection;
+    }
 
-	public void setMac(String mac) {
-		this.mac = mac;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (codigoPC != null ? codigoPC.hashCode() : 0);
+        return hash;
+    }
 
-	public List<Pcpartida> getPcpartidas() {
-		return this.pcpartidas;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Pc)) {
+            return false;
+        }
+        Pc other = (Pc) object;
+        if ((this.codigoPC == null && other.codigoPC != null) || (this.codigoPC != null && !this.codigoPC.equals(other.codigoPC))) {
+            return false;
+        }
+        return true;
+    }
 
-	public void setPcpartidas(List<Pcpartida> pcpartidas) {
-		this.pcpartidas = pcpartidas;
-	}
-
-	public Pcpartida addPcpartida(Pcpartida pcpartida) {
-		getPcpartidas().add(pcpartida);
-		pcpartida.setPc(this);
-
-		return pcpartida;
-	}
-
-	public Pcpartida removePcpartida(Pcpartida pcpartida) {
-		getPcpartidas().remove(pcpartida);
-		pcpartida.setPc(null);
-
-		return pcpartida;
-	}
-
+    @Override
+    public String toString() {
+        return "br.com.treinoweb.model.entidade.Pc[ codigoPC=" + codigoPC + " ]";
+    }
+    
 }

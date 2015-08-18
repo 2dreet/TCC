@@ -1,77 +1,118 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package entidade;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
-
+import java.util.Collection;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * The persistent class for the chave database table.
- * 
+ *
+ * @author Jose
  */
 @Entity
-@NamedQuery(name="Chave.findAll", query="SELECT c FROM Chave c")
+@Table(name = "chave")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Chave.findAll", query = "SELECT c FROM Chave c"),
+    @NamedQuery(name = "Chave.findByCodigoChave", query = "SELECT c FROM Chave c WHERE c.codigoChave = :codigoChave"),
+    @NamedQuery(name = "Chave.findByDescricao", query = "SELECT c FROM Chave c WHERE c.descricao = :descricao"),
+    @NamedQuery(name = "Chave.findByAtivo", query = "SELECT c FROM Chave c WHERE c.ativo = :ativo")})
 public class Chave implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "codigoChave")
+    private Integer codigoChave;
+    @Column(name = "descricao")
+    private String descricao;
+    @Basic(optional = false)
+    @Column(name = "ativo")
+    private boolean ativo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoChave")
+    private Collection<Campeonato> campeonatoCollection;
 
-	@Id
-	private int codigoChave;
+    public Chave() {
+    }
 
-	private byte ativo;
+    public Chave(Integer codigoChave) {
+        this.codigoChave = codigoChave;
+    }
 
-	private String descricao;
+    public Chave(Integer codigoChave, boolean ativo) {
+        this.codigoChave = codigoChave;
+        this.ativo = ativo;
+    }
 
-	//bi-directional many-to-one association to Campeonato
-	@OneToMany(mappedBy="chave")
-	private List<Campeonato> campeonatos;
+    public Integer getCodigoChave() {
+        return codigoChave;
+    }
 
-	public Chave() {
-	}
+    public void setCodigoChave(Integer codigoChave) {
+        this.codigoChave = codigoChave;
+    }
 
-	public int getCodigoChave() {
-		return this.codigoChave;
-	}
+    public String getDescricao() {
+        return descricao;
+    }
 
-	public void setCodigoChave(int codigoChave) {
-		this.codigoChave = codigoChave;
-	}
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 
-	public byte getAtivo() {
-		return this.ativo;
-	}
+    public boolean getAtivo() {
+        return ativo;
+    }
 
-	public void setAtivo(byte ativo) {
-		this.ativo = ativo;
-	}
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
 
-	public String getDescricao() {
-		return this.descricao;
-	}
+    @XmlTransient
+    public Collection<Campeonato> getCampeonatoCollection() {
+        return campeonatoCollection;
+    }
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
+    public void setCampeonatoCollection(Collection<Campeonato> campeonatoCollection) {
+        this.campeonatoCollection = campeonatoCollection;
+    }
 
-	public List<Campeonato> getCampeonatos() {
-		return this.campeonatos;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (codigoChave != null ? codigoChave.hashCode() : 0);
+        return hash;
+    }
 
-	public void setCampeonatos(List<Campeonato> campeonatos) {
-		this.campeonatos = campeonatos;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Chave)) {
+            return false;
+        }
+        Chave other = (Chave) object;
+        if ((this.codigoChave == null && other.codigoChave != null) || (this.codigoChave != null && !this.codigoChave.equals(other.codigoChave))) {
+            return false;
+        }
+        return true;
+    }
 
-	public Campeonato addCampeonato(Campeonato campeonato) {
-		getCampeonatos().add(campeonato);
-		campeonato.setChave(this);
-
-		return campeonato;
-	}
-
-	public Campeonato removeCampeonato(Campeonato campeonato) {
-		getCampeonatos().remove(campeonato);
-		campeonato.setChave(null);
-
-		return campeonato;
-	}
-
+    @Override
+    public String toString() {
+        return "br.com.treinoweb.model.entidade.Chave[ codigoChave=" + codigoChave + " ]";
+    }
+    
 }

@@ -1,103 +1,129 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package entidade;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
-
+import java.util.Collection;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * The persistent class for the periferico database table.
- * 
+ *
+ * @author Jose
  */
 @Entity
-@NamedQuery(name="Periferico.findAll", query="SELECT p FROM Periferico p")
+@Table(name = "periferico")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Periferico.findAll", query = "SELECT p FROM Periferico p"),
+    @NamedQuery(name = "Periferico.findByCodigoPeriferico", query = "SELECT p FROM Periferico p WHERE p.codigoPeriferico = :codigoPeriferico"),
+    @NamedQuery(name = "Periferico.findByDescricao", query = "SELECT p FROM Periferico p WHERE p.descricao = :descricao"),
+    @NamedQuery(name = "Periferico.findByAtivo", query = "SELECT p FROM Periferico p WHERE p.ativo = :ativo")})
 public class Periferico implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "codigoPeriferico")
+    private Integer codigoPeriferico;
+    @Column(name = "descricao")
+    private String descricao;
+    @Basic(optional = false)
+    @Column(name = "ativo")
+    private boolean ativo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoPeriferico")
+    private Collection<Marcaperiferico> marcaperifericoCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoPeriferico")
+    private Collection<Jogadorperiferico> jogadorperifericoCollection;
 
-	@Id
-	private int codigoPeriferico;
+    public Periferico() {
+    }
 
-	private byte ativo;
+    public Periferico(Integer codigoPeriferico) {
+        this.codigoPeriferico = codigoPeriferico;
+    }
 
-	private String descricao;
+    public Periferico(Integer codigoPeriferico, boolean ativo) {
+        this.codigoPeriferico = codigoPeriferico;
+        this.ativo = ativo;
+    }
 
-	//bi-directional many-to-one association to Jogadorperiferico
-	@OneToMany(mappedBy="periferico")
-	private List<Jogadorperiferico> jogadorperifericos;
+    public Integer getCodigoPeriferico() {
+        return codigoPeriferico;
+    }
 
-	//bi-directional many-to-one association to Marcaperiferico
-	@OneToMany(mappedBy="periferico")
-	private List<Marcaperiferico> marcaperifericos;
+    public void setCodigoPeriferico(Integer codigoPeriferico) {
+        this.codigoPeriferico = codigoPeriferico;
+    }
 
-	public Periferico() {
-	}
+    public String getDescricao() {
+        return descricao;
+    }
 
-	public int getCodigoPeriferico() {
-		return this.codigoPeriferico;
-	}
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 
-	public void setCodigoPeriferico(int codigoPeriferico) {
-		this.codigoPeriferico = codigoPeriferico;
-	}
+    public boolean getAtivo() {
+        return ativo;
+    }
 
-	public byte getAtivo() {
-		return this.ativo;
-	}
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
 
-	public void setAtivo(byte ativo) {
-		this.ativo = ativo;
-	}
+    @XmlTransient
+    public Collection<Marcaperiferico> getMarcaperifericoCollection() {
+        return marcaperifericoCollection;
+    }
 
-	public String getDescricao() {
-		return this.descricao;
-	}
+    public void setMarcaperifericoCollection(Collection<Marcaperiferico> marcaperifericoCollection) {
+        this.marcaperifericoCollection = marcaperifericoCollection;
+    }
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
+    @XmlTransient
+    public Collection<Jogadorperiferico> getJogadorperifericoCollection() {
+        return jogadorperifericoCollection;
+    }
 
-	public List<Jogadorperiferico> getJogadorperifericos() {
-		return this.jogadorperifericos;
-	}
+    public void setJogadorperifericoCollection(Collection<Jogadorperiferico> jogadorperifericoCollection) {
+        this.jogadorperifericoCollection = jogadorperifericoCollection;
+    }
 
-	public void setJogadorperifericos(List<Jogadorperiferico> jogadorperifericos) {
-		this.jogadorperifericos = jogadorperifericos;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (codigoPeriferico != null ? codigoPeriferico.hashCode() : 0);
+        return hash;
+    }
 
-	public Jogadorperiferico addJogadorperiferico(Jogadorperiferico jogadorperiferico) {
-		getJogadorperifericos().add(jogadorperiferico);
-		jogadorperiferico.setPeriferico(this);
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Periferico)) {
+            return false;
+        }
+        Periferico other = (Periferico) object;
+        if ((this.codigoPeriferico == null && other.codigoPeriferico != null) || (this.codigoPeriferico != null && !this.codigoPeriferico.equals(other.codigoPeriferico))) {
+            return false;
+        }
+        return true;
+    }
 
-		return jogadorperiferico;
-	}
-
-	public Jogadorperiferico removeJogadorperiferico(Jogadorperiferico jogadorperiferico) {
-		getJogadorperifericos().remove(jogadorperiferico);
-		jogadorperiferico.setPeriferico(null);
-
-		return jogadorperiferico;
-	}
-
-	public List<Marcaperiferico> getMarcaperifericos() {
-		return this.marcaperifericos;
-	}
-
-	public void setMarcaperifericos(List<Marcaperiferico> marcaperifericos) {
-		this.marcaperifericos = marcaperifericos;
-	}
-
-	public Marcaperiferico addMarcaperiferico(Marcaperiferico marcaperiferico) {
-		getMarcaperifericos().add(marcaperiferico);
-		marcaperiferico.setPeriferico(this);
-
-		return marcaperiferico;
-	}
-
-	public Marcaperiferico removeMarcaperiferico(Marcaperiferico marcaperiferico) {
-		getMarcaperifericos().remove(marcaperiferico);
-		marcaperiferico.setPeriferico(null);
-
-		return marcaperiferico;
-	}
-
+    @Override
+    public String toString() {
+        return "br.com.treinoweb.model.entidade.Periferico[ codigoPeriferico=" + codigoPeriferico + " ]";
+    }
+    
 }

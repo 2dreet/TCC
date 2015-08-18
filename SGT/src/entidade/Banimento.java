@@ -1,77 +1,118 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package entidade;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
-
+import java.util.Collection;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * The persistent class for the banimento database table.
- * 
+ *
+ * @author Jose
  */
 @Entity
-@NamedQuery(name="Banimento.findAll", query="SELECT b FROM Banimento b")
+@Table(name = "banimento")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Banimento.findAll", query = "SELECT b FROM Banimento b"),
+    @NamedQuery(name = "Banimento.findByCodigoBanimento", query = "SELECT b FROM Banimento b WHERE b.codigoBanimento = :codigoBanimento"),
+    @NamedQuery(name = "Banimento.findByDescricao", query = "SELECT b FROM Banimento b WHERE b.descricao = :descricao"),
+    @NamedQuery(name = "Banimento.findByAtivo", query = "SELECT b FROM Banimento b WHERE b.ativo = :ativo")})
 public class Banimento implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "codigoBanimento")
+    private Integer codigoBanimento;
+    @Column(name = "descricao")
+    private String descricao;
+    @Basic(optional = false)
+    @Column(name = "ativo")
+    private boolean ativo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoBanimento")
+    private Collection<Jogadorbanimento> jogadorbanimentoCollection;
 
-	@Id
-	private int codigoBanimento;
+    public Banimento() {
+    }
 
-	private byte ativo;
+    public Banimento(Integer codigoBanimento) {
+        this.codigoBanimento = codigoBanimento;
+    }
 
-	private String descricao;
+    public Banimento(Integer codigoBanimento, boolean ativo) {
+        this.codigoBanimento = codigoBanimento;
+        this.ativo = ativo;
+    }
 
-	//bi-directional many-to-one association to Jogadorbanimento
-	@OneToMany(mappedBy="banimento")
-	private List<Jogadorbanimento> jogadorbanimentos;
+    public Integer getCodigoBanimento() {
+        return codigoBanimento;
+    }
 
-	public Banimento() {
-	}
+    public void setCodigoBanimento(Integer codigoBanimento) {
+        this.codigoBanimento = codigoBanimento;
+    }
 
-	public int getCodigoBanimento() {
-		return this.codigoBanimento;
-	}
+    public String getDescricao() {
+        return descricao;
+    }
 
-	public void setCodigoBanimento(int codigoBanimento) {
-		this.codigoBanimento = codigoBanimento;
-	}
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 
-	public byte getAtivo() {
-		return this.ativo;
-	}
+    public boolean getAtivo() {
+        return ativo;
+    }
 
-	public void setAtivo(byte ativo) {
-		this.ativo = ativo;
-	}
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
 
-	public String getDescricao() {
-		return this.descricao;
-	}
+    @XmlTransient
+    public Collection<Jogadorbanimento> getJogadorbanimentoCollection() {
+        return jogadorbanimentoCollection;
+    }
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
+    public void setJogadorbanimentoCollection(Collection<Jogadorbanimento> jogadorbanimentoCollection) {
+        this.jogadorbanimentoCollection = jogadorbanimentoCollection;
+    }
 
-	public List<Jogadorbanimento> getJogadorbanimentos() {
-		return this.jogadorbanimentos;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (codigoBanimento != null ? codigoBanimento.hashCode() : 0);
+        return hash;
+    }
 
-	public void setJogadorbanimentos(List<Jogadorbanimento> jogadorbanimentos) {
-		this.jogadorbanimentos = jogadorbanimentos;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Banimento)) {
+            return false;
+        }
+        Banimento other = (Banimento) object;
+        if ((this.codigoBanimento == null && other.codigoBanimento != null) || (this.codigoBanimento != null && !this.codigoBanimento.equals(other.codigoBanimento))) {
+            return false;
+        }
+        return true;
+    }
 
-	public Jogadorbanimento addJogadorbanimento(Jogadorbanimento jogadorbanimento) {
-		getJogadorbanimentos().add(jogadorbanimento);
-		jogadorbanimento.setBanimento(this);
-
-		return jogadorbanimento;
-	}
-
-	public Jogadorbanimento removeJogadorbanimento(Jogadorbanimento jogadorbanimento) {
-		getJogadorbanimentos().remove(jogadorbanimento);
-		jogadorbanimento.setBanimento(null);
-
-		return jogadorbanimento;
-	}
-
+    @Override
+    public String toString() {
+        return "br.com.treinoweb.model.entidade.Banimento[ codigoBanimento=" + codigoBanimento + " ]";
+    }
+    
 }

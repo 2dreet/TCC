@@ -1,56 +1,99 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package entidade;
 
 import java.io.Serializable;
-import javax.persistence.*;
-
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * The persistent class for the pcpartida database table.
- * 
+ *
+ * @author Jose
  */
 @Entity
-@NamedQuery(name="Pcpartida.findAll", query="SELECT p FROM Pcpartida p")
+@Table(name = "pcpartida")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Pcpartida.findAll", query = "SELECT p FROM Pcpartida p"),
+    @NamedQuery(name = "Pcpartida.findByCodigoPcPartida", query = "SELECT p FROM Pcpartida p WHERE p.codigoPcPartida = :codigoPcPartida")})
 public class Pcpartida implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "codigoPcPartida")
+    private Integer codigoPcPartida;
+    @JoinColumn(name = "codigoPc", referencedColumnName = "codigoPC")
+    @ManyToOne(optional = false)
+    private Pc codigoPc;
+    @JoinColumn(name = "codigoPartida", referencedColumnName = "codigoPartida")
+    @ManyToOne(optional = false)
+    private Partida codigoPartida;
 
-	@Id
-	private int codigoPcPartida;
+    public Pcpartida() {
+    }
 
-	//bi-directional many-to-one association to Partida
-	@ManyToOne
-	@JoinColumn(name="codigoPartida")
-	private Partida partida;
+    public Pcpartida(Integer codigoPcPartida) {
+        this.codigoPcPartida = codigoPcPartida;
+    }
 
-	//bi-directional many-to-one association to Pc
-	@ManyToOne
-	@JoinColumn(name="codigoPc")
-	private Pc pc;
+    public Integer getCodigoPcPartida() {
+        return codigoPcPartida;
+    }
 
-	public Pcpartida() {
-	}
+    public void setCodigoPcPartida(Integer codigoPcPartida) {
+        this.codigoPcPartida = codigoPcPartida;
+    }
 
-	public int getCodigoPcPartida() {
-		return this.codigoPcPartida;
-	}
+    public Pc getCodigoPc() {
+        return codigoPc;
+    }
 
-	public void setCodigoPcPartida(int codigoPcPartida) {
-		this.codigoPcPartida = codigoPcPartida;
-	}
+    public void setCodigoPc(Pc codigoPc) {
+        this.codigoPc = codigoPc;
+    }
 
-	public Partida getPartida() {
-		return this.partida;
-	}
+    public Partida getCodigoPartida() {
+        return codigoPartida;
+    }
 
-	public void setPartida(Partida partida) {
-		this.partida = partida;
-	}
+    public void setCodigoPartida(Partida codigoPartida) {
+        this.codigoPartida = codigoPartida;
+    }
 
-	public Pc getPc() {
-		return this.pc;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (codigoPcPartida != null ? codigoPcPartida.hashCode() : 0);
+        return hash;
+    }
 
-	public void setPc(Pc pc) {
-		this.pc = pc;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Pcpartida)) {
+            return false;
+        }
+        Pcpartida other = (Pcpartida) object;
+        if ((this.codigoPcPartida == null && other.codigoPcPartida != null) || (this.codigoPcPartida != null && !this.codigoPcPartida.equals(other.codigoPcPartida))) {
+            return false;
+        }
+        return true;
+    }
 
+    @Override
+    public String toString() {
+        return "br.com.treinoweb.model.entidade.Pcpartida[ codigoPcPartida=" + codigoPcPartida + " ]";
+    }
+    
 }

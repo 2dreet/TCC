@@ -1,219 +1,190 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package entidade;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
-
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * The persistent class for the time database table.
- * 
+ *
+ * @author Jose
  */
 @Entity
-@NamedQuery(name="Time.findAll", query="SELECT t FROM Time t")
+@Table(name = "time")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Time.findAll", query = "SELECT t FROM Time t"),
+    @NamedQuery(name = "Time.findByCodigoTime", query = "SELECT t FROM Time t WHERE t.codigoTime = :codigoTime"),
+    @NamedQuery(name = "Time.findByDescricao", query = "SELECT t FROM Time t WHERE t.descricao = :descricao"),
+    @NamedQuery(name = "Time.findByDataCadastro", query = "SELECT t FROM Time t WHERE t.dataCadastro = :dataCadastro"),
+    @NamedQuery(name = "Time.findByAtivo", query = "SELECT t FROM Time t WHERE t.ativo = :ativo")})
 public class Time implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "codigoTime")
+    private Integer codigoTime;
+    @Column(name = "descricao")
+    private String descricao;
+    @Basic(optional = false)
+    @Column(name = "dataCadastro")
+    @Temporal(TemporalType.DATE)
+    private Date dataCadastro;
+    @Basic(optional = false)
+    @Column(name = "ativo")
+    private boolean ativo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "timeTerceiro")
+    private Collection<Classificacao> classificacaoCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "timeSegundo")
+    private Collection<Classificacao> classificacaoCollection1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "timePrimeiro")
+    private Collection<Classificacao> classificacaoCollection2;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoTime")
+    private Collection<Jogador> jogadorCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoTime")
+    private Collection<Timepartida> timepartidaCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoTime")
+    private Collection<Campeonatotime> campeonatotimeCollection;
 
-	@Id
-	private int codigoTime;
+    public Time() {
+    }
 
-	private byte ativo;
+    public Time(Integer codigoTime) {
+        this.codigoTime = codigoTime;
+    }
 
-	@Temporal(TemporalType.DATE)
-	private Date dataCadastro;
+    public Time(Integer codigoTime, Date dataCadastro, boolean ativo) {
+        this.codigoTime = codigoTime;
+        this.dataCadastro = dataCadastro;
+        this.ativo = ativo;
+    }
 
-	private String descricao;
+    public Integer getCodigoTime() {
+        return codigoTime;
+    }
 
-	//bi-directional many-to-one association to Campeonatotime
-	@OneToMany(mappedBy="time")
-	private List<Campeonatotime> campeonatotimes;
+    public void setCodigoTime(Integer codigoTime) {
+        this.codigoTime = codigoTime;
+    }
 
-	//bi-directional many-to-one association to Classificacao
-	@OneToMany(mappedBy="time1")
-	private List<Classificacao> classificacaos1;
+    public String getDescricao() {
+        return descricao;
+    }
 
-	//bi-directional many-to-one association to Classificacao
-	@OneToMany(mappedBy="time2")
-	private List<Classificacao> classificacaos2;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 
-	//bi-directional many-to-one association to Classificacao
-	@OneToMany(mappedBy="time3")
-	private List<Classificacao> classificacaos3;
+    public Date getDataCadastro() {
+        return dataCadastro;
+    }
 
-	//bi-directional many-to-one association to Jogador
-	@OneToMany(mappedBy="time")
-	private List<Jogador> jogadors;
+    public void setDataCadastro(Date dataCadastro) {
+        this.dataCadastro = dataCadastro;
+    }
 
-	//bi-directional many-to-one association to Timepartida
-	@OneToMany(mappedBy="time")
-	private List<Timepartida> timepartidas;
+    public boolean getAtivo() {
+        return ativo;
+    }
 
-	public Time() {
-	}
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
 
-	public int getCodigoTime() {
-		return this.codigoTime;
-	}
+    @XmlTransient
+    public Collection<Classificacao> getClassificacaoCollection() {
+        return classificacaoCollection;
+    }
 
-	public void setCodigoTime(int codigoTime) {
-		this.codigoTime = codigoTime;
-	}
+    public void setClassificacaoCollection(Collection<Classificacao> classificacaoCollection) {
+        this.classificacaoCollection = classificacaoCollection;
+    }
 
-	public byte getAtivo() {
-		return this.ativo;
-	}
+    @XmlTransient
+    public Collection<Classificacao> getClassificacaoCollection1() {
+        return classificacaoCollection1;
+    }
 
-	public void setAtivo(byte ativo) {
-		this.ativo = ativo;
-	}
+    public void setClassificacaoCollection1(Collection<Classificacao> classificacaoCollection1) {
+        this.classificacaoCollection1 = classificacaoCollection1;
+    }
 
-	public Date getDataCadastro() {
-		return this.dataCadastro;
-	}
+    @XmlTransient
+    public Collection<Classificacao> getClassificacaoCollection2() {
+        return classificacaoCollection2;
+    }
 
-	public void setDataCadastro(Date dataCadastro) {
-		this.dataCadastro = dataCadastro;
-	}
+    public void setClassificacaoCollection2(Collection<Classificacao> classificacaoCollection2) {
+        this.classificacaoCollection2 = classificacaoCollection2;
+    }
 
-	public String getDescricao() {
-		return this.descricao;
-	}
+    @XmlTransient
+    public Collection<Jogador> getJogadorCollection() {
+        return jogadorCollection;
+    }
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
+    public void setJogadorCollection(Collection<Jogador> jogadorCollection) {
+        this.jogadorCollection = jogadorCollection;
+    }
 
-	public List<Campeonatotime> getCampeonatotimes() {
-		return this.campeonatotimes;
-	}
+    @XmlTransient
+    public Collection<Timepartida> getTimepartidaCollection() {
+        return timepartidaCollection;
+    }
 
-	public void setCampeonatotimes(List<Campeonatotime> campeonatotimes) {
-		this.campeonatotimes = campeonatotimes;
-	}
+    public void setTimepartidaCollection(Collection<Timepartida> timepartidaCollection) {
+        this.timepartidaCollection = timepartidaCollection;
+    }
 
-	public Campeonatotime addCampeonatotime(Campeonatotime campeonatotime) {
-		getCampeonatotimes().add(campeonatotime);
-		campeonatotime.setTime(this);
+    @XmlTransient
+    public Collection<Campeonatotime> getCampeonatotimeCollection() {
+        return campeonatotimeCollection;
+    }
 
-		return campeonatotime;
-	}
+    public void setCampeonatotimeCollection(Collection<Campeonatotime> campeonatotimeCollection) {
+        this.campeonatotimeCollection = campeonatotimeCollection;
+    }
 
-	public Campeonatotime removeCampeonatotime(Campeonatotime campeonatotime) {
-		getCampeonatotimes().remove(campeonatotime);
-		campeonatotime.setTime(null);
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (codigoTime != null ? codigoTime.hashCode() : 0);
+        return hash;
+    }
 
-		return campeonatotime;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Time)) {
+            return false;
+        }
+        Time other = (Time) object;
+        if ((this.codigoTime == null && other.codigoTime != null) || (this.codigoTime != null && !this.codigoTime.equals(other.codigoTime))) {
+            return false;
+        }
+        return true;
+    }
 
-	public List<Classificacao> getClassificacaos1() {
-		return this.classificacaos1;
-	}
-
-	public void setClassificacaos1(List<Classificacao> classificacaos1) {
-		this.classificacaos1 = classificacaos1;
-	}
-
-	public Classificacao addClassificacaos1(Classificacao classificacaos1) {
-		getClassificacaos1().add(classificacaos1);
-		classificacaos1.setTime1(this);
-
-		return classificacaos1;
-	}
-
-	public Classificacao removeClassificacaos1(Classificacao classificacaos1) {
-		getClassificacaos1().remove(classificacaos1);
-		classificacaos1.setTime1(null);
-
-		return classificacaos1;
-	}
-
-	public List<Classificacao> getClassificacaos2() {
-		return this.classificacaos2;
-	}
-
-	public void setClassificacaos2(List<Classificacao> classificacaos2) {
-		this.classificacaos2 = classificacaos2;
-	}
-
-	public Classificacao addClassificacaos2(Classificacao classificacaos2) {
-		getClassificacaos2().add(classificacaos2);
-		classificacaos2.setTime2(this);
-
-		return classificacaos2;
-	}
-
-	public Classificacao removeClassificacaos2(Classificacao classificacaos2) {
-		getClassificacaos2().remove(classificacaos2);
-		classificacaos2.setTime2(null);
-
-		return classificacaos2;
-	}
-
-	public List<Classificacao> getClassificacaos3() {
-		return this.classificacaos3;
-	}
-
-	public void setClassificacaos3(List<Classificacao> classificacaos3) {
-		this.classificacaos3 = classificacaos3;
-	}
-
-	public Classificacao addClassificacaos3(Classificacao classificacaos3) {
-		getClassificacaos3().add(classificacaos3);
-		classificacaos3.setTime3(this);
-
-		return classificacaos3;
-	}
-
-	public Classificacao removeClassificacaos3(Classificacao classificacaos3) {
-		getClassificacaos3().remove(classificacaos3);
-		classificacaos3.setTime3(null);
-
-		return classificacaos3;
-	}
-
-	public List<Jogador> getJogadors() {
-		return this.jogadors;
-	}
-
-	public void setJogadors(List<Jogador> jogadors) {
-		this.jogadors = jogadors;
-	}
-
-	public Jogador addJogador(Jogador jogador) {
-		getJogadors().add(jogador);
-		jogador.setTime(this);
-
-		return jogador;
-	}
-
-	public Jogador removeJogador(Jogador jogador) {
-		getJogadors().remove(jogador);
-		jogador.setTime(null);
-
-		return jogador;
-	}
-
-	public List<Timepartida> getTimepartidas() {
-		return this.timepartidas;
-	}
-
-	public void setTimepartidas(List<Timepartida> timepartidas) {
-		this.timepartidas = timepartidas;
-	}
-
-	public Timepartida addTimepartida(Timepartida timepartida) {
-		getTimepartidas().add(timepartida);
-		timepartida.setTime(this);
-
-		return timepartida;
-	}
-
-	public Timepartida removeTimepartida(Timepartida timepartida) {
-		getTimepartidas().remove(timepartida);
-		timepartida.setTime(null);
-
-		return timepartida;
-	}
-
+    @Override
+    public String toString() {
+        return "br.com.treinoweb.model.entidade.Time[ codigoTime=" + codigoTime + " ]";
+    }
+    
 }

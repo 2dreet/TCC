@@ -1,77 +1,118 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package entidade;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
-
+import java.util.Collection;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * The persistent class for the modalidade database table.
- * 
+ *
+ * @author Jose
  */
 @Entity
-@NamedQuery(name="Modalidade.findAll", query="SELECT m FROM Modalidade m")
+@Table(name = "modalidade")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Modalidade.findAll", query = "SELECT m FROM Modalidade m"),
+    @NamedQuery(name = "Modalidade.findByCodigoModalidade", query = "SELECT m FROM Modalidade m WHERE m.codigoModalidade = :codigoModalidade"),
+    @NamedQuery(name = "Modalidade.findByDescricao", query = "SELECT m FROM Modalidade m WHERE m.descricao = :descricao"),
+    @NamedQuery(name = "Modalidade.findByAtivo", query = "SELECT m FROM Modalidade m WHERE m.ativo = :ativo")})
 public class Modalidade implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "codigoModalidade")
+    private Integer codigoModalidade;
+    @Column(name = "descricao")
+    private String descricao;
+    @Basic(optional = false)
+    @Column(name = "ativo")
+    private boolean ativo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoModalidade")
+    private Collection<Campeonato> campeonatoCollection;
 
-	@Id
-	private int codigoModalidade;
+    public Modalidade() {
+    }
 
-	private byte ativo;
+    public Modalidade(Integer codigoModalidade) {
+        this.codigoModalidade = codigoModalidade;
+    }
 
-	private String descricao;
+    public Modalidade(Integer codigoModalidade, boolean ativo) {
+        this.codigoModalidade = codigoModalidade;
+        this.ativo = ativo;
+    }
 
-	//bi-directional many-to-one association to Campeonato
-	@OneToMany(mappedBy="modalidade")
-	private List<Campeonato> campeonatos;
+    public Integer getCodigoModalidade() {
+        return codigoModalidade;
+    }
 
-	public Modalidade() {
-	}
+    public void setCodigoModalidade(Integer codigoModalidade) {
+        this.codigoModalidade = codigoModalidade;
+    }
 
-	public int getCodigoModalidade() {
-		return this.codigoModalidade;
-	}
+    public String getDescricao() {
+        return descricao;
+    }
 
-	public void setCodigoModalidade(int codigoModalidade) {
-		this.codigoModalidade = codigoModalidade;
-	}
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 
-	public byte getAtivo() {
-		return this.ativo;
-	}
+    public boolean getAtivo() {
+        return ativo;
+    }
 
-	public void setAtivo(byte ativo) {
-		this.ativo = ativo;
-	}
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
 
-	public String getDescricao() {
-		return this.descricao;
-	}
+    @XmlTransient
+    public Collection<Campeonato> getCampeonatoCollection() {
+        return campeonatoCollection;
+    }
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
+    public void setCampeonatoCollection(Collection<Campeonato> campeonatoCollection) {
+        this.campeonatoCollection = campeonatoCollection;
+    }
 
-	public List<Campeonato> getCampeonatos() {
-		return this.campeonatos;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (codigoModalidade != null ? codigoModalidade.hashCode() : 0);
+        return hash;
+    }
 
-	public void setCampeonatos(List<Campeonato> campeonatos) {
-		this.campeonatos = campeonatos;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Modalidade)) {
+            return false;
+        }
+        Modalidade other = (Modalidade) object;
+        if ((this.codigoModalidade == null && other.codigoModalidade != null) || (this.codigoModalidade != null && !this.codigoModalidade.equals(other.codigoModalidade))) {
+            return false;
+        }
+        return true;
+    }
 
-	public Campeonato addCampeonato(Campeonato campeonato) {
-		getCampeonatos().add(campeonato);
-		campeonato.setModalidade(this);
-
-		return campeonato;
-	}
-
-	public Campeonato removeCampeonato(Campeonato campeonato) {
-		getCampeonatos().remove(campeonato);
-		campeonato.setModalidade(null);
-
-		return campeonato;
-	}
-
+    @Override
+    public String toString() {
+        return "br.com.treinoweb.model.entidade.Modalidade[ codigoModalidade=" + codigoModalidade + " ]";
+    }
+    
 }

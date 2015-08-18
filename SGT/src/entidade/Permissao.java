@@ -1,77 +1,118 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package entidade;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
-
+import java.util.Collection;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * The persistent class for the permissao database table.
- * 
+ *
+ * @author Jose
  */
 @Entity
-@NamedQuery(name="Permissao.findAll", query="SELECT p FROM Permissao p")
+@Table(name = "permissao")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Permissao.findAll", query = "SELECT p FROM Permissao p"),
+    @NamedQuery(name = "Permissao.findByCodigoPermissao", query = "SELECT p FROM Permissao p WHERE p.codigoPermissao = :codigoPermissao"),
+    @NamedQuery(name = "Permissao.findByDescricao", query = "SELECT p FROM Permissao p WHERE p.descricao = :descricao"),
+    @NamedQuery(name = "Permissao.findByAtivo", query = "SELECT p FROM Permissao p WHERE p.ativo = :ativo")})
 public class Permissao implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "codigoPermissao")
+    private Integer codigoPermissao;
+    @Column(name = "descricao")
+    private String descricao;
+    @Basic(optional = false)
+    @Column(name = "ativo")
+    private boolean ativo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoPermissao")
+    private Collection<Usuario> usuarioCollection;
 
-	@Id
-	private int codigoPermissao;
+    public Permissao() {
+    }
 
-	private byte ativo;
+    public Permissao(Integer codigoPermissao) {
+        this.codigoPermissao = codigoPermissao;
+    }
 
-	private String descricao;
+    public Permissao(Integer codigoPermissao, boolean ativo) {
+        this.codigoPermissao = codigoPermissao;
+        this.ativo = ativo;
+    }
 
-	//bi-directional many-to-one association to Usuario
-	@OneToMany(mappedBy="permissao")
-	private List<Usuario> usuarios;
+    public Integer getCodigoPermissao() {
+        return codigoPermissao;
+    }
 
-	public Permissao() {
-	}
+    public void setCodigoPermissao(Integer codigoPermissao) {
+        this.codigoPermissao = codigoPermissao;
+    }
 
-	public int getCodigoPermissao() {
-		return this.codigoPermissao;
-	}
+    public String getDescricao() {
+        return descricao;
+    }
 
-	public void setCodigoPermissao(int codigoPermissao) {
-		this.codigoPermissao = codigoPermissao;
-	}
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 
-	public byte getAtivo() {
-		return this.ativo;
-	}
+    public boolean getAtivo() {
+        return ativo;
+    }
 
-	public void setAtivo(byte ativo) {
-		this.ativo = ativo;
-	}
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
 
-	public String getDescricao() {
-		return this.descricao;
-	}
+    @XmlTransient
+    public Collection<Usuario> getUsuarioCollection() {
+        return usuarioCollection;
+    }
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
+    public void setUsuarioCollection(Collection<Usuario> usuarioCollection) {
+        this.usuarioCollection = usuarioCollection;
+    }
 
-	public List<Usuario> getUsuarios() {
-		return this.usuarios;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (codigoPermissao != null ? codigoPermissao.hashCode() : 0);
+        return hash;
+    }
 
-	public void setUsuarios(List<Usuario> usuarios) {
-		this.usuarios = usuarios;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Permissao)) {
+            return false;
+        }
+        Permissao other = (Permissao) object;
+        if ((this.codigoPermissao == null && other.codigoPermissao != null) || (this.codigoPermissao != null && !this.codigoPermissao.equals(other.codigoPermissao))) {
+            return false;
+        }
+        return true;
+    }
 
-	public Usuario addUsuario(Usuario usuario) {
-		getUsuarios().add(usuario);
-		usuario.setPermissao(this);
-
-		return usuario;
-	}
-
-	public Usuario removeUsuario(Usuario usuario) {
-		getUsuarios().remove(usuario);
-		usuario.setPermissao(null);
-
-		return usuario;
-	}
-
+    @Override
+    public String toString() {
+        return "br.com.treinoweb.model.entidade.Permissao[ codigoPermissao=" + codigoPermissao + " ]";
+    }
+    
 }

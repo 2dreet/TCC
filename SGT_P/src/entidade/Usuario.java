@@ -1,198 +1,244 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package entidade;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
-
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * The persistent class for the usuario database table.
- * 
+ *
+ * @author Jose
  */
 @Entity
-@NamedQuery(name="Usuario.findAll", query="SELECT u FROM Usuario u")
+@Table(name = "usuario")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
+    @NamedQuery(name = "Usuario.findByCodigoUsuario", query = "SELECT u FROM Usuario u WHERE u.codigoUsuario = :codigoUsuario"),
+    @NamedQuery(name = "Usuario.findByNome", query = "SELECT u FROM Usuario u WHERE u.nome = :nome"),
+    @NamedQuery(name = "Usuario.findBySobreNome", query = "SELECT u FROM Usuario u WHERE u.sobreNome = :sobreNome"),
+    @NamedQuery(name = "Usuario.findByRg", query = "SELECT u FROM Usuario u WHERE u.rg = :rg"),
+    @NamedQuery(name = "Usuario.findByCpf", query = "SELECT u FROM Usuario u WHERE u.cpf = :cpf"),
+    @NamedQuery(name = "Usuario.findByDataNascimento", query = "SELECT u FROM Usuario u WHERE u.dataNascimento = :dataNascimento"),
+    @NamedQuery(name = "Usuario.findByTelefone", query = "SELECT u FROM Usuario u WHERE u.telefone = :telefone"),
+    @NamedQuery(name = "Usuario.findByEmail", query = "SELECT u FROM Usuario u WHERE u.email = :email"),
+    @NamedQuery(name = "Usuario.findByUsuario", query = "SELECT u FROM Usuario u WHERE u.usuario = :usuario"),
+    @NamedQuery(name = "Usuario.findBySenha", query = "SELECT u FROM Usuario u WHERE u.senha = :senha"),
+    @NamedQuery(name = "Usuario.findByAtivo", query = "SELECT u FROM Usuario u WHERE u.ativo = :ativo")})
 public class Usuario implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "codigoUsuario")
+    private Integer codigoUsuario;
+    @Basic(optional = false)
+    @Column(name = "nome")
+    private String nome;
+    @Basic(optional = false)
+    @Column(name = "sobreNome")
+    private String sobreNome;
+    @Column(name = "rg")
+    private String rg;
+    @Column(name = "cpf")
+    private String cpf;
+    @Basic(optional = false)
+    @Column(name = "dataNascimento")
+    @Temporal(TemporalType.DATE)
+    private Date dataNascimento;
+    @Column(name = "telefone")
+    private String telefone;
+    @Column(name = "email")
+    private String email;
+    @Basic(optional = false)
+    @Column(name = "usuario")
+    private String usuario;
+    @Basic(optional = false)
+    @Column(name = "senha")
+    private String senha;
+    @Basic(optional = false)
+    @Column(name = "ativo")
+    private boolean ativo;
+    @JoinColumn(name = "codigoPermissao", referencedColumnName = "codigoPermissao")
+    @ManyToOne(optional = false)
+    private Permissao codigoPermissao;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoUsuario")
+    private Collection<Funcionario> funcionarioCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoUsuario")
+    private Collection<Jogador> jogadorCollection;
 
-	@Id
-	private int codigoUsuario;
+    public Usuario() {
+    }
 
-	private byte ativo;
+    public Usuario(Integer codigoUsuario) {
+        this.codigoUsuario = codigoUsuario;
+    }
 
-	private String cpf;
+    public Usuario(Integer codigoUsuario, String nome, String sobreNome, Date dataNascimento, String usuario, String senha, boolean ativo) {
+        this.codigoUsuario = codigoUsuario;
+        this.nome = nome;
+        this.sobreNome = sobreNome;
+        this.dataNascimento = dataNascimento;
+        this.usuario = usuario;
+        this.senha = senha;
+        this.ativo = ativo;
+    }
 
-	@Temporal(TemporalType.DATE)
-	private Date dataNascimento;
+    public Integer getCodigoUsuario() {
+        return codigoUsuario;
+    }
 
-	private String email;
+    public void setCodigoUsuario(Integer codigoUsuario) {
+        this.codigoUsuario = codigoUsuario;
+    }
 
-	private String nome;
+    public String getNome() {
+        return nome;
+    }
 
-	private String rg;
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-	private String senha;
+    public String getSobreNome() {
+        return sobreNome;
+    }
 
-	private String sobreNome;
+    public void setSobreNome(String sobreNome) {
+        this.sobreNome = sobreNome;
+    }
 
-	private String telefone;
+    public String getRg() {
+        return rg;
+    }
 
-	private String usuario;
+    public void setRg(String rg) {
+        this.rg = rg;
+    }
 
-	//bi-directional many-to-one association to Funcionario
-	@OneToMany(mappedBy="usuario")
-	private List<Funcionario> funcionarios;
+    public String getCpf() {
+        return cpf;
+    }
 
-	//bi-directional many-to-one association to Jogador
-	@OneToMany(mappedBy="usuario")
-	private List<Jogador> jogadors;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
 
-	//bi-directional many-to-one association to Permissao
-	@ManyToOne
-	@JoinColumn(name="codigoPermissao")
-	private Permissao permissao;
+    public Date getDataNascimento() {
+        return dataNascimento;
+    }
 
-	public Usuario() {
-	}
+    public void setDataNascimento(Date dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
 
-	public int getCodigoUsuario() {
-		return this.codigoUsuario;
-	}
+    public String getTelefone() {
+        return telefone;
+    }
 
-	public void setCodigoUsuario(int codigoUsuario) {
-		this.codigoUsuario = codigoUsuario;
-	}
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
 
-	public byte getAtivo() {
-		return this.ativo;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setAtivo(byte ativo) {
-		this.ativo = ativo;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public String getCpf() {
-		return this.cpf;
-	}
+    public String getUsuario() {
+        return usuario;
+    }
 
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
 
-	public Date getDataNascimento() {
-		return this.dataNascimento;
-	}
+    public String getSenha() {
+        return senha;
+    }
 
-	public void setDataNascimento(Date dataNascimento) {
-		this.dataNascimento = dataNascimento;
-	}
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
 
-	public String getEmail() {
-		return this.email;
-	}
+    public boolean getAtivo() {
+        return ativo;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
 
-	public String getNome() {
-		return this.nome;
-	}
+    public Permissao getCodigoPermissao() {
+        return codigoPermissao;
+    }
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+    public void setCodigoPermissao(Permissao codigoPermissao) {
+        this.codigoPermissao = codigoPermissao;
+    }
 
-	public String getRg() {
-		return this.rg;
-	}
+    @XmlTransient
+    public Collection<Funcionario> getFuncionarioCollection() {
+        return funcionarioCollection;
+    }
 
-	public void setRg(String rg) {
-		this.rg = rg;
-	}
+    public void setFuncionarioCollection(Collection<Funcionario> funcionarioCollection) {
+        this.funcionarioCollection = funcionarioCollection;
+    }
 
-	public String getSenha() {
-		return this.senha;
-	}
+    @XmlTransient
+    public Collection<Jogador> getJogadorCollection() {
+        return jogadorCollection;
+    }
 
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
+    public void setJogadorCollection(Collection<Jogador> jogadorCollection) {
+        this.jogadorCollection = jogadorCollection;
+    }
 
-	public String getSobreNome() {
-		return this.sobreNome;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (codigoUsuario != null ? codigoUsuario.hashCode() : 0);
+        return hash;
+    }
 
-	public void setSobreNome(String sobreNome) {
-		this.sobreNome = sobreNome;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Usuario)) {
+            return false;
+        }
+        Usuario other = (Usuario) object;
+        if ((this.codigoUsuario == null && other.codigoUsuario != null) || (this.codigoUsuario != null && !this.codigoUsuario.equals(other.codigoUsuario))) {
+            return false;
+        }
+        return true;
+    }
 
-	public String getTelefone() {
-		return this.telefone;
-	}
-
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
-	}
-
-	public String getUsuario() {
-		return this.usuario;
-	}
-
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
-	}
-
-	public List<Funcionario> getFuncionarios() {
-		return this.funcionarios;
-	}
-
-	public void setFuncionarios(List<Funcionario> funcionarios) {
-		this.funcionarios = funcionarios;
-	}
-
-	public Funcionario addFuncionario(Funcionario funcionario) {
-		getFuncionarios().add(funcionario);
-		funcionario.setUsuario(this);
-
-		return funcionario;
-	}
-
-	public Funcionario removeFuncionario(Funcionario funcionario) {
-		getFuncionarios().remove(funcionario);
-		funcionario.setUsuario(null);
-
-		return funcionario;
-	}
-
-	public List<Jogador> getJogadors() {
-		return this.jogadors;
-	}
-
-	public void setJogadors(List<Jogador> jogadors) {
-		this.jogadors = jogadors;
-	}
-
-	public Jogador addJogador(Jogador jogador) {
-		getJogadors().add(jogador);
-		jogador.setUsuario(this);
-
-		return jogador;
-	}
-
-	public Jogador removeJogador(Jogador jogador) {
-		getJogadors().remove(jogador);
-		jogador.setUsuario(null);
-
-		return jogador;
-	}
-
-	public Permissao getPermissao() {
-		return this.permissao;
-	}
-
-	public void setPermissao(Permissao permissao) {
-		this.permissao = permissao;
-	}
-
+    @Override
+    public String toString() {
+        return "br.com.treinoweb.model.entidade.Usuario[ codigoUsuario=" + codigoUsuario + " ]";
+    }
+    
 }

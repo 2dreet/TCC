@@ -1,56 +1,99 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package entidade;
 
 import java.io.Serializable;
-import javax.persistence.*;
-
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * The persistent class for the campeonatopartida database table.
- * 
+ *
+ * @author Jose
  */
 @Entity
-@NamedQuery(name="Campeonatopartida.findAll", query="SELECT c FROM Campeonatopartida c")
+@Table(name = "campeonatopartida")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Campeonatopartida.findAll", query = "SELECT c FROM Campeonatopartida c"),
+    @NamedQuery(name = "Campeonatopartida.findByCodigoCampPartida", query = "SELECT c FROM Campeonatopartida c WHERE c.codigoCampPartida = :codigoCampPartida")})
 public class Campeonatopartida implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "codigoCampPartida")
+    private Integer codigoCampPartida;
+    @JoinColumn(name = "codigoPartida", referencedColumnName = "codigoPartida")
+    @ManyToOne(optional = false)
+    private Partida codigoPartida;
+    @JoinColumn(name = "codigoCampeonato", referencedColumnName = "codigoCampeonato")
+    @ManyToOne(optional = false)
+    private Campeonato codigoCampeonato;
 
-	@Id
-	private int codigoCampPartida;
+    public Campeonatopartida() {
+    }
 
-	//bi-directional many-to-one association to Campeonato
-	@ManyToOne
-	@JoinColumn(name="codigoCampeonato")
-	private Campeonato campeonato;
+    public Campeonatopartida(Integer codigoCampPartida) {
+        this.codigoCampPartida = codigoCampPartida;
+    }
 
-	//bi-directional many-to-one association to Partida
-	@ManyToOne
-	@JoinColumn(name="codigoPartida")
-	private Partida partida;
+    public Integer getCodigoCampPartida() {
+        return codigoCampPartida;
+    }
 
-	public Campeonatopartida() {
-	}
+    public void setCodigoCampPartida(Integer codigoCampPartida) {
+        this.codigoCampPartida = codigoCampPartida;
+    }
 
-	public int getCodigoCampPartida() {
-		return this.codigoCampPartida;
-	}
+    public Partida getCodigoPartida() {
+        return codigoPartida;
+    }
 
-	public void setCodigoCampPartida(int codigoCampPartida) {
-		this.codigoCampPartida = codigoCampPartida;
-	}
+    public void setCodigoPartida(Partida codigoPartida) {
+        this.codigoPartida = codigoPartida;
+    }
 
-	public Campeonato getCampeonato() {
-		return this.campeonato;
-	}
+    public Campeonato getCodigoCampeonato() {
+        return codigoCampeonato;
+    }
 
-	public void setCampeonato(Campeonato campeonato) {
-		this.campeonato = campeonato;
-	}
+    public void setCodigoCampeonato(Campeonato codigoCampeonato) {
+        this.codigoCampeonato = codigoCampeonato;
+    }
 
-	public Partida getPartida() {
-		return this.partida;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (codigoCampPartida != null ? codigoCampPartida.hashCode() : 0);
+        return hash;
+    }
 
-	public void setPartida(Partida partida) {
-		this.partida = partida;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Campeonatopartida)) {
+            return false;
+        }
+        Campeonatopartida other = (Campeonatopartida) object;
+        if ((this.codigoCampPartida == null && other.codigoCampPartida != null) || (this.codigoCampPartida != null && !this.codigoCampPartida.equals(other.codigoCampPartida))) {
+            return false;
+        }
+        return true;
+    }
 
+    @Override
+    public String toString() {
+        return "br.com.treinoweb.model.entidade.Campeonatopartida[ codigoCampPartida=" + codigoCampPartida + " ]";
+    }
+    
 }

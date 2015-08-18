@@ -1,56 +1,99 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package entidade;
 
 import java.io.Serializable;
-import javax.persistence.*;
-
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * The persistent class for the funcionariocampeonato database table.
- * 
+ *
+ * @author Jose
  */
 @Entity
-@NamedQuery(name="Funcionariocampeonato.findAll", query="SELECT f FROM Funcionariocampeonato f")
+@Table(name = "funcionariocampeonato")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Funcionariocampeonato.findAll", query = "SELECT f FROM Funcionariocampeonato f"),
+    @NamedQuery(name = "Funcionariocampeonato.findByCodigoFuncCamp", query = "SELECT f FROM Funcionariocampeonato f WHERE f.codigoFuncCamp = :codigoFuncCamp")})
 public class Funcionariocampeonato implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "codigoFuncCamp")
+    private Integer codigoFuncCamp;
+    @JoinColumn(name = "codigoFuncionario", referencedColumnName = "codigoFuncionario")
+    @ManyToOne(optional = false)
+    private Funcionario codigoFuncionario;
+    @JoinColumn(name = "codigoCampeonato", referencedColumnName = "codigoCampeonato")
+    @ManyToOne(optional = false)
+    private Campeonato codigoCampeonato;
 
-	@Id
-	private int codigoFuncCamp;
+    public Funcionariocampeonato() {
+    }
 
-	//bi-directional many-to-one association to Campeonato
-	@ManyToOne
-	@JoinColumn(name="codigoCampeonato")
-	private Campeonato campeonato;
+    public Funcionariocampeonato(Integer codigoFuncCamp) {
+        this.codigoFuncCamp = codigoFuncCamp;
+    }
 
-	//bi-directional many-to-one association to Funcionario
-	@ManyToOne
-	@JoinColumn(name="codigoFuncionario")
-	private Funcionario funcionario;
+    public Integer getCodigoFuncCamp() {
+        return codigoFuncCamp;
+    }
 
-	public Funcionariocampeonato() {
-	}
+    public void setCodigoFuncCamp(Integer codigoFuncCamp) {
+        this.codigoFuncCamp = codigoFuncCamp;
+    }
 
-	public int getCodigoFuncCamp() {
-		return this.codigoFuncCamp;
-	}
+    public Funcionario getCodigoFuncionario() {
+        return codigoFuncionario;
+    }
 
-	public void setCodigoFuncCamp(int codigoFuncCamp) {
-		this.codigoFuncCamp = codigoFuncCamp;
-	}
+    public void setCodigoFuncionario(Funcionario codigoFuncionario) {
+        this.codigoFuncionario = codigoFuncionario;
+    }
 
-	public Campeonato getCampeonato() {
-		return this.campeonato;
-	}
+    public Campeonato getCodigoCampeonato() {
+        return codigoCampeonato;
+    }
 
-	public void setCampeonato(Campeonato campeonato) {
-		this.campeonato = campeonato;
-	}
+    public void setCodigoCampeonato(Campeonato codigoCampeonato) {
+        this.codigoCampeonato = codigoCampeonato;
+    }
 
-	public Funcionario getFuncionario() {
-		return this.funcionario;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (codigoFuncCamp != null ? codigoFuncCamp.hashCode() : 0);
+        return hash;
+    }
 
-	public void setFuncionario(Funcionario funcionario) {
-		this.funcionario = funcionario;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Funcionariocampeonato)) {
+            return false;
+        }
+        Funcionariocampeonato other = (Funcionariocampeonato) object;
+        if ((this.codigoFuncCamp == null && other.codigoFuncCamp != null) || (this.codigoFuncCamp != null && !this.codigoFuncCamp.equals(other.codigoFuncCamp))) {
+            return false;
+        }
+        return true;
+    }
 
+    @Override
+    public String toString() {
+        return "br.com.treinoweb.model.entidade.Funcionariocampeonato[ codigoFuncCamp=" + codigoFuncCamp + " ]";
+    }
+    
 }

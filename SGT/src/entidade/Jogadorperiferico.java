@@ -1,56 +1,99 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package entidade;
 
 import java.io.Serializable;
-import javax.persistence.*;
-
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * The persistent class for the jogadorperiferico database table.
- * 
+ *
+ * @author Jose
  */
 @Entity
-@NamedQuery(name="Jogadorperiferico.findAll", query="SELECT j FROM Jogadorperiferico j")
+@Table(name = "jogadorperiferico")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Jogadorperiferico.findAll", query = "SELECT j FROM Jogadorperiferico j"),
+    @NamedQuery(name = "Jogadorperiferico.findByCodigojogaPeri", query = "SELECT j FROM Jogadorperiferico j WHERE j.codigojogaPeri = :codigojogaPeri")})
 public class Jogadorperiferico implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "codigojogaPeri")
+    private Integer codigojogaPeri;
+    @JoinColumn(name = "codigoJogador", referencedColumnName = "codigoJogador")
+    @ManyToOne(optional = false)
+    private Jogador codigoJogador;
+    @JoinColumn(name = "codigoPeriferico", referencedColumnName = "codigoPeriferico")
+    @ManyToOne(optional = false)
+    private Periferico codigoPeriferico;
 
-	@Id
-	private int codigojogaPeri;
+    public Jogadorperiferico() {
+    }
 
-	//bi-directional many-to-one association to Periferico
-	@ManyToOne
-	@JoinColumn(name="codigoPeriferico")
-	private Periferico periferico;
+    public Jogadorperiferico(Integer codigojogaPeri) {
+        this.codigojogaPeri = codigojogaPeri;
+    }
 
-	//bi-directional many-to-one association to Jogador
-	@ManyToOne
-	@JoinColumn(name="codigoJogador")
-	private Jogador jogador;
+    public Integer getCodigojogaPeri() {
+        return codigojogaPeri;
+    }
 
-	public Jogadorperiferico() {
-	}
+    public void setCodigojogaPeri(Integer codigojogaPeri) {
+        this.codigojogaPeri = codigojogaPeri;
+    }
 
-	public int getCodigojogaPeri() {
-		return this.codigojogaPeri;
-	}
+    public Jogador getCodigoJogador() {
+        return codigoJogador;
+    }
 
-	public void setCodigojogaPeri(int codigojogaPeri) {
-		this.codigojogaPeri = codigojogaPeri;
-	}
+    public void setCodigoJogador(Jogador codigoJogador) {
+        this.codigoJogador = codigoJogador;
+    }
 
-	public Periferico getPeriferico() {
-		return this.periferico;
-	}
+    public Periferico getCodigoPeriferico() {
+        return codigoPeriferico;
+    }
 
-	public void setPeriferico(Periferico periferico) {
-		this.periferico = periferico;
-	}
+    public void setCodigoPeriferico(Periferico codigoPeriferico) {
+        this.codigoPeriferico = codigoPeriferico;
+    }
 
-	public Jogador getJogador() {
-		return this.jogador;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (codigojogaPeri != null ? codigojogaPeri.hashCode() : 0);
+        return hash;
+    }
 
-	public void setJogador(Jogador jogador) {
-		this.jogador = jogador;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Jogadorperiferico)) {
+            return false;
+        }
+        Jogadorperiferico other = (Jogadorperiferico) object;
+        if ((this.codigojogaPeri == null && other.codigojogaPeri != null) || (this.codigojogaPeri != null && !this.codigojogaPeri.equals(other.codigojogaPeri))) {
+            return false;
+        }
+        return true;
+    }
 
+    @Override
+    public String toString() {
+        return "br.com.treinoweb.model.entidade.Jogadorperiferico[ codigojogaPeri=" + codigojogaPeri + " ]";
+    }
+    
 }

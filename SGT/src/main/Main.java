@@ -1,5 +1,7 @@
 package main;
 
+import dao.PermissaoDao;
+import entidade.Permissao;
 import tela.Home;
 
 public class Main {

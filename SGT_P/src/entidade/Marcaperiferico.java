@@ -1,56 +1,99 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package entidade;
 
 import java.io.Serializable;
-import javax.persistence.*;
-
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * The persistent class for the marcaperiferico database table.
- * 
+ *
+ * @author Jose
  */
 @Entity
-@NamedQuery(name="Marcaperiferico.findAll", query="SELECT m FROM Marcaperiferico m")
+@Table(name = "marcaperiferico")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Marcaperiferico.findAll", query = "SELECT m FROM Marcaperiferico m"),
+    @NamedQuery(name = "Marcaperiferico.findByCodigoMarcaPeriferico", query = "SELECT m FROM Marcaperiferico m WHERE m.codigoMarcaPeriferico = :codigoMarcaPeriferico")})
 public class Marcaperiferico implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "codigoMarcaPeriferico")
+    private Integer codigoMarcaPeriferico;
+    @JoinColumn(name = "codigoPeriferico", referencedColumnName = "codigoPeriferico")
+    @ManyToOne(optional = false)
+    private Periferico codigoPeriferico;
+    @JoinColumn(name = "codigoMarca", referencedColumnName = "codigoMarca")
+    @ManyToOne(optional = false)
+    private Marca codigoMarca;
 
-	@Id
-	private int codigoMarcaPeriferico;
+    public Marcaperiferico() {
+    }
 
-	//bi-directional many-to-one association to Marca
-	@ManyToOne
-	@JoinColumn(name="codigoMarca")
-	private Marca marca;
+    public Marcaperiferico(Integer codigoMarcaPeriferico) {
+        this.codigoMarcaPeriferico = codigoMarcaPeriferico;
+    }
 
-	//bi-directional many-to-one association to Periferico
-	@ManyToOne
-	@JoinColumn(name="codigoPeriferico")
-	private Periferico periferico;
+    public Integer getCodigoMarcaPeriferico() {
+        return codigoMarcaPeriferico;
+    }
 
-	public Marcaperiferico() {
-	}
+    public void setCodigoMarcaPeriferico(Integer codigoMarcaPeriferico) {
+        this.codigoMarcaPeriferico = codigoMarcaPeriferico;
+    }
 
-	public int getCodigoMarcaPeriferico() {
-		return this.codigoMarcaPeriferico;
-	}
+    public Periferico getCodigoPeriferico() {
+        return codigoPeriferico;
+    }
 
-	public void setCodigoMarcaPeriferico(int codigoMarcaPeriferico) {
-		this.codigoMarcaPeriferico = codigoMarcaPeriferico;
-	}
+    public void setCodigoPeriferico(Periferico codigoPeriferico) {
+        this.codigoPeriferico = codigoPeriferico;
+    }
 
-	public Marca getMarca() {
-		return this.marca;
-	}
+    public Marca getCodigoMarca() {
+        return codigoMarca;
+    }
 
-	public void setMarca(Marca marca) {
-		this.marca = marca;
-	}
+    public void setCodigoMarca(Marca codigoMarca) {
+        this.codigoMarca = codigoMarca;
+    }
 
-	public Periferico getPeriferico() {
-		return this.periferico;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (codigoMarcaPeriferico != null ? codigoMarcaPeriferico.hashCode() : 0);
+        return hash;
+    }
 
-	public void setPeriferico(Periferico periferico) {
-		this.periferico = periferico;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Marcaperiferico)) {
+            return false;
+        }
+        Marcaperiferico other = (Marcaperiferico) object;
+        if ((this.codigoMarcaPeriferico == null && other.codigoMarcaPeriferico != null) || (this.codigoMarcaPeriferico != null && !this.codigoMarcaPeriferico.equals(other.codigoMarcaPeriferico))) {
+            return false;
+        }
+        return true;
+    }
 
+    @Override
+    public String toString() {
+        return "br.com.treinoweb.model.entidade.Marcaperiferico[ codigoMarcaPeriferico=" + codigoMarcaPeriferico + " ]";
+    }
+    
 }

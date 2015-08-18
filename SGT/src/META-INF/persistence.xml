@@ -2,6 +2,7 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 	
 	<persistence-unit name="GTGS" transaction-type="RESOURCE_LOCAL">
+		<class>entidade.Permissao</class>
 		<class>entidade.Banimento</class>
 		<class>entidade.Campeonato</class>
 		<class>entidade.Campeonatopartida</class>
@@ -21,17 +22,16 @@
 		<class>entidade.Pc</class>
 		<class>entidade.Pcpartida</class>
 		<class>entidade.Periferico</class>
-		<class>entidade.Permissao</class>
 		<class>entidade.Time</class>
 		<class>entidade.Timepartida</class>
 		<class>entidade.Usuario</class>
-		<exclude-unlisted-classes>false</exclude-unlisted-classes>
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		
 		<properties> 
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" /> 
 			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/gtgs" /> 
-			<property name="javax.persistence.jdbc.user" value="root" /> 
-			<property name="javax.persistence.jdbc.password" value="root" />
+			<property name="javax.persistence.jdbc.user" value="jclan" /> 
+			<property name="javax.persistence.jdbc.password" value="jcuser" />
 		</properties>
 	</persistence-unit>
 </persistence>
