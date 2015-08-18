@@ -7,8 +7,10 @@ import javax.swing.JPanel;
 
 import utilitario.BordaEscura;
 import utilitario.BordaSombreada;
+import utilitario.MascaraCrud;
 import utilitario.ParametroCrud;
 import utilitario.UtilitarioTela;
+import utilitario.ValidadorCrud;
 
 import javax.swing.JButton;
 
@@ -20,6 +22,8 @@ import javax.swing.border.BevelBorder;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class CrudJogador extends JPanel {
 	private JTextField txNome;
@@ -38,9 +42,32 @@ public class CrudJogador extends JPanel {
 		setLayout(null);
 		setBackground(null);
 		
+		JPanel header = new JPanel();
+		header.setSize(500, 30);
+		header.setLocation((getWidth()/2)-250, 10);
+		header.setLayout(null);
+		header.setBackground(UtilitarioTela.getColorCrud(modoCrud));
+		header.setBorder(null);
+		add(header);
+		
+		String textoHeader = "";
+		if(modoCrud == ParametroCrud.getModoCrudNovo()){
+			textoHeader= "Cadastrar Jogador";
+		} else if(modoCrud == ParametroCrud.getModoCrudAlterar()){
+			textoHeader= "Alterar Jogador";
+		} else if(modoCrud == ParametroCrud.getModoCrudDeletar()){
+			textoHeader= "Deletar Jogador";
+		}
+		
+		JLabel lblHeader = new JLabel(textoHeader);
+		lblHeader.setBounds((header.getWidth()/2) - 50, 0, 200, 30);
+		lblHeader.setFont(UtilitarioTela.getFontCrud());
+		lblHeader.setForeground(UtilitarioTela.getFontColorCrud());
+		header.add(lblHeader);
+		
 		JPanel meio = new JPanel();
-		meio.setSize(500, getHeight()-20);
-		meio.setLocation((getWidth()/2)-250, 10);
+		meio.setSize(500, getHeight()-50);
+		meio.setLocation((getWidth()/2)-250, 40);
 		meio.setLayout(null);
 		meio.setBackground(UtilitarioTela.getFundoCrud());
 		meio.setBorder(new BordaSombreada(modoCrud));
@@ -102,6 +129,13 @@ public class CrudJogador extends JPanel {
 		txRg = new JTextField();
 		txRg.setColumns(50);
 		txRg.setBounds(155, 90, 100, 25);
+		txRg.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				ValidadorCrud.campoInt(arg0, txRg.getText());
+			}
+			
+		});
 		txRg.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -138,6 +172,17 @@ public class CrudJogador extends JPanel {
 		});
 		txDataNascimento.setLayout(null);
 		txDataNascimento.setBorder(UtilitarioTela.jTextFieldNormal());
+		txDataNascimento.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				ValidadorCrud.campoData(arg0, txDataNascimento.getText());
+			}
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				txDataNascimento.setText(MascaraCrud.mascaraData(txDataNascimento.getText()));
+			}
+		});
+		
 		meio.add(txDataNascimento);
 		setVisible(true);
 		
@@ -148,6 +193,16 @@ public class CrudJogador extends JPanel {
 		meio.add(lbTelefone);
 		
 		txTelefone = new JTextField();
+		txTelefone.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				ValidadorCrud.campoTelefone(arg0, txTelefone.getText());
+			}
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				txTelefone.setText(MascaraCrud.mascaraTelefone(txTelefone.getText()));
+			}
+		});
 		txTelefone.setColumns(50);
 		txTelefone.setBounds(155, 160, 100, 25);
 		txTelefone.addFocusListener(new FocusAdapter() {
@@ -212,12 +267,20 @@ public class CrudJogador extends JPanel {
 		txUsuario.setBorder(UtilitarioTela.jTextFieldNormal());
 		meio.add(txUsuario);
 		
-		JButton btSalvar = new JButton("Salvar");
-		btSalvar.setBounds(100, getHeight()-70, 100, 25);
+		String texto = "";
+
+		if(modoCrud == ParametroCrud.getModoCrudDeletar()){
+			texto = "Confirmar";
+		} else {
+			texto = "Salvar";
+		}
+		
+		JButton btSalvar = new JButton(texto);
+		btSalvar.setBounds(50, meio.getHeight()-70, 150, 35);
 		meio.add(btSalvar);
 		
 		JButton btCancelar = new JButton("Cancelar");
-		btCancelar.setBounds(300, getHeight()-70, 100, 25);
+		btCancelar.setBounds(300, meio.getHeight()-70, 150, 35);
 		meio.add(btCancelar);
 		
 		if(modoCrud == ParametroCrud.getModoCrudDeletar()){
@@ -226,6 +289,43 @@ public class CrudJogador extends JPanel {
 		
 	}
 
+	private boolean validarCrud(){
+		try{
+
+			if(txNome.getText() == null || txNome.getText().trim().isEmpty()){
+				txNome.requestFocus();
+				return false;
+			}
+			if(txSobreNome.getText() == null || txSobreNome.getText().trim().isEmpty()){
+				txSobreNome.requestFocus();
+				return false;
+			}
+			if(txUsuario.getText() == null || txUsuario.getText().trim().isEmpty()){
+				txUsuario.requestFocus();
+				return false;
+			}
+			
+			
+			
+			return true;	
+		}catch(Exception e){
+			return false;
+		}
+	}
+	
+	private void save(int modoCrud){
+		if(modoCrud == ParametroCrud.getModoCrudNovo()){
+			
+			
+		}else if(modoCrud == ParametroCrud.getModoCrudAlterar()){
+			
+			
+		}else if(modoCrud == ParametroCrud.getModoCrudDeletar()){
+			
+			
+		}
+	}
+	
 	private void desabilitarTodos(){
 		txNome.setEditable(false);
 		txSobreNome.setEditable(false);
