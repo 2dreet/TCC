@@ -1,5 +1,6 @@
 package crud;
 
+import java.awt.Insets;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
@@ -9,6 +10,7 @@ import utilitario.BordaEscura;
 import utilitario.BordaSombreada;
 import utilitario.MascaraCrud;
 import utilitario.ParametroCrud;
+import utilitario.UtilitarioCrud;
 import utilitario.UtilitarioTela;
 import utilitario.ValidadorCrud;
 
@@ -24,6 +26,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+
 import javax.swing.SwingConstants;
 
 public class CrudJogador extends JPanel {
@@ -34,6 +37,8 @@ public class CrudJogador extends JPanel {
 	private JTextField txTelefone;
 	private JTextField txEmail;
 	private JTextField txUsuario;
+	private JLabel lblMsg;
+	private JPanel msg;
 
 	/**
 	 * Create the panel.
@@ -134,7 +139,7 @@ public class CrudJogador extends JPanel {
 		txRg.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent arg0) {
-				ValidadorCrud.campoInt(arg0, txRg.getText());
+				ValidadorCrud.campoRG(arg0, txRg.getText());
 			}
 			
 		});
@@ -272,21 +277,49 @@ public class CrudJogador extends JPanel {
 		String texto = "";
 
 		if(modoCrud == ParametroCrud.getModoCrudDeletar()){
-			texto = "Confirmar";
-		} else {
-			texto = "Salvar";
+			texto = "Deletar";
+		} else if(modoCrud == ParametroCrud.getModoCrudAlterar()) {
+			texto = "Alterar";
+		} else if(modoCrud == ParametroCrud.getModoCrudNovo()) {
+			texto = "Cadastrar";
 		}
 		
-		JButton btSalvar = new JButton(texto);
-		btSalvar.setBounds(50, meio.getHeight()-70, 150, 35);
-		meio.add(btSalvar);
 		
-		JButton btCancelar = new JButton("Cancelar");
-		btCancelar.setBounds(300, meio.getHeight()-70, 150, 35);
-		meio.add(btCancelar);
+		JButton btSalvar = new JButton(texto);
+		btSalvar.setBounds(175, meio.getHeight()-70, 150, 35);
+		btSalvar.setFont(UtilitarioTela.getFontCrud());
+		btSalvar.setFocusPainted(false);
+		btSalvar.setBackground(UtilitarioTela.getColorCrud(modoCrud));
+		btSalvar.setIcon(UtilitarioCrud.getIconeCrud(modoCrud));
+		meio.add(btSalvar);
+		btSalvar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(modoCrud != ParametroCrud.getModoCrudDeletar()){
+					validarCrud();
+				}
+			}
+		});
+		
+		
+		msg = new JPanel();
+		msg.setSize(490, 35);
+		msg.setLocation(5, 280);
+		msg.setLayout(null);
+		msg.setBackground(null);
+		meio.add(msg);
+		
+		lblMsg = new JLabel("");
+		lblMsg.setHorizontalAlignment(SwingConstants.CENTER);
+		lblMsg.setBounds(0, 0 , 490, 35);
+		lblMsg.setFont(UtilitarioTela.getFontCrud());
+		lblMsg.setForeground(UtilitarioTela.getFontColorCrud());
+		lblMsg.setBackground(UtilitarioTela.getColorCrud(modoCrud));
+		msg.add(lblMsg);
 		
 		if(modoCrud == ParametroCrud.getModoCrudDeletar()){
 			desabilitarTodos();
+			msg.setBackground(UtilitarioTela.getColorCrud(modoCrud));
+			lblMsg.setText("Deseja Deletar Esse Jogador?");
 		}
 		
 	}
@@ -302,26 +335,27 @@ public class CrudJogador extends JPanel {
 				txSobreNome.requestFocus();
 				return false;
 			}
+			if(txRg.getText() == null || txRg.getText().trim().isEmpty() || !ValidadorCrud.validarRg(txRg.getText())){
+				txRg.requestFocus();
+				return false;
+			}
+			if(txDataNascimento.getText() == null || txDataNascimento.getText().trim().isEmpty() || !ValidadorCrud.validarData(txDataNascimento.getText())){
+				txDataNascimento.requestFocus();
+				return false;
+			}
+			if(txTelefone.getText() == null || txTelefone.getText().trim().isEmpty() || !ValidadorCrud.validarTelefone(txTelefone.getText())){
+				txTelefone.requestFocus();
+				return false;
+			}
+			if(txEmail.getText() == null || txEmail.getText().trim().isEmpty() || !ValidadorCrud.validarEmail(txEmail.getText())){
+				txEmail.requestFocus();
+				return false;
+			}
 			if(txUsuario.getText() == null || txUsuario.getText().trim().isEmpty()){
 				txUsuario.requestFocus();
 				return false;
 			}
-			if(txEmail.getText() == null || txEmail.getText().trim().isEmpty() || ValidadorCrud.validarEmail(txEmail.getText())){
-				txEmail.requestFocus();
-				return false;
-			}
-			if(txDataNascimento.getText() == null || txDataNascimento.getText().trim().isEmpty() || ValidadorCrud.validarData(txDataNascimento.getText())){
-				txDataNascimento.requestFocus();
-				return false;
-			}
-			if(txTelefone.getText() == null || txTelefone.getText().trim().isEmpty() || ValidadorCrud.validarTelefone(txTelefone.getText())){
-				txTelefone.requestFocus();
-				return false;
-			}
-			if(txRg.getText() == null || txRg.getText().trim().isEmpty() || ValidadorCrud.validarRg(txRg.getText())){
-				txRg.requestFocus();
-				return false;
-			}
+			
 			
 			return true;	
 		}catch(Exception e){

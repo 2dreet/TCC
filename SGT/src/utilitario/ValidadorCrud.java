@@ -45,16 +45,16 @@ public class ValidadorCrud {
 		try{
 			if(data.length() == 10){
 				if(MascaraCrud.validarDia(data.substring(0, 2)) && MascaraCrud.validarMes(data.substring(3, 5)) && MascaraCrud.validarAno(data.substring(6, 10))){
-					return true;
-				}else{
 					return false;
+				}else{
+					return true;
 				}
 			} else {
-				return false;
+				return true;
 			}
 			
 		}catch(Exception e){
-			return false;
+			return true;
 		}
 	}
 	
@@ -88,6 +88,20 @@ public class ValidadorCrud {
 		try{
 			String caracteres="0987654321";
 			if(!caracteres.contains(evt.getKeyChar()+"")){
+				evt.consume();
+			}
+		}catch(Exception e){
+			evt.consume();
+		}
+	}
+	
+	public static void  campoRG(KeyEvent evt, String texto){
+		try{
+			String caracteres="0987654321";
+			if(!caracteres.contains(evt.getKeyChar()+"")){
+				evt.consume();
+			}
+			if((texto.length() > 12)){
 				evt.consume();
 			}
 		}catch(Exception e){

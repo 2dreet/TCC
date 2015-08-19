@@ -28,7 +28,7 @@ public class UtilitarioTela {
 	public static Dimension getTamanhoMunitor() {
 		Dimension dm = Toolkit.getDefaultToolkit().getScreenSize();
 		Double height = dm.getHeight() - (dm.getHeight() * 0.1);
-		Double width = dm.getWidth() - (dm.getWidth() * 0.1);
+		Double width = dm.getWidth();
 		dm.setSize(width, height);
 		return dm;
 	}
@@ -36,49 +36,35 @@ public class UtilitarioTela {
 	public static Dimension getTamanhoMunitorJpanel() {
 		Dimension dm = Toolkit.getDefaultToolkit().getScreenSize();
 		Double height = dm.getHeight() - (dm.getHeight() * 0.1) - (10);
-		Double width = dm.getWidth() - (dm.getWidth() * 0.1) - (10);
+		Double width = dm.getWidth() - (10);
 
-		if(width <= 1100){
-			width = dm.getWidth() - 44;
-			height = dm.getHeight() - 10 ;
-		}
 		dm.setSize(width, height);
 		return dm;
 	}
 
 	public static Dimension getTamanhoMenuLateral() {
-		Dimension dm = Toolkit.getDefaultToolkit().getScreenSize();
-		Double height = (dm.getHeight() - (dm.getHeight() * 0.1) - (10)) - 160;
+		Dimension dm = getTamanhoMunitor();
+		Double height = (dm.getHeight() - (dm.getHeight() * 0.1) - (10)) - 80;
 		Double width = 240.0;
 		
-		if(width <= 1100){
-			height = dm.getHeight()-160;
-		}
 		dm.setSize(width, height);
 		return dm;
 	}
 
 	public static Dimension getTamanhoMeio() {
-		Dimension dm = Toolkit.getDefaultToolkit().getScreenSize();
-		Double height = (dm.getHeight() - (dm.getHeight() * 0.1) - (10)) - 160;
-		Double width = (dm.getWidth() - (dm.getWidth() * 0.1) - (10)) - 250;
+		Dimension dm = getTamanhoMunitor();
+		Double height = (dm.getHeight() - (dm.getHeight() * 0.1) - (10)) - 80;
+		Double width = (dm.getWidth() - (10)) - 250;
 		
-		if(width <= 1100){
-			width = dm.getWidth()-260;
-			height = dm.getHeight()-170;
-		}
 		dm.setSize(width, height);
 		return dm;
 	}
 
 	public static Dimension getTamanhoMenuBaixo() {
-		Dimension dm = Toolkit.getDefaultToolkit().getScreenSize();
-		Double height = (dm.getHeight() - (dm.getHeight() * 0.1) - (10)) - 160;
-		Double width = (dm.getWidth() - (dm.getWidth() * 0.1) - (10));
-		if(width <= 1200){
-			width = dm.getWidth()-10;
-			height = dm.getHeight()-170;
-		}
+		Dimension dm = getTamanhoMunitor();
+		Double height = (dm.getHeight() - (dm.getHeight() * 0.1) - (10)) - 80;
+		Double width = (dm.getWidth() - (10));
+		
 		dm.setSize(width, height);
 		return dm;
 	}
@@ -154,4 +140,5 @@ public class UtilitarioTela {
 		}
 		return new Color(r, g, b);
 	}
+	
 }
