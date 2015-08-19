@@ -308,14 +308,6 @@ public class CrudJogador extends JPanel {
 		msg.setBackground(null);
 		meio.add(msg);
 		
-		lblMsg = new JLabel("");
-		lblMsg.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMsg.setBounds(0, 0 , 490, 35);
-		lblMsg.setFont(UtilitarioTela.getFontCrud());
-		lblMsg.setForeground(UtilitarioTela.getFontColorCrud());
-		lblMsg.setBackground(UtilitarioTela.getColorCrud(modoCrud));
-		msg.add(lblMsg);
-		
 		if(modoCrud == ParametroCrud.getModoCrudDeletar()){
 			desabilitarTodos();
 			msg.setBackground(UtilitarioTela.getColorCrud(modoCrud));
@@ -324,6 +316,16 @@ public class CrudJogador extends JPanel {
 		
 	}
 
+	public void msgErro(String erro){
+		msg.removeAll();
+		lblMsg = new JLabel(erro);
+		lblMsg.setHorizontalAlignment(SwingConstants.CENTER);
+		lblMsg.setBounds(0, 0 , 490, 35);
+		lblMsg.setFont(UtilitarioTela.getFontCrud());
+		lblMsg.setForeground(UtilitarioTela.getFontColorCrud());
+		msg.add(lblMsg);
+	}
+	
 	private boolean validarCrud(){
 		try{
 
