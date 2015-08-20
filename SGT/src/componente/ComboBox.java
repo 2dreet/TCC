@@ -14,8 +14,9 @@ public class ComboBox extends JComboBox{
         setPreferredSize(dimension);
         setSize(dimension);      
         setForeground(new Color(46,49,56));
-        setFont(UtilitarioTela.getFont(14));
+        setFont(UtilitarioTela.getFont(12));
         setBorder(BorderFactory.createLineBorder(new Color(176, 177, 184), 1));
+        setBackground(Color.WHITE);
         setUI(CustomUI.createUI(this));                
         setVisible(true);
     }

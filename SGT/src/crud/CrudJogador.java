@@ -1,5 +1,6 @@
 package crud;
 
+import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -36,6 +37,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
+import componente.ComboBox;
+
 import java.awt.Color;
 import java.util.Date;
 
@@ -49,8 +52,7 @@ public class CrudJogador extends JPanel {
 	private JTextField txUsuario;
 	private JLabel lblMsg;
 	private JPanel msg;
-	private JRadioButton sexoFeminino ;
-	private JRadioButton sexoMasculino;
+	private ComboBox comboSexo;
 	private Jogador jogadorSelecionado;
 
 	/**
@@ -253,20 +255,10 @@ public class CrudJogador extends JPanel {
 		lbSexo.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbSexo);
 		
-		sexoMasculino = new JRadioButton("Masculino");
-		sexoMasculino.setSelected(true);
-		sexoMasculino.setBounds(150, 195, 109, 23);
-		sexoMasculino.setBackground(null);
-		meio.add(sexoMasculino);
-		
-		sexoFeminino = new JRadioButton("Feminino");
-		sexoFeminino.setBounds(270, 195, 109, 23);
-		sexoFeminino.setBackground(null);
-		meio.add(sexoFeminino);
-		
-		ButtonGroup bg = new ButtonGroup();
-		bg.add(sexoMasculino);
-		bg.add(sexoFeminino);
+		comboSexo = new ComboBox(new Dimension(150, 25));
+		comboSexo.setModel(new DefaultComboBoxModel(new String[] {"Masculino", "Feminino"}));
+		comboSexo.setLocation(155, 195);
+		meio.add(comboSexo);
 		
 		JLabel lbEmail = new JLabel("Email :");
 		lbEmail.setBounds(20, 230, 100, 20);
@@ -479,7 +471,7 @@ public class CrudJogador extends JPanel {
 			usuario.setTelefone(txTelefone.getText());
 			usuario.setUsuario(txUsuario.getText());
 			usuario.setPermissao(PermissaoDao.getPermissao(Parametros.getPermissaoJogador()));
-			if(sexoMasculino.isSelected()){
+			if(comboSexo.getSelectedIndex()==0){
 				usuario.setSexo(Parametros.getSexoMasculino());
 			}else{
 				usuario.setSexo(Parametros.getSexoFeminino());
@@ -496,7 +488,7 @@ public class CrudJogador extends JPanel {
 			usuario.setDataNascimento(UtilitarioCrud.getData(txDataNascimento.getText()));
 			usuario.setTelefone(txTelefone.getText());
 			usuario.setUsuario(txUsuario.getText());
-			if(sexoMasculino.isSelected()){
+			if(comboSexo.getSelectedIndex()==0){
 				usuario.setSexo(Parametros.getSexoMasculino());
 			}else{
 				usuario.setSexo(Parametros.getSexoFeminino());
@@ -519,6 +511,7 @@ public class CrudJogador extends JPanel {
 		txTelefone.setEditable(false);
 		txEmail.setEditable(false);
 		txUsuario.setEditable(false);
+		comboSexo.setEditable(false);
 	}
 	
 	public JTextField getTxNome() {

@@ -28,9 +28,9 @@ public class CustomUI extends BasicComboBoxUI {
 	@Override
 	protected JButton createArrowButton() {
 		BasicArrowButton basicArrowButton = new BasicArrowButton(
-				BasicArrowButton.SOUTH, Color.WHITE, new Color(46, 49, 56),
-				new Color(46, 49, 56), Color.WHITE);
-		basicArrowButton.setBorder(BorderFactory.createLineBorder(new Color(225,225,225), 1));
+				BasicArrowButton.SOUTH, Color.WHITE, new Color(252, 79, 63),
+				new Color(252, 79, 63), Color.WHITE);
+		basicArrowButton.setBorder(BorderFactory.createLineBorder(new Color(176,177,184), 1));
 		basicArrowButton.setContentAreaFilled(false);
 		return basicArrowButton;
 	}
@@ -49,7 +49,7 @@ public class CustomUI extends BasicComboBoxUI {
 	@Override
 	public void paintCurrentValueBackground(Graphics g, Rectangle bounds,
 			boolean hasFocus) {
-		g.setColor(new Color(232,234,239));
+		g.setColor(Color.WHITE);
 		g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 	}
 
@@ -62,12 +62,12 @@ public class CustomUI extends BasicComboBoxUI {
 					boolean cellHasFocus) {
 				super.getListCellRendererComponent(list, value, index,
 						isSelected, cellHasFocus);
-				list.setSelectionBackground(new Color(232,234,239));
+				list.setSelectionBackground(Color.WHITE);
 				if (isSelected) {
 					setBackground(new Color(176,177,184));
 					setForeground(new Color(252,79,63));
 				} else {
-					setBackground(new Color(232,234,239));
+					setBackground(Color.WHITE);
 					setForeground(new Color(46,44,56));
 				}
 				return this;
