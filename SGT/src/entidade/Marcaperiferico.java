@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -30,15 +32,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Marcaperiferico implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "codigoMarcaPeriferico")
     private Integer codigoMarcaPeriferico;
     @JoinColumn(name = "codigoPeriferico", referencedColumnName = "codigoPeriferico")
     @ManyToOne(optional = false)
-    private Periferico codigoPeriferico;
+    private Periferico periferico;
     @JoinColumn(name = "codigoMarca", referencedColumnName = "codigoMarca")
     @ManyToOne(optional = false)
-    private Marca codigoMarca;
+    private Marca marca;
 
     public Marcaperiferico() {
     }
@@ -55,23 +58,23 @@ public class Marcaperiferico implements Serializable {
         this.codigoMarcaPeriferico = codigoMarcaPeriferico;
     }
 
-    public Periferico getCodigoPeriferico() {
-        return codigoPeriferico;
-    }
+    public Periferico getPeriferico() {
+		return periferico;
+	}
 
-    public void setCodigoPeriferico(Periferico codigoPeriferico) {
-        this.codigoPeriferico = codigoPeriferico;
-    }
+	public void setPeriferico(Periferico periferico) {
+		this.periferico = periferico;
+	}
 
-    public Marca getCodigoMarca() {
-        return codigoMarca;
-    }
+	public Marca getMarca() {
+		return marca;
+	}
 
-    public void setCodigoMarca(Marca codigoMarca) {
-        this.codigoMarca = codigoMarca;
-    }
+	public void setMarca(Marca marca) {
+		this.marca = marca;
+	}
 
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (codigoMarcaPeriferico != null ? codigoMarcaPeriferico.hashCode() : 0);
@@ -93,7 +96,7 @@ public class Marcaperiferico implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.treinoweb.model.entidade.Marcaperiferico[ codigoMarcaPeriferico=" + codigoMarcaPeriferico + " ]";
+        return "criaentidades.Marcaperiferico[ codigoMarcaPeriferico=" + codigoMarcaPeriferico + " ]";
     }
     
 }

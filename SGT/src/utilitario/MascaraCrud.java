@@ -10,6 +10,8 @@ public class MascaraCrud {
 			telefone = "("+telefone+")";
 		} else if(telefone.length() == 8){
 			telefone += "-";
+		} else if(telefone.length() == 13){
+			telefone = "("+telefone.substring(1, 3)+")"+telefone.substring(4, 8)+"-"+telefone.substring(9, 13);
 		}
 		
 		return telefone;
@@ -49,7 +51,6 @@ public class MascaraCrud {
 			}
 			
 		}
-		System.out.println(data);
 		return data;
 	}
 	

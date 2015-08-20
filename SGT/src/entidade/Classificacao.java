@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -30,6 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Classificacao implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "codigoClassificacao")
     private Integer codigoClassificacao;
@@ -44,7 +47,7 @@ public class Classificacao implements Serializable {
     private Time timePrimeiro;
     @JoinColumn(name = "codigoCampeonato", referencedColumnName = "codigoCampeonato")
     @ManyToOne(optional = false)
-    private Campeonato codigoCampeonato;
+    private Campeonato campeonato;
 
     public Classificacao() {
     }
@@ -84,16 +87,16 @@ public class Classificacao implements Serializable {
     public void setTimePrimeiro(Time timePrimeiro) {
         this.timePrimeiro = timePrimeiro;
     }
+    
+    public Campeonato getCampeonato() {
+		return campeonato;
+	}
 
-    public Campeonato getCodigoCampeonato() {
-        return codigoCampeonato;
-    }
+	public void setCampeonato(Campeonato campeonato) {
+		this.campeonato = campeonato;
+	}
 
-    public void setCodigoCampeonato(Campeonato codigoCampeonato) {
-        this.codigoCampeonato = codigoCampeonato;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (codigoClassificacao != null ? codigoClassificacao.hashCode() : 0);
@@ -115,7 +118,7 @@ public class Classificacao implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.treinoweb.model.entidade.Classificacao[ codigoClassificacao=" + codigoClassificacao + " ]";
+        return "criaentidades.Classificacao[ codigoClassificacao=" + codigoClassificacao + " ]";
     }
     
 }

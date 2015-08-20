@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -32,6 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Jogadorbanimento implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "codigoJogBan")
     private Integer codigoJogBan;
@@ -42,10 +45,10 @@ public class Jogadorbanimento implements Serializable {
     private boolean ativo;
     @JoinColumn(name = "codigoJogador", referencedColumnName = "codigoJogador")
     @ManyToOne(optional = false)
-    private Jogador codigoJogador;
+    private Jogador jogador;
     @JoinColumn(name = "codigoBanimento", referencedColumnName = "codigoBanimento")
     @ManyToOne(optional = false)
-    private Banimento codigoBanimento;
+    private Banimento banimento;
 
     public Jogadorbanimento() {
     }
@@ -82,24 +85,24 @@ public class Jogadorbanimento implements Serializable {
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
+    
+    public Jogador getJogador() {
+		return jogador;
+	}
 
-    public Jogador getCodigoJogador() {
-        return codigoJogador;
-    }
+	public void setJogador(Jogador jogador) {
+		this.jogador = jogador;
+	}
 
-    public void setCodigoJogador(Jogador codigoJogador) {
-        this.codigoJogador = codigoJogador;
-    }
+	public Banimento getBanimento() {
+		return banimento;
+	}
 
-    public Banimento getCodigoBanimento() {
-        return codigoBanimento;
-    }
+	public void setBanimento(Banimento banimento) {
+		this.banimento = banimento;
+	}
 
-    public void setCodigoBanimento(Banimento codigoBanimento) {
-        this.codigoBanimento = codigoBanimento;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (codigoJogBan != null ? codigoJogBan.hashCode() : 0);
@@ -121,7 +124,7 @@ public class Jogadorbanimento implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.treinoweb.model.entidade.Jogadorbanimento[ codigoJogBan=" + codigoJogBan + " ]";
+        return "criaentidades.Jogadorbanimento[ codigoJogBan=" + codigoJogBan + " ]";
     }
     
 }

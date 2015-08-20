@@ -3,126 +3,143 @@ package utilitario;
 import java.awt.event.KeyEvent;
 import java.util.Date;
 
+import dao.UsuarioDao;
+import entidade.Usuario;
+
 public class ValidadorCrud {
 
-	
-	public static boolean isInt(String valor){
-		try{
+	public static boolean isInt(String valor) {
+		try {
 			int x = Integer.parseInt(valor);
 			return true;
-		}catch(Exception e){
+		} catch (Exception e) {
 			return false;
 		}
 	}
-	
-	public static boolean validarEmail(String email){
-		try{
-			if(email.contains("@")){
+
+	public static boolean validarUsuario(String login) {
+		try {
+			Usuario usuario = UsuarioDao.validarUsuario(login);
+			if (usuario == null) {
 				return true;
-			}else{
+			} else {
 				return false;
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			return false;
 		}
 	}
-	
-	public static void  campoData(KeyEvent evt, String texto){
-		try{
-			String caracteres="0987654321";
-			if(!caracteres.contains(evt.getKeyChar()+"")){
-				evt.consume();
+
+	public static boolean validarEmail(String email) {
+		try {
+			if (email.contains("@")) {
+				return true;
+			} else {
+				return false;
 			}
-			if((texto.length() > 9)){
-				evt.consume();
-			}
-		}catch(Exception e){
-			
+		} catch (Exception e) {
+			return false;
 		}
 	}
-	
-	public static boolean validarData(String data){
-		try{
-			if(data.length() == 10){
-				if(MascaraCrud.validarDia(data.substring(0, 2)) && MascaraCrud.validarMes(data.substring(3, 5)) && MascaraCrud.validarAno(data.substring(6, 10))){
-					return false;
-				}else{
+
+	public static void campoData(KeyEvent evt, String texto) {
+		try {
+			String caracteres = "0987654321";
+			if (!caracteres.contains(evt.getKeyChar() + "")) {
+				evt.consume();
+			}
+			if ((texto.length() > 9)) {
+				evt.consume();
+			}
+		} catch (Exception e) {
+
+		}
+	}
+
+	public static boolean validarData(String data) {
+		try {
+			if (data.length() == 10) {
+				if (MascaraCrud.validarDia(data.substring(0, 2))
+						&& MascaraCrud.validarMes(data.substring(3, 5))
+						&& MascaraCrud.validarAno(data.substring(6, 10))) {
 					return true;
+				} else {
+					return false;
 				}
 			} else {
-				return true;
+				return false;
 			}
-			
-		}catch(Exception e){
-			return true;
+
+		} catch (Exception e) {
+			return false;
 		}
 	}
-	
-	public static boolean validarTelefone(String telefone){
-		try{
-			if(telefone.length() == 13){
+
+	public static boolean validarTelefone(String telefone) {
+		try {
+			if (telefone.length() == 13) {
 				return true;
 			} else {
 				return false;
 			}
-			
-		}catch(Exception e){
+
+		} catch (Exception e) {
 			return false;
 		}
 	}
-	public static boolean validarRg(String rg){
-		try{
-			if(rg.length() > 0){
+
+	public static boolean validarRg(String rg) {
+		try {
+			if (rg.length() > 0) {
 				return true;
 			} else {
 				return false;
 			}
-			
-		}catch(Exception e){
+
+		} catch (Exception e) {
 			return false;
 		}
 	}
-	
-	
-	public static void  campoInt(KeyEvent evt, String texto){
-		try{
-			String caracteres="0987654321";
-			if(!caracteres.contains(evt.getKeyChar()+"")){
+
+	public static void campoInt(KeyEvent evt, String texto) {
+		try {
+			String caracteres = "0987654321";
+			if (!caracteres.contains(evt.getKeyChar() + "")) {
 				evt.consume();
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			evt.consume();
 		}
 	}
-	
-	public static void  campoRG(KeyEvent evt, String texto){
-		try{
-			String caracteres="0987654321";
-			if(!caracteres.contains(evt.getKeyChar()+"")){
+
+	public static void campoRG(KeyEvent evt, String texto) {
+		try {
+			String caracteres = "0987654321";
+			if (!caracteres.contains(evt.getKeyChar() + "")) {
 				evt.consume();
 			}
-			if((texto.length() > 12)){
+			if ((texto.length() > 12)) {
 				evt.consume();
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			evt.consume();
 		}
 	}
-	
-	public static void  campoTelefone(KeyEvent evt, String texto){
-		try{
-			String caracteres="0987654321";
-			if(!caracteres.contains(evt.getKeyChar()+"")){
+
+	public static void campoTelefone(KeyEvent evt, String texto) {
+		try {
+			String caracteres = "0987654321";
+			if (!caracteres.contains(evt.getKeyChar() + "")) {
 				evt.consume();
 			}
-			if((texto.length() > 12)){
+			if ((texto.length() > 12)) {
 				evt.consume();
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			evt.consume();
 		}
 	}
-	
+
 	public static boolean isCpf(String cpf) {
 		try {
 			if (cpf.equals("00000000000") || cpf.equals("11111111111")

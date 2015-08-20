@@ -12,6 +12,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -38,6 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Funcionario implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "codigoFuncionario")
     private Integer codigoFuncionario;
@@ -46,8 +49,8 @@ public class Funcionario implements Serializable {
     private Date dataCadastro;
     @JoinColumn(name = "codigoUsuario", referencedColumnName = "codigoUsuario")
     @ManyToOne(optional = false)
-    private Usuario codigoUsuario;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoFuncionario")
+    private Usuario usuario;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "funcionario")
     private Collection<Funcionariocampeonato> funcionariocampeonatoCollection;
 
     public Funcionario() {
@@ -72,16 +75,16 @@ public class Funcionario implements Serializable {
     public void setDataCadastro(Date dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
+    
+    public Usuario getUsuario() {
+		return usuario;
+	}
 
-    public Usuario getCodigoUsuario() {
-        return codigoUsuario;
-    }
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 
-    public void setCodigoUsuario(Usuario codigoUsuario) {
-        this.codigoUsuario = codigoUsuario;
-    }
-
-    @XmlTransient
+	@XmlTransient
     public Collection<Funcionariocampeonato> getFuncionariocampeonatoCollection() {
         return funcionariocampeonatoCollection;
     }
@@ -112,7 +115,7 @@ public class Funcionario implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.treinoweb.model.entidade.Funcionario[ codigoFuncionario=" + codigoFuncionario + " ]";
+        return "criaentidades.Funcionario[ codigoFuncionario=" + codigoFuncionario + " ]";
     }
     
 }

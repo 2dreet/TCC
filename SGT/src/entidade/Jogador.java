@@ -12,6 +12,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -38,21 +40,22 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Jogador implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "codigoJogador")
     private Integer codigoJogador;
     @Column(name = "dataCadastro")
     @Temporal(TemporalType.DATE)
     private Date dataCadastro;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoJogador")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "jogador")
     private Collection<Jogadorbanimento> jogadorbanimentoCollection;
     @JoinColumn(name = "codigoUsuario", referencedColumnName = "codigoUsuario")
     @ManyToOne(optional = false)
-    private Usuario codigoUsuario;
+    private Usuario usuario;
     @JoinColumn(name = "codigoTime", referencedColumnName = "codigoTime")
     @ManyToOne(optional = false)
-    private Time codigoTime;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoJogador")
+    private Time time;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "jogador")
     private Collection<Jogadorperiferico> jogadorperifericoCollection;
 
     public Jogador() {
@@ -86,24 +89,24 @@ public class Jogador implements Serializable {
     public void setJogadorbanimentoCollection(Collection<Jogadorbanimento> jogadorbanimentoCollection) {
         this.jogadorbanimentoCollection = jogadorbanimentoCollection;
     }
+    
+    public Usuario getUsuario() {
+		return usuario;
+	}
 
-    public Usuario getCodigoUsuario() {
-        return codigoUsuario;
-    }
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 
-    public void setCodigoUsuario(Usuario codigoUsuario) {
-        this.codigoUsuario = codigoUsuario;
-    }
+	public Time getTime() {
+		return time;
+	}
 
-    public Time getCodigoTime() {
-        return codigoTime;
-    }
+	public void setTime(Time time) {
+		this.time = time;
+	}
 
-    public void setCodigoTime(Time codigoTime) {
-        this.codigoTime = codigoTime;
-    }
-
-    @XmlTransient
+	@XmlTransient
     public Collection<Jogadorperiferico> getJogadorperifericoCollection() {
         return jogadorperifericoCollection;
     }
@@ -134,7 +137,7 @@ public class Jogador implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.treinoweb.model.entidade.Jogador[ codigoJogador=" + codigoJogador + " ]";
+        return "criaentidades.Jogador[ codigoJogador=" + codigoJogador + " ]";
     }
     
 }

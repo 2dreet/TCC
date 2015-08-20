@@ -11,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -34,6 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Banimento implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "codigoBanimento")
     private Integer codigoBanimento;
@@ -42,7 +45,7 @@ public class Banimento implements Serializable {
     @Basic(optional = false)
     @Column(name = "ativo")
     private boolean ativo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoBanimento")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "banimento")
     private Collection<Jogadorbanimento> jogadorbanimentoCollection;
 
     public Banimento() {
@@ -112,7 +115,7 @@ public class Banimento implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.treinoweb.model.entidade.Banimento[ codigoBanimento=" + codigoBanimento + " ]";
+        return "criaentidades.Banimento[ codigoBanimento=" + codigoBanimento + " ]";
     }
     
 }

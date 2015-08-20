@@ -4,12 +4,15 @@
  * and open the template in the editor.
  */
 package entidade;
+
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -33,6 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Marca implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "codigoMarca")
     private Integer codigoMarca;
@@ -41,9 +45,9 @@ public class Marca implements Serializable {
     @Basic(optional = false)
     @Column(name = "ativo")
     private boolean ativo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoMarca")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "marca")
     private Collection<Marcaperiferico> marcaperifericoCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoMarca")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "marca")
     private Collection<Driver> driverCollection;
 
     public Marca() {
@@ -122,7 +126,7 @@ public class Marca implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.treinoweb.model.entidade.Marca[ codigoMarca=" + codigoMarca + " ]";
+        return "criaentidades.Marca[ codigoMarca=" + codigoMarca + " ]";
     }
     
 }

@@ -10,6 +10,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -34,6 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Campeonatotime implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "codigoCampTime")
     private Integer codigoCampTime;
@@ -42,10 +45,10 @@ public class Campeonatotime implements Serializable {
     private Date dataInscricao;
     @JoinColumn(name = "codigoTime", referencedColumnName = "codigoTime")
     @ManyToOne(optional = false)
-    private Time codigoTime;
+    private Time time;
     @JoinColumn(name = "codigoCampeonato", referencedColumnName = "codigoCampeonato")
     @ManyToOne(optional = false)
-    private Campeonato codigoCampeonato;
+    private Campeonato campeonato;
 
     public Campeonatotime() {
     }
@@ -69,24 +72,24 @@ public class Campeonatotime implements Serializable {
     public void setDataInscricao(Date dataInscricao) {
         this.dataInscricao = dataInscricao;
     }
+    
+    public Time getTime() {
+		return time;
+	}
 
-    public Time getCodigoTime() {
-        return codigoTime;
-    }
+	public void setTime(Time time) {
+		this.time = time;
+	}
 
-    public void setCodigoTime(Time codigoTime) {
-        this.codigoTime = codigoTime;
-    }
+	public Campeonato getCampeonato() {
+		return campeonato;
+	}
 
-    public Campeonato getCodigoCampeonato() {
-        return codigoCampeonato;
-    }
+	public void setCampeonato(Campeonato campeonato) {
+		this.campeonato = campeonato;
+	}
 
-    public void setCodigoCampeonato(Campeonato codigoCampeonato) {
-        this.codigoCampeonato = codigoCampeonato;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (codigoCampTime != null ? codigoCampTime.hashCode() : 0);
@@ -108,7 +111,7 @@ public class Campeonatotime implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.treinoweb.model.entidade.Campeonatotime[ codigoCampTime=" + codigoCampTime + " ]";
+        return "criaentidades.Campeonatotime[ codigoCampTime=" + codigoCampTime + " ]";
     }
     
 }

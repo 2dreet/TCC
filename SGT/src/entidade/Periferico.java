@@ -11,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -34,6 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Periferico implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "codigoPeriferico")
     private Integer codigoPeriferico;
@@ -42,9 +45,9 @@ public class Periferico implements Serializable {
     @Basic(optional = false)
     @Column(name = "ativo")
     private boolean ativo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoPeriferico")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "periferico")
     private Collection<Marcaperiferico> marcaperifericoCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoPeriferico")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "periferico")
     private Collection<Jogadorperiferico> jogadorperifericoCollection;
 
     public Periferico() {
@@ -123,7 +126,7 @@ public class Periferico implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.treinoweb.model.entidade.Periferico[ codigoPeriferico=" + codigoPeriferico + " ]";
+        return "criaentidades.Periferico[ codigoPeriferico=" + codigoPeriferico + " ]";
     }
     
 }

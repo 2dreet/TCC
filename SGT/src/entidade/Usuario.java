@@ -12,6 +12,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -43,10 +45,12 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Usuario.findByEmail", query = "SELECT u FROM Usuario u WHERE u.email = :email"),
     @NamedQuery(name = "Usuario.findByUsuario", query = "SELECT u FROM Usuario u WHERE u.usuario = :usuario"),
     @NamedQuery(name = "Usuario.findBySenha", query = "SELECT u FROM Usuario u WHERE u.senha = :senha"),
-    @NamedQuery(name = "Usuario.findByAtivo", query = "SELECT u FROM Usuario u WHERE u.ativo = :ativo")})
+    @NamedQuery(name = "Usuario.findByAtivo", query = "SELECT u FROM Usuario u WHERE u.ativo = :ativo"),
+    @NamedQuery(name = "Usuario.findBySexo", query = "SELECT u FROM Usuario u WHERE u.sexo = :sexo")})
 public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "codigoUsuario")
     private Integer codigoUsuario;
@@ -77,12 +81,15 @@ public class Usuario implements Serializable {
     @Basic(optional = false)
     @Column(name = "ativo")
     private boolean ativo;
+    @Basic(optional = false)
+    @Column(name = "sexo")
+    private int sexo;
     @JoinColumn(name = "codigoPermissao", referencedColumnName = "codigoPermissao")
     @ManyToOne(optional = false)
-    private Permissao codigoPermissao;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoUsuario")
+    private Permissao permissao;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
     private Collection<Funcionario> funcionarioCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoUsuario")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
     private Collection<Jogador> jogadorCollection;
 
     public Usuario() {
@@ -92,7 +99,7 @@ public class Usuario implements Serializable {
         this.codigoUsuario = codigoUsuario;
     }
 
-    public Usuario(Integer codigoUsuario, String nome, String sobreNome, Date dataNascimento, String usuario, String senha, boolean ativo) {
+    public Usuario(Integer codigoUsuario, String nome, String sobreNome, Date dataNascimento, String usuario, String senha, boolean ativo, int sexo) {
         this.codigoUsuario = codigoUsuario;
         this.nome = nome;
         this.sobreNome = sobreNome;
@@ -100,6 +107,7 @@ public class Usuario implements Serializable {
         this.usuario = usuario;
         this.senha = senha;
         this.ativo = ativo;
+        this.sexo = sexo;
     }
 
     public Integer getCodigoUsuario() {
@@ -190,15 +198,23 @@ public class Usuario implements Serializable {
         this.ativo = ativo;
     }
 
-    public Permissao getCodigoPermissao() {
-        return codigoPermissao;
+    public int getSexo() {
+        return sexo;
     }
 
-    public void setCodigoPermissao(Permissao codigoPermissao) {
-        this.codigoPermissao = codigoPermissao;
+    public void setSexo(int sexo) {
+        this.sexo = sexo;
     }
 
-    @XmlTransient
+    public Permissao getPermissao() {
+		return permissao;
+	}
+
+	public void setPermissao(Permissao permissao) {
+		this.permissao = permissao;
+	}
+
+	@XmlTransient
     public Collection<Funcionario> getFuncionarioCollection() {
         return funcionarioCollection;
     }
@@ -238,7 +254,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.treinoweb.model.entidade.Usuario[ codigoUsuario=" + codigoUsuario + " ]";
+        return "criaentidades.Usuario[ codigoUsuario=" + codigoUsuario + " ]";
     }
     
 }

@@ -11,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -34,6 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Permissao implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "codigoPermissao")
     private Integer codigoPermissao;
@@ -42,7 +45,7 @@ public class Permissao implements Serializable {
     @Basic(optional = false)
     @Column(name = "ativo")
     private boolean ativo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoPermissao")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "permissao")
     private Collection<Usuario> usuarioCollection;
 
     public Permissao() {
@@ -112,7 +115,7 @@ public class Permissao implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.treinoweb.model.entidade.Permissao[ codigoPermissao=" + codigoPermissao + " ]";
+        return "criaentidades.Permissao[ codigoPermissao=" + codigoPermissao + " ]";
     }
     
 }

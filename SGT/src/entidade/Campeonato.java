@@ -12,6 +12,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -42,6 +44,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Campeonato implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "codigoCampeonato")
     private Integer codigoCampeonato;
@@ -59,19 +62,19 @@ public class Campeonato implements Serializable {
     @Basic(optional = false)
     @Column(name = "ativo")
     private boolean ativo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoCampeonato")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "campeonato")
     private Collection<Campeonatopartida> campeonatopartidaCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoCampeonato")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "campeonato")
     private Collection<Classificacao> classificacaoCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoCampeonato")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "campeonato")
     private Collection<Funcionariocampeonato> funcionariocampeonatoCollection;
     @JoinColumn(name = "codigoModalidade", referencedColumnName = "codigoModalidade")
     @ManyToOne(optional = false)
-    private Modalidade codigoModalidade;
+    private Modalidade modalidade;
     @JoinColumn(name = "codigoChave", referencedColumnName = "codigoChave")
     @ManyToOne(optional = false)
-    private Chave codigoChave;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoCampeonato")
+    private Chave chave;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "campeonato")
     private Collection<Campeonatotime> campeonatotimeCollection;
 
     public Campeonato() {
@@ -160,24 +163,24 @@ public class Campeonato implements Serializable {
     public void setFuncionariocampeonatoCollection(Collection<Funcionariocampeonato> funcionariocampeonatoCollection) {
         this.funcionariocampeonatoCollection = funcionariocampeonatoCollection;
     }
+    
+    public Modalidade getModalidade() {
+		return modalidade;
+	}
 
-    public Modalidade getCodigoModalidade() {
-        return codigoModalidade;
-    }
+	public void setModalidade(Modalidade modalidade) {
+		this.modalidade = modalidade;
+	}
 
-    public void setCodigoModalidade(Modalidade codigoModalidade) {
-        this.codigoModalidade = codigoModalidade;
-    }
+	public Chave getChave() {
+		return chave;
+	}
 
-    public Chave getCodigoChave() {
-        return codigoChave;
-    }
+	public void setChave(Chave chave) {
+		this.chave = chave;
+	}
 
-    public void setCodigoChave(Chave codigoChave) {
-        this.codigoChave = codigoChave;
-    }
-
-    @XmlTransient
+	@XmlTransient
     public Collection<Campeonatotime> getCampeonatotimeCollection() {
         return campeonatotimeCollection;
     }
@@ -208,7 +211,7 @@ public class Campeonato implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.treinoweb.model.entidade.Campeonato[ codigoCampeonato=" + codigoCampeonato + " ]";
+        return "criaentidades.Campeonato[ codigoCampeonato=" + codigoCampeonato + " ]";
     }
     
 }

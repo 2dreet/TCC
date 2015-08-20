@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -30,15 +32,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Funcionariocampeonato implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "codigoFuncCamp")
     private Integer codigoFuncCamp;
     @JoinColumn(name = "codigoFuncionario", referencedColumnName = "codigoFuncionario")
     @ManyToOne(optional = false)
-    private Funcionario codigoFuncionario;
+    private Funcionario funcionario;
     @JoinColumn(name = "codigoCampeonato", referencedColumnName = "codigoCampeonato")
     @ManyToOne(optional = false)
-    private Campeonato codigoCampeonato;
+    private Campeonato campeonato;
 
     public Funcionariocampeonato() {
     }
@@ -54,24 +57,24 @@ public class Funcionariocampeonato implements Serializable {
     public void setCodigoFuncCamp(Integer codigoFuncCamp) {
         this.codigoFuncCamp = codigoFuncCamp;
     }
+    
+    public Funcionario getFuncionario() {
+		return funcionario;
+	}
 
-    public Funcionario getCodigoFuncionario() {
-        return codigoFuncionario;
-    }
+	public void setFuncionario(Funcionario funcionario) {
+		this.funcionario = funcionario;
+	}
 
-    public void setCodigoFuncionario(Funcionario codigoFuncionario) {
-        this.codigoFuncionario = codigoFuncionario;
-    }
+	public Campeonato getCampeonato() {
+		return campeonato;
+	}
 
-    public Campeonato getCodigoCampeonato() {
-        return codigoCampeonato;
-    }
+	public void setCampeonato(Campeonato campeonato) {
+		this.campeonato = campeonato;
+	}
 
-    public void setCodigoCampeonato(Campeonato codigoCampeonato) {
-        this.codigoCampeonato = codigoCampeonato;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (codigoFuncCamp != null ? codigoFuncCamp.hashCode() : 0);
@@ -93,7 +96,7 @@ public class Funcionariocampeonato implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.treinoweb.model.entidade.Funcionariocampeonato[ codigoFuncCamp=" + codigoFuncCamp + " ]";
+        return "criaentidades.Funcionariocampeonato[ codigoFuncCamp=" + codigoFuncCamp + " ]";
     }
     
 }

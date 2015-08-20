@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -30,15 +32,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Pcpartida implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "codigoPcPartida")
     private Integer codigoPcPartida;
     @JoinColumn(name = "codigoPc", referencedColumnName = "codigoPC")
     @ManyToOne(optional = false)
-    private Pc codigoPc;
+    private Pc pc;
     @JoinColumn(name = "codigoPartida", referencedColumnName = "codigoPartida")
     @ManyToOne(optional = false)
-    private Partida codigoPartida;
+    private Partida partida;
 
     public Pcpartida() {
     }
@@ -55,23 +58,23 @@ public class Pcpartida implements Serializable {
         this.codigoPcPartida = codigoPcPartida;
     }
 
-    public Pc getCodigoPc() {
-        return codigoPc;
-    }
+    public Pc getPc() {
+		return pc;
+	}
 
-    public void setCodigoPc(Pc codigoPc) {
-        this.codigoPc = codigoPc;
-    }
+	public void setPc(Pc pc) {
+		this.pc = pc;
+	}
 
-    public Partida getCodigoPartida() {
-        return codigoPartida;
-    }
+	public Partida getPartida() {
+		return partida;
+	}
 
-    public void setCodigoPartida(Partida codigoPartida) {
-        this.codigoPartida = codigoPartida;
-    }
+	public void setPartida(Partida partida) {
+		this.partida = partida;
+	}
 
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (codigoPcPartida != null ? codigoPcPartida.hashCode() : 0);
@@ -93,7 +96,7 @@ public class Pcpartida implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.treinoweb.model.entidade.Pcpartida[ codigoPcPartida=" + codigoPcPartida + " ]";
+        return "criaentidades.Pcpartida[ codigoPcPartida=" + codigoPcPartida + " ]";
     }
     
 }

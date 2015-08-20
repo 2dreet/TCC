@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -33,6 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Driver implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "codigoDriver")
     private Integer codigoDriver;
@@ -46,7 +49,7 @@ public class Driver implements Serializable {
     private boolean ativo;
     @JoinColumn(name = "codigoMarca", referencedColumnName = "codigoMarca")
     @ManyToOne(optional = false)
-    private Marca codigoMarca;
+    private Marca marca;
 
     public Driver() {
     }
@@ -91,16 +94,16 @@ public class Driver implements Serializable {
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
+    
+    public Marca getMarca() {
+		return marca;
+	}
 
-    public Marca getCodigoMarca() {
-        return codigoMarca;
-    }
+	public void setMarca(Marca marca) {
+		this.marca = marca;
+	}
 
-    public void setCodigoMarca(Marca codigoMarca) {
-        this.codigoMarca = codigoMarca;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (codigoDriver != null ? codigoDriver.hashCode() : 0);
@@ -122,7 +125,7 @@ public class Driver implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.treinoweb.model.entidade.Driver[ codigoDriver=" + codigoDriver + " ]";
+        return "criaentidades.Driver[ codigoDriver=" + codigoDriver + " ]";
     }
     
 }

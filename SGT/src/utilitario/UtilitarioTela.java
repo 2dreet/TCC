@@ -126,19 +126,22 @@ public class UtilitarioTela {
 	public static Color getColorCrud(int modoCrud) {
 		int r = 0, g = 0, b = 0;
 		if (modoCrud == ParametroCrud.getModoCrudNovo()) {
-			r = 76;
+			r = 153;
 			g = 255;
-			b = 70;
+			b = 153;
 		} else if (modoCrud == ParametroCrud.getModoCrudAlterar()) {
 			r = 255;
 			g = 178;
 			b = 102;
 		} else {
-			r = 252;
-			g = 79;
-			b = 63;
+			r = 255;
+			g = 153;
+			b = 153;
 		}
 		return new Color(r, g, b);
 	}
 	
+	public static Color getColorErro(){
+		return new Color(252, 79, 63);
+	}
 }

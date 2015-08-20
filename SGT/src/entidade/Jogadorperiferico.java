@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -30,15 +32,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Jogadorperiferico implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "codigojogaPeri")
     private Integer codigojogaPeri;
     @JoinColumn(name = "codigoJogador", referencedColumnName = "codigoJogador")
     @ManyToOne(optional = false)
-    private Jogador codigoJogador;
+    private Jogador jogador;
     @JoinColumn(name = "codigoPeriferico", referencedColumnName = "codigoPeriferico")
     @ManyToOne(optional = false)
-    private Periferico codigoPeriferico;
+    private Periferico periferico;
 
     public Jogadorperiferico() {
     }
@@ -54,24 +57,24 @@ public class Jogadorperiferico implements Serializable {
     public void setCodigojogaPeri(Integer codigojogaPeri) {
         this.codigojogaPeri = codigojogaPeri;
     }
+    
+    public Jogador getJogador() {
+		return jogador;
+	}
 
-    public Jogador getCodigoJogador() {
-        return codigoJogador;
-    }
+	public void setJogador(Jogador jogador) {
+		this.jogador = jogador;
+	}
 
-    public void setCodigoJogador(Jogador codigoJogador) {
-        this.codigoJogador = codigoJogador;
-    }
+	public Periferico getPeriferico() {
+		return periferico;
+	}
 
-    public Periferico getCodigoPeriferico() {
-        return codigoPeriferico;
-    }
+	public void setPeriferico(Periferico periferico) {
+		this.periferico = periferico;
+	}
 
-    public void setCodigoPeriferico(Periferico codigoPeriferico) {
-        this.codigoPeriferico = codigoPeriferico;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (codigojogaPeri != null ? codigojogaPeri.hashCode() : 0);
@@ -93,7 +96,7 @@ public class Jogadorperiferico implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.treinoweb.model.entidade.Jogadorperiferico[ codigojogaPeri=" + codigojogaPeri + " ]";
+        return "criaentidades.Jogadorperiferico[ codigojogaPeri=" + codigojogaPeri + " ]";
     }
     
 }

@@ -12,6 +12,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -41,6 +43,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Partida implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "codigoPartida")
     private Integer codigoPartida;
@@ -59,11 +62,11 @@ public class Partida implements Serializable {
     @Basic(optional = false)
     @Column(name = "ativo")
     private boolean ativo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoPartida")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "partida")
     private Collection<Campeonatopartida> campeonatopartidaCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoPartida")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "partida")
     private Collection<Pcpartida> pcpartidaCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoPartida")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "partida")
     private Collection<Timepartida> timepartidaCollection;
 
     public Partida() {
@@ -183,7 +186,7 @@ public class Partida implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.treinoweb.model.entidade.Partida[ codigoPartida=" + codigoPartida + " ]";
+        return "criaentidades.Partida[ codigoPartida=" + codigoPartida + " ]";
     }
     
 }

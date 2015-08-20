@@ -12,6 +12,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -38,6 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Time implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "codigoTime")
     private Integer codigoTime;
@@ -56,11 +59,11 @@ public class Time implements Serializable {
     private Collection<Classificacao> classificacaoCollection1;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "timePrimeiro")
     private Collection<Classificacao> classificacaoCollection2;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoTime")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "time")
     private Collection<Jogador> jogadorCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoTime")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "time")
     private Collection<Timepartida> timepartidaCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoTime")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "time")
     private Collection<Campeonatotime> campeonatotimeCollection;
 
     public Time() {
@@ -184,7 +187,7 @@ public class Time implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.treinoweb.model.entidade.Time[ codigoTime=" + codigoTime + " ]";
+        return "criaentidades.Time[ codigoTime=" + codigoTime + " ]";
     }
     
 }
