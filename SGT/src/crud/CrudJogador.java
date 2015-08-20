@@ -10,12 +10,14 @@ import utilitario.BordaEscura;
 import utilitario.BordaSombreada;
 import utilitario.MascaraCrud;
 import utilitario.ParametroCrud;
+import utilitario.Parametros;
 import utilitario.UtilitarioCrud;
 import utilitario.UtilitarioTela;
 import utilitario.ValidadorCrud;
 
 import javax.swing.JButton;
 
+import dao.PermissaoDao;
 import entidade.Jogador;
 import entidade.Usuario;
 
@@ -28,11 +30,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import javax.swing.ButtonGroup;
 import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+
 import java.awt.Color;
+import java.util.Date;
 
 public class CrudJogador extends JPanel {
 	private JTextField txNome;
@@ -44,6 +49,9 @@ public class CrudJogador extends JPanel {
 	private JTextField txUsuario;
 	private JLabel lblMsg;
 	private JPanel msg;
+	private JRadioButton sexoFeminino ;
+	private JRadioButton sexoMasculino;
+	private Jogador jogadorSelecionado;
 
 	/**
 	 * Create the panel.
@@ -52,6 +60,8 @@ public class CrudJogador extends JPanel {
 		setSize(UtilitarioTela.getTamanhoMeio());
 		setLayout(null);
 		setBackground(null);
+		
+		jogadorSelecionado = jogador;
 		
 		JPanel header = new JPanel();
 		header.setSize(500, 30);
@@ -73,7 +83,7 @@ public class CrudJogador extends JPanel {
 		JLabel lblHeader = new JLabel(textoHeader);
 		lblHeader.setHorizontalAlignment(SwingConstants.CENTER);
 		lblHeader.setBounds(0, 0, header.getWidth(), header.getHeight());
-		lblHeader.setFont(UtilitarioTela.getFontCrud());
+		lblHeader.setFont(UtilitarioTela.getFont(14));
 		lblHeader.setForeground(UtilitarioTela.getFontColorCrud());
 		header.add(lblHeader);
 		
@@ -87,7 +97,7 @@ public class CrudJogador extends JPanel {
 		
 		JLabel lbNome = new JLabel("Nome :");
 		lbNome.setBounds(20, 20, 50, 20);
-		lbNome.setFont(UtilitarioTela.getFontCrud());
+		lbNome.setFont(UtilitarioTela.getFont(14));
 		lbNome.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbNome);
 		
@@ -111,7 +121,7 @@ public class CrudJogador extends JPanel {
 		
 		JLabel lbSobrenome = new JLabel("Sobrenome :");
 		lbSobrenome.setBounds(20, 55, 100, 20);
-		lbSobrenome.setFont(UtilitarioTela.getFontCrud());
+		lbSobrenome.setFont(UtilitarioTela.getFont(14));
 		lbSobrenome.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbSobrenome);
 		
@@ -136,7 +146,7 @@ public class CrudJogador extends JPanel {
 		
 		JLabel lbRg = new JLabel("RG :");
 		lbRg.setBounds(20, 90, 100, 20);
-		lbRg.setFont(UtilitarioTela.getFontCrud());
+		lbRg.setFont(UtilitarioTela.getFont(14));
 		lbRg.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbRg);
 		
@@ -168,7 +178,7 @@ public class CrudJogador extends JPanel {
 		
 		JLabel lbDataNascimento = new JLabel("Data Nascimento :");
 		lbDataNascimento.setBounds(20, 125, 130, 20);
-		lbDataNascimento.setFont(UtilitarioTela.getFontCrud());
+		lbDataNascimento.setFont(UtilitarioTela.getFont(14));
 		lbDataNascimento.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbDataNascimento);
 		
@@ -204,7 +214,7 @@ public class CrudJogador extends JPanel {
 		
 		JLabel lbTelefone = new JLabel("Telefone :");
 		lbTelefone.setBounds(20, 160, 100, 20);
-		lbTelefone.setFont(UtilitarioTela.getFontCrud());
+		lbTelefone.setFont(UtilitarioTela.getFont(14));
 		lbTelefone.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbTelefone);
 		
@@ -237,9 +247,30 @@ public class CrudJogador extends JPanel {
 		meio.add(txTelefone);
 		setVisible(true);
 		
+		JLabel lbSexo = new JLabel("Sexo :");
+		lbSexo.setBounds(20, 195, 100, 20);
+		lbSexo.setFont(UtilitarioTela.getFont(14));
+		lbSexo.setForeground(UtilitarioTela.getFontColorCrud());
+		meio.add(lbSexo);
+		
+		sexoMasculino = new JRadioButton("Masculino");
+		sexoMasculino.setSelected(true);
+		sexoMasculino.setBounds(150, 195, 109, 23);
+		sexoMasculino.setBackground(null);
+		meio.add(sexoMasculino);
+		
+		sexoFeminino = new JRadioButton("Feminino");
+		sexoFeminino.setBounds(270, 195, 109, 23);
+		sexoFeminino.setBackground(null);
+		meio.add(sexoFeminino);
+		
+		ButtonGroup bg = new ButtonGroup();
+		bg.add(sexoMasculino);
+		bg.add(sexoFeminino);
+		
 		JLabel lbEmail = new JLabel("Email :");
 		lbEmail.setBounds(20, 230, 100, 20);
-		lbEmail.setFont(UtilitarioTela.getFontCrud());
+		lbEmail.setFont(UtilitarioTela.getFont(14));
 		lbEmail.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbEmail);
 		
@@ -264,7 +295,7 @@ public class CrudJogador extends JPanel {
 		
 		JLabel lbUsuario = new JLabel("Usuário :");
 		lbUsuario.setBounds(20, 265, 100, 20);
-		lbUsuario.setFont(UtilitarioTela.getFontCrud());
+		lbUsuario.setFont(UtilitarioTela.getFont(14));
 		lbUsuario.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbUsuario);
 		
@@ -286,6 +317,8 @@ public class CrudJogador extends JPanel {
 		txUsuario.setBorder(UtilitarioTela.jTextFieldNormal());
 		meio.add(txUsuario);
 		
+		
+		
 		String texto = "";
 
 		if(modoCrud == ParametroCrud.getModoCrudDeletar()){
@@ -299,7 +332,7 @@ public class CrudJogador extends JPanel {
 		
 		JButton btSalvar = new JButton(texto);
 		btSalvar.setBounds(175, meio.getHeight()-70, 150, 35);
-		btSalvar.setFont(UtilitarioTela.getFontCrud());
+		btSalvar.setFont(UtilitarioTela.getFont(14));
 		btSalvar.setFocusPainted(false);
 		btSalvar.setBackground(UtilitarioTela.getColorCrud(modoCrud));
 		btSalvar.setIcon(UtilitarioCrud.getIconeCrud(modoCrud));
@@ -320,15 +353,7 @@ public class CrudJogador extends JPanel {
 		msg.setBackground(null);
 		meio.add(msg);
 		
-		JRadioButton radioButton = new JRadioButton("New radio button");
-		radioButton.setSelected(true);
-		radioButton.setBounds(155, 195, 109, 23);
-		radioButton.setBackground(null);
-		meio.add(radioButton);
 		
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("New radio button");
-		rdbtnNewRadioButton.setBounds(282, 195, 109, 23);
-		meio.add(rdbtnNewRadioButton);
 		
 		
 		if(modoCrud == ParametroCrud.getModoCrudDeletar()){
@@ -343,7 +368,7 @@ public class CrudJogador extends JPanel {
 		lblMsg = new JLabel(erro);
 		lblMsg.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMsg.setBounds(0, 0 , 490, 35);
-		lblMsg.setFont(UtilitarioTela.getFontCrud());
+		lblMsg.setFont(UtilitarioTela.getFont(14));
 		lblMsg.setForeground(UtilitarioTela.getColorErro());
 		msg.add(lblMsg);
 		msg.setBackground(null);
@@ -355,7 +380,7 @@ public class CrudJogador extends JPanel {
 		lblMsg = new JLabel(erro);
 		lblMsg.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMsg.setBounds(0, 0 , 490, 35);
-		lblMsg.setFont(UtilitarioTela.getFontCrud());
+		lblMsg.setFont(UtilitarioTela.getFont(14));
 		lblMsg.setForeground(UtilitarioTela.getFontColorCrud());
 		msg.add(lblMsg);
 		msg.setBackground(UtilitarioTela.getColorErro());
@@ -366,7 +391,7 @@ public class CrudJogador extends JPanel {
 		lblMsg = new JLabel("");
 		lblMsg.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMsg.setBounds(0, 0 , 490, 35);
-		lblMsg.setFont(UtilitarioTela.getFontCrud());
+		lblMsg.setFont(UtilitarioTela.getFont(12));
 		lblMsg.setForeground(UtilitarioTela.getFontColorCrud());
 		msg.add(lblMsg);
 		msg.setBackground(null);
@@ -446,13 +471,43 @@ public class CrudJogador extends JPanel {
 	private void save(int modoCrud){
 		if(modoCrud == ParametroCrud.getModoCrudNovo()){
 			Usuario usuario = new Usuario();
+			usuario.setAtivo(true);
+			usuario.setNome(txNome.getText());
+			usuario.setSobreNome(txSobreNome.getText());
+			usuario.setRg(txRg.getText());
+			usuario.setDataNascimento(UtilitarioCrud.getData(txDataNascimento.getText()));
+			usuario.setTelefone(txTelefone.getText());
+			usuario.setUsuario(txUsuario.getText());
+			usuario.setPermissao(PermissaoDao.getPermissao(Parametros.getPermissaoJogador()));
+			if(sexoMasculino.isSelected()){
+				usuario.setSexo(Parametros.getSexoMasculino());
+			}else{
+				usuario.setSexo(Parametros.getSexoFeminino());
+			}
+			Jogador jogador = new Jogador();
+			jogador.setUsuario(usuario);
+			jogador.setDataCadastro(new Date());
 			
 		}else if(modoCrud == ParametroCrud.getModoCrudAlterar()){
-			
-			
+			Usuario usuario = jogadorSelecionado.getUsuario();
+			usuario.setNome(txNome.getText());
+			usuario.setSobreNome(txSobreNome.getText());
+			usuario.setRg(txRg.getText());
+			usuario.setDataNascimento(UtilitarioCrud.getData(txDataNascimento.getText()));
+			usuario.setTelefone(txTelefone.getText());
+			usuario.setUsuario(txUsuario.getText());
+			if(sexoMasculino.isSelected()){
+				usuario.setSexo(Parametros.getSexoMasculino());
+			}else{
+				usuario.setSexo(Parametros.getSexoFeminino());
+			}
+			Jogador jogador = jogadorSelecionado;
+			jogador.setUsuario(usuario);
 		}else if(modoCrud == ParametroCrud.getModoCrudDeletar()){
-			
-			
+			Usuario usuario = jogadorSelecionado.getUsuario();
+			usuario.setAtivo(false);
+			Jogador jogador = jogadorSelecionado;
+			jogador.setUsuario(usuario);
 		}
 	}
 	

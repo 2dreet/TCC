@@ -5,12 +5,18 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
+import utilitario.Parametros;
 import utilitario.UtilitarioTela;
+
 import java.awt.Component;
+
 import javax.swing.border.BevelBorder;
+
 import java.awt.Color;
+
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.SoftBevelBorder;
@@ -27,8 +33,12 @@ public class Home extends JFrame {
 	
 	/**
 	 * Create the frame.
+	 * @throws UnsupportedLookAndFeelException 
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 * @throws ClassNotFoundException 
 	 */
-	public Home() {
+	public Home() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(UtilitarioTela.getTamanhoMunitor());
 		
@@ -44,6 +54,7 @@ public class Home extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		setUndecorated(true);
+		Parametros.setPai(this);
 		addHomeFuncionario();
 	}
 	

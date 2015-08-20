@@ -233,6 +233,7 @@ public class HomeFuncionario extends JPanel {
 	public void abreMenu(JPanel panel){
 		baixo.removeAll();
 		baixo.add(panel);
+		baixo.repaint();
 	}
 
 	public void zeraSelecao() {

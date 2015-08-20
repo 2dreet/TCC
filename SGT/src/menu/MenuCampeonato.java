@@ -60,11 +60,13 @@ public class MenuCampeonato extends JPanel {
 		menuMeio.setSize(UtilitarioTela.getTamanhoMeio());
 		menuMeio.setLocation(250, 0);
 		menuMeio.setBackground(new Color(46, 49, 56));
+		menuMeio.setLayout(null);
 		add(menuMeio);
 
 		JPanel menuLateralBaixo = new JPanel();
 		menuLateralBaixo.setBounds(0, 30, 240, getHeight() - 30);
 		menuLateralBaixo.setBackground(new Color(46, 49, 56));
+		menuLateralBaixo.setLayout(null);
 		menuLateral.add(menuLateralBaixo);
 
 		JPanel jp1 = new JPanel();

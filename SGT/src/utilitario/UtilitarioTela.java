@@ -9,7 +9,10 @@ import java.awt.Toolkit;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.border.SoftBevelBorder;
 
 import net.miginfocom.layout.LayoutCallback;
 import tela.HomeFuncionario;
@@ -114,15 +117,10 @@ public class UtilitarioTela {
 		return new Color(232,234,239);
 	}
 
+	public static Font getFont(int tamanho) {
+		return new Font("SansSerif", Font.BOLD, tamanho);
+	}
 	
-	public static Font getFontMenu() {
-		return new Font("SansSerif", Font.BOLD, 14);
-	}
-
-	public static Font getFontCrud() {
-		return new Font("SansSerif", Font.BOLD, 14);
-	}
-
 	public static Color getColorCrud(int modoCrud) {
 		int r = 0, g = 0, b = 0;
 		if (modoCrud == ParametroCrud.getModoCrudNovo()) {
