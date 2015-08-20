@@ -1,6 +1,7 @@
 package localizar;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -38,13 +39,14 @@ public class LocalizarJogador extends JPanel {
 	 */
 	public LocalizarJogador() {
 		setSize(UtilitarioTela.getTamanhoMeio());
+		setLayout(null);
 		setBackground(null);
 		
 		JPanel header = new JPanel();
-		header.setSize(500, 30);
-		header.setLocation((getWidth()/2)-250, 10);
+		header.setSize(getWidth()-20, 30);
+		header.setLocation(10, 10);
 		header.setLayout(null);
-		header.setBackground(null);
+		header.setBackground(Color.white);
 		header.setBorder(null);
 		add(header);
 		
@@ -55,10 +57,18 @@ public class LocalizarJogador extends JPanel {
 		lblHeader.setForeground(UtilitarioTela.getFontColorCrud());
 		header.add(lblHeader);
 		
+		JPanel meio = new JPanel();
+		meio.setSize(getWidth()-20, getHeight()-50);
+		meio.setLocation(10, 40);
+		meio.setLayout(null);
+		meio.setBackground(new Color(232, 234, 239));
+		meio.setBorder(new BordaSombreada());
+		add(meio);
+		
 		ComboBox combo = new ComboBox(new Dimension(300, 25));
 		combo.setModel(new DefaultComboBoxModel(new String[] { "Enero", "Febrero", "Marzo", "Diciembre" }));
-		combo.setLocation(420, 360);
-		add(combo);
+		combo.setLocation(10, 100);
+		meio.add(combo);
 	}
 }
 

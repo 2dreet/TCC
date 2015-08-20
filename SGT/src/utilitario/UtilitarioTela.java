@@ -116,7 +116,7 @@ public class UtilitarioTela {
 	public static Color getFundoCrud() {
 		return new Color(232,234,239);
 	}
-
+	
 	public static Font getFont(int tamanho) {
 		return new Font("SansSerif", Font.BOLD, tamanho);
 	}

@@ -9,16 +9,24 @@ import javax.swing.border.Border;
 
 public class BordaSombreada implements Border {
 
-	private int modoCrud;
-	
+	private int modoCrud = 0;
+
 	public BordaSombreada(int modoCrud) {
 		this.modoCrud = modoCrud;
+	}
+
+	public BordaSombreada() {
+		modoCrud = 0;
 	}
 
 	public void paintBorder(Component c, Graphics g, int x, int y, int width,
 			int height) {
 
-		g.setColor(UtilitarioTela.getColorCrud(modoCrud));
+		if (modoCrud != 0) {
+			g.setColor(UtilitarioTela.getColorCrud(modoCrud));
+		} else {
+			g.setColor(Color.white);
+		}
 		g.drawRect(x, y, width - 1, height - 1);
 
 		g.setColor(new Color(53, 56, 64));
