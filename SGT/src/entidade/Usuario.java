@@ -8,6 +8,7 @@ package entidade;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,6 +21,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -50,7 +52,8 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator="InvSeq")
+    @SequenceGenerator(name="InvSeq",sequenceName="INV_SEQ", allocationSize=5)
     @Basic(optional = false)
     @Column(name = "codigoUsuario")
     private Integer codigoUsuario;

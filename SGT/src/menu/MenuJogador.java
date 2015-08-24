@@ -33,10 +33,10 @@ public class MenuJogador extends JPanel {
 	 */
 	private JPanel menuMeio;
 	private JButton btLocalizar;
-	private JTextField txLocalizar;
-	private JButton btNovoJogador;
-	private JButton btAlterarJogador;
-	private JButton btDeletarJogador;
+	private JButton btNovo;
+	private JButton btAlterar;
+	private JButton btDeletar;
+	private JButton btVisualizar;
 	private Jogador jogadorSelecionado;
 
 	public MenuJogador() {
@@ -87,33 +87,18 @@ public class MenuJogador extends JPanel {
 		jp1.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp1);
 
-		txLocalizar = new JTextField();
-		txLocalizar.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent arg0) {
-				txLocalizar.setBorder(UtilitarioTela.jTextFieldComFocus());
-			}
-
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				txLocalizar.setBorder(UtilitarioTela.jTextFieldNormal());
-			}
-		});
-		txLocalizar.setBounds(5, 5, 200, 24);
-		txLocalizar.setLayout(null);
-		txLocalizar.setBorder(UtilitarioTela.jTextFieldNormal());
-		jp1.add(txLocalizar);
-
-		btLocalizar = new JButton("");
+		btLocalizar = new JButton("Localizar Jogador");
 		btLocalizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
+				getIcon(btLocalizar, true);
 				localizarJogador();
 			}
 		});
-		btLocalizar.setBounds(jp1.getWidth() - 30, 5, 24, 24);
+		btLocalizar.setBounds( 5, 5,  230, 30);
 		btLocalizar.setName("localizar");
 		btLocalizar.setBorderPainted(false);
+		btLocalizar.setHorizontalAlignment(SwingConstants.LEFT);
 		getIcon(btLocalizar, false);
 		jp1.add(btLocalizar);
 
@@ -124,22 +109,23 @@ public class MenuJogador extends JPanel {
 		jp2.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp2);
 
-		btNovoJogador = new JButton("Cadastrar Jogador");
+		btNovo = new JButton("Cadastrar Jogador");
 
-		btNovoJogador.setBounds(5, 5, 230, 30);
-		btNovoJogador.setBorderPainted(false);
-		btNovoJogador.setBackground(null);
-		btNovoJogador.setLayout(null);
-		btNovoJogador.setName("cadastrarJogador");
-		btNovoJogador.setHorizontalAlignment(SwingConstants.LEFT);
-		btNovoJogador.addActionListener(new ActionListener() {
+		btNovo.setBounds(5, 5, 230, 30);
+		btNovo.setBorderPainted(false);
+		btNovo.setBackground(null);
+		btNovo.setLayout(null);
+		btNovo.setName("cadastrarJogador");
+		btNovo.setHorizontalAlignment(SwingConstants.LEFT);
+		btNovo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
-				getIcon(btNovoJogador, true);
+				getIcon(btNovo, true);
+				limpar();
 				alterarMenu(null, ParametroCrud.getModoCrudNovo());
 			}
 		});
-		jp2.add(btNovoJogador);
+		jp2.add(btNovo);
 
 		JPanel jp3 = new JPanel();
 		jp3.setBounds(0, 80, 240, 40);
@@ -147,24 +133,22 @@ public class MenuJogador extends JPanel {
 		jp3.setLayout(null);
 		jp3.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp3);
-
-		btAlterarJogador = new JButton("Alterar Jogador");
-		btAlterarJogador.setBounds(5, 5, 230, 30);
-		btAlterarJogador.setBorderPainted(false);
-		btAlterarJogador.setBackground(null);
-		btAlterarJogador.setLayout(null);
-		btAlterarJogador.setName("alterarJogador");
-		btAlterarJogador.setHorizontalAlignment(SwingConstants.LEFT);
-		btAlterarJogador.addActionListener(new ActionListener() {
+		
+		btVisualizar = new JButton("Visualizar Jogador");
+		btVisualizar.setBounds(5, 5, 230, 30);
+		btVisualizar.setBorderPainted(false);
+		btVisualizar.setBackground(null);
+		btVisualizar.setLayout(null);
+		btVisualizar.setName("visualizarJogador");
+		btVisualizar.setHorizontalAlignment(SwingConstants.LEFT);
+		btVisualizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
-				getIcon(btAlterarJogador, true);
-				alterarMenu(jogadorSelecionado,
-						ParametroCrud.getModoCrudAlterar());
+				getIcon(btVisualizar, true);
+				alterarMenu(jogadorSelecionado,	ParametroCrud.getModoVisualizar());
 			}
 		});
-
-		jp3.add(btAlterarJogador);
+		jp3.add(btVisualizar);
 
 		JPanel jp4 = new JPanel();
 		jp4.setBounds(0, 120, 240, 40);
@@ -172,25 +156,25 @@ public class MenuJogador extends JPanel {
 		jp4.setLayout(null);
 		jp4.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp4);
-
-		btDeletarJogador = new JButton("Deletar Jogador");
-		btDeletarJogador.setBounds(5, 5, 230, 30);
-		btDeletarJogador.setBorderPainted(false);
-		btDeletarJogador.setBackground(null);
-		btDeletarJogador.setLayout(null);
-		btDeletarJogador.setName("deletarJogador");
-		btDeletarJogador.setHorizontalAlignment(SwingConstants.LEFT);
-		btDeletarJogador.addActionListener(new ActionListener() {
+		
+		btAlterar = new JButton("Alterar Jogador");
+		btAlterar.setBounds(5, 5, 230, 30);
+		btAlterar.setBorderPainted(false);
+		btAlterar.setBackground(null);
+		btAlterar.setLayout(null);
+		btAlterar.setName("alterarJogador");
+		btAlterar.setHorizontalAlignment(SwingConstants.LEFT);
+		btAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
-				getIcon(btDeletarJogador, true);
+				getIcon(btAlterar, true);
 				alterarMenu(jogadorSelecionado,
-						ParametroCrud.getModoCrudDeletar());
+						ParametroCrud.getModoCrudAlterar());
 			}
 		});
+		jp4.add(btAlterar);
 
-		jp4.add(btDeletarJogador);
-
+		
 		JPanel jp5 = new JPanel();
 		jp5.setBounds(0, 160, 240, 40);
 		jp5.setBackground(null);
@@ -198,6 +182,25 @@ public class MenuJogador extends JPanel {
 		jp5.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp5);
 
+		btDeletar = new JButton("Deletar Jogador");
+		btDeletar.setBounds(5, 5, 230, 30);
+		btDeletar.setBorderPainted(false);
+		btDeletar.setBackground(null);
+		btDeletar.setLayout(null);
+		btDeletar.setName("deletarJogador");
+		btDeletar.setHorizontalAlignment(SwingConstants.LEFT);
+		btDeletar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				zeraSelecao();
+				getIcon(btDeletar, true);
+				alterarMenu(jogadorSelecionado,
+						ParametroCrud.getModoCrudDeletar());
+			}
+		});
+
+		jp5.add(btDeletar);
+
+		
 		JPanel jp6 = new JPanel();
 		jp6.setBounds(0, 200, 240, 40);
 		jp6.setBackground(null);
@@ -212,20 +215,42 @@ public class MenuJogador extends JPanel {
 		jp7.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp7);
 
-		getIcon(btNovoJogador, false);
-		getIcon(btAlterarJogador, false);
-		getIcon(btDeletarJogador, false);
-		btDeletarJogador.setForeground(UtilitarioTela
+		getIcon(btNovo, false);
+		getIcon(btAlterar, false);
+		getIcon(btDeletar, false);
+		getIcon(btVisualizar, false);
+		getIcon(btLocalizar, false);
+		
+		btDeletar.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
-		btAlterarJogador.setForeground(UtilitarioTela
+		btAlterar.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
-		btNovoJogador.setForeground(UtilitarioTela.getFontColorSelecao(false));
-		btNovoJogador.setFont(UtilitarioTela.getFont(14));
-		btAlterarJogador.setFont(UtilitarioTela.getFont(14));
-		btDeletarJogador.setFont(UtilitarioTela.getFont(14));
-
+		btNovo.setForeground(UtilitarioTela.getFontColorSelecao(false));
+		btVisualizar.setForeground(UtilitarioTela.getFontColorSelecao(false));
+		btLocalizar.setForeground(UtilitarioTela
+				.getFontColorSelecao(false));
+		
+		btNovo.setFont(UtilitarioTela.getFont(14));
+		btAlterar.setFont(UtilitarioTela.getFont(14));
+		btDeletar.setFont(UtilitarioTela.getFont(14));
+		btVisualizar.setFont(UtilitarioTela.getFont(14));
+		btLocalizar.setFont(UtilitarioTela.getFont(14));
+		
+		limpar();
 	}
 
+	public void limpar(){
+		btAlterar.setEnabled(false);
+		btDeletar.setEnabled(false);
+		btVisualizar.setEnabled(false);
+	}
+	
+	public void exibirJogador(Jogador jogador){
+		this.jogadorSelecionado = jogador;
+		liberarCrud();
+		alterarMenu(jogadorSelecionado , ParametroCrud.getModoVisualizar());
+	}
+	
 	public void localizarJogador() {
 		menuMeio.removeAll();
 		LocalizarJogador localizar = new LocalizarJogador();
@@ -234,9 +259,15 @@ public class MenuJogador extends JPanel {
 		menuMeio.repaint();
 	}
 
+	public void liberarCrud(){
+		btAlterar.setEnabled(true);
+		btDeletar.setEnabled(true);
+		btVisualizar.setEnabled(true);
+	}
+	
 	public void alterarMenu(Jogador jogador, int modoCrud) {
 		menuMeio.removeAll();
-		CrudJogador c = new CrudJogador(jogador, modoCrud);
+		CrudJogador c = new CrudJogador(jogador, modoCrud, this);
 		menuMeio.add(c);
 		c.getTxNome().requestFocus();
 		menuMeio.revalidate();
@@ -244,22 +275,35 @@ public class MenuJogador extends JPanel {
 	}
 
 	public void zeraSelecao() {
-		btNovoJogador.setIcon(new ImageIcon(HomeFuncionario.class
+		
+		btLocalizar.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/crud/locJog.png")));
+		btLocalizar.setBackground(UtilitarioTela.getBtnFundo(false));
+		btLocalizar.setForeground(UtilitarioTela.getFontColorSelecao(false));
+		
+		btNovo.setIcon(new ImageIcon(HomeFuncionario.class
 				.getResource("/imagem/crud/addJog.png")));
-		btNovoJogador.setBackground(UtilitarioTela.getBtnFundo(false));
-		btNovoJogador.setForeground(UtilitarioTela.getFontColorSelecao(false));
+		btNovo.setBackground(UtilitarioTela.getBtnFundo(false));
+		btNovo.setForeground(UtilitarioTela.getFontColorSelecao(false));
 
-		btAlterarJogador.setIcon(new ImageIcon(HomeFuncionario.class
+		btAlterar.setIcon(new ImageIcon(HomeFuncionario.class
 				.getResource("/imagem/crud/altJog.png")));
-		btAlterarJogador.setBackground(UtilitarioTela.getBtnFundo(false));
-		btAlterarJogador.setForeground(UtilitarioTela
+		btAlterar.setBackground(UtilitarioTela.getBtnFundo(false));
+		btAlterar.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
 
-		btDeletarJogador.setIcon(new ImageIcon(HomeFuncionario.class
+		btDeletar.setIcon(new ImageIcon(HomeFuncionario.class
 				.getResource("/imagem/crud/delJog.png")));
-		btDeletarJogador.setBackground(UtilitarioTela.getBtnFundo(false));
-		btDeletarJogador.setForeground(UtilitarioTela
+		btDeletar.setBackground(UtilitarioTela.getBtnFundo(false));
+		btDeletar.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
+		
+		btVisualizar.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/crud/visuJog.png")));
+		btVisualizar.setBackground(UtilitarioTela.getBtnFundo(false));
+		btVisualizar.setForeground(UtilitarioTela
+				.getFontColorSelecao(false));
+		
 
 	}
 
@@ -268,9 +312,9 @@ public class MenuJogador extends JPanel {
 		if (botao.getName() != null) {
 			if (botao.getName().equals("localizar")) {
 				if (selecionado) {
-					url = "/imagem/diverssos/localizar.png";
+					url = "/imagem/crud/locJogSelect.png";
 				} else {
-					url = "/imagem/diverssos/localizar.png";
+					url = "/imagem/crud/locJog.png";
 				}
 			}
 			if (botao.getName().equals("cadastrarJogador")) {
@@ -292,6 +336,13 @@ public class MenuJogador extends JPanel {
 					url = "/imagem/crud/delJogSelect.png";
 				} else {
 					url = "/imagem/crud/delJog.png";
+				}
+			}
+			if (botao.getName().equals("visualizarJogador")) {
+				if (selecionado) {
+					url = "/imagem/crud/visuJogSelect.png";
+				} else {
+					url = "/imagem/crud/visuJog.png";
 				}
 			}
 			botao.setFocusPainted(false);

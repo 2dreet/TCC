@@ -9,6 +9,15 @@ public class Parametros {
 	private static int permissaoJogador =1;
 	private static JFrame pai = null;
 	
+	public static String getSexo(int sexo){
+		if(sexo == sexoMasculino){
+			return "Masculino";
+		}
+		else if(sexo == sexoFeminino){
+			return "Feminino";	
+		}
+		return "";
+	}
 	
 	public static int getSexoMasculino() {
 		return sexoMasculino;

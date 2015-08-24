@@ -131,15 +131,31 @@ public class UtilitarioTela {
 			r = 255;
 			g = 178;
 			b = 102;
-		} else {
+		} else if (modoCrud == ParametroCrud.getModoCrudDeletar()){
 			r = 255;
 			g = 153;
 			b = 153;
+		} else if (modoCrud == ParametroCrud.getModoVisualizar()){
+			r = 232;
+			g = 234;
+			b = 239;
 		}
 		return new Color(r, g, b);
 	}
 	
+	public static Color getFontColorPadrao(){
+		return new Color(252, 79, 63);
+	}
+	
+	public static ImageIcon getIconeLocalizar(){
+		return new ImageIcon(UtilitarioTela.class.getResource("/imagem/localizar.png"));
+	}
+	
 	public static Color getColorErro(){
+		return new Color(252, 79, 63);
+	}
+	
+	public static Color getFundoLocalizar(){
 		return new Color(252, 79, 63);
 	}
 }

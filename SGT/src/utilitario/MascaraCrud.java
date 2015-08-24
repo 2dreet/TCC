@@ -14,7 +14,15 @@ public class MascaraCrud {
 			telefone = "("+telefone.substring(1, 3)+")"+telefone.substring(4, 8)+"-"+telefone.substring(9, 13);
 		}
 		
+		
 		return telefone;
+	}
+	
+	public static String mascaraTelefoneResult(String telefone){
+		 if(telefone.length() == 10){
+				telefone = "("+telefone.substring(0, 2)+")"+telefone.substring(2, 6)+"-"+telefone.substring(6, 10);
+		}
+		 return telefone;
 	}
 	
 	public static String mascaraData(String data){

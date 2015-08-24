@@ -21,7 +21,7 @@ public class EntityManagerLocal{
 	}
 	
 	public static EntityManager getEntityManager(){
-		if(em==null){
+		if(emf==null){
 			openEntityManager();
 		}
 		return em;

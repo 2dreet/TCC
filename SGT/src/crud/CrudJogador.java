@@ -7,6 +7,7 @@ import java.awt.event.FocusEvent;
 
 import javax.swing.JPanel;
 
+import componente.Menssage;
 import utilitario.BordaEscura;
 import utilitario.BordaSombreada;
 import utilitario.MascaraCrud;
@@ -18,6 +19,7 @@ import utilitario.ValidadorCrud;
 
 import javax.swing.JButton;
 
+import dao.EntityManagerLocal;
 import dao.PermissaoDao;
 import entidade.Jogador;
 import entidade.Usuario;
@@ -42,6 +44,10 @@ import componente.ComboBox;
 import java.awt.Color;
 import java.util.Date;
 
+import javax.swing.JTextArea;
+
+import menu.MenuJogador;
+
 public class CrudJogador extends JPanel {
 	private JTextField txNome;
 	private JTextField txSobreNome;
@@ -54,18 +60,21 @@ public class CrudJogador extends JPanel {
 	private JPanel msg;
 	private ComboBox comboSexo;
 	private Jogador jogadorSelecionado;
-
+	private MenuJogador pai;
+	private JPanel header;
+	private JLabel lblHeader;
 	/**
 	 * Create the panel.
 	 */
-	public CrudJogador(Jogador jogador, int modoCrud) {
+	public CrudJogador(Jogador jogador, int modoCrud, MenuJogador pai) {
+		this.pai = pai;
 		setSize(UtilitarioTela.getTamanhoMeio());
 		setLayout(null);
 		setBackground(null);
 		
 		jogadorSelecionado = jogador;
 		
-		JPanel header = new JPanel();
+		header = new JPanel();
 		header.setSize(500, 30);
 		header.setLocation((getWidth()/2)-250, 10);
 		header.setLayout(null);
@@ -82,7 +91,7 @@ public class CrudJogador extends JPanel {
 			textoHeader= "Deletar Jogador";
 		}
 		
-		JLabel lblHeader = new JLabel(textoHeader);
+		lblHeader = new JLabel(textoHeader);
 		lblHeader.setHorizontalAlignment(SwingConstants.CENTER);
 		lblHeader.setBounds(0, 0, header.getWidth(), header.getHeight());
 		lblHeader.setFont(UtilitarioTela.getFont(14));
@@ -332,7 +341,9 @@ public class CrudJogador extends JPanel {
 		btSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(modoCrud != ParametroCrud.getModoCrudDeletar()){
-					validarCrud();
+					if(validarCrud()){
+						save(modoCrud);
+					}
 				}
 			}
 		});
@@ -346,15 +357,29 @@ public class CrudJogador extends JPanel {
 		meio.add(msg);
 		
 		
-		
-		
 		if(modoCrud == ParametroCrud.getModoCrudDeletar()){
 			desabilitarTodos();
 			msgDelecao("Deseja Deletar Esse Jogador?");
 		}
 		
+		if(jogadorSelecionado != null){
+			setarCampos();
+		}
 	}
 
+	public void setarCampos(){
+		txNome.setText(jogadorSelecionado.getUsuario().getNome());
+		txSobreNome.setText(jogadorSelecionado.getUsuario().getNome());
+		txRg.setText(jogadorSelecionado.getUsuario().getNome());
+		txTelefone.setText(jogadorSelecionado.getUsuario().getNome());
+		txEmail.setText(jogadorSelecionado.getUsuario().getNome());
+		txUsuario.setText(jogadorSelecionado.getUsuario().getNome());
+		comboSexo.setSelectedIndex(0);
+		if(jogadorSelecionado.getUsuario().getSexo() == Parametros.getSexoFeminino()){
+			comboSexo.setSelectedIndex(1);
+		}
+	}
+	
 	public void msgDelecao(String erro){
 		msg.removeAll();
 		lblMsg = new JLabel(erro);
@@ -461,24 +486,33 @@ public class CrudJogador extends JPanel {
 	}
 	
 	private void save(int modoCrud){
+		EntityManagerLocal.begin();
+		String modo = "";
+		String menssage = "";
 		if(modoCrud == ParametroCrud.getModoCrudNovo()){
+			modo = "Cadastro de Jogador";
+			menssage  = "<html>Jogador Cadastrado com Sucesso!</html>";
 			Usuario usuario = new Usuario();
 			usuario.setAtivo(true);
 			usuario.setNome(txNome.getText());
 			usuario.setSobreNome(txSobreNome.getText());
 			usuario.setRg(txRg.getText());
 			usuario.setDataNascimento(UtilitarioCrud.getData(txDataNascimento.getText()));
-			usuario.setTelefone(txTelefone.getText());
+			usuario.setTelefone(txTelefone.getText().replace("(", "").replace(")", "").replace("-", ""));
 			usuario.setUsuario(txUsuario.getText());
+			usuario.setEmail(txEmail.getText());
 			usuario.setPermissao(PermissaoDao.getPermissao(Parametros.getPermissaoJogador()));
 			if(comboSexo.getSelectedIndex()==0){
 				usuario.setSexo(Parametros.getSexoMasculino());
 			}else{
 				usuario.setSexo(Parametros.getSexoFeminino());
 			}
+			EntityManagerLocal.persist(usuario);
 			Jogador jogador = new Jogador();
 			jogador.setUsuario(usuario);
 			jogador.setDataCadastro(new Date());
+			EntityManagerLocal.persist(jogador);
+			jogadorSelecionado = jogador;
 			
 		}else if(modoCrud == ParametroCrud.getModoCrudAlterar()){
 			Usuario usuario = jogadorSelecionado.getUsuario();
@@ -493,14 +527,45 @@ public class CrudJogador extends JPanel {
 			}else{
 				usuario.setSexo(Parametros.getSexoFeminino());
 			}
-			Jogador jogador = jogadorSelecionado;
-			jogador.setUsuario(usuario);
+			EntityManagerLocal.merge(usuario);
+			jogadorSelecionado.setUsuario(usuario);
+			EntityManagerLocal.merge(jogadorSelecionado);
 		}else if(modoCrud == ParametroCrud.getModoCrudDeletar()){
 			Usuario usuario = jogadorSelecionado.getUsuario();
 			usuario.setAtivo(false);
+			EntityManagerLocal.merge(usuario);
 			Jogador jogador = jogadorSelecionado;
 			jogador.setUsuario(usuario);
+			EntityManagerLocal.merge(jogador);
 		}
+		EntityManagerLocal.commit();
+		Menssage.setMenssage(Parametros.getPai(), modo, menssage, modoCrud);
+		if(modoCrud == ParametroCrud.getModoCrudNovo() || modoCrud == ParametroCrud.getModoCrudAlterar()){
+			pai.exibirJogador(jogadorSelecionado);
+		}
+	}
+	
+	
+	
+	public void visualizarJogador(){
+		header.removeAll();
+		header.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoVisualizar()));
+		
+		lblHeader = new JLabel("Visualizar Jogador");
+		lblHeader.setHorizontalAlignment(SwingConstants.CENTER);
+		lblHeader.setBounds(0, 0, header.getWidth(), header.getHeight());
+		lblHeader.setFont(UtilitarioTela.getFont(14));
+		lblHeader.setForeground(UtilitarioTela.getFontColorCrud());
+		header.add(lblHeader);
+		
+		txNome.setEditable(false);
+		txSobreNome.setEditable(false);
+		txRg.setEditable(false);
+		txDataNascimento.setEditable(false);
+		txTelefone.setEditable(false);
+		txEmail.setEditable(false);
+		txUsuario.setEditable(false);
+		comboSexo.setEditable(false);
 	}
 	
 	private void desabilitarTodos(){
