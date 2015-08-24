@@ -92,6 +92,7 @@ public class MenuJogador extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btLocalizar, true);
+				limpar();
 				localizarJogador();
 			}
 		});
@@ -239,6 +240,13 @@ public class MenuJogador extends JPanel {
 		limpar();
 	}
 
+	public void home(){
+		zeraSelecao();
+		getIcon(btLocalizar, true);
+		limpar();
+		localizarJogador();
+	}
+	
 	public void limpar(){
 		btAlterar.setEnabled(false);
 		btDeletar.setEnabled(false);
@@ -246,6 +254,8 @@ public class MenuJogador extends JPanel {
 	}
 	
 	public void exibirJogador(Jogador jogador){
+		zeraSelecao();
+		getIcon(btVisualizar, true);
 		this.jogadorSelecionado = jogador;
 		liberarCrud();
 		alterarMenu(jogadorSelecionado , ParametroCrud.getModoVisualizar());
@@ -253,7 +263,7 @@ public class MenuJogador extends JPanel {
 	
 	public void localizarJogador() {
 		menuMeio.removeAll();
-		LocalizarJogador localizar = new LocalizarJogador();
+		LocalizarJogador localizar = new LocalizarJogador(this);
 		menuMeio.add(localizar);
 		menuMeio.revalidate();
 		menuMeio.repaint();

@@ -20,11 +20,12 @@ import javax.swing.SwingConstants;
 import utilitario.BordaEscura;
 import utilitario.BordaSombreada;
 import utilitario.ParametroCrud;
+import utilitario.Parametros;
 import utilitario.UtilitarioTela;
 
 public class Menssage {
-	public static void setMenssage(JFrame parent, String titulo, String menssage, int modoCrud) {
-		JDialog dialog = new JDialog(parent, true);
+	public static void setMenssage( String titulo, String menssage, int modoCrud) {
+		JDialog dialog = new JDialog(Parametros.getPai(), true);
 		dialog.setUndecorated(true);
 		dialog.setLayout(null);
 		dialog.setSize(400, 300);
@@ -95,23 +96,5 @@ public class Menssage {
 		
 		dialog.getContentPane().add(panel);
 		dialog.setVisible(true);
-	}
-	
-	public static void main(String [] args){
-		JFrame j = new JFrame();
-		j.setSize(500, 500);
-		j.setUndecorated(true);
-		j.setLocationRelativeTo(null);
-		JButton b = new JButton("a");
-		b.setSize(100,30);
-		b.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				System.exit(0);
-			}
-		});
-		j.add(b);
-		j.setVisible(true);
-		Menssage.setMenssage(j, "Cadastro de Jogador", "<html>Jogador Cadastrado com Sucesso!</html>", 1);
-		
 	}
 }

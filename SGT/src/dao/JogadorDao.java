@@ -8,6 +8,7 @@ import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 
 import entidade.Jogador;
+import entidade.Usuario;
 
 public class JogadorDao {
 
@@ -17,7 +18,7 @@ public class JogadorDao {
 			if(metodoPesquisa.equals("Código")){
 				condicao = " j.codigoJogador like '"+valorPesquisa+"%'";
 			} else if (metodoPesquisa.equals("Nome")){
-				condicao = " CONCAT(u.nome, u.sobrenome) like '"+valorPesquisa+"%'";
+				condicao = " CONCAT(u.nome, u.sobrenome) like '%"+valorPesquisa+"%'";
 			} else if (metodoPesquisa.equals("Usuário")){
 				condicao = "u.usuario like '"+valorPesquisa+"%'";
 			} else if (metodoPesquisa.equals("RG")){
@@ -36,6 +37,19 @@ public class JogadorDao {
 			System.out.println(sql);
 			
 			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Jogador.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
+	public static Jogador getJogador(int codigo){
+		try {
+			String sql = "SELECT * FROM jogador j INNER JOIN usuario u"
+					+ "	ON j.codigoUsuario = u.codigoUsuario"
+					+ " where codigoJogador = '"+codigo+"' AND u.ativo = true";
+			return (Jogador) EntityManagerLocal.getEntityManager().createNativeQuery(sql, Jogador.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.setMaxResults(1).getSingleResult();
 		} catch (NoResultException ex) {
 			return null;
 		}

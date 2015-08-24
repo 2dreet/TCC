@@ -1,9 +1,12 @@
 package utilitario;
 
 import java.awt.event.KeyEvent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MascaraCrud {
-
+	
+	private static SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 	
 	public static String mascaraTelefone(String telefone){
 		if(telefone.length() == 2){
@@ -16,6 +19,10 @@ public class MascaraCrud {
 		
 		
 		return telefone;
+	}
+	
+	public static String macaraDataBanco(Date data){
+		return format.format(data);
 	}
 	
 	public static String mascaraTelefoneResult(String telefone){
