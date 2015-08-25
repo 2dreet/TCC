@@ -45,6 +45,7 @@ import javax.swing.JTextArea;
 import menu.MenuCampeonato;
 import menu.MenuComputador;
 import menu.MenuDriver;
+import menu.MenuFuncionario;
 import menu.MenuHome;
 import menu.MenuJogador;
 import menu.MenuRelatorio;
@@ -64,6 +65,7 @@ public class HomeFuncionario extends JPanel {
 	private JButton btDriver;
 	private JButton btRelatorio;
 	private JButton btPc;
+	private JButton btFunc;
 	private JLabel baner2;
 	private JPanel baixo;
 	
@@ -104,7 +106,7 @@ public class HomeFuncionario extends JPanel {
 
 		JPanel menuIconesTopo = new JPanel();
 		menuIconesTopo.setBackground(new Color(45, 49, 56));
-		menuIconesTopo.setBounds((getWidth() / 2) - 229, 0, 458, 61);
+		menuIconesTopo.setBounds((getWidth() / 2) - 229, 0, 500, 61);
 		menuTopo.add(menuIconesTopo);
 		menuIconesTopo.setLayout(null);
 
@@ -227,6 +229,20 @@ public class HomeFuncionario extends JPanel {
 			}
 		});
 		menuIconesTopo.add(btPc);
+		
+		btFunc = new JButton("");
+		btFunc.setBounds(454, 10, 42, 42);
+		btFunc.setName("funcionario");
+		btFunc.setBorderPainted(false);
+		getIcon(btFunc, false);
+		btFunc.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				zeraSelecao();
+				getIcon(btFunc, true);
+				abreMenu(new MenuFuncionario());
+			}
+		});
+		menuIconesTopo.add(btFunc);
 
 	}
 	
@@ -265,6 +281,13 @@ public class HomeFuncionario extends JPanel {
 				.getResource("/imagem/pc.png")));
 		btPc.setBackground(getBtnFundo(false));
 		repaint();
+		
+		btFunc.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/func.png")));
+		btFunc.setBackground(getBtnFundo(false));
+		repaint();
+		
+		
 	}
 
 	public void getIcon(JButton botao, boolean selecionado) {
@@ -312,7 +335,14 @@ public class HomeFuncionario extends JPanel {
 				} else {
 					url = "/imagem/pc.png";
 				}
+			} else if (botao.getName().equals("funcionario")) {
+				if (selecionado) {
+					url = "/imagem/func_select.png";
+				} else {
+					url = "/imagem/func.png";
+				}
 			}
+			
 
 			botao.setBackground(getBtnFundo(selecionado));
 			botao.setIcon(new ImageIcon(HomeFuncionario.class.getResource(url)));

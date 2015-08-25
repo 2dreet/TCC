@@ -14,7 +14,10 @@ public class ParametroDao {
 			switch (versaoBanco) {
 				case 0: {
 					atualizarBanco("INSERT INTO permissao(descricao, ativo) values('Jogador',true)", 1);
-				} 
+				}
+				case 1: {
+					atualizarBanco("INSERT INTO permissao(descricao, ativo) values('Funcionario',true)", 2);
+				}
 				default: {
 					return;
 				}

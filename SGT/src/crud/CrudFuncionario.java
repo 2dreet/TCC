@@ -22,6 +22,7 @@ import javax.swing.JButton;
 
 import dao.EntityManagerLocal;
 import dao.PermissaoDao;
+import entidade.Funcionario;
 import entidade.Jogador;
 import entidade.Usuario;
 
@@ -47,12 +48,14 @@ import java.util.Date;
 
 import javax.swing.JTextArea;
 
+import menu.MenuFuncionario;
 import menu.MenuJogador;
 
-public class CrudJogador extends JPanel {
+public class CrudFuncionario extends JPanel {
 	private JTextField txNome;
 	private JTextField txSobreNome;
 	private JTextField txRg;
+	private JTextField txCpf;
 	private JTextField txDataNascimento;
 	private JTextField txTelefone;
 	private JTextField txEmail;
@@ -60,8 +63,8 @@ public class CrudJogador extends JPanel {
 	private JLabel lblMsg;
 	private JPanel msg;
 	private ComboBox comboSexo;
-	private Jogador jogadorSelecionado;
-	private MenuJogador menuPai;
+	private Funcionario funcionarioSelecionado;
+	private MenuFuncionario menuPai;
 	private JPanel header;
 	private JLabel lblHeader;
 	private JPanel meio;
@@ -69,13 +72,13 @@ public class CrudJogador extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public CrudJogador(Jogador jogador, int modoCrud, MenuJogador menuPai) {
+	public CrudFuncionario(Funcionario funcionario, int modoCrud, MenuFuncionario menuPai) {
 		this.menuPai = menuPai;
 		setSize(UtilitarioTela.getTamanhoMeio());
 		setLayout(null);
 		setBackground(null);
 
-		jogadorSelecionado = jogador;
+		funcionarioSelecionado = funcionario;
 
 		header = new JPanel();
 		header.setSize(500, 30);
@@ -87,13 +90,13 @@ public class CrudJogador extends JPanel {
 
 		String textoHeader = "";
 		if (modoCrud == ParametroCrud.getModoCrudNovo()) {
-			textoHeader = "Cadastrar Jogador";
+			textoHeader = "Cadastrar Funcionário";
 		} else if (modoCrud == ParametroCrud.getModoCrudAlterar()) {
-			textoHeader = "Alterar Jogador";
+			textoHeader = "Alterar Funcionário";
 		} else if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
-			textoHeader = "Deletar Jogador";
+			textoHeader = "Deletar Funcionário";
 		} else if (modoCrud == ParametroCrud.getModoVisualizar()) {
-			textoHeader = "Visualizar Jogador";
+			textoHeader = "Visualizar Funcionário";
 		}
 
 		lblHeader = new JLabel(textoHeader);
@@ -195,15 +198,48 @@ public class CrudJogador extends JPanel {
 		meio.add(txRg);
 		setVisible(true);
 
+		JLabel lbCpf = new JLabel("CPF :");
+		lbCpf.setBounds(20, 125, 100, 20);
+		lbCpf.setFont(UtilitarioTela.getFont(14));
+		lbCpf.setForeground(UtilitarioTela.getFontColorCrud());
+		meio.add(lbCpf);
+
+		txCpf = new JTextField();
+		txCpf.setColumns(50);
+		txCpf.setBounds(155, 125, 100, 25);
+		txCpf.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				ValidadorCrud.campoCPF(arg0, txCpf.getText());
+			}
+
+		});
+		txCpf.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				txCpf.setBorder(UtilitarioTela.jTextFieldComFocus());
+			}
+
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				txCpf.setBorder(UtilitarioTela.jTextFieldNormal());
+				limpaErro();
+			}
+		});
+		txCpf.setLayout(null);
+		txCpf.setBorder(UtilitarioTela.jTextFieldNormal());
+		meio.add(txCpf);
+		setVisible(true);
+		
 		JLabel lbDataNascimento = new JLabel("Data Nascimento :");
-		lbDataNascimento.setBounds(20, 125, 130, 20);
+		lbDataNascimento.setBounds(20, 160, 130, 20);
 		lbDataNascimento.setFont(UtilitarioTela.getFont(14));
 		lbDataNascimento.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbDataNascimento);
 
 		txDataNascimento = new JTextField();
 		txDataNascimento.setColumns(50);
-		txDataNascimento.setBounds(155, 125, 100, 25);
+		txDataNascimento.setBounds(155, 160, 100, 25);
 		txDataNascimento.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -235,7 +271,7 @@ public class CrudJogador extends JPanel {
 		setVisible(true);
 
 		JLabel lbTelefone = new JLabel("Telefone :");
-		lbTelefone.setBounds(20, 160, 100, 20);
+		lbTelefone.setBounds(20, 195, 100, 20);
 		lbTelefone.setFont(UtilitarioTela.getFont(14));
 		lbTelefone.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbTelefone);
@@ -254,7 +290,7 @@ public class CrudJogador extends JPanel {
 			}
 		});
 		txTelefone.setColumns(50);
-		txTelefone.setBounds(155, 160, 100, 25);
+		txTelefone.setBounds(155, 195, 100, 25);
 		txTelefone.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -273,7 +309,7 @@ public class CrudJogador extends JPanel {
 		setVisible(true);
 
 		JLabel lbSexo = new JLabel("Sexo :");
-		lbSexo.setBounds(20, 195, 100, 20);
+		lbSexo.setBounds(20, 230, 100, 20);
 		lbSexo.setFont(UtilitarioTela.getFont(14));
 		lbSexo.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbSexo);
@@ -281,18 +317,18 @@ public class CrudJogador extends JPanel {
 		comboSexo = new ComboBox(new Dimension(150, 25));
 		comboSexo.setModel(new DefaultComboBoxModel(new String[] { "Masculino",
 				"Feminino" }));
-		comboSexo.setLocation(155, 195);
+		comboSexo.setLocation(155, 230);
 		meio.add(comboSexo);
 
 		JLabel lbEmail = new JLabel("Email :");
-		lbEmail.setBounds(20, 230, 100, 20);
+		lbEmail.setBounds(20, 265, 100, 20);
 		lbEmail.setFont(UtilitarioTela.getFont(14));
 		lbEmail.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbEmail);
 
 		txEmail = new JTextField();
 		txEmail.setColumns(100);
-		txEmail.setBounds(155, 230, 320, 25);
+		txEmail.setBounds(155, 265, 320, 25);
 		txEmail.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -311,14 +347,14 @@ public class CrudJogador extends JPanel {
 		setVisible(true);
 
 		JLabel lbUsuario = new JLabel("Usuário :");
-		lbUsuario.setBounds(20, 265, 100, 20);
+		lbUsuario.setBounds(20, 300, 100, 20);
 		lbUsuario.setFont(UtilitarioTela.getFont(14));
 		lbUsuario.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbUsuario);
 
 		txUsuario = new JTextField();
 		txUsuario.setColumns(100);
-		txUsuario.setBounds(155, 265, 320, 25);
+		txUsuario.setBounds(155, 300, 320, 25);
 		txUsuario.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -363,7 +399,7 @@ public class CrudJogador extends JPanel {
 
 		msg = new JPanel();
 		msg.setSize(490, 35);
-		msg.setLocation(5, 300);
+		msg.setLocation(5, 330);
 		msg.setLayout(null);
 		msg.setBackground(null);
 		meio.add(msg);
@@ -374,23 +410,24 @@ public class CrudJogador extends JPanel {
 			visualizar(modoCrud);
 		}
 
-		if (jogadorSelecionado != null) {
+		if (funcionarioSelecionado != null) {
 			setarCampos();
 		}
 	}
 
 	public void setarCampos() {
-		txNome.setText(jogadorSelecionado.getUsuario().getNome());
-		txSobreNome.setText(jogadorSelecionado.getUsuario().getSobreNome());
-		txRg.setText(jogadorSelecionado.getUsuario().getRg());
-		txTelefone.setText(MascaraCrud.mascaraTelefoneResult(jogadorSelecionado
+		txNome.setText(funcionarioSelecionado.getUsuario().getNome());
+		txSobreNome.setText(funcionarioSelecionado.getUsuario().getSobreNome());
+		txRg.setText(funcionarioSelecionado.getUsuario().getRg());
+		txCpf.setText(funcionarioSelecionado.getUsuario().getCpf());
+		txTelefone.setText(MascaraCrud.mascaraTelefoneResult(funcionarioSelecionado
 				.getUsuario().getTelefone()));
-		txEmail.setText(jogadorSelecionado.getUsuario().getEmail());
-		txUsuario.setText(jogadorSelecionado.getUsuario().getUsuario());
-		txDataNascimento.setText(MascaraCrud.macaraDataBanco(jogadorSelecionado
+		txEmail.setText(funcionarioSelecionado.getUsuario().getEmail());
+		txUsuario.setText(funcionarioSelecionado.getUsuario().getUsuario());
+		txDataNascimento.setText(MascaraCrud.macaraDataBanco(funcionarioSelecionado
 				.getUsuario().getDataNascimento()));
 		comboSexo.setSelectedIndex(0);
-		if (jogadorSelecionado.getUsuario().getSexo() == Parametros
+		if (funcionarioSelecionado.getUsuario().getSexo() == Parametros
 				.getSexoFeminino()) {
 			comboSexo.setSelectedIndex(1);
 		}
@@ -442,6 +479,16 @@ public class CrudJogador extends JPanel {
 				txRg.requestFocus();
 				return false;
 			}
+			
+			if (txCpf.getText() == null || txCpf.getText().trim().isEmpty()) {
+				msgErro("Campo CPF é Obrigatório!");
+				txCpf.requestFocus();
+				return false;
+			} else if (!ValidadorCrud.isCpf(txCpf.getText())) {
+				msgErro("CPF é Inválido!");
+				txCpf.requestFocus();
+				return false;
+			}
 
 			if (txDataNascimento.getText() == null
 					|| txDataNascimento.getText().trim().isEmpty()) {
@@ -481,13 +528,13 @@ public class CrudJogador extends JPanel {
 				msgErro("Campo Usuário é Obrigatório!");
 				return false;
 			} else if (!ValidadorCrud.validarUsuario(txUsuario.getText())
-					&& jogadorSelecionado == null) {
+					&& funcionarioSelecionado == null) {
 				txUsuario.requestFocus();
 				msgErro("Usuário Já Cadastrado!");
 				return false;
 			} else if (!ValidadorCrud.validarUsuario(txUsuario.getText())
-					&& jogadorSelecionado != null
-					&& !jogadorSelecionado.getUsuario().getUsuario()
+					&& funcionarioSelecionado != null
+					&& !funcionarioSelecionado.getUsuario().getUsuario()
 							.equals(txUsuario.getText())) {
 				txUsuario.requestFocus();
 				msgErro("Usuário Já Cadastrado!");
@@ -527,8 +574,8 @@ public class CrudJogador extends JPanel {
 		lbCodigo.setFont(UtilitarioTela.getFont(14));
 		lbCodigo.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbCodigo);
-		JLabel lbCodigoV = new JLabel(String.valueOf(jogadorSelecionado
-				.getCodigoJogador()));
+		JLabel lbCodigoV = new JLabel(String.valueOf(funcionarioSelecionado
+				.getCodigoFuncionario()));
 		lbCodigoV.setBounds(155, linha, 300, 20);
 		lbCodigoV.setFont(UtilitarioTela.getFont(14));
 		lbCodigoV.setForeground(UtilitarioTela.getFontColorCrud());
@@ -540,7 +587,7 @@ public class CrudJogador extends JPanel {
 		lbNome.setFont(UtilitarioTela.getFont(14));
 		lbNome.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbNome);
-		JLabel lbNomeV = new JLabel(jogadorSelecionado.getUsuario().getNome());
+		JLabel lbNomeV = new JLabel(funcionarioSelecionado.getUsuario().getNome());
 		lbNomeV.setBounds(155, linha, 300, 20);
 		lbNomeV.setFont(UtilitarioTela.getFont(14));
 		lbNomeV.setForeground(UtilitarioTela.getFontColorCrud());
@@ -552,7 +599,7 @@ public class CrudJogador extends JPanel {
 		lbSobrenome.setFont(UtilitarioTela.getFont(14));
 		lbSobrenome.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbSobrenome);
-		JLabel lbSobrenomeV = new JLabel(jogadorSelecionado.getUsuario()
+		JLabel lbSobrenomeV = new JLabel(funcionarioSelecionado.getUsuario()
 				.getSobreNome());
 		lbSobrenomeV.setBounds(155, linha, 300, 20);
 		lbSobrenomeV.setFont(UtilitarioTela.getFont(14));
@@ -565,11 +612,23 @@ public class CrudJogador extends JPanel {
 		lbRg.setFont(UtilitarioTela.getFont(14));
 		lbRg.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbRg);
-		JLabel lbRgV = new JLabel(jogadorSelecionado.getUsuario().getRg());
+		JLabel lbRgV = new JLabel(funcionarioSelecionado.getUsuario().getRg());
 		lbRgV.setBounds(155, linha, 300, 20);
 		lbRgV.setFont(UtilitarioTela.getFont(14));
 		lbRgV.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbRgV);
+		
+		linha += 35;
+		JLabel lbCpf = new JLabel("CPF :");
+		lbCpf.setBounds(20, linha, 100, 20);
+		lbCpf.setFont(UtilitarioTela.getFont(14));
+		lbCpf.setForeground(UtilitarioTela.getFontColorCrud());
+		meio.add(lbCpf);
+		JLabel lbCpfV = new JLabel(funcionarioSelecionado.getUsuario().getCpf());
+		lbCpfV.setBounds(155, linha, 300, 20);
+		lbCpfV.setFont(UtilitarioTela.getFont(14));
+		lbCpfV.setForeground(UtilitarioTela.getFontColorCrud());
+		meio.add(lbCpfV);
 
 		linha += 35;
 		JLabel lbDataNascimento = new JLabel("Data Nascimento :");
@@ -578,7 +637,7 @@ public class CrudJogador extends JPanel {
 		lbDataNascimento.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbDataNascimento);
 		JLabel lbDataNascimentoV = new JLabel(
-				MascaraCrud.macaraDataBanco(jogadorSelecionado.getUsuario()
+				MascaraCrud.macaraDataBanco(funcionarioSelecionado.getUsuario()
 						.getDataNascimento()));
 		lbDataNascimentoV.setBounds(155, linha, 300, 20);
 		lbDataNascimentoV.setFont(UtilitarioTela.getFont(14));
@@ -592,7 +651,7 @@ public class CrudJogador extends JPanel {
 		lbTelefone.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbTelefone);
 		JLabel lbTelefoneV = new JLabel(
-				MascaraCrud.mascaraTelefoneResult(jogadorSelecionado
+				MascaraCrud.mascaraTelefoneResult(funcionarioSelecionado
 						.getUsuario().getTelefone()));
 		lbTelefoneV.setBounds(155, linha, 300, 20);
 		lbTelefoneV.setFont(UtilitarioTela.getFont(14));
@@ -605,7 +664,7 @@ public class CrudJogador extends JPanel {
 		lbSexo.setFont(UtilitarioTela.getFont(14));
 		lbSexo.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbSexo);
-		JLabel lbSexoV = new JLabel(Parametros.getSexo(jogadorSelecionado
+		JLabel lbSexoV = new JLabel(Parametros.getSexo(funcionarioSelecionado
 				.getUsuario().getSexo()));
 		lbSexoV.setBounds(155, linha, 300, 20);
 		lbSexoV.setFont(UtilitarioTela.getFont(14));
@@ -618,7 +677,7 @@ public class CrudJogador extends JPanel {
 		lbEmail.setFont(UtilitarioTela.getFont(14));
 		lbEmail.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbEmail);
-		JLabel lbEmailV = new JLabel(jogadorSelecionado.getUsuario().getEmail());
+		JLabel lbEmailV = new JLabel(funcionarioSelecionado.getUsuario().getEmail());
 		lbEmailV.setBounds(155, linha, 300, 20);
 		lbEmailV.setFont(UtilitarioTela.getFont(14));
 		lbEmailV.setForeground(UtilitarioTela.getFontColorCrud());
@@ -630,7 +689,7 @@ public class CrudJogador extends JPanel {
 		lbUsuario.setFont(UtilitarioTela.getFont(14));
 		lbUsuario.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbUsuario);
-		JLabel lbUsuarioV = new JLabel(jogadorSelecionado.getUsuario()
+		JLabel lbUsuarioV = new JLabel(funcionarioSelecionado.getUsuario()
 				.getUsuario());
 		lbUsuarioV.setBounds(155, linha, 300, 20);
 		lbUsuarioV.setFont(UtilitarioTela.getFont(14));
@@ -642,8 +701,8 @@ public class CrudJogador extends JPanel {
 		boolean confirmado = true;
 
 		if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
-			MenssageConfirmacao.setMenssage("Deletar Jogador",
-					"Deseja Deletar Esse Jogador?", modoCrud);
+			MenssageConfirmacao.setMenssage("Deletar Funcionário",
+					"Deseja Deletar Esse Funcionário?", modoCrud);
 			confirmado = MenssageConfirmacao.isConfirmado();
 		}
 
@@ -652,13 +711,14 @@ public class CrudJogador extends JPanel {
 			String modo = "";
 			String menssage = "";
 			if (modoCrud == ParametroCrud.getModoCrudNovo()) {
-				modo = "Cadastro de Jogador";
-				menssage = "<html>Jogador Cadastrado com Sucesso!</html>";
+				modo = "Cadastro de Funcionário";
+				menssage = "<html>Funcionário Cadastrado com Sucesso!</html>";
 				Usuario usuario = new Usuario();
 				usuario.setAtivo(true);
 				usuario.setNome(txNome.getText());
 				usuario.setSobreNome(txSobreNome.getText());
 				usuario.setRg(txRg.getText());
+				usuario.setCpf(txCpf.getText());
 				usuario.setDataNascimento(UtilitarioCrud
 						.getData(txDataNascimento.getText()));
 				usuario.setTelefone(txTelefone.getText().replace("(", "")
@@ -666,26 +726,27 @@ public class CrudJogador extends JPanel {
 				usuario.setUsuario(txUsuario.getText());
 				usuario.setEmail(txEmail.getText());
 				usuario.setPermissao(PermissaoDao.getPermissao(Parametros
-						.getPermissaoJogador()));
+						.getPermissaoFuncionario()));
 				if (comboSexo.getSelectedIndex() == 0) {
 					usuario.setSexo(Parametros.getSexoMasculino());
 				} else {
 					usuario.setSexo(Parametros.getSexoFeminino());
 				}
 				EntityManagerLocal.persist(usuario);
-				Jogador jogador = new Jogador();
-				jogador.setUsuario(usuario);
-				jogador.setDataCadastro(new Date());
-				EntityManagerLocal.persist(jogador);
-				jogadorSelecionado = jogador;
+				Funcionario funcionario = new Funcionario();
+				funcionario.setUsuario(usuario);
+				funcionario.setDataCadastro(new Date());
+				EntityManagerLocal.persist(funcionario);
+				funcionarioSelecionado = funcionario;
 
 			} else if (modoCrud == ParametroCrud.getModoCrudAlterar()) {
-				modo = "Alteração de Jogador";
-				menssage = "<html>Jogador Alterado com Sucesso!</html>";
-				Usuario usuario = jogadorSelecionado.getUsuario();
+				modo = "Alteração de Funcionário";
+				menssage = "<html>Funcionário Alterado com Sucesso!</html>";
+				Usuario usuario = funcionarioSelecionado.getUsuario();
 				usuario.setNome(txNome.getText());
 				usuario.setSobreNome(txSobreNome.getText());
 				usuario.setRg(txRg.getText());
+				usuario.setCpf(txCpf.getText());
 				usuario.setDataNascimento(UtilitarioCrud
 						.getData(txDataNascimento.getText()));
 				usuario.setTelefone(txTelefone.getText().replace("(", "")
@@ -697,22 +758,22 @@ public class CrudJogador extends JPanel {
 					usuario.setSexo(Parametros.getSexoFeminino());
 				}
 				EntityManagerLocal.merge(usuario);
-				jogadorSelecionado.setUsuario(usuario);
-				EntityManagerLocal.merge(jogadorSelecionado);
+				funcionarioSelecionado.setUsuario(usuario);
+				EntityManagerLocal.merge(funcionarioSelecionado);
 			} else if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
-				modo = "Deleção de Jogador";
-				menssage = "<html>Jogador Deletado com Sucesso!</html>";
-				Usuario usuario = jogadorSelecionado.getUsuario();
+				modo = "Deleção de Funcionário";
+				menssage = "<html>Funcionário Deletado com Sucesso!</html>";
+				Usuario usuario = funcionarioSelecionado.getUsuario();
 				usuario.setAtivo(false);
 				EntityManagerLocal.merge(usuario);
-				jogadorSelecionado.setUsuario(usuario);
-				EntityManagerLocal.merge(jogadorSelecionado);
+				funcionarioSelecionado.setUsuario(usuario);
+				EntityManagerLocal.merge(funcionarioSelecionado);
 			}
 			EntityManagerLocal.commit();
 			Menssage.setMenssage(modo, menssage, modoCrud);
 			if (modoCrud == ParametroCrud.getModoCrudNovo()
 					|| modoCrud == ParametroCrud.getModoCrudAlterar()) {
-				menuPai.exibirJogador(jogadorSelecionado);
+				menuPai.exibirFuncionario(funcionarioSelecionado);
 			} else if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
 				menuPai.home();
 			}

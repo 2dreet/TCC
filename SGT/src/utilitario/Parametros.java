@@ -6,7 +6,8 @@ public class Parametros {
 
 	private static int sexoMasculino = 1;
 	private static int sexoFeminino = 2;
-	private static int permissaoJogador =1;
+	private static int permissaoJogador = 1;
+	private static int permissaoFuncionario = 2;
 	private static JFrame pai = null;
 	
 	public static String getSexo(int sexo){
@@ -36,5 +37,8 @@ public class Parametros {
 		Parametros.pai = pai;
 	}
 	
+	public static int getPermissaoFuncionario(){
+		return permissaoFuncionario;
+	}
 	
 }

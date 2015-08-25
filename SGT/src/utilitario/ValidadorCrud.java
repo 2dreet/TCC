@@ -125,6 +125,20 @@ public class ValidadorCrud {
 			evt.consume();
 		}
 	}
+	
+	public static void campoCPF(KeyEvent evt, String texto) {
+		try {
+			String caracteres = "0987654321";
+			if (!caracteres.contains(evt.getKeyChar() + "")) {
+				evt.consume();
+			}
+			if ((texto.length() > 11)) {
+				evt.consume();
+			}
+		} catch (Exception e) {
+			evt.consume();
+		}
+	}
 
 	public static void campoTelefone(KeyEvent evt, String texto) {
 		try {

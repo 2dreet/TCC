@@ -44,14 +44,16 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
+import menu.MenuFuncionario;
 import menu.MenuJogador;
+import dao.FuncionarioDao;
 import dao.JogadorDao;
-import entidade.Jogador;
+import entidade.Funcionario;
 import exemplos.Tabela;
 
-public class LocalizarJogador extends JPanel {
+public class LocalizarFuncionario extends JPanel {
 
-	private List<Jogador> listaJogador;
+	private List<Funcionario> listaFuncionario;
 	private JTable tabela;
 	private JTextField txBusca;
 	private ComboBox metodoBusca;
@@ -61,22 +63,23 @@ public class LocalizarJogador extends JPanel {
 			new String[] { "Email" } };
 	private String[] linhaBusca = new String[] { "Código", "Nome", "Usuário",
 			"RG", "Telefone", "Email" };
-	private Jogador jogadorSelecionado;
-	private MenuJogador menuPai;
+	private Funcionario funcionarioSelecionado;
+	private MenuFuncionario menuPai;
 
 	/**
 	 * Create the panel.
 	 */
-	public LocalizarJogador(MenuJogador menuPai) {
+	
+	
+	public LocalizarFuncionario(MenuFuncionario menuPai) {
 		this();
 		this.menuPai = menuPai;
-	}	
+	}
 	
-	public LocalizarJogador() {
+	public LocalizarFuncionario(){
 		super();
-		jogadorSelecionado = null;
-	
-		listaJogador = new ArrayList<Jogador>();
+		funcionarioSelecionado = null;
+		listaFuncionario = new ArrayList<Funcionario>();
 
 		setSize(UtilitarioTela.getTamanhoMeio());
 		setLayout(null);
@@ -90,7 +93,7 @@ public class LocalizarJogador extends JPanel {
 		header.setBorder(null);
 		add(header);
 
-		JLabel lblHeader = new JLabel("Localizar Jogador");
+		JLabel lblHeader = new JLabel("Localizar Funcionário");
 		lblHeader.setHorizontalAlignment(SwingConstants.CENTER);
 		lblHeader.setBounds(0, 0, header.getWidth(), header.getHeight());
 		lblHeader.setFont(UtilitarioTela.getFont(14));
@@ -185,7 +188,7 @@ public class LocalizarJogador extends JPanel {
 		btSelecionar.setFont(UtilitarioTela.getFont(14));
 		btSelecionar.setFocusPainted(false);
 		btSelecionar.setBackground(new Color(46, 49, 56));
-		btSelecionar.setIcon(new ImageIcon(LocalizarJogador.class
+		btSelecionar.setIcon(new ImageIcon(LocalizarFuncionario.class
 				.getResource("/imagem/ok.png")));
 		meio.add(btSelecionar);
 		btSelecionar.addActionListener(new ActionListener() {
@@ -211,10 +214,10 @@ public class LocalizarJogador extends JPanel {
 
 	public void selecionar() {
 		if(tabela.getRowCount() > 0 ){
-			jogadorSelecionado = JogadorDao.getJogador(Integer.parseInt(String.valueOf(tabela.getValueAt(tabela.getSelectedRow(), 0))));
-			if (jogadorSelecionado != null) {
+			funcionarioSelecionado = FuncionarioDao.getFuncionario(Integer.parseInt(String.valueOf(tabela.getValueAt(tabela.getSelectedRow(), 0))));
+			if (funcionarioSelecionado != null) {
 				if(menuPai != null){
-					menuPai.exibirJogador(jogadorSelecionado);
+					menuPai.exibirFuncionario(funcionarioSelecionado);
 				}
 			}
 		}
@@ -225,24 +228,24 @@ public class LocalizarJogador extends JPanel {
 	}
 
 	public void localizar() {
-		listaJogador = JogadorDao.getListaPesquisa(metodoBusca
+		listaFuncionario = FuncionarioDao.getListaPesquisa(metodoBusca
 				.getSelectedItem().toString(), txBusca.getText());
 		DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
 		modelo.setNumRows(0);
-		if (listaJogador != null) {
-			for (Jogador j : listaJogador) {
+		if (listaFuncionario != null) {
+			for (Funcionario f : listaFuncionario) {
 				modelo.addRow(new String[] {
-						String.valueOf(j.getCodigoJogador()),
-						j.getUsuario().getNome() + " "
-								+ j.getUsuario().getSobreNome(),
-						j.getUsuario().getUsuario(),
-						j.getUsuario().getRg(),
-						MascaraCrud.mascaraTelefoneResult(j.getUsuario()
-								.getTelefone()), j.getUsuario().getEmail() });
+						String.valueOf(f.getCodigoFuncionario()),
+						f.getUsuario().getNome() + " "
+								+ f.getUsuario().getSobreNome(),
+						f.getUsuario().getUsuario(),
+						f.getUsuario().getRg(),
+						MascaraCrud.mascaraTelefoneResult(f.getUsuario()
+								.getTelefone()), f.getUsuario().getEmail() });
 
 			}
 		} else {
-			listaJogador = new ArrayList<Jogador>();
+			listaFuncionario = new ArrayList<Funcionario>();
 		}
 	}
 }

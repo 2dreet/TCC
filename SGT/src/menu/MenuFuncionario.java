@@ -13,7 +13,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import crud.CrudFuncionario;
 import crud.CrudJogador;
+import entidade.Funcionario;
 import entidade.Jogador;
 import entidade.Usuario;
 import tela.HomeFuncionario;
@@ -24,9 +26,10 @@ import utilitario.UtilitarioTela;
 
 import java.awt.Font;
 
+import localizar.LocalizarFuncionario;
 import localizar.LocalizarJogador;
 
-public class MenuJogador extends JPanel {
+public class MenuFuncionario extends JPanel {
 
 	/**
 	 * Create the panel.
@@ -37,9 +40,9 @@ public class MenuJogador extends JPanel {
 	private JButton btAlterar;
 	private JButton btDeletar;
 	private JButton btVisualizar;
-	private Jogador jogadorSelecionado;
+	private Funcionario funcionarioSelecionado;
 
-	public MenuJogador() {
+	public MenuFuncionario() {
 		setSize(UtilitarioTela.getTamanhoMenuBaixo());
 		setBackground(null);
 		setLayout(null);
@@ -60,7 +63,7 @@ public class MenuJogador extends JPanel {
 		menuLateral.add(menuLateralTopo);
 		menuLateralTopo.setLayout(null);
 
-		JLabel tituloMenu = new JLabel("Jogador");
+		JLabel tituloMenu = new JLabel("Funcionário");
 		tituloMenu.setForeground(Color.DARK_GRAY);
 		tituloMenu.setFont(new Font("SansSerif", Font.BOLD, 18));
 		tituloMenu.setHorizontalAlignment(SwingConstants.CENTER);
@@ -93,7 +96,7 @@ public class MenuJogador extends JPanel {
 				zeraSelecao();
 				getIcon(btLocalizar, true);
 				limpar();
-				localizarJogador();
+				localizarFuncionario();
 			}
 		});
 		btLocalizar.setBounds( 5, 5,  230, 30);
@@ -116,7 +119,7 @@ public class MenuJogador extends JPanel {
 		btNovo.setBorderPainted(false);
 		btNovo.setBackground(null);
 		btNovo.setLayout(null);
-		btNovo.setName("cadastrarJogador");
+		btNovo.setName("cadastrarFuncionario");
 		btNovo.setHorizontalAlignment(SwingConstants.LEFT);
 		btNovo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -140,13 +143,13 @@ public class MenuJogador extends JPanel {
 		btVisualizar.setBorderPainted(false);
 		btVisualizar.setBackground(null);
 		btVisualizar.setLayout(null);
-		btVisualizar.setName("visualizarJogador");
+		btVisualizar.setName("visualizarFuncionario");
 		btVisualizar.setHorizontalAlignment(SwingConstants.LEFT);
 		btVisualizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btVisualizar, true);
-				alterarMenu(jogadorSelecionado,	ParametroCrud.getModoVisualizar());
+				alterarMenu(funcionarioSelecionado,	ParametroCrud.getModoVisualizar());
 			}
 		});
 		jp3.add(btVisualizar);
@@ -163,13 +166,13 @@ public class MenuJogador extends JPanel {
 		btAlterar.setBorderPainted(false);
 		btAlterar.setBackground(null);
 		btAlterar.setLayout(null);
-		btAlterar.setName("alterarJogador");
+		btAlterar.setName("alterarFuncionario");
 		btAlterar.setHorizontalAlignment(SwingConstants.LEFT);
 		btAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btAlterar, true);
-				alterarMenu(jogadorSelecionado,
+				alterarMenu(funcionarioSelecionado,
 						ParametroCrud.getModoCrudAlterar());
 			}
 		});
@@ -188,13 +191,13 @@ public class MenuJogador extends JPanel {
 		btDeletar.setBorderPainted(false);
 		btDeletar.setBackground(null);
 		btDeletar.setLayout(null);
-		btDeletar.setName("deletarJogador");
+		btDeletar.setName("deletarFuncionario");
 		btDeletar.setHorizontalAlignment(SwingConstants.LEFT);
 		btDeletar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btDeletar, true);
-				alterarMenu(jogadorSelecionado,
+				alterarMenu(funcionarioSelecionado,
 						ParametroCrud.getModoCrudDeletar());
 			}
 		});
@@ -244,7 +247,7 @@ public class MenuJogador extends JPanel {
 		zeraSelecao();
 		getIcon(btLocalizar, true);
 		limpar();
-		localizarJogador();
+		localizarFuncionario();
 	}
 	
 	public void limpar(){
@@ -253,17 +256,17 @@ public class MenuJogador extends JPanel {
 		btVisualizar.setEnabled(false);
 	}
 	
-	public void exibirJogador(Jogador jogador){
+	public void exibirFuncionario(Funcionario funcionario){
 		zeraSelecao();
 		getIcon(btVisualizar, true);
-		this.jogadorSelecionado = jogador;
+		this.funcionarioSelecionado = funcionario;
 		liberarCrud();
-		alterarMenu(jogadorSelecionado , ParametroCrud.getModoVisualizar());
+		alterarMenu(funcionarioSelecionado , ParametroCrud.getModoVisualizar());
 	}
 	
-	public void localizarJogador() {
+	public void localizarFuncionario() {
 		menuMeio.removeAll();
-		LocalizarJogador localizar = new LocalizarJogador(this);
+		LocalizarFuncionario localizar = new LocalizarFuncionario(this);
 		menuMeio.add(localizar);
 		menuMeio.revalidate();
 		menuMeio.repaint();
@@ -275,9 +278,9 @@ public class MenuJogador extends JPanel {
 		btVisualizar.setEnabled(true);
 	}
 	
-	public void alterarMenu(Jogador jogador, int modoCrud) {
+	public void alterarMenu(Funcionario funcionario, int modoCrud) {
 		menuMeio.removeAll();
-		CrudJogador c = new CrudJogador(jogador, modoCrud, this);
+		CrudFuncionario c = new CrudFuncionario(funcionario, modoCrud, this);
 		menuMeio.add(c);
 		c.getTxNome().requestFocus();
 		menuMeio.revalidate();
@@ -287,29 +290,29 @@ public class MenuJogador extends JPanel {
 	public void zeraSelecao() {
 		
 		btLocalizar.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/crud/locJog.png")));
+				.getResource("/imagem/crud/locFunc.png")));
 		btLocalizar.setBackground(UtilitarioTela.getBtnFundo(false));
 		btLocalizar.setForeground(UtilitarioTela.getFontColorSelecao(false));
 		
 		btNovo.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/crud/addJog.png")));
+				.getResource("/imagem/crud/addFunc.png")));
 		btNovo.setBackground(UtilitarioTela.getBtnFundo(false));
 		btNovo.setForeground(UtilitarioTela.getFontColorSelecao(false));
 
 		btAlterar.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/crud/altJog.png")));
+				.getResource("/imagem/crud/altFunc.png")));
 		btAlterar.setBackground(UtilitarioTela.getBtnFundo(false));
 		btAlterar.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
 
 		btDeletar.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/crud/delJog.png")));
+				.getResource("/imagem/crud/delFunc.png")));
 		btDeletar.setBackground(UtilitarioTela.getBtnFundo(false));
 		btDeletar.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
 		
 		btVisualizar.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/crud/visuJog.png")));
+				.getResource("/imagem/crud/visuFunc.png")));
 		btVisualizar.setBackground(UtilitarioTela.getBtnFundo(false));
 		btVisualizar.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
@@ -322,37 +325,37 @@ public class MenuJogador extends JPanel {
 		if (botao.getName() != null) {
 			if (botao.getName().equals("localizar")) {
 				if (selecionado) {
-					url = "/imagem/crud/locJogSelect.png";
+					url = "/imagem/crud/locFuncSelect.png";
 				} else {
-					url = "/imagem/crud/locJog.png";
+					url = "/imagem/crud/locFunc.png";
 				}
 			}
-			if (botao.getName().equals("cadastrarJogador")) {
+			if (botao.getName().equals("cadastrarFuncionario")) {
 				if (selecionado) {
-					url = "/imagem/crud/addJogSelect.png";
+					url = "/imagem/crud/addFuncSelect.png";
 				} else {
-					url = "/imagem/crud/addJog.png";
+					url = "/imagem/crud/addFunc.png";
 				}
 			}
-			if (botao.getName().equals("alterarJogador")) {
+			if (botao.getName().equals("alterarFuncionario")) {
 				if (selecionado) {
-					url = "/imagem/crud/altJogSelect.png";
+					url = "/imagem/crud/altFuncSelect.png";
 				} else {
-					url = "/imagem/crud/altJog.png";
+					url = "/imagem/crud/altFunc.png";
 				}
 			}
-			if (botao.getName().equals("deletarJogador")) {
+			if (botao.getName().equals("deletarFuncionario")) {
 				if (selecionado) {
-					url = "/imagem/crud/delJogSelect.png";
+					url = "/imagem/crud/delFuncSelect.png";
 				} else {
-					url = "/imagem/crud/delJog.png";
+					url = "/imagem/crud/delFunc.png";
 				}
 			}
-			if (botao.getName().equals("visualizarJogador")) {
+			if (botao.getName().equals("visualizarFuncionario")) {
 				if (selecionado) {
-					url = "/imagem/crud/visuJogSelect.png";
+					url = "/imagem/crud/visuFuncSelect.png";
 				} else {
-					url = "/imagem/crud/visuJog.png";
+					url = "/imagem/crud/visuFunc.png";
 				}
 			}
 			botao.setFocusPainted(false);
