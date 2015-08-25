@@ -59,7 +59,7 @@ public class MenssageConfirmacao {
 		pTitulo.setBorder(new BordaSombreada(new Color(46, 49, 56), new Color(102, 102, 102), false, true, false , false));
 		panelMeio.add(pTitulo);
 		
-		JLabel lbMenssage = new JLabel(menssage);
+		JLabel lbMenssage = new JLabel("<html>"+menssage.replace("\n", "<BR>")+"</html>");
 		lbMenssage.setForeground(UtilitarioTela.getFontColorPadrao());
 		lbMenssage.setFont(UtilitarioTela.getFont(14));
 		lbMenssage.setSize(380, 150);

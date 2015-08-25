@@ -653,7 +653,7 @@ public class CrudJogador extends JPanel {
 			String menssage = "";
 			if (modoCrud == ParametroCrud.getModoCrudNovo()) {
 				modo = "Cadastro de Jogador";
-				menssage = "<html>Jogador Cadastrado com Sucesso!</html>";
+				menssage = "Jogador Cadastrado com Sucesso!";
 				Usuario usuario = new Usuario();
 				usuario.setAtivo(true);
 				usuario.setNome(txNome.getText());
@@ -681,7 +681,7 @@ public class CrudJogador extends JPanel {
 
 			} else if (modoCrud == ParametroCrud.getModoCrudAlterar()) {
 				modo = "Alteração de Jogador";
-				menssage = "<html>Jogador Alterado com Sucesso!</html>";
+				menssage = "Jogador Alterado com Sucesso!";
 				Usuario usuario = jogadorSelecionado.getUsuario();
 				usuario.setNome(txNome.getText());
 				usuario.setSobreNome(txSobreNome.getText());
@@ -701,7 +701,7 @@ public class CrudJogador extends JPanel {
 				EntityManagerLocal.merge(jogadorSelecionado);
 			} else if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
 				modo = "Deleção de Jogador";
-				menssage = "<html>Jogador Deletado com Sucesso!</html>";
+				menssage = "Jogador Deletado com Sucesso!";
 				Usuario usuario = jogadorSelecionado.getUsuario();
 				usuario.setAtivo(false);
 				EntityManagerLocal.merge(usuario);

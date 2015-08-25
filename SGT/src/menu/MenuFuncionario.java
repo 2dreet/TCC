@@ -43,6 +43,8 @@ public class MenuFuncionario extends JPanel {
 	private Funcionario funcionarioSelecionado;
 
 	public MenuFuncionario() {
+		funcionarioSelecionado=null;
+		
 		setSize(UtilitarioTela.getTamanhoMenuBaixo());
 		setBackground(null);
 		setLayout(null);

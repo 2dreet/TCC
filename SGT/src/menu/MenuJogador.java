@@ -40,6 +40,8 @@ public class MenuJogador extends JPanel {
 	private Jogador jogadorSelecionado;
 
 	public MenuJogador() {
+		jogadorSelecionado=null;
+		
 		setSize(UtilitarioTela.getTamanhoMenuBaixo());
 		setBackground(null);
 		setLayout(null);

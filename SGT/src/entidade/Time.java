@@ -8,6 +8,7 @@ package entidade;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,6 +16,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -46,6 +48,9 @@ public class Time implements Serializable {
     private Integer codigoTime;
     @Column(name = "descricao")
     private String descricao;
+    @Lob
+    @Column(name = "logo")
+    private String logo;
     @Basic(optional = false)
     @Column(name = "dataCadastro")
     @Temporal(TemporalType.DATE)
@@ -95,6 +100,14 @@ public class Time implements Serializable {
         this.descricao = descricao;
     }
 
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+    
     public Date getDataCadastro() {
         return dataCadastro;
     }
