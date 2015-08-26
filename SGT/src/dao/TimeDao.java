@@ -36,13 +36,33 @@ public class TimeDao {
 	public static Time getTime(int codigo){
 		try {
 			String sql = "SELECT * FROM time "
-					+ " where coidigoTime = '"+codigo+"' AND ativo = true";
+					+ " where codigoTime = '"+codigo+"' AND ativo = true";
 			return (Time) EntityManagerLocal.getEntityManager().createNativeQuery(sql, Time.class)
 					.setHint(QueryHints.REFRESH, HintValues.TRUE)
 					.setMaxResults(1).getSingleResult();
 		} catch (NoResultException ex) {
 			return null;
 		}
+	}
+	
+	public static Time getTime(String nome){
+		try {
+			String sql = "SELECT * FROM time "
+					+ " where descricao = '"+nome+"' AND ativo = true";
+			return (Time) EntityManagerLocal.getEntityManager().createNativeQuery(sql, Time.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.setMaxResults(1).getSingleResult();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
+	public static boolean timeCadastrado(String nome){
+		Time time = getTime(nome);
+		if(time != null){
+			return true;
+		}
+		return false;
 	}
 	
 }

@@ -42,6 +42,20 @@ public class JogadorDao {
 		}
 	}
 	
+	public static List<Jogador> getListaJogadorTime(int codigoTime){
+		try {
+			String sql = "SELECT * FROM jogador j INNER JOIN usuario u"
+					+ "	ON j.codigoUsuario = u.codigoUsuario"
+					+ " where codigoTime = ' " + codigoTime + " ' AND u.ativo = true";
+			
+			System.out.println(sql);
+			
+			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Jogador.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
 	public static Jogador getJogador(int codigo){
 		try {
 			String sql = "SELECT * FROM jogador j INNER JOIN usuario u"

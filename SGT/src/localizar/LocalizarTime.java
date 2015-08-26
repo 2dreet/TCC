@@ -29,6 +29,7 @@ import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import javax.swing.JButton;
 
 import componente.ComboBox;
+import componente.DadoComIcone;
 import componente.TabelaCell;
 import componente.TextoIconeCell;
 
@@ -52,20 +53,16 @@ import dao.JogadorDao;
 import dao.TimeDao;
 import entidade.Funcionario;
 import entidade.Time;
-import exemplos.Tabela;
 
 public class LocalizarTime extends JPanel {
 
-	private List<Funcionario> listaFuncionario;
+	private List<Time> listaTime;
 	private JTable tabela;
 	private JTextField txBusca;
 	private ComboBox metodoBusca;
-	private Object[][] colunas = new Object[][] { new String[] { "Código" },
-			new String[] { "Nome" }, new String[] { "Usuário" },
-			new String[] { "RG" }, new String[] { "Telefone" },
-			new String[] { "Email" } };
-	private String[] linhaBusca = new String[] { "Código", "Nome", "Usuário",
-			"RG", "Telefone", "Email" };
+	private Object[][] colunas = new Object[][] { new String[] { "Logo" }, new String[] { "Código" },
+			new String[] { "Nome" }};
+	private String[] linhaBusca = new String[] { "Código", "Nome"};
 	private Time timeSelecionado;
 	private MenuTime menuPai;
 
@@ -82,7 +79,7 @@ public class LocalizarTime extends JPanel {
 	public LocalizarTime(){
 		super();
 		timeSelecionado = null;
-		listaFuncionario = new ArrayList<Funcionario>();
+		listaTime = new ArrayList<Time>();
 
 		setSize(UtilitarioTela.getTamanhoMeio());
 		setLayout(null);
@@ -155,34 +152,31 @@ public class LocalizarTime extends JPanel {
 
 		tabela = new JTable();
 		tabela.setModel(UtilitarioTabela.getModelo(colunas));
-		TableColumnModel tcm = tabela.getColumnModel();
-		tcm.getColumn(0).setPreferredWidth(60);
-		tcm.getColumn(0).setMinWidth(60);
-		tcm.getColumn(0).setResizable(false);
-		tcm.getColumn(1).setPreferredWidth(170);
-		tcm.getColumn(1).setMinWidth(170);
-		tcm.getColumn(1).setResizable(false);
-		tcm.getColumn(2).setPreferredWidth(100);
-		tcm.getColumn(2).setMinWidth(100);
-		tcm.getColumn(2).setResizable(false);
-		tcm.getColumn(3).setPreferredWidth(83);
-		tcm.getColumn(3).setMinWidth(83);
-		tcm.getColumn(3).setResizable(false);
-		tcm.getColumn(4).setPreferredWidth(100);
-		tcm.getColumn(4).setMinWidth(100);
-		tcm.getColumn(4).setResizable(false);
-		tcm.getColumn(5).setPreferredWidth(130);
-		tcm.getColumn(5).setMinWidth(130);
-		tcm.getColumn(5).setResizable(false);
 		
-		UtilitarioTabela.pintarColona(UtilitarioTabela.getFundoHeaderPadrao(),
-				UtilitarioTabela.getFontColotHeaderPadrao(), tcm, colunas);
-		UtilitarioTabela.pintarLinha(new Color(255, 153, 153), Color.black, tabela);
+		TableColumnModel tcm = tabela.getColumnModel();
+		TextoIconeCell renderer = new TextoIconeCell();
+	    tcm.getColumn(0).setCellRenderer(renderer);
+	    tcm.getColumn(0).setPreferredWidth(50);
+		tcm.getColumn(0).setMinWidth(50);
+		tcm.getColumn(0).setResizable(false);
+		tcm.getColumn(1).setPreferredWidth(120);
+		tcm.getColumn(1).setMinWidth(120);
+		tcm.getColumn(1).setResizable(false);
+		tcm.getColumn(2).setPreferredWidth(476);
+		tcm.getColumn(2).setMinWidth(473);
+		tcm.getColumn(2).setResizable(false);
+		
+		UtilitarioTabela.pintarColona(UtilitarioTabela.getFundoHeaderPadrao() ,UtilitarioTabela.getFontColotHeaderPadrao()
+				, tcm, colunas);
+		UtilitarioTabela.pintarLinha( new Color(255, 153, 153), Color.black, tabela);
 		tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tabela.setPreferredScrollableViewportSize(tabela.getPreferredSize());
 		tabela.getTableHeader().setReorderingAllowed(false);
+		tabela.setRowHeight(50);
+		tabela.setFont(UtilitarioTela.getFont(14));
 		JScrollPane scroll = new JScrollPane(tabela);
 		scroll.setBounds(2, 45, 646, meio.getHeight() - 85);
+		scroll.setBackground(Color.red);
 		meio.add(scroll);
 
 		JButton btSelecionar = new JButton("Selecionar");
@@ -215,9 +209,10 @@ public class LocalizarTime extends JPanel {
 		});
 	}
 
+	
 	public void selecionar() {
 		if(tabela.getRowCount() > 0 ){
-			timeSelecionado = TimeDao.getTime(Integer.parseInt(String.valueOf(tabela.getValueAt(tabela.getSelectedRow(), 0))));
+			timeSelecionado = TimeDao.getTime(Integer.parseInt(String.valueOf(tabela.getValueAt(tabela.getSelectedRow(), 1))));
 			if (timeSelecionado != null) {
 				if(menuPai != null){
 					menuPai.exibirTime(timeSelecionado);
@@ -231,24 +226,19 @@ public class LocalizarTime extends JPanel {
 	}
 
 	public void localizar() {
-		listaFuncionario = FuncionarioDao.getListaPesquisa(metodoBusca
+		listaTime = TimeDao.getListaPesquisa(metodoBusca
 				.getSelectedItem().toString(), txBusca.getText());
 		DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
 		modelo.setNumRows(0);
-		if (listaFuncionario != null) {
-			for (Funcionario f : listaFuncionario) {
-				modelo.addRow(new String[] {
-						String.valueOf(f.getCodigoFuncionario()),
-						f.getUsuario().getNome() + " "
-								+ f.getUsuario().getSobreNome(),
-						f.getUsuario().getUsuario(),
-						f.getUsuario().getRg(),
-						MascaraCrud.mascaraTelefoneResult(f.getUsuario()
-								.getTelefone()), f.getUsuario().getEmail() });
+		if (listaTime != null) {
+			for (Time t : listaTime) {
+				modelo.addRow(new Object[] {new DadoComIcone("", new ImageIcon("logo/"+t.getLogo())),
+						String.valueOf(t.getCodigoTime()),
+						t.getDescricao()});
 
 			}
 		} else {
-			listaFuncionario = new ArrayList<Funcionario>();
+			listaTime = new ArrayList<Time>();
 		}
 	}
 }

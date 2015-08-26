@@ -7,8 +7,10 @@ import java.awt.event.FocusEvent;
 
 import javax.swing.JPanel;
 
+import componente.DadoComIcone;
 import componente.Menssage;
 import componente.MenssageConfirmacao;
+import componente.TextoIconeCell;
 import utilitario.BordaEscura;
 import utilitario.BordaSombreada;
 import utilitario.MascaraCrud;
@@ -17,13 +19,16 @@ import utilitario.ParametroCrud;
 import utilitario.Parametros;
 import utilitario.UtilitarioCrud;
 import utilitario.UtilitarioLogo;
+import utilitario.UtilitarioTabela;
 import utilitario.UtilitarioTela;
 import utilitario.ValidadorCrud;
 
 import javax.swing.JButton;
 
 import dao.EntityManagerLocal;
+import dao.JogadorDao;
 import dao.PermissaoDao;
+import dao.TimeDao;
 import entidade.Jogador;
 import entidade.Time;
 import entidade.Usuario;
@@ -32,6 +37,8 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -41,6 +48,8 @@ import java.awt.event.KeyEvent;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
@@ -51,7 +60,9 @@ import componente.ComboBox;
 
 import java.awt.Color;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.JTextArea;
 
@@ -70,7 +81,12 @@ public class CrudTime extends JPanel {
 	private JPanel meio;
 	private JPanel pLogo;
 	private File logo;
-
+	private JTable tabela;
+	private List<Jogador> listaJogador;
+	private Object[][] colunas = new Object[][] { new String[] { "Código" },
+			new String[] { "Nome" }, new String[] { "Usuário" },
+			new String[] { "RG" }, new String[] { "Telefone" },
+			new String[] { "Email" } };
 	/**
 	 * Create the panel.
 	 */
@@ -84,7 +100,7 @@ public class CrudTime extends JPanel {
 		timeSelecionado = time;
 
 		header = new JPanel();
-		header.setSize(500, 30);
+		header.setSize(650, 30);
 		header.setLocation((getWidth() / 2) - 250, 10);
 		header.setLayout(null);
 		header.setBackground(UtilitarioTela.getColorCrud(modoCrud));
@@ -110,7 +126,7 @@ public class CrudTime extends JPanel {
 		header.add(lblHeader);
 
 		meio = new JPanel();
-		meio.setSize(500, getHeight() - 50);
+		meio.setSize(650, getHeight() - 50);
 		meio.setLocation((getWidth() / 2) - 250, 40);
 		meio.setLayout(null);
 		meio.setBackground(UtilitarioTela.getFundoCrud());
@@ -245,8 +261,8 @@ public class CrudTime extends JPanel {
 			    		lbLogo.setBounds(2, 2, 50, 50);
 			    		pLogo.add(lbLogo);
 			    		pLogo.repaint();
-			    		//MoverArquivo.copyFile(chooser.getSelectedFile(), MoverArquivo.getLocalLogo(chooser.getSelectedFile()));
 			    	}else{
+			    		logo = null;
 			    		Menssage.setMenssage("Imagem Inválida", "Imagem selecionada deve ter o tamanho 50 X 50", ParametroCrud.getModoCrudDeletar());
 			    		limparLogo();
 			    	}
@@ -270,7 +286,19 @@ public class CrudTime extends JPanel {
 	}
 	
 	public void setarCampos() {
-		
+		txDescricao.setText(timeSelecionado.getDescricao());
+		if(timeSelecionado.getLogo() !=null ){
+			logo = new File("logo/" + timeSelecionado.getLogo());
+			pLogo.removeAll();
+			txLogo.setText(logo.getAbsolutePath());
+			JLabel lbLogo = new JLabel(new ImageIcon("logo/"+timeSelecionado.getLogo()));
+			lbLogo.setBounds(2, 2, 50, 50);
+			pLogo.add(lbLogo);
+			pLogo.repaint();
+		}else{
+			logo = null;
+			limparLogo();
+		}
 	}
 
 	public void msgErro(String erro) {
@@ -297,14 +325,15 @@ public class CrudTime extends JPanel {
 
 	private boolean validarCrud() {
 		try {
-
 			if (txDescricao.getText() == null || txDescricao.getText().trim().isEmpty()) {
 				txDescricao.requestFocus();
 				msgErro("Campo Nome é Obrigatório!");
 				return false;
+			} else if(TimeDao.timeCadastrado(txDescricao.getText()) && !timeSelecionado.getDescricao().equals(txDescricao.getText())){
+				txDescricao.requestFocus();
+				msgErro("Nome Já está sendo Usado\nInformar outro nome!");
+				return false;
 			}
-			
-
 			return true;
 		} catch (Exception e) {
 			return false;
@@ -333,33 +362,101 @@ public class CrudTime extends JPanel {
 
 		int linha = 20;
 
+		JLabel lbLogoV = new JLabel(new ImageIcon("logo/" + timeSelecionado.getLogo()));
+		lbLogoV.setFont(UtilitarioTela.getFont(14));
+		lbLogoV.setForeground(UtilitarioTela.getFontColorCrud());
+		lbLogoV.setBounds(2, 2, 50, 50);	
+		JPanel pnLogo = new JPanel();
+		pnLogo.setBounds(20, linha, 54, 54);
+		pnLogo.setLayout(null);
+		pnLogo.setBackground(null);
+		pnLogo.setBorder(new BordaSombreada());
+		pnLogo.add(lbLogoV);
+		meio.add(pnLogo);
+
 		JLabel lbCodigo = new JLabel("Código :");
-		lbCodigo.setBounds(20, linha, 100, 20);
+		lbCodigo.setBounds(90, linha, 80, 20);
 		lbCodigo.setFont(UtilitarioTela.getFont(14));
 		lbCodigo.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbCodigo);
 		JLabel lbCodigoV = new JLabel(String.valueOf(timeSelecionado
 				.getCodigoTime()));
-		lbCodigoV.setBounds(155, linha, 300, 20);
+		lbCodigoV.setBounds(180, linha, 200, 20);
 		lbCodigoV.setFont(UtilitarioTela.getFont(14));
 		lbCodigoV.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbCodigoV);
-
+		
 		linha += 35;
 		JLabel lbDescricao = new JLabel("Descrição :");
-		lbDescricao.setBounds(20, linha, 50, 20);
+		lbDescricao.setBounds(90, linha, 80, 20);
 		lbDescricao.setFont(UtilitarioTela.getFont(14));
 		lbDescricao.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbDescricao);
 		JLabel lbDescricaoV = new JLabel(timeSelecionado.getDescricao());
-		lbDescricaoV.setBounds(155, linha, 300, 20);
+		lbDescricaoV.setBounds(180, linha, 200, 20);
 		lbDescricaoV.setFont(UtilitarioTela.getFont(14));
 		lbDescricaoV.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbDescricaoV);
 
+		linha += 35;
+		linha += 35;
+		tabela = new JTable();
+		tabela.setModel(UtilitarioTabela.getModelo(colunas));
+		TableColumnModel tcm = tabela.getColumnModel();
+		tcm.getColumn(0).setPreferredWidth(60);
+		tcm.getColumn(0).setMinWidth(60);
+		tcm.getColumn(0).setResizable(false);
+		tcm.getColumn(1).setPreferredWidth(170);
+		tcm.getColumn(1).setMinWidth(170);
+		tcm.getColumn(1).setResizable(false);
+		tcm.getColumn(2).setPreferredWidth(100);
+		tcm.getColumn(2).setMinWidth(100);
+		tcm.getColumn(2).setResizable(false);
+		tcm.getColumn(3).setPreferredWidth(83);
+		tcm.getColumn(3).setMinWidth(83);
+		tcm.getColumn(3).setResizable(false);
+		tcm.getColumn(4).setPreferredWidth(100);
+		tcm.getColumn(4).setMinWidth(100);
+		tcm.getColumn(4).setResizable(false);
+		tcm.getColumn(5).setPreferredWidth(130);
+		tcm.getColumn(5).setMinWidth(130);
+		tcm.getColumn(5).setResizable(false);
+		
+		UtilitarioTabela.pintarColona(UtilitarioTabela.getFundoHeaderPadrao() ,UtilitarioTabela.getFontColotHeaderPadrao()
+				, tcm, colunas);
+		UtilitarioTabela.pintarLinha( new Color(255, 153, 153), Color.black, tabela);
+		tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		tabela.setPreferredScrollableViewportSize(tabela.getPreferredSize());
+		tabela.getTableHeader().setReorderingAllowed(false);
+		tabela.setRowHeight(50);
+		tabela.setFont(UtilitarioTela.getFont(14));
+		JScrollPane scroll = new JScrollPane(tabela);
+		scroll.setBounds(2, linha, 646, 250);
+		meio.add(scroll);
 		
 	}
 
+	public void atualizarTabela(){
+		listaJogador = JogadorDao.getListaJogadorTime(timeSelecionado.getCodigoTime());
+		DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
+		modelo.setNumRows(0);
+		if (listaJogador != null) {
+			for (Jogador j : listaJogador) {
+				modelo.addRow(new String[] {
+						String.valueOf(j.getCodigoJogador()),
+						j.getUsuario().getNome() + " "
+								+ j.getUsuario().getSobreNome(),
+						j.getUsuario().getUsuario(),
+						j.getUsuario().getRg(),
+						MascaraCrud.mascaraTelefoneResult(j.getUsuario()
+								.getTelefone()), j.getUsuario().getEmail() });
+
+			}
+		} else {
+			listaJogador = new ArrayList<Jogador>();
+		}
+	}
+	
 	private void save(int modoCrud) {
 		boolean confirmado = true;
 
@@ -374,18 +471,50 @@ public class CrudTime extends JPanel {
 			String modo = "";
 			String menssage = "";
 			if (modoCrud == ParametroCrud.getModoCrudNovo()) {
-				modo = "Cadastro de Time";
-				menssage = "<html>Time Cadastrado com Sucesso!</html>";
 				
-
+				modo = "Cadastro de Time";
+				menssage = "Time Cadastrado com Sucesso!";
+				Time time = new Time();
+				if(logo != null){
+					try{
+						MoverArquivo.copyFile( logo, MoverArquivo.getLocalLogo(logo));
+						logo = new File("logo/" + logo.getName());
+						logo.renameTo(new File("logo/" + txDescricao.getText()));
+						time.setLogo(logo.getName());
+					}catch(Exception e){
+						e.printStackTrace();
+						Menssage.setMenssage("Erro ao mover Logo", "Não foi possivel mover a logo!", ParametroCrud.getModoErro());
+					}
+				}
+				time.setDescricao(txDescricao.getText());
+				time.setDataCadastro(new Date());
+				time.setAtivo(true);
+				EntityManagerLocal.persist(time);
+				timeSelecionado = time;
+				
 			} else if (modoCrud == ParametroCrud.getModoCrudAlterar()) {
 				modo = "Alteração de Time";
-				menssage = "<html>Time Alterado com Sucesso!</html>";
+				menssage = "Time Alterado com Sucesso!";
+				if(logo != null){
+					try{
+						logo.renameTo(new File(logo.getPath().replace(logo.getName(), "")+txDescricao.getText()+".png"));
+						logo = new File(logo.getPath().replace(logo.getName(), "")+txDescricao.getText()+".png");
+						MoverArquivo.copyFile( logo, MoverArquivo.getLocalLogo(logo));
+						timeSelecionado.setLogo(logo.getName());
+					}catch(Exception e){
+						e.printStackTrace();
+						Menssage.setMenssage("Erro ao mover Logo", "Não foi possivel mover a logo!", ParametroCrud.getModoErro());
+					}
+				}
+
+				timeSelecionado.setDescricao(txDescricao.getText());
+				EntityManagerLocal.merge(timeSelecionado);
 				
 			} else if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
 				modo = "Deleção de Time";
-				menssage = "<html>Time Deletado com Sucesso!</html>";
-				
+				menssage = "Time Deletado com Sucesso!";
+				timeSelecionado.setAtivo(false);
+				EntityManagerLocal.merge(timeSelecionado);
 			}
 			EntityManagerLocal.commit();
 			Menssage.setMenssage(modo, menssage, modoCrud);

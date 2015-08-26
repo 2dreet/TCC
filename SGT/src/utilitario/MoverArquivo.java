@@ -40,4 +40,14 @@ public class MoverArquivo {
 		return new File("logo/"+arquivo.getName());
 	}
 	
+	
+	public static boolean verificaArquivoExistente(File arquivo){
+		try{
+			
+			return true;
+		}catch(Exception e){
+			return false;
+		}
+	}
+	
 }
