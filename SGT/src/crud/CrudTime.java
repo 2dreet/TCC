@@ -29,6 +29,7 @@ import dao.EntityManagerLocal;
 import dao.JogadorDao;
 import dao.PermissaoDao;
 import dao.TimeDao;
+import dialog.DialogLocalizarJogador;
 import entidade.Jogador;
 import entidade.Time;
 import entidade.Usuario;
@@ -48,8 +49,10 @@ import java.awt.event.KeyEvent;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
@@ -101,7 +104,7 @@ public class CrudTime extends JPanel {
 
 		header = new JPanel();
 		header.setSize(650, 30);
-		header.setLocation((getWidth() / 2) - 250, 10);
+		header.setLocation((getWidth() / 2) - 325, 10);
 		header.setLayout(null);
 		header.setBackground(UtilitarioTela.getColorCrud(modoCrud));
 		header.setBorder(null);
@@ -127,7 +130,7 @@ public class CrudTime extends JPanel {
 
 		meio = new JPanel();
 		meio.setSize(650, getHeight() - 50);
-		meio.setLocation((getWidth() / 2) - 250, 40);
+		meio.setLocation((getWidth() / 2) - 325, 40);
 		meio.setLayout(null);
 		meio.setBackground(UtilitarioTela.getFundoCrud());
 		meio.setBorder(new BordaSombreada(modoCrud));
@@ -208,7 +211,7 @@ public class CrudTime extends JPanel {
 
 		if (modoCrud != ParametroCrud.getModoVisualizar()) {
 			JButton btSalvar = new JButton(texto);
-			btSalvar.setBounds(175, meio.getHeight() - 70, 150, 35);
+			btSalvar.setBounds((meio.getWidth()/2)-85, meio.getHeight() - 70, 150, 35);
 			btSalvar.setFont(UtilitarioTela.getFont(14));
 			btSalvar.setFocusPainted(false);
 			btSalvar.setBackground(UtilitarioTela.getColorCrud(modoCrud));
@@ -345,7 +348,7 @@ public class CrudTime extends JPanel {
 
 		if (modoCrud != ParametroCrud.getModoVisualizar()) {
 			JButton btSalvar = new JButton("Deletar");
-			btSalvar.setBounds(175, meio.getHeight() - 70, 150, 35);
+			btSalvar.setBounds((meio.getWidth()/2)-85, meio.getHeight() - 70, 150, 35);
 			btSalvar.setFont(UtilitarioTela.getFont(14));
 			btSalvar.setFocusPainted(false);
 			btSalvar.setBackground(UtilitarioTela.getColorCrud(modoCrud));
@@ -428,12 +431,73 @@ public class CrudTime extends JPanel {
 		tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tabela.setPreferredScrollableViewportSize(tabela.getPreferredSize());
 		tabela.getTableHeader().setReorderingAllowed(false);
-		tabela.setRowHeight(50);
-		tabela.setFont(UtilitarioTela.getFont(14));
+		tabela.setFont(UtilitarioTela.getFont(12));
+		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scroll = new JScrollPane(tabela);
 		scroll.setBounds(2, linha, 646, 250);
 		meio.add(scroll);
 		
+		if (modoCrud == ParametroCrud.getModoVisualizar()) {
+			JButton btAddJogador = new JButton("Adicionar Jogador");
+			btAddJogador.setBounds(80, meio.getHeight() - 70, 220, 35);
+			btAddJogador.setFont(UtilitarioTela.getFont(14));
+			btAddJogador.setFocusPainted(false);
+			btAddJogador.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudNovo()));
+			btAddJogador.setIcon((new ImageIcon(CrudTime.class.getResource("/imagem/crud/addJogSelect.png"))));
+			meio.add(btAddJogador);
+			btAddJogador.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					DialogLocalizarJogador.localizarJogador();
+					if(DialogLocalizarJogador.getJogadorSelecionado() != null){
+						Jogador jogador = DialogLocalizarJogador.getJogadorSelecionado();
+						boolean confirmado = true;
+						MenssageConfirmacao.setMenssage("Adicionar Jogador no Time",
+								"Deseja Adicionar Esse Jogador no Time?\nJogador: "+jogador.getUsuario().getNome()+" "+jogador.getUsuario().getSobreNome(), modoCrud);
+						confirmado = MenssageConfirmacao.isConfirmado();
+						if(confirmado){
+							EntityManagerLocal.begin();
+							jogador.setTime(timeSelecionado);
+							EntityManagerLocal.merge(jogador);
+							EntityManagerLocal.commit();
+						}
+						atualizarTabela();
+					}
+				}
+			});
+			
+			JButton btRemoveJogador = new JButton("Remover Jogador");
+			btRemoveJogador.setBounds(360, meio.getHeight() - 70, 220, 35);
+			btRemoveJogador.setFont(UtilitarioTela.getFont(14));
+			btRemoveJogador.setFocusPainted(false);
+			btRemoveJogador.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudDeletar()));
+			btRemoveJogador.setIcon((new ImageIcon(CrudTime.class.getResource("/imagem/crud/delJogSelect.png"))));
+			meio.add(btRemoveJogador);
+			btRemoveJogador.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					if(tabela.getRowCount() > 0 ){
+						if(tabela.getSelectedRow() > -1){
+							Jogador jogadorSelecionado = JogadorDao.getJogador(Integer.parseInt(String.valueOf(tabela.getValueAt(tabela.getSelectedRow(), 0))));
+							boolean confirmado = true;
+							MenssageConfirmacao.setMenssage("Remover Jogador do Time",
+								"Deseja Remover Esse Jogador do Time?\nJogador: "+jogadorSelecionado.getUsuario().getNome()+" "+jogadorSelecionado.getUsuario().getSobreNome(), modoCrud);
+							confirmado = MenssageConfirmacao.isConfirmado();
+							if(confirmado){
+								EntityManagerLocal.begin();
+								jogadorSelecionado.setTime(null);
+								EntityManagerLocal.merge(jogadorSelecionado);
+								EntityManagerLocal.commit();
+							}
+						} else{
+							Menssage.setMenssage("Jogador não Selecionado", "Deve selecionar um Jogador!", ParametroCrud.getModoCrudDeletar());
+						}
+					} else{
+						Menssage.setMenssage("Jogador não Selecionado", "Deve selecionar um Jogador!", ParametroCrud.getModoCrudDeletar());
+					}
+					atualizarTabela();
+				}
+			});
+		}
+		atualizarTabela();
 	}
 
 	public void atualizarTabela(){
@@ -477,9 +541,9 @@ public class CrudTime extends JPanel {
 				Time time = new Time();
 				if(logo != null){
 					try{
+						logo.renameTo(new File(logo.getPath().replace(logo.getName(), "")+txDescricao.getText()+".png"));
+						logo = new File(logo.getPath().replace(logo.getName(), "")+txDescricao.getText()+".png");
 						MoverArquivo.copyFile( logo, MoverArquivo.getLocalLogo(logo));
-						logo = new File("logo/" + logo.getName());
-						logo.renameTo(new File("logo/" + txDescricao.getText()));
 						time.setLogo(logo.getName());
 					}catch(Exception e){
 						e.printStackTrace();
@@ -511,6 +575,7 @@ public class CrudTime extends JPanel {
 				EntityManagerLocal.merge(timeSelecionado);
 				
 			} else if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
+				JogadorDao.desvincularJogadorTime(timeSelecionado.getCodigoTime());
 				modo = "Deleção de Time";
 				menssage = "Time Deletado com Sucesso!";
 				timeSelecionado.setAtivo(false);

@@ -293,7 +293,7 @@ public class MenuTime extends JPanel {
 	public void zeraSelecao() {
 		
 		btLocalizar.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/crud/locJog.png")));
+				.getResource("/imagem/crud/locTime.png")));
 		btLocalizar.setBackground(UtilitarioTela.getBtnFundo(false));
 		btLocalizar.setForeground(UtilitarioTela.getFontColorSelecao(false));
 		
@@ -315,7 +315,7 @@ public class MenuTime extends JPanel {
 				.getFontColorSelecao(false));
 		
 		btVisualizar.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/crud/visuJog.png")));
+				.getResource("/imagem/crud/visuTime.png")));
 		btVisualizar.setBackground(UtilitarioTela.getBtnFundo(false));
 		btVisualizar.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
@@ -328,9 +328,9 @@ public class MenuTime extends JPanel {
 		if (botao.getName() != null) {
 			if (botao.getName().equals("localizar")) {
 				if (selecionado) {
-					url = "/imagem/crud/locJogSelect.png";
+					url = "/imagem/crud/locTimeSelect.png";
 				} else {
-					url = "/imagem/crud/locJog.png";
+					url = "/imagem/crud/locTime.png";
 				}
 			}
 			if (botao.getName().equals("cadastrarTime")) {
@@ -356,9 +356,9 @@ public class MenuTime extends JPanel {
 			}
 			if (botao.getName().equals("visualizarTime")) {
 				if (selecionado) {
-					url = "/imagem/crud/visuJogSelect.png";
+					url = "/imagem/crud/visuTimeSelect.png";
 				} else {
-					url = "/imagem/crud/visuJog.png";
+					url = "/imagem/crud/visuTime.png";
 				}
 			}
 			botao.setFocusPainted(false);

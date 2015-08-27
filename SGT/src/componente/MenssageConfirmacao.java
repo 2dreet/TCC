@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import utilitario.BordaSombreada;
+import utilitario.ParametroCrud;
 import utilitario.Parametros;
 import utilitario.UtilitarioTela;
 
@@ -79,7 +80,7 @@ public class MenssageConfirmacao {
 		JButton confirmar = new JButton("Confirmar");
 		confirmar.setSize(150,30);
 		confirmar.setLocation(20, 250);
-		confirmar.setBackground(UtilitarioTela.getFundoLocalizar());
+		confirmar.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudNovo()));
 		confirmar.setFocusPainted(false);
 		confirmar.setIcon(new ImageIcon(Menssage.class.getResource("/imagem/ok.png")));
 		confirmar.addActionListener(new ActionListener() {
@@ -94,7 +95,7 @@ public class MenssageConfirmacao {
 		cancelar.setLocation(223, 250);
 		cancelar.setBackground(UtilitarioTela.getFundoLocalizar());
 		cancelar.setFocusPainted(false);
-		cancelar.setIcon(new ImageIcon(Menssage.class.getResource("/imagem/ok.png")));
+		cancelar.setIcon(new ImageIcon(Menssage.class.getResource("/imagem/cancelBlack.png")));
 		cancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				cancelar();

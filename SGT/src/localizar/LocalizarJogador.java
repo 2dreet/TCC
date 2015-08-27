@@ -14,6 +14,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 
 import utilitario.BordaSombreada;
@@ -29,6 +30,7 @@ import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import javax.swing.JButton;
 
 import componente.ComboBox;
+import componente.Menssage;
 import componente.TabelaCell;
 import componente.TextoIconeCell;
 
@@ -70,12 +72,12 @@ public class LocalizarJogador extends JPanel {
 	public LocalizarJogador(MenuJogador menuPai) {
 		this();
 		this.menuPai = menuPai;
-	}	
-	
+	}
+
 	public LocalizarJogador() {
 		super();
 		jogadorSelecionado = null;
-	
+
 		listaJogador = new ArrayList<Jogador>();
 
 		setSize(UtilitarioTela.getTamanhoMeio());
@@ -168,13 +170,15 @@ public class LocalizarJogador extends JPanel {
 		tcm.getColumn(5).setPreferredWidth(130);
 		tcm.getColumn(5).setMinWidth(130);
 		tcm.getColumn(5).setResizable(false);
-		
+
 		UtilitarioTabela.pintarColona(UtilitarioTabela.getFundoHeaderPadrao(),
 				UtilitarioTabela.getFontColotHeaderPadrao(), tcm, colunas);
-		UtilitarioTabela.pintarLinha(new Color(255, 153, 153), Color.black, tabela);
+		UtilitarioTabela.pintarLinha(new Color(255, 153, 153), Color.black,
+				tabela);
 		tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tabela.setPreferredScrollableViewportSize(tabela.getPreferredSize());
 		tabela.getTableHeader().setReorderingAllowed(false);
+		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scroll = new JScrollPane(tabela);
 		scroll.setBounds(2, 45, 646, meio.getHeight() - 85);
 		meio.add(scroll);
@@ -185,8 +189,8 @@ public class LocalizarJogador extends JPanel {
 		btSelecionar.setFont(UtilitarioTela.getFont(14));
 		btSelecionar.setFocusPainted(false);
 		btSelecionar.setBackground(new Color(46, 49, 56));
-		btSelecionar.setIcon(new ImageIcon(LocalizarJogador.class
-				.getResource("/imagem/ok.png")));
+		btSelecionar.setIcon(new ImageIcon(LocalizarFuncionario.class
+				.getResource("/imagem/done.png")));
 		meio.add(btSelecionar);
 		btSelecionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -198,25 +202,39 @@ public class LocalizarJogador extends JPanel {
 		btLimparSelecao.setBounds(350, meio.getHeight() - 35, 180, 25);
 		btLimparSelecao.setFont(UtilitarioTela.getFont(14));
 		btLimparSelecao.setFocusPainted(false);
-		btLimparSelecao.setForeground(UtilitarioTela.getFontColorPadrao());
-		btLimparSelecao.setBackground(new Color(46, 49, 56));
-		btLimparSelecao.setIcon(UtilitarioTela.getIconeLocalizar());
+		btLimparSelecao.setForeground(new Color(46, 49, 56));
+		btLimparSelecao.setBackground(UtilitarioTela.getFontColorPadrao());
+		btLimparSelecao.setIcon(new ImageIcon(LocalizarFuncionario.class
+				.getResource("/imagem/cancelBlack.png")));
 		meio.add(btLimparSelecao);
 		btLimparSelecao.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				limparSelecao();
 			}
 		});
+		localizar();
 	}
 
 	public void selecionar() {
-		if(tabela.getRowCount() > 0 ){
-			jogadorSelecionado = JogadorDao.getJogador(Integer.parseInt(String.valueOf(tabela.getValueAt(tabela.getSelectedRow(), 0))));
-			if (jogadorSelecionado != null) {
-				if(menuPai != null){
-					menuPai.exibirJogador(jogadorSelecionado);
-				}
+		if (tabela.getRowCount() > 0) {
+			if (tabela.getSelectedRow() > -1) {
+				jogadorSelecionado = JogadorDao.getJogador(Integer
+						.parseInt(String.valueOf(tabela.getValueAt(
+								tabela.getSelectedRow(), 0))));
+				if (jogadorSelecionado != null) {
+					if (menuPai != null) {
+						menuPai.exibirJogador(jogadorSelecionado);
+					}
+				} 
+			} else {
+				Menssage.setMenssage("Jogador não Selecionado",
+						"Deve selecionar um Jogador!",
+						ParametroCrud.getModoCrudDeletar());
 			}
+		} else {
+			Menssage.setMenssage("Jogador não Selecionado",
+					"Deve selecionar um Jogador!",
+					ParametroCrud.getModoCrudDeletar());
 		}
 	}
 
@@ -243,6 +261,9 @@ public class LocalizarJogador extends JPanel {
 			}
 		} else {
 			listaJogador = new ArrayList<Jogador>();
+			Menssage.setMenssage("Jogador não Encontrado",
+					"Nenhum Jogador foi encontrado!",
+					ParametroCrud.getModoCrudDeletar());
 		}
 	}
 }

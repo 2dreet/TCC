@@ -1,114 +1,96 @@
-package localizar;
+package dialog;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Font;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
-
-import utilitario.BordaSombreada;
-import utilitario.MascaraCrud;
-import utilitario.ParametroCrud;
-import utilitario.Parametros;
-import utilitario.UtilitarioCrud;
-import utilitario.UtilitarioTabela;
-import utilitario.UtilitarioTela;
-
-import javax.swing.JComboBox;
-import javax.swing.plaf.basic.BasicComboBoxRenderer;
-import javax.swing.JButton;
-
-import componente.ComboBox;
-import componente.Menssage;
-import componente.TabelaCell;
-import componente.TextoIconeCell;
-
-import java.awt.event.ActionListener;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-import menu.MenuFuncionario;
-import menu.MenuJogador;
-import dao.FuncionarioDao;
+import localizar.LocalizarJogador;
+import utilitario.BordaSombreada;
+import utilitario.MascaraCrud;
+import utilitario.ParametroCrud;
+import utilitario.Parametros;
+import utilitario.UtilitarioTabela;
+import utilitario.UtilitarioTela;
+import componente.ComboBox;
+import componente.Menssage;
 import dao.JogadorDao;
-import entidade.Funcionario;
-import exemplos.Tabela;
+import entidade.Jogador;
 
-public class LocalizarFuncionario extends JPanel {
-
-	private List<Funcionario> listaFuncionario;
-	private JTable tabela;
-	private JTextField txBusca;
-	private ComboBox metodoBusca;
-	private Object[][] colunas = new Object[][] { new String[] { "Código" },
+public class DialogLocalizarJogador {
+	
+	private static List<Jogador> listaJogador;
+	private static JTable tabela;
+	private static JTextField txBusca;
+	private static ComboBox metodoBusca;
+	private static Object[][] colunas = new Object[][] { new String[] { "Código" },
 			new String[] { "Nome" }, new String[] { "Usuário" },
 			new String[] { "RG" }, new String[] { "Telefone" },
 			new String[] { "Email" } };
-	private String[] linhaBusca = new String[] { "Código", "Nome", "Usuário",
+	private static String[] linhaBusca = new String[] { "Código", "Nome", "Usuário",
 			"RG", "Telefone", "Email" };
-	private Funcionario funcionarioSelecionado;
-	private MenuFuncionario menuPai;
-
-	/**
-	 * Create the panel.
-	 */
-
-	public LocalizarFuncionario(MenuFuncionario menuPai) {
-		this();
-		this.menuPai = menuPai;
-	}
-
-	public LocalizarFuncionario() {
+	private static Jogador jogadorSelecionado;
+	private static JDialog dialog;
+	private static Window pai;
+	
+	public DialogLocalizarJogador(){
 		super();
-		funcionarioSelecionado = null;
-		listaFuncionario = new ArrayList<Funcionario>();
-
-		setSize(UtilitarioTela.getTamanhoMeio());
-		setLayout(null);
-		setBackground(null);
-
-		JPanel header = new JPanel();
-		header.setSize(650, 30);
-		header.setLocation((getWidth() / 2) - 400, 10);
-		header.setLayout(null);
-		header.setBackground(Color.white);
-		header.setBorder(null);
-		add(header);
-
-		JLabel lblHeader = new JLabel("Localizar Funcionário");
-		lblHeader.setHorizontalAlignment(SwingConstants.CENTER);
-		lblHeader.setBounds(0, 0, header.getWidth(), header.getHeight());
-		lblHeader.setFont(UtilitarioTela.getFont(14));
-		lblHeader.setForeground(UtilitarioTela.getFontColorCrud());
-		header.add(lblHeader);
-
+		jogadorSelecionado = null;
+		listaJogador = new ArrayList<Jogador>();
+	}
+	
+	public static void localizarJogador() {
+		jogadorSelecionado = null;
+		listaJogador = new ArrayList<Jogador>();
+		dialog = new JDialog(Parametros.getPai(), true);
+		dialog.setUndecorated(true);
+		dialog.setLayout(null);
+		dialog.setSize(654, 410);
+		dialog.getContentPane().setBackground(new Color(232, 234, 239));
+		dialog.setLocationRelativeTo(null);
+		
+		JPanel panel = new JPanel();
+		panel.setBorder(new BordaSombreada(new Color(46, 49, 56), new Color(102, 102, 102)));
+		panel.setLayout(null);
+		panel.setSize(dialog.getSize());
+		panel.setBackground(null);
+		panel.setLocation(0, 0);
+		panel.setFocusable(true);
+		panel.requestFocusInWindow();
+		
+		JLabel lbHeader = new JLabel("Localizar Jogador");
+		lbHeader.setHorizontalAlignment(SwingConstants.CENTER);
+		lbHeader.setBounds(0, 10, 654, 30);
+		lbHeader.setFont(UtilitarioTela.getFont(14));
+		lbHeader.setForeground(UtilitarioTela.getFontColorCrud());
+		panel.add(lbHeader);
+		
 		JPanel meio = new JPanel();
-		meio.setSize(650, getHeight() - 50);
-		meio.setLocation((getWidth() / 2) - 400, 40);
+		meio.setSize(650, 350);
 		meio.setLayout(null);
+		meio.setLocation(2, 50);
 		meio.setBackground(new Color(232, 234, 239));
-		meio.setBorder(new BordaSombreada());
-		add(meio);
-
+		panel.add(meio);
+		
 		JLabel lbNome = new JLabel("Busca :");
 		lbNome.setBounds(10, 10, 55, 20);
 		lbNome.setFont(UtilitarioTela.getFont(14));
@@ -172,11 +154,10 @@ public class LocalizarFuncionario extends JPanel {
 		tcm.getColumn(5).setPreferredWidth(130);
 		tcm.getColumn(5).setMinWidth(130);
 		tcm.getColumn(5).setResizable(false);
-
+		
 		UtilitarioTabela.pintarColona(UtilitarioTabela.getFundoHeaderPadrao(),
 				UtilitarioTabela.getFontColotHeaderPadrao(), tcm, colunas);
-		UtilitarioTabela.pintarLinha(new Color(255, 153, 153), Color.black,
-				tabela);
+		UtilitarioTabela.pintarLinha(new Color(255, 153, 153), Color.black, tabela);
 		tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tabela.setPreferredScrollableViewportSize(tabela.getPreferredSize());
 		tabela.getTableHeader().setReorderingAllowed(false);
@@ -187,11 +168,11 @@ public class LocalizarFuncionario extends JPanel {
 
 		JButton btSelecionar = new JButton("Selecionar");
 		btSelecionar.setBounds(120, meio.getHeight() - 35, 180, 25);
-		btSelecionar.setForeground(UtilitarioTela.getFontColorPadrao());
+		btSelecionar.setForeground(UtilitarioTela.getColorErro());
 		btSelecionar.setFont(UtilitarioTela.getFont(14));
 		btSelecionar.setFocusPainted(false);
 		btSelecionar.setBackground(new Color(46, 49, 56));
-		btSelecionar.setIcon(new ImageIcon(LocalizarFuncionario.class
+		btSelecionar.setIcon(new ImageIcon(LocalizarJogador.class
 				.getResource("/imagem/done.png")));
 		meio.add(btSelecionar);
 		btSelecionar.addActionListener(new ActionListener() {
@@ -200,77 +181,76 @@ public class LocalizarFuncionario extends JPanel {
 			}
 		});
 
-		JButton btLimparSelecao = new JButton("Limpar Seleção");
+		JButton btLimparSelecao = new JButton("Cancelar");
 		btLimparSelecao.setBounds(350, meio.getHeight() - 35, 180, 25);
 		btLimparSelecao.setFont(UtilitarioTela.getFont(14));
 		btLimparSelecao.setFocusPainted(false);
 		btLimparSelecao.setForeground(new Color(46, 49, 56));
 		btLimparSelecao.setBackground(UtilitarioTela.getFontColorPadrao());
-		btLimparSelecao.setIcon(new ImageIcon(LocalizarFuncionario.class
+		btLimparSelecao.setIcon(new ImageIcon(LocalizarJogador.class
 				.getResource("/imagem/cancelBlack.png")));
 		meio.add(btLimparSelecao);
 		btLimparSelecao.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				limparSelecao();
+				cancelar();
 			}
 		});
+		
+		dialog.getContentPane().add(panel);
+		dialog.setVisible(true);
 		localizar();
 	}
 
-	public void selecionar() {
-		if (tabela.getRowCount() > 0) {
-			if (tabela.getSelectedRow() > -1) {
-				funcionarioSelecionado = FuncionarioDao.getFuncionario(Integer
-						.parseInt(String.valueOf(tabela.getValueAt(
-								tabela.getSelectedRow(), 0))));
-				if (funcionarioSelecionado != null) {
-					if (menuPai != null) {
-						menuPai.exibirFuncionario(funcionarioSelecionado);
-					}
-				} else {
-					Menssage.setMenssage("Funcionário não Selecionado",
-							"Deve selecionar um Funcionário!",
-							ParametroCrud.getModoCrudDeletar());
-				}
-			} else {
-				Menssage.setMenssage("Funcionário não Selecionado",
-						"Deve selecionar um Funcionário!",
-						ParametroCrud.getModoCrudDeletar());
+	public static Jogador getJogadorSelecionado(){
+		return jogadorSelecionado;
+	}
+	
+	private static void selecionar() {
+		if(tabela.getRowCount() > 0 ){
+			if(tabela.getSelectedRow() > -1){
+				jogadorSelecionado = JogadorDao.getJogador(Integer.parseInt(String.valueOf(tabela.getValueAt(tabela.getSelectedRow(), 0))));
+				dialog.setVisible(false);
+			} else{
+				Menssage.setMenssage("Jogador não Selecionado", "Deve selecionar um Jogador!", ParametroCrud.getModoCrudDeletar());
 			}
-		} else {
-			Menssage.setMenssage("Funcionário não Selecionado",
-					"Deve selecionar um Funcionário!",
-					ParametroCrud.getModoCrudDeletar());
+		} else{
+			Menssage.setMenssage("Jogador não Selecionado", "Deve selecionar um Jogador!", ParametroCrud.getModoCrudDeletar());
 		}
-
 	}
 
-	public void limparSelecao() {
+	public static void cancelar() {
 		tabela.clearSelection();
+		jogadorSelecionado = null;
+		listaJogador = null;
+		dialog.setVisible(false);
 	}
 
-	public void localizar() {
-		listaFuncionario = FuncionarioDao.getListaPesquisa(metodoBusca
+	public static void localizar() {
+		listaJogador = JogadorDao.getListaJogadorSemTime(metodoBusca
 				.getSelectedItem().toString(), txBusca.getText());
 		DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
 		modelo.setNumRows(0);
-		if (listaFuncionario != null) {
-			for (Funcionario f : listaFuncionario) {
+		if (listaJogador != null && listaJogador.size() > 0 ) {
+			for (Jogador j : listaJogador) {
 				modelo.addRow(new String[] {
-						String.valueOf(f.getCodigoFuncionario()),
-						f.getUsuario().getNome() + " "
-								+ f.getUsuario().getSobreNome(),
-						f.getUsuario().getUsuario(),
-						f.getUsuario().getRg(),
-						MascaraCrud.mascaraTelefoneResult(f.getUsuario()
-								.getTelefone()), f.getUsuario().getEmail() });
+						String.valueOf(j.getCodigoJogador()),
+						j.getUsuario().getNome() + " "
+								+ j.getUsuario().getSobreNome(),
+						j.getUsuario().getUsuario(),
+						j.getUsuario().getRg(),
+						MascaraCrud.mascaraTelefoneResult(j.getUsuario()
+								.getTelefone()), j.getUsuario().getEmail() });
 
 			}
 		} else {
-			listaFuncionario = new ArrayList<Funcionario>();
-			Menssage.setMenssage("Funcionário não Encontrado",
-					"Nenhum Funcionário foi encontrado!",
-					ParametroCrud.getModoCrudDeletar());
+			listaJogador = new ArrayList<Jogador>();
+			Menssage.setMenssage("Jogador não Encontrado", "Nenhum Jogador foi encontrado!", ParametroCrud.getModoCrudDeletar());
 		}
 	}
+	
+	public static void main(String [] args){
+		DialogLocalizarJogador.localizarJogador();
+	}
+
+
 }
