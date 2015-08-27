@@ -67,7 +67,7 @@ public class LocalizarTime extends JPanel {
 	private String[] linhaBusca = new String[] { "Código", "Nome" };
 	private Time timeSelecionado;
 	private MenuTime menuPai;
-
+	private JPanel meio;
 	/**
 	 * Create the panel.
 	 */
@@ -101,7 +101,7 @@ public class LocalizarTime extends JPanel {
 		lblHeader.setForeground(UtilitarioTela.getFontColorCrud());
 		header.add(lblHeader);
 
-		JPanel meio = new JPanel();
+		meio = new JPanel();
 		meio.setSize(650, getHeight() - 50);
 		meio.setLocation((getWidth() / 2) - 325, 40);
 		meio.setLayout(null);
@@ -227,17 +227,17 @@ public class LocalizarTime extends JPanel {
 				} else {
 					Menssage.setMenssage("Time não Selecionado",
 							"Deve selecionar um Time!",
-							ParametroCrud.getModoCrudDeletar());
+							ParametroCrud.getModoCrudDeletar(), meio);
 				}
 			} else {
 				Menssage.setMenssage("Time não Selecionado",
 						"Deve selecionar um Time!",
-						ParametroCrud.getModoCrudDeletar());
+						ParametroCrud.getModoCrudDeletar(), meio);
 			}
 		} else {
 			Menssage.setMenssage("Time não Selecionado",
 					"Deve selecionar um Time!",
-					ParametroCrud.getModoCrudDeletar());
+					ParametroCrud.getModoCrudDeletar(), meio);
 		}
 
 	}
@@ -251,7 +251,7 @@ public class LocalizarTime extends JPanel {
 				.toString(), txBusca.getText());
 		DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
 		modelo.setNumRows(0);
-		if (listaTime != null) {
+		if (listaTime != null && listaTime.size() > 0) {
 			for (Time t : listaTime) {
 				modelo.addRow(new Object[] {
 						new DadoComIcone("", new ImageIcon("logo/"
@@ -263,7 +263,7 @@ public class LocalizarTime extends JPanel {
 			listaTime = new ArrayList<Time>();
 			Menssage.setMenssage("Time não Encontrado",
 					"Nenhum Time foi encontrado!",
-					ParametroCrud.getModoCrudDeletar());
+					ParametroCrud.getModoCrudDeletar(), meio);
 		}
 	}
 }

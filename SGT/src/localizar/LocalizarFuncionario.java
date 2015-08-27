@@ -67,6 +67,7 @@ public class LocalizarFuncionario extends JPanel {
 			"RG", "Telefone", "Email" };
 	private Funcionario funcionarioSelecionado;
 	private MenuFuncionario menuPai;
+	private JPanel meio;
 
 	/**
 	 * Create the panel.
@@ -101,7 +102,7 @@ public class LocalizarFuncionario extends JPanel {
 		lblHeader.setForeground(UtilitarioTela.getFontColorCrud());
 		header.add(lblHeader);
 
-		JPanel meio = new JPanel();
+		meio = new JPanel();
 		meio.setSize(650, getHeight() - 50);
 		meio.setLocation((getWidth() / 2) - 400, 40);
 		meio.setLayout(null);
@@ -230,17 +231,17 @@ public class LocalizarFuncionario extends JPanel {
 				} else {
 					Menssage.setMenssage("Funcionário não Selecionado",
 							"Deve selecionar um Funcionário!",
-							ParametroCrud.getModoCrudDeletar());
+							ParametroCrud.getModoCrudDeletar(), meio);
 				}
 			} else {
 				Menssage.setMenssage("Funcionário não Selecionado",
 						"Deve selecionar um Funcionário!",
-						ParametroCrud.getModoCrudDeletar());
+						ParametroCrud.getModoCrudDeletar(), meio);
 			}
 		} else {
 			Menssage.setMenssage("Funcionário não Selecionado",
 					"Deve selecionar um Funcionário!",
-					ParametroCrud.getModoCrudDeletar());
+					ParametroCrud.getModoCrudDeletar(), meio);
 		}
 
 	}
@@ -254,7 +255,7 @@ public class LocalizarFuncionario extends JPanel {
 				.getSelectedItem().toString(), txBusca.getText());
 		DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
 		modelo.setNumRows(0);
-		if (listaFuncionario != null) {
+		if (listaFuncionario != null && listaFuncionario.size() > 0) {
 			for (Funcionario f : listaFuncionario) {
 				modelo.addRow(new String[] {
 						String.valueOf(f.getCodigoFuncionario()),
@@ -270,7 +271,7 @@ public class LocalizarFuncionario extends JPanel {
 			listaFuncionario = new ArrayList<Funcionario>();
 			Menssage.setMenssage("Funcionário não Encontrado",
 					"Nenhum Funcionário foi encontrado!",
-					ParametroCrud.getModoCrudDeletar());
+					ParametroCrud.getModoCrudDeletar(), meio);
 		}
 	}
 }

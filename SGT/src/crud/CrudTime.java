@@ -266,11 +266,11 @@ public class CrudTime extends JPanel {
 			    		pLogo.repaint();
 			    	}else{
 			    		logo = null;
-			    		Menssage.setMenssage("Imagem Inválida", "Imagem selecionada deve ter o tamanho 50 X 50", ParametroCrud.getModoCrudDeletar());
+			    		Menssage.setMenssage("Imagem Inválida", "Imagem selecionada deve ter o tamanho 50 X 50", ParametroCrud.getModoCrudDeletar(), meio);
 			    		limparLogo();
 			    	}
 		    	}else{
-		    		Menssage.setMenssage("Imagem Inválida", "Arquivo selecionado deve ser uma \nImagem do tipo '.PNG, .GIF, .JPG ou .JPEG'", ParametroCrud.getModoCrudDeletar());
+		    		Menssage.setMenssage("Imagem Inválida", "Arquivo selecionado deve ser uma \nImagem do tipo '.PNG, .GIF, .JPG ou .JPEG'", ParametroCrud.getModoCrudDeletar(), meio);
 		    		logo = null;
 		    		limparLogo();
 		    	}
@@ -447,12 +447,12 @@ public class CrudTime extends JPanel {
 			meio.add(btAddJogador);
 			btAddJogador.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					DialogLocalizarJogador.localizarJogador();
+					DialogLocalizarJogador.localizarJogador(meio);
 					if(DialogLocalizarJogador.getJogadorSelecionado() != null){
 						Jogador jogador = DialogLocalizarJogador.getJogadorSelecionado();
 						boolean confirmado = true;
 						MenssageConfirmacao.setMenssage("Adicionar Jogador no Time",
-								"Deseja Adicionar Esse Jogador no Time?\nJogador: "+jogador.getUsuario().getNome()+" "+jogador.getUsuario().getSobreNome(), modoCrud);
+								"Deseja Adicionar Esse Jogador no Time?\nJogador: "+jogador.getUsuario().getNome()+" "+jogador.getUsuario().getSobreNome(), modoCrud, meio);
 						confirmado = MenssageConfirmacao.isConfirmado();
 						if(confirmado){
 							EntityManagerLocal.begin();
@@ -479,7 +479,7 @@ public class CrudTime extends JPanel {
 							Jogador jogadorSelecionado = JogadorDao.getJogador(Integer.parseInt(String.valueOf(tabela.getValueAt(tabela.getSelectedRow(), 0))));
 							boolean confirmado = true;
 							MenssageConfirmacao.setMenssage("Remover Jogador do Time",
-								"Deseja Remover Esse Jogador do Time?\nJogador: "+jogadorSelecionado.getUsuario().getNome()+" "+jogadorSelecionado.getUsuario().getSobreNome(), modoCrud);
+								"Deseja Remover Esse Jogador do Time?\nJogador: "+jogadorSelecionado.getUsuario().getNome()+" "+jogadorSelecionado.getUsuario().getSobreNome(), modoCrud, meio);
 							confirmado = MenssageConfirmacao.isConfirmado();
 							if(confirmado){
 								EntityManagerLocal.begin();
@@ -488,10 +488,10 @@ public class CrudTime extends JPanel {
 								EntityManagerLocal.commit();
 							}
 						} else{
-							Menssage.setMenssage("Jogador não Selecionado", "Deve selecionar um Jogador!", ParametroCrud.getModoCrudDeletar());
+							Menssage.setMenssage("Jogador não Selecionado", "Deve selecionar um Jogador!", ParametroCrud.getModoCrudDeletar(), meio);
 						}
 					} else{
-						Menssage.setMenssage("Jogador não Selecionado", "Deve selecionar um Jogador!", ParametroCrud.getModoCrudDeletar());
+						Menssage.setMenssage("Jogador não Selecionado", "Deve selecionar um Jogador!", ParametroCrud.getModoCrudDeletar(), meio);
 					}
 					atualizarTabela();
 				}
@@ -526,7 +526,7 @@ public class CrudTime extends JPanel {
 
 		if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
 			MenssageConfirmacao.setMenssage("Deletar Time",
-					"Deseja Deletar Esse Time?", modoCrud);
+					"Deseja Deletar Esse Time?", modoCrud, meio);
 			confirmado = MenssageConfirmacao.isConfirmado();
 		}
 
@@ -547,7 +547,7 @@ public class CrudTime extends JPanel {
 						time.setLogo(logo.getName());
 					}catch(Exception e){
 						e.printStackTrace();
-						Menssage.setMenssage("Erro ao mover Logo", "Não foi possivel mover a logo!", ParametroCrud.getModoErro());
+						Menssage.setMenssage("Erro ao mover Logo", "Não foi possivel mover a logo!", ParametroCrud.getModoErro(), meio);
 					}
 				}
 				time.setDescricao(txDescricao.getText());
@@ -567,7 +567,7 @@ public class CrudTime extends JPanel {
 						timeSelecionado.setLogo(logo.getName());
 					}catch(Exception e){
 						e.printStackTrace();
-						Menssage.setMenssage("Erro ao mover Logo", "Não foi possivel mover a logo!", ParametroCrud.getModoErro());
+						Menssage.setMenssage("Erro ao mover Logo", "Não foi possivel mover a logo!", ParametroCrud.getModoErro(), meio);
 					}
 				}
 
@@ -582,7 +582,7 @@ public class CrudTime extends JPanel {
 				EntityManagerLocal.merge(timeSelecionado);
 			}
 			EntityManagerLocal.commit();
-			Menssage.setMenssage(modo, menssage, modoCrud);
+			Menssage.setMenssage(modo, menssage, modoCrud, meio);
 			if (modoCrud == ParametroCrud.getModoCrudNovo()
 					|| modoCrud == ParametroCrud.getModoCrudAlterar()) {
 				menuPai.exibirTime(timeSelecionado);

@@ -20,6 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.RepaintManager;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -50,7 +51,7 @@ public class DialogLocalizarJogador {
 			"RG", "Telefone", "Email" };
 	private static Jogador jogadorSelecionado;
 	private static JDialog dialog;
-	private static Window pai;
+	private static JPanel meio;
 	
 	public DialogLocalizarJogador(){
 		super();
@@ -58,18 +59,18 @@ public class DialogLocalizarJogador {
 		listaJogador = new ArrayList<Jogador>();
 	}
 	
-	public static void localizarJogador() {
+	public static void localizarJogador(JPanel painelPai) {
 		jogadorSelecionado = null;
 		listaJogador = new ArrayList<Jogador>();
 		dialog = new JDialog(Parametros.getPai(), true);
 		dialog.setUndecorated(true);
 		dialog.setLayout(null);
-		dialog.setSize(654, 410);
-		dialog.getContentPane().setBackground(new Color(232, 234, 239));
-		dialog.setLocationRelativeTo(null);
+		dialog.setSize(664, 392);
+		dialog.getContentPane().setBackground(new Color(51, 153, 255));
+		dialog.setLocationRelativeTo(painelPai);
 		
 		JPanel panel = new JPanel();
-		panel.setBorder(new BordaSombreada(new Color(46, 49, 56), new Color(102, 102, 102)));
+		panel.setBorder(new BordaSombreada(new Color(46, 49, 56), new Color(0, 128, 255)));
 		panel.setLayout(null);
 		panel.setSize(dialog.getSize());
 		panel.setBackground(null);
@@ -79,16 +80,17 @@ public class DialogLocalizarJogador {
 		
 		JLabel lbHeader = new JLabel("Localizar Jogador");
 		lbHeader.setHorizontalAlignment(SwingConstants.CENTER);
-		lbHeader.setBounds(0, 10, 654, 30);
+		lbHeader.setBounds(2, 10, 660, 30);
 		lbHeader.setFont(UtilitarioTela.getFont(14));
 		lbHeader.setForeground(UtilitarioTela.getFontColorCrud());
+		lbHeader.setBorder(new BordaSombreada(false, true, false, false));
 		panel.add(lbHeader);
 		
 		JPanel meio = new JPanel();
-		meio.setSize(650, 350);
+		meio.setSize(660, 350);
 		meio.setLayout(null);
-		meio.setLocation(2, 50);
-		meio.setBackground(new Color(232, 234, 239));
+		meio.setLocation(2, 40);
+		meio.setBackground(new Color(224, 224, 224));
 		panel.add(meio);
 		
 		JLabel lbNome = new JLabel("Busca :");
@@ -139,8 +141,8 @@ public class DialogLocalizarJogador {
 		tcm.getColumn(0).setPreferredWidth(60);
 		tcm.getColumn(0).setMinWidth(60);
 		tcm.getColumn(0).setResizable(false);
-		tcm.getColumn(1).setPreferredWidth(170);
-		tcm.getColumn(1).setMinWidth(170);
+		tcm.getColumn(1).setPreferredWidth(180);
+		tcm.getColumn(1).setMinWidth(180);
 		tcm.getColumn(1).setResizable(false);
 		tcm.getColumn(2).setPreferredWidth(100);
 		tcm.getColumn(2).setMinWidth(100);
@@ -163,7 +165,7 @@ public class DialogLocalizarJogador {
 		tabela.getTableHeader().setReorderingAllowed(false);
 		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scroll = new JScrollPane(tabela);
-		scroll.setBounds(2, 45, 646, meio.getHeight() - 85);
+		scroll.setBounds(2, 45, 656, meio.getHeight() - 85);
 		meio.add(scroll);
 
 		JButton btSelecionar = new JButton("Selecionar");
@@ -198,7 +200,6 @@ public class DialogLocalizarJogador {
 		
 		dialog.getContentPane().add(panel);
 		dialog.setVisible(true);
-		localizar();
 	}
 
 	public static Jogador getJogadorSelecionado(){
@@ -211,10 +212,10 @@ public class DialogLocalizarJogador {
 				jogadorSelecionado = JogadorDao.getJogador(Integer.parseInt(String.valueOf(tabela.getValueAt(tabela.getSelectedRow(), 0))));
 				dialog.setVisible(false);
 			} else{
-				Menssage.setMenssage("Jogador não Selecionado", "Deve selecionar um Jogador!", ParametroCrud.getModoCrudDeletar());
+				Menssage.setMenssage("Jogador não Selecionado", "Deve selecionar um Jogador!", ParametroCrud.getModoCrudDeletar(), dialog.getContentPane());
 			}
 		} else{
-			Menssage.setMenssage("Jogador não Selecionado", "Deve selecionar um Jogador!", ParametroCrud.getModoCrudDeletar());
+			Menssage.setMenssage("Jogador não Selecionado", "Deve selecionar um Jogador!", ParametroCrud.getModoCrudDeletar(), dialog.getContentPane());
 		}
 	}
 
@@ -244,13 +245,8 @@ public class DialogLocalizarJogador {
 			}
 		} else {
 			listaJogador = new ArrayList<Jogador>();
-			Menssage.setMenssage("Jogador não Encontrado", "Nenhum Jogador foi encontrado!", ParametroCrud.getModoCrudDeletar());
+			Menssage.setMenssage("Jogador não Encontrado", "Nenhum Jogador foi encontrado!", ParametroCrud.getModoCrudDeletar(), dialog.getContentPane());
 		}
 	}
 	
-	public static void main(String [] args){
-		DialogLocalizarJogador.localizarJogador();
-	}
-
-
 }

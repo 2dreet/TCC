@@ -13,9 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import crud.CrudJogador;
-import entidade.Jogador;
-import entidade.Usuario;
+import crud.CrudMarca;
 import tela.HomeFuncionario;
 import utilitario.BordaEscura;
 import utilitario.ParametroCrud;
@@ -89,7 +87,11 @@ public class MenuDriver extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btMarca, true);
-				
+				menuMeio.removeAll();
+				CrudMarca c = new CrudMarca(MenuDriver.this);
+				menuMeio.add(c);
+				menuMeio.revalidate();
+				menuMeio.repaint();
 			}
 		});
 		btMarca.setBounds( 5, 5,  230, 30);
@@ -195,15 +197,7 @@ public class MenuDriver extends JPanel {
 	}
 	
 	
-	public void alterarMenu(Jogador jogador, int modoCrud) {
-		menuMeio.removeAll();
-//		CrudJogador c = new CrudJogador(jogador, modoCrud, this);
-//		menuMeio.add(c);
-//		c.getTxNome().requestFocus();
-		menuMeio.revalidate();
-		menuMeio.repaint();
-	}
-
+	
 	public void zeraSelecao() {
 		
 		btMarca.setIcon(new ImageIcon(HomeFuncionario.class

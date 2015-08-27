@@ -702,7 +702,7 @@ public class CrudFuncionario extends JPanel {
 
 		if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
 			MenssageConfirmacao.setMenssage("Deletar Funcionário",
-					"Deseja Deletar Esse Funcionário?", modoCrud);
+					"Deseja Deletar Esse Funcionário?", modoCrud, meio);
 			confirmado = MenssageConfirmacao.isConfirmado();
 		}
 
@@ -770,7 +770,7 @@ public class CrudFuncionario extends JPanel {
 				EntityManagerLocal.merge(funcionarioSelecionado);
 			}
 			EntityManagerLocal.commit();
-			Menssage.setMenssage(modo, menssage, modoCrud);
+			Menssage.setMenssage(modo, menssage, modoCrud, meio);
 			if (modoCrud == ParametroCrud.getModoCrudNovo()
 					|| modoCrud == ParametroCrud.getModoCrudAlterar()) {
 				menuPai.exibirFuncionario(funcionarioSelecionado);

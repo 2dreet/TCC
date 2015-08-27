@@ -2,6 +2,7 @@ package componente;
 
 //import com.sun.awt.AWTUtilities;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
@@ -24,12 +25,12 @@ import utilitario.Parametros;
 import utilitario.UtilitarioTela;
 
 public class Menssage {
-	public static void setMenssage( String titulo, String menssage, int modoCrud) {
+	public static void setMenssage( String titulo, String menssage, int modoCrud, Container painelPai) {
 		JDialog dialog = new JDialog(Parametros.getPai(), true);
 		dialog.setUndecorated(true);
 		dialog.setLayout(null);
 		dialog.setSize(400, 300);
-		dialog.setLocationRelativeTo(null);
+		dialog.setLocationRelativeTo(painelPai);
 		
 		
 		JPanel panel = new JPanel();

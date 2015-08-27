@@ -21,13 +21,13 @@ public class MenssageConfirmacao {
 	
 	public static boolean confirmado;
 	
-	public static void setMenssage( String titulo, String menssage, int modoCrud) {
+	public static void setMenssage( String titulo, String menssage, int modoCrud, JPanel painelPai) {
 		confirmado = false;
 		JDialog dialog = new JDialog(Parametros.getPai(), true);
 		dialog.setUndecorated(true);
 		dialog.setLayout(null);
 		dialog.setSize(400, 300);
-		dialog.setLocationRelativeTo(null);
+		dialog.setLocationRelativeTo(painelPai);
 		
 		
 		JPanel panel = new JPanel();
@@ -120,25 +120,5 @@ public class MenssageConfirmacao {
 	
 	public static boolean isConfirmado(){
 		return confirmado;
-	}
-	
-	public static void main(String [] args){
-		JFrame j = new JFrame();
-		j.setSize(500, 500);
-		j.setUndecorated(true);
-		j.setLocationRelativeTo(null);
-		JButton b = new JButton("a");
-		b.setSize(100,30);
-		b.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				System.exit(0);
-			}
-		});
-		j.add(b);
-		j.setVisible(true);
-		MenssageConfirmacao.setMenssage( "Cadastro de Jogador", "<html>Jogador Cadastrado com Sucesso!</html>", 1);
-		if(MenssageConfirmacao.isConfirmado()){
-			System.out.print("confirmado");
-		}
 	}
 }

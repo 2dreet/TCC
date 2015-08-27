@@ -643,7 +643,7 @@ public class CrudJogador extends JPanel {
 
 		if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
 			MenssageConfirmacao.setMenssage("Deletar Jogador",
-					"Deseja Deletar Esse Jogador?", modoCrud);
+					"Deseja Deletar Esse Jogador?", modoCrud, meio);
 			confirmado = MenssageConfirmacao.isConfirmado();
 		}
 
@@ -709,7 +709,7 @@ public class CrudJogador extends JPanel {
 				EntityManagerLocal.merge(jogadorSelecionado);
 			}
 			EntityManagerLocal.commit();
-			Menssage.setMenssage(modo, menssage, modoCrud);
+			Menssage.setMenssage(modo, menssage, modoCrud, meio);
 			if (modoCrud == ParametroCrud.getModoCrudNovo()
 					|| modoCrud == ParametroCrud.getModoCrudAlterar()) {
 				menuPai.exibirJogador(jogadorSelecionado);

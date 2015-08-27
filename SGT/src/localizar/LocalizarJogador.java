@@ -65,7 +65,8 @@ public class LocalizarJogador extends JPanel {
 			"RG", "Telefone", "Email" };
 	private Jogador jogadorSelecionado;
 	private MenuJogador menuPai;
-
+	private JPanel meio;
+	
 	/**
 	 * Create the panel.
 	 */
@@ -99,7 +100,7 @@ public class LocalizarJogador extends JPanel {
 		lblHeader.setForeground(UtilitarioTela.getFontColorCrud());
 		header.add(lblHeader);
 
-		JPanel meio = new JPanel();
+		meio = new JPanel();
 		meio.setSize(650, getHeight() - 50);
 		meio.setLocation((getWidth() / 2) - 400, 40);
 		meio.setLayout(null);
@@ -229,12 +230,12 @@ public class LocalizarJogador extends JPanel {
 			} else {
 				Menssage.setMenssage("Jogador não Selecionado",
 						"Deve selecionar um Jogador!",
-						ParametroCrud.getModoCrudDeletar());
+						ParametroCrud.getModoCrudDeletar(), meio);
 			}
 		} else {
 			Menssage.setMenssage("Jogador não Selecionado",
 					"Deve selecionar um Jogador!",
-					ParametroCrud.getModoCrudDeletar());
+					ParametroCrud.getModoCrudDeletar(), meio);
 		}
 	}
 
@@ -247,7 +248,7 @@ public class LocalizarJogador extends JPanel {
 				.getSelectedItem().toString(), txBusca.getText());
 		DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
 		modelo.setNumRows(0);
-		if (listaJogador != null) {
+		if (listaJogador != null && listaJogador.size() > 0) {
 			for (Jogador j : listaJogador) {
 				modelo.addRow(new String[] {
 						String.valueOf(j.getCodigoJogador()),
@@ -263,7 +264,7 @@ public class LocalizarJogador extends JPanel {
 			listaJogador = new ArrayList<Jogador>();
 			Menssage.setMenssage("Jogador não Encontrado",
 					"Nenhum Jogador foi encontrado!",
-					ParametroCrud.getModoCrudDeletar());
+					ParametroCrud.getModoCrudDeletar(), meio);
 		}
 	}
 }
