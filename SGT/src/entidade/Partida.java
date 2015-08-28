@@ -65,6 +65,8 @@ public class Partida implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "partida")
     private Collection<Campeonatopartida> campeonatopartidaCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "partida")
+    private Collection<Jogadorpartida> jogadorpartidaCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "partida")
     private Collection<Pcpartida> pcpartidaCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "partida")
     private Collection<Timepartida> timepartidaCollection;
@@ -147,6 +149,15 @@ public class Partida implements Serializable {
     }
 
     @XmlTransient
+    public Collection<Jogadorpartida> getJogadorpartidaCollection() {
+        return jogadorpartidaCollection;
+    }
+
+    public void setJogadorpartidaCollection(Collection<Jogadorpartida> jogadorpartidaCollection) {
+        this.jogadorpartidaCollection = jogadorpartidaCollection;
+    }
+
+    @XmlTransient
     public Collection<Pcpartida> getPcpartidaCollection() {
         return pcpartidaCollection;
     }
@@ -186,7 +197,7 @@ public class Partida implements Serializable {
 
     @Override
     public String toString() {
-        return "criaentidades.Partida[ codigoPartida=" + codigoPartida + " ]";
+        return "entidade.Partida[ codigoPartida=" + codigoPartida + " ]";
     }
     
 }

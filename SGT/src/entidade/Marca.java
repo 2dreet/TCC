@@ -46,8 +46,6 @@ public class Marca implements Serializable {
     @Column(name = "ativo")
     private boolean ativo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "marca")
-    private Collection<Marcaperiferico> marcaperifericoCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "marca")
     private Collection<Driver> driverCollection;
 
     public Marca() {
@@ -87,15 +85,6 @@ public class Marca implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Marcaperiferico> getMarcaperifericoCollection() {
-        return marcaperifericoCollection;
-    }
-
-    public void setMarcaperifericoCollection(Collection<Marcaperiferico> marcaperifericoCollection) {
-        this.marcaperifericoCollection = marcaperifericoCollection;
-    }
-
-    @XmlTransient
     public Collection<Driver> getDriverCollection() {
         return driverCollection;
     }
@@ -126,7 +115,7 @@ public class Marca implements Serializable {
 
     @Override
     public String toString() {
-        return "criaentidades.Marca[ codigoMarca=" + codigoMarca + " ]";
+        return "entidade.Marca[ codigoMarca=" + codigoMarca + " ]";
     }
     
 }

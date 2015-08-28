@@ -124,7 +124,7 @@ public class Jogadorbanimento implements Serializable {
 
     @Override
     public String toString() {
-        return "criaentidades.Jogadorbanimento[ codigoJogBan=" + codigoJogBan + " ]";
+        return "entidade.Jogadorbanimento[ codigoJogBan=" + codigoJogBan + " ]";
     }
     
 }

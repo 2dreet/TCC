@@ -96,7 +96,7 @@ public class Funcionariocampeonato implements Serializable {
 
     @Override
     public String toString() {
-        return "criaentidades.Funcionariocampeonato[ codigoFuncCamp=" + codigoFuncCamp + " ]";
+        return "entidade.Funcionariocampeonato[ codigoFuncCamp=" + codigoFuncCamp + " ]";
     }
     
 }

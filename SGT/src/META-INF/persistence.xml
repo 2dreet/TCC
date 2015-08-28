@@ -6,32 +6,32 @@
 		<class>entidade.Campeonato</class>
 		<class>entidade.Campeonatopartida</class>
 		<class>entidade.Campeonatotime</class>
-		<class>entidade.Chave</class>
 		<class>entidade.Classificacao</class>
 		<class>entidade.Driver</class>
+		<class>entidade.Chave</class>
 		<class>entidade.Funcionario</class>
-		<class>entidade.Funcionariocampeonato</class>
 		<class>entidade.Jogador</class>
 		<class>entidade.Jogadorbanimento</class>
-		<class>entidade.Jogadorperiferico</class>
+		<class>entidade.Funcionariocampeonato</class>
+		<class>entidade.Jogadorpartida</class>
 		<class>entidade.Marca</class>
-		<class>entidade.Marcaperiferico</class>
-		<class>entidade.Modalidade</class>
 		<class>entidade.Partida</class>
-		<class>entidade.Pcpartida</class>
-		<class>entidade.Time</class>
-		<class>entidade.Timepartida</class>
-		<class>entidade.Pc</class>
-		<class>entidade.Permissao</class>
 		<class>entidade.Periferico</class>
+		<class>entidade.Time</class>
+		<class>entidade.Permissao</class>
 		<class>entidade.Usuario</class>
+		<class>entidade.Pcpartida</class>
+		<class>entidade.Pc</class>
+		<class>entidade.Modalidade</class>
+		<class>entidade.Timepartida</class>
+		<class>entidade.Jogadordriver</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		
 		<properties> 
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" /> 
 			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/gtgs" /> 
-			<property name="javax.persistence.jdbc.user" value="root" /> 
-			<property name="javax.persistence.jdbc.password" value="root" />
+			<property name="javax.persistence.jdbc.user" value="jclan" /> 
+			<property name="javax.persistence.jdbc.password" value="jcuser" />
 		</properties>
 	</persistence-unit>
 </persistence>

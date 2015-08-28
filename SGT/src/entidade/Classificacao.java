@@ -118,7 +118,7 @@ public class Classificacao implements Serializable {
 
     @Override
     public String toString() {
-        return "criaentidades.Classificacao[ codigoClassificacao=" + codigoClassificacao + " ]";
+        return "entidade.Classificacao[ codigoClassificacao=" + codigoClassificacao + " ]";
     }
     
 }

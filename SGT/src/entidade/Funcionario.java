@@ -115,7 +115,7 @@ public class Funcionario implements Serializable {
 
     @Override
     public String toString() {
-        return "criaentidades.Funcionario[ codigoFuncionario=" + codigoFuncionario + " ]";
+        return "entidade.Funcionario[ codigoFuncionario=" + codigoFuncionario + " ]";
     }
     
 }

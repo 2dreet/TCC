@@ -126,7 +126,7 @@ public class Pc implements Serializable {
 
     @Override
     public String toString() {
-        return "criaentidades.Pc[ codigoPC=" + codigoPC + " ]";
+        return "entidade.Pc[ codigoPC=" + codigoPC + " ]";
     }
     
 }

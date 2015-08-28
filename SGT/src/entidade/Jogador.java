@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Jogador.findAll", query = "SELECT j FROM Jogador j"),
     @NamedQuery(name = "Jogador.findByCodigoJogador", query = "SELECT j FROM Jogador j WHERE j.codigoJogador = :codigoJogador"),
-    @NamedQuery(name = "Jogador.findByDataCadastro", query = "SELECT j FROM Jogador j WHERE j.dataCadastro = :dataCadastro")})
+    @NamedQuery(name = "Jogador.findByDataCadastro", query = "SELECT j FROM Jogador j WHERE j.dataCadastro = :dataCadastro"),
+    @NamedQuery(name = "Jogador.findByTitular", query = "SELECT j FROM Jogador j WHERE j.titular = :titular")})
 public class Jogador implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -47,22 +48,32 @@ public class Jogador implements Serializable {
     @Column(name = "dataCadastro")
     @Temporal(TemporalType.DATE)
     private Date dataCadastro;
+    @Basic(optional = false)
+    @Column(name = "titular")
+    private boolean titular;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "jogador")
     private Collection<Jogadorbanimento> jogadorbanimentoCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "jogador")
+    private Collection<Jogadorpartida> jogadorpartidaCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "jogador")
+    private Collection<Jogadordriver> jogadordriverCollection;
     @JoinColumn(name = "codigoUsuario", referencedColumnName = "codigoUsuario")
     @ManyToOne(optional = false)
     private Usuario usuario;
     @JoinColumn(name = "codigoTime", referencedColumnName = "codigoTime")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Time time;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "jogador")
-    private Collection<Jogadorperiferico> jogadorperifericoCollection;
 
     public Jogador() {
     }
 
     public Jogador(Integer codigoJogador) {
         this.codigoJogador = codigoJogador;
+    }
+
+    public Jogador(Integer codigoJogador, boolean titular) {
+        this.codigoJogador = codigoJogador;
+        this.titular = titular;
     }
 
     public Integer getCodigoJogador() {
@@ -81,6 +92,14 @@ public class Jogador implements Serializable {
         this.dataCadastro = dataCadastro;
     }
 
+    public boolean getTitular() {
+        return titular;
+    }
+
+    public void setTitular(boolean titular) {
+        this.titular = titular;
+    }
+
     @XmlTransient
     public Collection<Jogadorbanimento> getJogadorbanimentoCollection() {
         return jogadorbanimentoCollection;
@@ -88,6 +107,24 @@ public class Jogador implements Serializable {
 
     public void setJogadorbanimentoCollection(Collection<Jogadorbanimento> jogadorbanimentoCollection) {
         this.jogadorbanimentoCollection = jogadorbanimentoCollection;
+    }
+
+    @XmlTransient
+    public Collection<Jogadorpartida> getJogadorpartidaCollection() {
+        return jogadorpartidaCollection;
+    }
+
+    public void setJogadorpartidaCollection(Collection<Jogadorpartida> jogadorpartidaCollection) {
+        this.jogadorpartidaCollection = jogadorpartidaCollection;
+    }
+
+    @XmlTransient
+    public Collection<Jogadordriver> getJogadordriverCollection() {
+        return jogadordriverCollection;
+    }
+
+    public void setJogadordriverCollection(Collection<Jogadordriver> jogadordriverCollection) {
+        this.jogadordriverCollection = jogadordriverCollection;
     }
     
     public Usuario getUsuario() {
@@ -106,16 +143,7 @@ public class Jogador implements Serializable {
 		this.time = time;
 	}
 
-	@XmlTransient
-    public Collection<Jogadorperiferico> getJogadorperifericoCollection() {
-        return jogadorperifericoCollection;
-    }
-
-    public void setJogadorperifericoCollection(Collection<Jogadorperiferico> jogadorperifericoCollection) {
-        this.jogadorperifericoCollection = jogadorperifericoCollection;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (codigoJogador != null ? codigoJogador.hashCode() : 0);
@@ -137,7 +165,7 @@ public class Jogador implements Serializable {
 
     @Override
     public String toString() {
-        return "criaentidades.Jogador[ codigoJogador=" + codigoJogador + " ]";
+        return "entidade.Jogador[ codigoJogador=" + codigoJogador + " ]";
     }
     
 }

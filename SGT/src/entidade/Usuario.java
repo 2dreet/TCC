@@ -8,7 +8,6 @@ package entidade;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
-
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,7 +20,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -52,8 +50,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(generator="InvSeq")
-    @SequenceGenerator(name="InvSeq",sequenceName="INV_SEQ", allocationSize=5)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "codigoUsuario")
     private Integer codigoUsuario;
@@ -63,6 +60,7 @@ public class Usuario implements Serializable {
     @Basic(optional = false)
     @Column(name = "sobreNome")
     private String sobreNome;
+    @Basic(optional = false)
     @Column(name = "rg")
     private String rg;
     @Column(name = "cpf")
@@ -78,7 +76,6 @@ public class Usuario implements Serializable {
     @Basic(optional = false)
     @Column(name = "usuario")
     private String usuario;
-    @Basic(optional = false)
     @Column(name = "senha")
     private String senha;
     @Basic(optional = false)
@@ -102,13 +99,13 @@ public class Usuario implements Serializable {
         this.codigoUsuario = codigoUsuario;
     }
 
-    public Usuario(Integer codigoUsuario, String nome, String sobreNome, Date dataNascimento, String usuario, String senha, boolean ativo, int sexo) {
+    public Usuario(Integer codigoUsuario, String nome, String sobreNome, String rg, Date dataNascimento, String usuario, boolean ativo, int sexo) {
         this.codigoUsuario = codigoUsuario;
         this.nome = nome;
         this.sobreNome = sobreNome;
+        this.rg = rg;
         this.dataNascimento = dataNascimento;
         this.usuario = usuario;
-        this.senha = senha;
         this.ativo = ativo;
         this.sexo = sexo;
     }
@@ -208,7 +205,7 @@ public class Usuario implements Serializable {
     public void setSexo(int sexo) {
         this.sexo = sexo;
     }
-
+    
     public Permissao getPermissao() {
 		return permissao;
 	}
@@ -257,7 +254,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "criaentidades.Usuario[ codigoUsuario=" + codigoUsuario + " ]";
+        return "entidade.Usuario[ codigoUsuario=" + codigoUsuario + " ]";
     }
     
 }

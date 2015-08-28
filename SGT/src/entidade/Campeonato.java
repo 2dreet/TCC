@@ -163,7 +163,9 @@ public class Campeonato implements Serializable {
     public void setFuncionariocampeonatoCollection(Collection<Funcionariocampeonato> funcionariocampeonatoCollection) {
         this.funcionariocampeonatoCollection = funcionariocampeonatoCollection;
     }
+
     
+
     public Modalidade getModalidade() {
 		return modalidade;
 	}
@@ -211,7 +213,7 @@ public class Campeonato implements Serializable {
 
     @Override
     public String toString() {
-        return "criaentidades.Campeonato[ codigoCampeonato=" + codigoCampeonato + " ]";
+        return "entidade.Campeonato[ codigoCampeonato=" + codigoCampeonato + " ]";
     }
     
 }

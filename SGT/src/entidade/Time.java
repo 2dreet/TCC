@@ -8,7 +8,6 @@ package entidade;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
-
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -64,7 +63,7 @@ public class Time implements Serializable {
     private Collection<Classificacao> classificacaoCollection1;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "timePrimeiro")
     private Collection<Classificacao> classificacaoCollection2;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "time")
+    @OneToMany(mappedBy = "time")
     private Collection<Jogador> jogadorCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "time")
     private Collection<Timepartida> timepartidaCollection;
@@ -107,7 +106,7 @@ public class Time implements Serializable {
     public void setLogo(String logo) {
         this.logo = logo;
     }
-    
+
     public Date getDataCadastro() {
         return dataCadastro;
     }
@@ -200,7 +199,7 @@ public class Time implements Serializable {
 
     @Override
     public String toString() {
-        return "criaentidades.Time[ codigoTime=" + codigoTime + " ]";
+        return "entidade.Time[ codigoTime=" + codigoTime + " ]";
     }
     
 }

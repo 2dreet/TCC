@@ -72,6 +72,7 @@ public class Campeonatotime implements Serializable {
     public void setDataInscricao(Date dataInscricao) {
         this.dataInscricao = dataInscricao;
     }
+
     
     public Time getTime() {
 		return time;
@@ -111,7 +112,7 @@ public class Campeonatotime implements Serializable {
 
     @Override
     public String toString() {
-        return "criaentidades.Campeonatotime[ codigoCampTime=" + codigoCampTime + " ]";
+        return "entidade.Campeonatotime[ codigoCampTime=" + codigoCampTime + " ]";
     }
     
 }

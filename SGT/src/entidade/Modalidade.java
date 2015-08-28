@@ -115,7 +115,7 @@ public class Modalidade implements Serializable {
 
     @Override
     public String toString() {
-        return "criaentidades.Modalidade[ codigoModalidade=" + codigoModalidade + " ]";
+        return "entidade.Modalidade[ codigoModalidade=" + codigoModalidade + " ]";
     }
     
 }

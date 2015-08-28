@@ -115,7 +115,7 @@ public class Permissao implements Serializable {
 
     @Override
     public String toString() {
-        return "criaentidades.Permissao[ codigoPermissao=" + codigoPermissao + " ]";
+        return "entidade.Permissao[ codigoPermissao=" + codigoPermissao + " ]";
     }
     
 }

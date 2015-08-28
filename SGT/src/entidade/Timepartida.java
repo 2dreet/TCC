@@ -129,7 +129,7 @@ public class Timepartida implements Serializable {
 
     @Override
     public String toString() {
-        return "criaentidades.Timepartida[ codigoTimePartida=" + codigoTimePartida + " ]";
+        return "entidade.Timepartida[ codigoTimePartida=" + codigoTimePartida + " ]";
     }
     
 }

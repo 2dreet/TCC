@@ -115,7 +115,7 @@ public class Chave implements Serializable {
 
     @Override
     public String toString() {
-        return "criaentidades.Chave[ codigoChave=" + codigoChave + " ]";
+        return "entidade.Chave[ codigoChave=" + codigoChave + " ]";
     }
     
 }

@@ -57,6 +57,7 @@ public class Campeonatopartida implements Serializable {
     public void setCodigoCampPartida(Integer codigoCampPartida) {
         this.codigoCampPartida = codigoCampPartida;
     }
+
     
     public Partida getPartida() {
 		return partida;
@@ -96,7 +97,7 @@ public class Campeonatopartida implements Serializable {
 
     @Override
     public String toString() {
-        return "criaentidades.Campeonatopartida[ codigoCampPartida=" + codigoCampPartida + " ]";
+        return "entidade.Campeonatopartida[ codigoCampPartida=" + codigoCampPartida + " ]";
     }
     
 }

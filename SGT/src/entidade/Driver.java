@@ -6,7 +6,9 @@
 package entidade;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,8 +19,10 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -47,12 +51,14 @@ public class Driver implements Serializable {
     @Basic(optional = false)
     @Column(name = "ativo")
     private boolean ativo;
-    @JoinColumn(name = "codigoMarca", referencedColumnName = "codigoMarca")
-    @ManyToOne(optional = false)
-    private Marca marca;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "driver")
+    private Collection<Jogadordriver> jogadordriverCollection;
     @JoinColumn(name = "codigoPeriferico", referencedColumnName = "codigoPeriferico")
     @ManyToOne(optional = false)
     private Periferico periferico;
+    @JoinColumn(name = "codigoMarca", referencedColumnName = "codigoMarca")
+    @ManyToOne(optional = false)
+    private Marca marca;
 
     public Driver() {
     }
@@ -97,21 +103,30 @@ public class Driver implements Serializable {
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
-    
-    public Marca getMarca() {
-		return marca;
-	}
 
-	public void setMarca(Marca marca) {
-		this.marca = marca;
-	}
-	
-	public Periferico getPeriferico() {
+    @XmlTransient
+    public Collection<Jogadordriver> getJogadordriverCollection() {
+        return jogadordriverCollection;
+    }
+
+    public void setJogadordriverCollection(Collection<Jogadordriver> jogadordriverCollection) {
+        this.jogadordriverCollection = jogadordriverCollection;
+    }
+    
+    public Periferico getPeriferico() {
 		return periferico;
 	}
 
 	public void setPeriferico(Periferico periferico) {
 		this.periferico = periferico;
+	}
+
+	public Marca getMarca() {
+		return marca;
+	}
+
+	public void setMarca(Marca marca) {
+		this.marca = marca;
 	}
 
 	@Override
@@ -136,7 +151,7 @@ public class Driver implements Serializable {
 
     @Override
     public String toString() {
-        return "criaentidades.Driver[ codigoDriver=" + codigoDriver + " ]";
+        return "entidade.Driver[ codigoDriver=" + codigoDriver + " ]";
     }
     
 }

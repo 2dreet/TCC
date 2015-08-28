@@ -46,9 +46,7 @@ public class Periferico implements Serializable {
     @Column(name = "ativo")
     private boolean ativo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "periferico")
-    private Collection<Marcaperiferico> marcaperifericoCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "periferico")
-    private Collection<Jogadorperiferico> jogadorperifericoCollection;
+    private Collection<Driver> driverCollection;
 
     public Periferico() {
     }
@@ -87,21 +85,12 @@ public class Periferico implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Marcaperiferico> getMarcaperifericoCollection() {
-        return marcaperifericoCollection;
+    public Collection<Driver> getDriverCollection() {
+        return driverCollection;
     }
 
-    public void setMarcaperifericoCollection(Collection<Marcaperiferico> marcaperifericoCollection) {
-        this.marcaperifericoCollection = marcaperifericoCollection;
-    }
-
-    @XmlTransient
-    public Collection<Jogadorperiferico> getJogadorperifericoCollection() {
-        return jogadorperifericoCollection;
-    }
-
-    public void setJogadorperifericoCollection(Collection<Jogadorperiferico> jogadorperifericoCollection) {
-        this.jogadorperifericoCollection = jogadorperifericoCollection;
+    public void setDriverCollection(Collection<Driver> driverCollection) {
+        this.driverCollection = driverCollection;
     }
 
     @Override
@@ -126,7 +115,7 @@ public class Periferico implements Serializable {
 
     @Override
     public String toString() {
-        return "criaentidades.Periferico[ codigoPeriferico=" + codigoPeriferico + " ]";
+        return "entidade.Periferico[ codigoPeriferico=" + codigoPeriferico + " ]";
     }
     
 }
