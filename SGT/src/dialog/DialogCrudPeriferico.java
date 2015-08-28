@@ -22,24 +22,24 @@ import org.omg.CORBA.TCKind;
 import componente.Menssage;
 import componente.MenssageConfirmacao;
 import dao.EntityManagerLocal;
-import dao.MarcaDao;
+import dao.PerifericoDao;
 import utilitario.BordaSombreada;
 import utilitario.ParametroCrud;
 import utilitario.Parametros;
 import utilitario.UtilitarioTela;
-import entidade.Marca;
+import entidade.Periferico;
 
-public class DialogCrudMarca {
+public class DialogCrudPeriferico {
 	
 	public JTextField txNome;
 	private boolean confirmado;
-	private Marca marcaSelecionada;
+	private Periferico perifericoSelecionado;
 	private JLabel lblMsg;
 	private JPanel msg;
 	private JPanel meio;
 	
-	public void crudMarca(Marca marcaSelecionada, int modoCrud, JPanel painelPai){
-		this.marcaSelecionada = marcaSelecionada;
+	public void crudPeriferico(Periferico perifericoSelecionado, int modoCrud, JPanel painelPai){
+		this.perifericoSelecionado = perifericoSelecionado;
 		
 		JDialog dialog = new JDialog(Parametros.getPai(), true);
 		dialog.setUndecorated(true);
@@ -67,11 +67,11 @@ public class DialogCrudMarca {
 		
 		String textoHeader = "";
 		if (modoCrud == ParametroCrud.getModoCrudNovo()) {
-			textoHeader = "Cadastrar Marca";
+			textoHeader = "Cadastrar Periférico";
 		} else if (modoCrud == ParametroCrud.getModoCrudAlterar()) {
-			textoHeader = "Alterar Marca";
+			textoHeader = "Alterar Periférico";
 		} else if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
-			textoHeader = "Deletar Marca";
+			textoHeader = "Deletar Periférico";
 		} 
 		
 		JLabel lbHeader = new JLabel(textoHeader);
@@ -167,8 +167,8 @@ public class DialogCrudMarca {
 			txNome.setEditable(false);
 		}
 		
-		if(marcaSelecionada != null){
-			txNome.setText(this.marcaSelecionada.getDescricao());
+		if(perifericoSelecionado != null){
+			txNome.setText(this.perifericoSelecionado.getDescricao());
 		}
 		
 		dialog.getContentPane().add(panel);
@@ -197,14 +197,14 @@ public class DialogCrudMarca {
 				txNome.requestFocus();
 				msgErro("Campo Nome é Obrigatório!");
 				return false;
-			} else if(MarcaDao.verificaMarca(txNome.getText())){
+			} else if(PerifericoDao.verificaPeriferico(txNome.getText())){
 				txNome.requestFocus();
-				msgErro("Marca Já Cadastrada!");
+				msgErro("Periferico Já Cadastrado!");
 				return false;
 			}
 		}
 		if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
-			MenssageConfirmacao.setMenssage("Deletar Marca", "Confirma a delecao da marca?\nTodos os vinculos iram ser perdidos\nMarca: "+this.marcaSelecionada.getDescricao(),ParametroCrud.getModoCrudDeletar(), meio);
+			MenssageConfirmacao.setMenssage("Deletar Periferico", "Confirma a delecao do Periferico?\nTodos os vinculos iram ser perdidos\nPeriferico: "+this.perifericoSelecionado.getDescricao(),ParametroCrud.getModoCrudDeletar(), meio);
 			confirmado = MenssageConfirmacao.isConfirmado();
 		}
 		
@@ -212,17 +212,16 @@ public class DialogCrudMarca {
 		if(confirmado){
 			EntityManagerLocal.begin();
 			if (modoCrud == ParametroCrud.getModoCrudNovo()) {
-				Marca marca= new Marca();
-				marca.setDescricao(txNome.getText());
-				marca.setAtivo(true);
-				EntityManagerLocal.persist(marca);
+				Periferico periferico= new Periferico();
+				periferico.setDescricao(txNome.getText());
+				periferico.setAtivo(true);
+				EntityManagerLocal.persist(periferico);
 			} else if(modoCrud == ParametroCrud.getModoCrudAlterar()){
-				marcaSelecionada.setDescricao(txNome.getText());
-				EntityManagerLocal.merge(marcaSelecionada);
+				perifericoSelecionado.setDescricao(txNome.getText());
+				EntityManagerLocal.merge(perifericoSelecionado);
 			} else if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
-				marcaSelecionada.setAtivo(false);
-				MarcaDao.desativarDrivers(marcaSelecionada.getCodigoMarca());
-				EntityManagerLocal.merge(marcaSelecionada);
+				perifericoSelecionado.setAtivo(false);
+				EntityManagerLocal.merge(perifericoSelecionado);
 			}
 			EntityManagerLocal.commit();
 		}

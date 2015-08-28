@@ -13,7 +13,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import crud.CrudDriver;
 import crud.CrudMarca;
+import crud.CrudPeriferico;
 import tela.HomeFuncionario;
 import utilitario.BordaEscura;
 import utilitario.ParametroCrud;
@@ -120,7 +122,11 @@ public class MenuDriver extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btPeriferico, true);
-				
+				menuMeio.removeAll();
+				CrudPeriferico c = new CrudPeriferico(MenuDriver.this);
+				menuMeio.add(c);
+				menuMeio.revalidate();
+				menuMeio.repaint();
 			}
 		});
 		jp2.add(btPeriferico);
@@ -143,6 +149,11 @@ public class MenuDriver extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btDriver, true);
+				menuMeio.removeAll();
+				CrudDriver c = new CrudDriver(MenuDriver.this);
+				menuMeio.add(c);
+				menuMeio.revalidate();
+				menuMeio.repaint();
 			}
 		});
 		jp3.add(btDriver);

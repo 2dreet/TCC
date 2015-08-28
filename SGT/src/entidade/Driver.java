@@ -50,6 +50,9 @@ public class Driver implements Serializable {
     @JoinColumn(name = "codigoMarca", referencedColumnName = "codigoMarca")
     @ManyToOne(optional = false)
     private Marca marca;
+    @JoinColumn(name = "codigoPeriferico", referencedColumnName = "codigoPeriferico")
+    @ManyToOne(optional = false)
+    private Periferico periferico;
 
     public Driver() {
     }
@@ -101,6 +104,14 @@ public class Driver implements Serializable {
 
 	public void setMarca(Marca marca) {
 		this.marca = marca;
+	}
+	
+	public Periferico getPeriferico() {
+		return periferico;
+	}
+
+	public void setPeriferico(Periferico periferico) {
+		this.periferico = periferico;
 	}
 
 	@Override

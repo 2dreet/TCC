@@ -53,7 +53,7 @@ public class MarcaDao {
 		}
 	}
 	
-	public static void desativarPerifericos(int codigoMarca){
+	public static void desativarDrivers(int codigoMarca){
 		try {
 			String sql = "UPDATE driver SET ativo = false WHERE codigoMarca = '"+codigoMarca+"'";
 			EntityManagerLocal.getEntityManager().createNativeQuery(sql).executeUpdate();

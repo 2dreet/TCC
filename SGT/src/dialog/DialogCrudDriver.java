@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -19,6 +20,7 @@ import javax.swing.SwingConstants;
 
 import org.omg.CORBA.TCKind;
 
+import componente.ComboBox;
 import componente.Menssage;
 import componente.MenssageConfirmacao;
 import dao.EntityManagerLocal;
@@ -27,19 +29,23 @@ import utilitario.BordaSombreada;
 import utilitario.ParametroCrud;
 import utilitario.Parametros;
 import utilitario.UtilitarioTela;
+import entidade.Driver;
 import entidade.Marca;
+import entidade.Periferico;
 
-public class DialogCrudMarca {
+public class DialogCrudDriver {
 	
 	public JTextField txNome;
 	private boolean confirmado;
-	private Marca marcaSelecionada;
+	private Driver driverSelecionado;
+	private ComboBox periferico;
+	private ComboBox marca;
 	private JLabel lblMsg;
 	private JPanel msg;
 	private JPanel meio;
 	
-	public void crudMarca(Marca marcaSelecionada, int modoCrud, JPanel painelPai){
-		this.marcaSelecionada = marcaSelecionada;
+	public void crudDriver(Driver driverSelecionado, int modoCrud, JPanel painelPai){
+		this.driverSelecionado = driverSelecionado;
 		
 		JDialog dialog = new JDialog(Parametros.getPai(), true);
 		dialog.setUndecorated(true);
@@ -67,11 +73,11 @@ public class DialogCrudMarca {
 		
 		String textoHeader = "";
 		if (modoCrud == ParametroCrud.getModoCrudNovo()) {
-			textoHeader = "Cadastrar Marca";
+			textoHeader = "Cadastrar Driver";
 		} else if (modoCrud == ParametroCrud.getModoCrudAlterar()) {
-			textoHeader = "Alterar Marca";
+			textoHeader = "Alterar Driver";
 		} else if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
-			textoHeader = "Deletar Marca";
+			textoHeader = "Deletar Driver";
 		} 
 		
 		JLabel lbHeader = new JLabel(textoHeader);
@@ -167,8 +173,8 @@ public class DialogCrudMarca {
 			txNome.setEditable(false);
 		}
 		
-		if(marcaSelecionada != null){
-			txNome.setText(this.marcaSelecionada.getDescricao());
+		if(driverSelecionado != null){
+			txNome.setText(this.driverSelecionado.getDescricao());
 		}
 		
 		dialog.getContentPane().add(panel);
@@ -204,7 +210,7 @@ public class DialogCrudMarca {
 			}
 		}
 		if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
-			MenssageConfirmacao.setMenssage("Deletar Marca", "Confirma a delecao da marca?\nTodos os vinculos iram ser perdidos\nMarca: "+this.marcaSelecionada.getDescricao(),ParametroCrud.getModoCrudDeletar(), meio);
+			MenssageConfirmacao.setMenssage("Deletar Driver", "Confirma a delecao do Driver?\nDriver: "+this.driverSelecionado.getDescricao(),ParametroCrud.getModoCrudDeletar(), meio);
 			confirmado = MenssageConfirmacao.isConfirmado();
 		}
 		
@@ -212,17 +218,16 @@ public class DialogCrudMarca {
 		if(confirmado){
 			EntityManagerLocal.begin();
 			if (modoCrud == ParametroCrud.getModoCrudNovo()) {
-				Marca marca= new Marca();
-				marca.setDescricao(txNome.getText());
-				marca.setAtivo(true);
-				EntityManagerLocal.persist(marca);
+				Driver driver= new Driver();
+				driver.setDescricao(txNome.getText());
+				driver.setAtivo(true);
+				EntityManagerLocal.persist(driver);
 			} else if(modoCrud == ParametroCrud.getModoCrudAlterar()){
-				marcaSelecionada.setDescricao(txNome.getText());
-				EntityManagerLocal.merge(marcaSelecionada);
+				driverSelecionado.setDescricao(txNome.getText());
+				EntityManagerLocal.merge(driverSelecionado);
 			} else if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
-				marcaSelecionada.setAtivo(false);
-				MarcaDao.desativarDrivers(marcaSelecionada.getCodigoMarca());
-				EntityManagerLocal.merge(marcaSelecionada);
+				driverSelecionado.setAtivo(false);
+				EntityManagerLocal.merge(driverSelecionado);
 			}
 			EntityManagerLocal.commit();
 		}
