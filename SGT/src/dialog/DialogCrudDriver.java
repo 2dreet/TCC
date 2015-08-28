@@ -9,14 +9,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.List;
+import java.util.Vector;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.omg.CORBA.TCKind;
 
@@ -25,9 +29,11 @@ import componente.Menssage;
 import componente.MenssageConfirmacao;
 import dao.EntityManagerLocal;
 import dao.MarcaDao;
+import dao.PerifericoDao;
 import utilitario.BordaSombreada;
 import utilitario.ParametroCrud;
 import utilitario.Parametros;
+import utilitario.UtilitarioLogo;
 import utilitario.UtilitarioTela;
 import entidade.Driver;
 import entidade.Marca;
@@ -38,8 +44,8 @@ public class DialogCrudDriver {
 	public JTextField txNome;
 	private boolean confirmado;
 	private Driver driverSelecionado;
-	private ComboBox periferico;
-	private ComboBox marca;
+	private ComboBox cbPeriferico;
+	private ComboBox cbMarca;
 	private JLabel lblMsg;
 	private JPanel msg;
 	private JPanel meio;
@@ -50,7 +56,7 @@ public class DialogCrudDriver {
 		JDialog dialog = new JDialog(Parametros.getPai(), true);
 		dialog.setUndecorated(true);
 		dialog.setLayout(null);
-		dialog.setSize(400, 220);
+		dialog.setSize(400, 320);
 		dialog.getContentPane().setBackground(new Color(232, 234, 239));
 		dialog.setLocationRelativeTo(painelPai);
 		
@@ -89,21 +95,22 @@ public class DialogCrudDriver {
 		header.add(lbHeader);
 		
 		meio = new JPanel();
-		meio.setSize(396, 188);
+		meio.setSize(396, 220);
 		meio.setLayout(null);
 		meio.setLocation(2, 30);
-		meio.setBackground(new Color(232, 234, 239));
+//		meio.setBackground(new Color(232, 234, 239));
+		meio.setBackground(Color.red);
 		panel.add(meio);
 		
 		JLabel lbNome = new JLabel("Nome :");
-		lbNome.setBounds(20, 30, 50, 20);
+		lbNome.setBounds(20, 10, 50, 20);
 		lbNome.setFont(UtilitarioTela.getFont(14));
 		lbNome.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbNome);
 		
 		txNome = new JTextField();
 		txNome.setColumns(100);
-		txNome.setBounds(80, 30, 270, 25);
+		txNome.setBounds(110, 10, 270, 25);
 		txNome.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -118,6 +125,28 @@ public class DialogCrudDriver {
 		txNome.setLayout(null);
 		txNome.setBorder(UtilitarioTela.jTextFieldNormal());
 		meio.add(txNome);
+		
+		JLabel lbPeriferico = new JLabel("Periférico :");
+		lbPeriferico.setBounds(20, 45, 90, 20);
+		lbPeriferico.setFont(UtilitarioTela.getFont(14));
+		lbPeriferico.setForeground(UtilitarioTela.getFontColorCrud());
+		meio.add(lbPeriferico);
+		
+		cbPeriferico = new ComboBox(new Dimension(150, 25));
+		cbPeriferico.setModel(new DefaultComboBoxModel(PerifericoDao.getVetorPeriferico()));
+		cbPeriferico.setLocation(110, 45);
+		meio.add(cbPeriferico);
+		
+		JLabel lbMarca = new JLabel("Marca :");
+		lbMarca.setBounds(20, 80, 80, 20);
+		lbMarca.setFont(UtilitarioTela.getFont(14));
+		lbMarca.setForeground(UtilitarioTela.getFontColorCrud());
+		meio.add(lbMarca);
+		
+		cbMarca = new ComboBox(new Dimension(150, 25));
+		cbMarca.setModel(new DefaultComboBoxModel(MarcaDao.getVetorMarca()));
+		cbMarca.setLocation(110, 80);
+		meio.add(cbMarca);
 		
 		msg = new JPanel();
 		msg.setSize(396, 35);
@@ -136,7 +165,7 @@ public class DialogCrudDriver {
 		
 		JButton confirmar = new JButton(texto);
 		confirmar.setSize(150,30);
-		confirmar.setLocation(20, 130);
+		confirmar.setLocation(20, 160);
 		confirmar.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudNovo()));
 		confirmar.setFocusPainted(false);
 		 if (modoCrud != ParametroCrud.getModoCrudDeletar()) {
@@ -154,7 +183,7 @@ public class DialogCrudDriver {
 		
 		JButton cancelar = new JButton("Cancelar");
 		cancelar.setSize(150,30);
-		cancelar.setLocation(223, 130);
+		cancelar.setLocation(223, 160);
 		cancelar.setBackground(UtilitarioTela.getFundoLocalizar());
 		cancelar.setFocusPainted(false);
 		cancelar.setIcon(new ImageIcon(Menssage.class.getResource("/imagem/cancelBlack.png")));
@@ -242,6 +271,25 @@ public class DialogCrudDriver {
 		return txNome;
 	}
 	
-	
+	public void localizarLogo(){
+		try{
+			JFileChooser chooser = new JFileChooser();    
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("Imagens Png", "png");   
+		    chooser.setFileFilter(filter);    
+		    int returnVal = chooser.showOpenDialog(meio);   
+		    if(returnVal == JFileChooser.APPROVE_OPTION) {    
+		    	String extencao = chooser.getSelectedFile().getName();
+		    	if(extencao.length() > 0 && UtilitarioLogo.validarLogo(extencao)){
+		    		
+		    	}else{
+		    		Menssage.setMenssage("Imagem Inválida", "Arquivo selecionado deve ser uma \nImagem do tipo '.PNG, .GIF, .JPG ou .JPEG'", ParametroCrud.getModoCrudDeletar(), meio);
+		    		
+		    	}
+		           
+		    }  
+		}catch(Exception e){
+			
+		}
+	}
 	
 }

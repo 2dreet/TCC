@@ -34,9 +34,6 @@ public class DriverDao {
 			
 			String sql = "SELECT * FROM driver "
 					+ " where "+condicao+" AND ativo = true";
-			
-			System.out.println(sql);
-			
 			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Driver.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
 		} catch (NoResultException ex) {
 			return null;

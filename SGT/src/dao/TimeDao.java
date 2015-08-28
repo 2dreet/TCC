@@ -25,8 +25,6 @@ public class TimeDao {
 			String sql = "SELECT * FROM time "
 					+ " where "+condicao+" AND ativo = true";
 			
-			System.out.println(sql);
-			
 			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Time.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
 		} catch (NoResultException ex) {
 			return null;

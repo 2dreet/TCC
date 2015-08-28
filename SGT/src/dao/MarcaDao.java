@@ -8,6 +8,7 @@ import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 
 import entidade.Marca;
+import entidade.Periferico;
 
 public class MarcaDao {
 
@@ -30,15 +31,38 @@ public class MarcaDao {
 			} else if (metodoPesquisa.equals("Descrição")){
 				condicao = " descricao like '%"+valorPesquisa+"%'";
 			} 
-			
 			String sql = "SELECT * FROM marca "
 					+ " where "+condicao+" AND ativo = true";
-			
-			System.out.println(sql);
-			
 			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Marca.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
 		} catch (NoResultException ex) {
 			return null;
+		}
+	}
+	
+	public static List<Marca> getListaMarca(){
+		try {
+			String sql = "SELECT * FROM marca "
+					+ " where ativo = true";
+			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Marca.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
+	public static Object[] getVetorMarca(){
+		List<Marca> listaMarca = getListaMarca();
+		Object [] listaAux;
+		if(listaMarca !=null && listaMarca.size() > 0){
+			listaAux = new Object [listaMarca.size()];
+			int i = 0;
+			for(Marca m : listaMarca){
+				listaAux[i] = m.getDescricao();
+				i++;
+			}
+			return  listaAux;
+		}else{
+			listaAux = new Object [0];
+			return listaAux;
 		}
 	}
 	

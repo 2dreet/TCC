@@ -35,8 +35,6 @@ public class FuncionarioDao {
 					+ "	ON f.codigoUsuario = u.codigoUsuario"
 					+ " where "+condicao+" AND u.ativo = true";
 			
-			System.out.println(sql);
-			
 			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Funcionario.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
 		} catch (NoResultException ex) {
 			return null;

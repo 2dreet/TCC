@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Pc.findAll", query = "SELECT p FROM Pc p"),
     @NamedQuery(name = "Pc.findByCodigoPC", query = "SELECT p FROM Pc p WHERE p.codigoPC = :codigoPC"),
     @NamedQuery(name = "Pc.findByDescricao", query = "SELECT p FROM Pc p WHERE p.descricao = :descricao"),
-    @NamedQuery(name = "Pc.findByMac", query = "SELECT p FROM Pc p WHERE p.mac = :mac"),
+    @NamedQuery(name = "Pc.findByIp", query = "SELECT p FROM Pc p WHERE p.ip = :ip"),
     @NamedQuery(name = "Pc.findByAtivo", query = "SELECT p FROM Pc p WHERE p.ativo = :ativo")})
 public class Pc implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -43,8 +43,8 @@ public class Pc implements Serializable {
     private Integer codigoPC;
     @Column(name = "descricao")
     private String descricao;
-    @Column(name = "mac")
-    private String mac;
+    @Column(name = "ip")
+    private String ip;
     @Basic(optional = false)
     @Column(name = "ativo")
     private boolean ativo;
@@ -79,12 +79,12 @@ public class Pc implements Serializable {
         this.descricao = descricao;
     }
 
-    public String getMac() {
-        return mac;
+    public String getIp() {
+        return ip;
     }
 
-    public void setMac(String mac) {
-        this.mac = mac;
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 
     public boolean getAtivo() {

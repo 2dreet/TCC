@@ -34,11 +34,38 @@ public class PerifericoDao {
 			String sql = "SELECT * FROM periferico "
 					+ " where "+condicao+" AND ativo = true";
 			
-			System.out.println(sql);
 			
 			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Periferico.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
 		} catch (NoResultException ex) {
 			return null;
+		}
+	}
+	
+	public static List<Periferico> getListaPeriferico(){
+		try {
+			String sql = "SELECT * FROM periferico "
+					+ " where ativo = true";
+			
+			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Periferico.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
+	public static Object[] getVetorPeriferico(){
+		List<Periferico> listaPeriferico = getListaPeriferico();
+		Object [] listaAux;
+		if(listaPeriferico !=null && listaPeriferico.size() > 0){
+			listaAux = new Object [listaPeriferico.size()];
+			int i = 0;
+			for(Periferico p : listaPeriferico){
+				listaAux[i] = p.getDescricao();
+				i++;
+			}
+			return  listaAux;
+		}else{
+			listaAux = new Object [0];
+			return listaAux;
 		}
 	}
 	
