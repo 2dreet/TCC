@@ -45,7 +45,7 @@ import javax.swing.JTextArea;
 
 import menu.MenuCampeonato;
 import menu.MenuComputador;
-import menu.MenuDriver;
+import menu.MenuConfiguracoes;
 import menu.MenuFuncionario;
 import menu.MenuHome;
 import menu.MenuJogador;
@@ -198,7 +198,7 @@ public class HomeFuncionario extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btDriver, true);
-				abreMenu(new MenuDriver());
+				abreMenu(new MenuConfiguracoes());
 			}
 		});
 		menuIconesTopo.add(btDriver);

@@ -197,7 +197,11 @@ public class DialogCrudMarca {
 				txNome.requestFocus();
 				msgErro("Campo Nome é Obrigatório!");
 				return false;
-			} else if(MarcaDao.verificaMarca(txNome.getText())){
+			} else if(MarcaDao.verificaMarca(txNome.getText()) && marcaSelecionada != null && !marcaSelecionada.getDescricao().equals(txNome.getText())){
+				txNome.requestFocus();
+				msgErro("Marca Já Cadastrada!");
+				return false;
+			} else if(MarcaDao.verificaMarca(txNome.getText()) && marcaSelecionada == null){
 				txNome.requestFocus();
 				msgErro("Marca Já Cadastrada!");
 				return false;

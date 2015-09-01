@@ -15,6 +15,7 @@ import javax.swing.SwingConstants;
 
 import crud.CrudDriver;
 import crud.CrudMarca;
+import crud.CrudModalidade;
 import crud.CrudPeriferico;
 import tela.HomeFuncionario;
 import utilitario.BordaEscura;
@@ -26,7 +27,7 @@ import java.awt.Font;
 
 import localizar.LocalizarJogador;
 
-public class MenuDriver extends JPanel {
+public class MenuConfiguracoes extends JPanel {
 
 	/**
 	 * Create the panel.
@@ -35,8 +36,10 @@ public class MenuDriver extends JPanel {
 	private JButton btMarca;
 	private JButton btPeriferico;
 	private JButton btDriver;
+	private JButton btModalidade;
+	private JButton btBanimento;
 	
-	public MenuDriver() {
+	public MenuConfiguracoes() {
 		setSize(UtilitarioTela.getTamanhoMenuBaixo());
 		setBackground(null);
 		setLayout(null);
@@ -57,7 +60,7 @@ public class MenuDriver extends JPanel {
 		menuLateral.add(menuLateralTopo);
 		menuLateralTopo.setLayout(null);
 
-		JLabel tituloMenu = new JLabel("Periférico");
+		JLabel tituloMenu = new JLabel("Configurações");
 		tituloMenu.setForeground(Color.DARK_GRAY);
 		tituloMenu.setFont(new Font("SansSerif", Font.BOLD, 18));
 		tituloMenu.setHorizontalAlignment(SwingConstants.CENTER);
@@ -90,7 +93,7 @@ public class MenuDriver extends JPanel {
 				zeraSelecao();
 				getIcon(btMarca, true);
 				menuMeio.removeAll();
-				CrudMarca c = new CrudMarca(MenuDriver.this);
+				CrudMarca c = new CrudMarca(MenuConfiguracoes.this);
 				menuMeio.add(c);
 				menuMeio.revalidate();
 				menuMeio.repaint();
@@ -123,7 +126,7 @@ public class MenuDriver extends JPanel {
 				zeraSelecao();
 				getIcon(btPeriferico, true);
 				menuMeio.removeAll();
-				CrudPeriferico c = new CrudPeriferico(MenuDriver.this);
+				CrudPeriferico c = new CrudPeriferico(MenuConfiguracoes.this);
 				menuMeio.add(c);
 				menuMeio.revalidate();
 				menuMeio.repaint();
@@ -150,7 +153,7 @@ public class MenuDriver extends JPanel {
 				zeraSelecao();
 				getIcon(btDriver, true);
 				menuMeio.removeAll();
-				CrudDriver c = new CrudDriver(MenuDriver.this);
+				CrudDriver c = new CrudDriver(MenuConfiguracoes.this);
 				menuMeio.add(c);
 				menuMeio.revalidate();
 				menuMeio.repaint();
@@ -165,12 +168,52 @@ public class MenuDriver extends JPanel {
 		jp4.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp4);
 		
+		btModalidade = new JButton("Modalidade");
+		btModalidade.setBounds(5, 5, 230, 30);
+		btModalidade.setBorderPainted(false);
+		btModalidade.setBackground(null);
+		btModalidade.setLayout(null);
+		btModalidade.setName("modalidade");
+		btModalidade.setHorizontalAlignment(SwingConstants.LEFT);
+		btModalidade.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				zeraSelecao();
+				getIcon(btModalidade, true);
+				menuMeio.removeAll();
+				CrudModalidade c = new CrudModalidade(MenuConfiguracoes.this);
+				menuMeio.add(c);
+				menuMeio.revalidate();
+				menuMeio.repaint();
+			}
+		});
+		jp4.add(btModalidade);
+		
 		JPanel jp5 = new JPanel();
 		jp5.setBounds(0, 160, 240, 40);
 		jp5.setBackground(null);
 		jp5.setLayout(null);
 		jp5.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp5);
+		
+		btBanimento = new JButton("Banimento");
+		btBanimento.setBounds(5, 5, 230, 30);
+		btBanimento.setBorderPainted(false);
+		btBanimento.setBackground(null);
+		btBanimento.setLayout(null);
+		btBanimento.setName("banimento");
+		btBanimento.setHorizontalAlignment(SwingConstants.LEFT);
+		btBanimento.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				zeraSelecao();
+				getIcon(btBanimento, true);
+				menuMeio.removeAll();
+//				CrudDriver c = new CrudDriver(MenuConfiguracoes.this);
+//				menuMeio.add(c);
+				menuMeio.revalidate();
+				menuMeio.repaint();
+			}
+		});
+		jp5.add(btBanimento);
 		
 		JPanel jp6 = new JPanel();
 		jp6.setBounds(0, 200, 240, 40);
@@ -189,16 +232,24 @@ public class MenuDriver extends JPanel {
 		getIcon(btMarca, false);
 		getIcon(btPeriferico, false);
 		getIcon(btDriver, false);
+		getIcon(btBanimento, false);
+		getIcon(btModalidade, false);
 		
 		btMarca.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
 		btPeriferico.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
 		btDriver.setForeground(UtilitarioTela.getFontColorSelecao(false));
+		btBanimento.setForeground(UtilitarioTela
+				.getFontColorSelecao(false));
+		btModalidade.setForeground(UtilitarioTela
+				.getFontColorSelecao(false));
 		
 		btMarca.setFont(UtilitarioTela.getFont(14));
 		btPeriferico.setFont(UtilitarioTela.getFont(14));
 		btDriver.setFont(UtilitarioTela.getFont(14));
+		btBanimento.setFont(UtilitarioTela.getFont(14));
+		btModalidade.setFont(UtilitarioTela.getFont(14));
 		
 		
 	}
@@ -226,6 +277,16 @@ public class MenuDriver extends JPanel {
 		btDriver.setBackground(UtilitarioTela.getBtnFundo(false));
 		btDriver.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
+		
+		btModalidade.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/crud/peri.png")));
+		btModalidade.setBackground(UtilitarioTela.getBtnFundo(false));
+		btModalidade.setForeground(UtilitarioTela.getFontColorSelecao(false));
+		
+		btBanimento.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/crud/peri.png")));
+		btBanimento.setBackground(UtilitarioTela.getBtnFundo(false));
+		btBanimento.setForeground(UtilitarioTela.getFontColorSelecao(false));
 	}
 
 	public void getIcon(JButton botao, boolean selecionado) {
@@ -246,6 +307,20 @@ public class MenuDriver extends JPanel {
 				}
 			}
 			if (botao.getName().equals("driver")) {
+				if (selecionado) {
+					url = "/imagem/crud/driverSelect.png";
+				} else {
+					url = "/imagem/crud/driver.png";
+				}
+			}
+			if (botao.getName().equals("modalidade")) {
+				if (selecionado) {
+					url = "/imagem/crud/driverSelect.png";
+				} else {
+					url = "/imagem/crud/driver.png";
+				}
+			}
+			if (botao.getName().equals("banimento")) {
 				if (selecionado) {
 					url = "/imagem/crud/driverSelect.png";
 				} else {

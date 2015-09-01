@@ -236,7 +236,8 @@ public class DialogCrudDriver {
 				txNome.requestFocus();
 				msgErro("Marca Já Cadastrada!");
 				return false;
-			}
+			} 
+			
 		}
 		if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
 			MenssageConfirmacao.setMenssage("Deletar Driver", "Confirma a delecao do Driver?\nDriver: "+this.driverSelecionado.getDescricao(),ParametroCrud.getModoCrudDeletar(), meio);

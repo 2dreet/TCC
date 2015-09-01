@@ -6,6 +6,7 @@
 package entidade;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -30,6 +33,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Jogadorbanimento.findAll", query = "SELECT j FROM Jogadorbanimento j"),
     @NamedQuery(name = "Jogadorbanimento.findByCodigoJogBan", query = "SELECT j FROM Jogadorbanimento j WHERE j.codigoJogBan = :codigoJogBan"),
     @NamedQuery(name = "Jogadorbanimento.findByDescricao", query = "SELECT j FROM Jogadorbanimento j WHERE j.descricao = :descricao"),
+    @NamedQuery(name = "Jogadorbanimento.findByDataBanimento", query = "SELECT j FROM Jogadorbanimento j WHERE j.dataBanimento = :dataBanimento"),
+    @NamedQuery(name = "Jogadorbanimento.findByDataSaidaBanimento", query = "SELECT j FROM Jogadorbanimento j WHERE j.dataSaidaBanimento = :dataSaidaBanimento"),
     @NamedQuery(name = "Jogadorbanimento.findByAtivo", query = "SELECT j FROM Jogadorbanimento j WHERE j.ativo = :ativo")})
 public class Jogadorbanimento implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -40,6 +45,12 @@ public class Jogadorbanimento implements Serializable {
     private Integer codigoJogBan;
     @Column(name = "descricao")
     private String descricao;
+    @Column(name = "dataBanimento")
+    @Temporal(TemporalType.DATE)
+    private Date dataBanimento;
+    @Column(name = "dataSaidaBanimento")
+    @Temporal(TemporalType.DATE)
+    private Date dataSaidaBanimento;
     @Basic(optional = false)
     @Column(name = "ativo")
     private boolean ativo;
@@ -78,6 +89,22 @@ public class Jogadorbanimento implements Serializable {
         this.descricao = descricao;
     }
 
+    public Date getDataBanimento() {
+        return dataBanimento;
+    }
+
+    public void setDataBanimento(Date dataBanimento) {
+        this.dataBanimento = dataBanimento;
+    }
+
+    public Date getDataSaidaBanimento() {
+        return dataSaidaBanimento;
+    }
+
+    public void setDataSaidaBanimento(Date dataSaidaBanimento) {
+        this.dataSaidaBanimento = dataSaidaBanimento;
+    }
+
     public boolean getAtivo() {
         return ativo;
     }
@@ -85,7 +112,7 @@ public class Jogadorbanimento implements Serializable {
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
-    
+
     public Jogador getJogador() {
 		return jogador;
 	}

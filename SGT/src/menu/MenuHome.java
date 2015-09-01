@@ -3,44 +3,44 @@ package menu;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import crud.CrudDriver;
+import crud.CrudMarca;
+import crud.CrudPeriferico;
 import tela.HomeFuncionario;
 import utilitario.BordaEscura;
-import utilitario.BordaSombreada;
+import utilitario.ParametroCrud;
+import utilitario.Parametros;
 import utilitario.UtilitarioTela;
 
-import javax.swing.border.BevelBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.JTextField;
+import java.awt.Font;
 
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
+import localizar.LocalizarJogador;
 
 public class MenuHome extends JPanel {
 
 	/**
 	 * Create the panel.
 	 */
-	
-	private JButton btLocalizar; 
-	private JTextField txLocalizar;
-	private JButton btExemplo;
+	private JPanel menuMeio;
+	private JButton btMarca;
+	private JButton btPeriferico;
+	private JButton btDriver;
 	
 	public MenuHome() {
 		setSize(UtilitarioTela.getTamanhoMenuBaixo());
 		setBackground(null);
 		setLayout(null);
 		setVisible(true);
-
 		
 		JPanel menuLateral = new JPanel();
 		menuLateral.setSize(UtilitarioTela.getTamanhoMenuLateral());
@@ -49,28 +49,32 @@ public class MenuHome extends JPanel {
 		menuLateral.setLocation(0, 0);
 		add(menuLateral);
 		menuLateral.setLayout(null);
-		
+
 		JPanel menuLateralTopo = new JPanel();
 		menuLateralTopo.setBounds(0, 0, 240, 30);
 		menuLateralTopo.setBorder(new BordaEscura());
-		menuLateralTopo.setBackground(new Color(232,234,239));
+		menuLateralTopo.setBackground(new Color(232, 234, 239));
 		menuLateral.add(menuLateralTopo);
 		menuLateralTopo.setLayout(null);
 
-		JLabel tituloMenu = new JLabel("Home");
+		JLabel tituloMenu = new JLabel("Periférico");
+		tituloMenu.setForeground(Color.DARK_GRAY);
+		tituloMenu.setFont(new Font("SansSerif", Font.BOLD, 18));
 		tituloMenu.setHorizontalAlignment(SwingConstants.CENTER);
 		tituloMenu.setBounds(0, 0, 240, 25);
 		menuLateralTopo.add(tituloMenu);
 
-		JPanel menuMeio = new JPanel();
+		menuMeio = new JPanel();
 		menuMeio.setSize(UtilitarioTela.getTamanhoMeio());
 		menuMeio.setLocation(250, 0);
+		menuMeio.setLayout(null);
 		menuMeio.setBackground(new Color(46, 49, 56));
 		add(menuMeio);
-		
+
 		JPanel menuLateralBaixo = new JPanel();
 		menuLateralBaixo.setBounds(0, 30, 240, getHeight() - 30);
 		menuLateralBaixo.setBackground(new Color(46, 49, 56));
+		menuLateralBaixo.setLayout(null);
 		menuLateral.add(menuLateralBaixo);
 
 		JPanel jp1 = new JPanel();
@@ -79,61 +83,54 @@ public class MenuHome extends JPanel {
 		jp1.setLayout(null);
 		jp1.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp1);
-		
-		
-		txLocalizar = new JTextField();
-		txLocalizar.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent arg0) {
-				txLocalizar.setBorder(UtilitarioTela.jTextFieldComFocus());
-			}
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				txLocalizar.setBorder(UtilitarioTela.jTextFieldNormal());
-			}
-		});
-		txLocalizar.setBounds(5, 5, 200, 24);
-		txLocalizar.setLayout(null);
-		txLocalizar.setBorder(UtilitarioTela.jTextFieldNormal());
-		
-		jp1.add(txLocalizar);
-		
-		
-		btLocalizar = new JButton("");
-		btLocalizar.addActionListener(new ActionListener() {
+
+		btMarca = new JButton("Marca");
+		btMarca.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-		
+				zeraSelecao();
+				getIcon(btMarca, true);
+				menuMeio.removeAll();
+//				CrudMarca c = new CrudMarca(MenuHome.this);
+//				menuMeio.add(c);
+				menuMeio.revalidate();
+				menuMeio.repaint();
 			}
 		});
-		btLocalizar.setBounds(jp1.getWidth()-30, 5, 24, 24);
-		btLocalizar.setName("localizar");
-		btLocalizar.setBorderPainted(false);
-		
-		getIcon(btLocalizar, false);
-		jp1.add(btLocalizar);
-		
-		
+		btMarca.setBounds( 5, 5,  230, 30);
+		btMarca.setName("marca");
+		btMarca.setBorderPainted(false);
+		btMarca.setHorizontalAlignment(SwingConstants.LEFT);
+		getIcon(btMarca, false);
+		jp1.add(btMarca);
+
 		JPanel jp2 = new JPanel();
 		jp2.setBounds(0, 40, 240, 40);
 		jp2.setBackground(null);
 		jp2.setLayout(null);
 		jp2.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp2);
-		
-		btExemplo = new JButton("New button");
-		btExemplo.setBounds(5, 5, 230, 30);
-		btExemplo.setBorderPainted(false);
-		btExemplo.setBackground(null);
-		btExemplo.setLayout(null);
-		btExemplo.setName("btExemplo");
-		btExemplo.addActionListener(new ActionListener() {
+
+		btPeriferico = new JButton("Periférico");
+
+		btPeriferico.setBounds(5, 5, 230, 30);
+		btPeriferico.setBorderPainted(false);
+		btPeriferico.setBackground(null);
+		btPeriferico.setLayout(null);
+		btPeriferico.setName("periferico");
+		btPeriferico.setHorizontalAlignment(SwingConstants.LEFT);
+		btPeriferico.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//zeraSelecao();
-				getSelecao(btExemplo, true);
+				zeraSelecao();
+				getIcon(btPeriferico, true);
+				menuMeio.removeAll();
+//				CrudPeriferico c = new CrudPeriferico(MenuHome.this);
+//				menuMeio.add(c);
+				menuMeio.revalidate();
+				menuMeio.repaint();
 			}
 		});
-		jp2.add(btExemplo);
-		
+		jp2.add(btPeriferico);
+
 		JPanel jp3 = new JPanel();
 		jp3.setBounds(0, 80, 240, 40);
 		jp3.setBackground(null);
@@ -141,6 +138,26 @@ public class MenuHome extends JPanel {
 		jp3.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp3);
 		
+		btDriver = new JButton("Driver");
+		btDriver.setBounds(5, 5, 230, 30);
+		btDriver.setBorderPainted(false);
+		btDriver.setBackground(null);
+		btDriver.setLayout(null);
+		btDriver.setName("driver");
+		btDriver.setHorizontalAlignment(SwingConstants.LEFT);
+		btDriver.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				zeraSelecao();
+				getIcon(btDriver, true);
+				menuMeio.removeAll();
+//				CrudDriver c = new CrudDriver(MenuHome.this);
+//				menuMeio.add(c);
+				menuMeio.revalidate();
+				menuMeio.repaint();
+			}
+		});
+		jp3.add(btDriver);
+
 		JPanel jp4 = new JPanel();
 		jp4.setBounds(0, 120, 240, 40);
 		jp4.setBackground(null);
@@ -161,7 +178,7 @@ public class MenuHome extends JPanel {
 		jp6.setLayout(null);
 		jp6.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp6);
-		
+
 		JPanel jp7 = new JPanel();
 		jp7.setBounds(0, 240, 240, 40);
 		jp7.setBackground(null);
@@ -169,56 +186,77 @@ public class MenuHome extends JPanel {
 		jp7.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp7);
 
-	}
-	
-	public void zeraSelecao() {
-		btExemplo.setBorder(null);
-		//repaint();
+		getIcon(btMarca, false);
+		getIcon(btPeriferico, false);
+		getIcon(btDriver, false);
+		
+		btMarca.setForeground(UtilitarioTela
+				.getFontColorSelecao(false));
+		btPeriferico.setForeground(UtilitarioTela
+				.getFontColorSelecao(false));
+		btDriver.setForeground(UtilitarioTela.getFontColorSelecao(false));
+		
+		btMarca.setFont(UtilitarioTela.getFont(14));
+		btPeriferico.setFont(UtilitarioTela.getFont(14));
+		btDriver.setFont(UtilitarioTela.getFont(14));
+		
+		
 	}
 
-	public void getSelecao(JButton botao, boolean selecionado){
-		if (botao.getName() != null) {
-			if (botao.getName().equals("btExemplo")) {
-				if (selecionado) {
-					botao.setBackground(new Color(176, 177, 184));
-				} else {
-					botao.setBackground(null);
-				}
-			}
-			//repaint();
-		}
+	public void home(){
+		zeraSelecao();
 	}
 	
+	
+	
+	public void zeraSelecao() {
+		
+		btMarca.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/crud/marca.png")));
+		btMarca.setBackground(UtilitarioTela.getBtnFundo(false));
+		btMarca.setForeground(UtilitarioTela.getFontColorSelecao(false));
+		
+		btPeriferico.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/crud/peri.png")));
+		btPeriferico.setBackground(UtilitarioTela.getBtnFundo(false));
+		btPeriferico.setForeground(UtilitarioTela.getFontColorSelecao(false));
+
+		btDriver.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/crud/driver.png")));
+		btDriver.setBackground(UtilitarioTela.getBtnFundo(false));
+		btDriver.setForeground(UtilitarioTela
+				.getFontColorSelecao(false));
+	}
+
 	public void getIcon(JButton botao, boolean selecionado) {
 		String url = "";
 		if (botao.getName() != null) {
-			if (botao.getName().equals("localizar")) {
+			if (botao.getName().equals("marca")) {
 				if (selecionado) {
-					url = "/imagem/localizar.png";
+					url = "/imagem/crud/marcaSelect.png";
 				} else {
-					url = "/imagem/localizar.png";
+					url = "/imagem/crud/marca.png";
 				}
 			}
-			botao.setBackground(getBtnFundo(selecionado));
+			if (botao.getName().equals("periferico")) {
+				if (selecionado) {
+					url = "/imagem/crud/periSelect.png";
+				} else {
+					url = "/imagem/crud/peri.png";
+				}
+			}
+			if (botao.getName().equals("driver")) {
+				if (selecionado) {
+					url = "/imagem/crud/driverSelect.png";
+				} else {
+					url = "/imagem/crud/driver.png";
+				}
+			}
+			botao.setFocusPainted(false);
+			botao.setBackground(UtilitarioTela.getBtnFundo(selecionado));
 			botao.setIcon(new ImageIcon(HomeFuncionario.class.getResource(url)));
+			botao.setForeground(UtilitarioTela.getFontColorSelecao(true));
 			repaint();
 		}
-	}
-
-	
-	public Color getBtnFundo(boolean selecionado) {
-		int r = 0, g = 0, b = 0;
-
-		if (selecionado) {
-			r = 252;
-			g = 79;
-			b = 63;
-		} else {
-			r = 46;
-			g = 49;
-			b = 56;
-		}
-
-		return new Color(r, g, b);
 	}
 }

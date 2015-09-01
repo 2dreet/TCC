@@ -22,24 +22,26 @@ import org.omg.CORBA.TCKind;
 import componente.Menssage;
 import componente.MenssageConfirmacao;
 import dao.EntityManagerLocal;
-import dao.PerifericoDao;
+import dao.MarcaDao;
+import dao.ModalidadeDao;
 import utilitario.BordaSombreada;
 import utilitario.ParametroCrud;
 import utilitario.Parametros;
 import utilitario.UtilitarioTela;
-import entidade.Periferico;
+import entidade.Marca;
+import entidade.Modalidade;
 
-public class DialogCrudPeriferico {
+public class DialogCrudModalidade {
 	
 	public JTextField txNome;
 	private boolean confirmado;
-	private Periferico perifericoSelecionado;
+	private Modalidade modalidadeSelecionada;
 	private JLabel lblMsg;
 	private JPanel msg;
 	private JPanel meio;
 	
-	public void crudPeriferico(Periferico perifericoSelecionado, int modoCrud, JPanel painelPai){
-		this.perifericoSelecionado = perifericoSelecionado;
+	public void crudModalidade(Modalidade modalidadeSelecionada, int modoCrud, JPanel painelPai){
+		this.modalidadeSelecionada = modalidadeSelecionada;
 		
 		JDialog dialog = new JDialog(Parametros.getPai(), true);
 		dialog.setUndecorated(true);
@@ -67,11 +69,11 @@ public class DialogCrudPeriferico {
 		
 		String textoHeader = "";
 		if (modoCrud == ParametroCrud.getModoCrudNovo()) {
-			textoHeader = "Cadastrar Periférico";
+			textoHeader = "Cadastrar Modalidade";
 		} else if (modoCrud == ParametroCrud.getModoCrudAlterar()) {
-			textoHeader = "Alterar Periférico";
+			textoHeader = "Alterar Modalidade";
 		} else if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
-			textoHeader = "Deletar Periférico";
+			textoHeader = "Deletar Modalidade";
 		} 
 		
 		JLabel lbHeader = new JLabel(textoHeader);
@@ -89,7 +91,7 @@ public class DialogCrudPeriferico {
 		meio.setBackground(new Color(232, 234, 239));
 		panel.add(meio);
 		
-		JLabel lbNome = new JLabel("Nome :");
+		JLabel lbNome = new JLabel("Descrição :");
 		lbNome.setBounds(20, 30, 50, 20);
 		lbNome.setFont(UtilitarioTela.getFont(14));
 		lbNome.setForeground(UtilitarioTela.getFontColorCrud());
@@ -167,8 +169,8 @@ public class DialogCrudPeriferico {
 			txNome.setEditable(false);
 		}
 		
-		if(perifericoSelecionado != null){
-			txNome.setText(this.perifericoSelecionado.getDescricao());
+		if(modalidadeSelecionada != null){
+			txNome.setText(this.modalidadeSelecionada.getDescricao());
 		}
 		
 		dialog.getContentPane().add(panel);
@@ -195,20 +197,20 @@ public class DialogCrudPeriferico {
 		if (modoCrud != ParametroCrud.getModoCrudDeletar()) {
 			if(txNome.getText() == null || txNome.getText().isEmpty()){
 				txNome.requestFocus();
-				msgErro("Campo Nome é Obrigatório!");
+				msgErro("Campo Descrição é Obrigatório!");
 				return false;
-			} else if(PerifericoDao.verificaPeriferico(txNome.getText()) && perifericoSelecionado != null && !perifericoSelecionado.getDescricao().equals(txNome.getText())){
+			} else if(ModalidadeDao.verificaModalidade(txNome.getText()) && modalidadeSelecionada != null && !modalidadeSelecionada.getDescricao().equals(txNome.getText())){
 				txNome.requestFocus();
-				msgErro("Periferico Já Cadastrado!");
+				msgErro("Modalidade Já Cadastrada!");
 				return false;
-			} else if(PerifericoDao.verificaPeriferico(txNome.getText()) && perifericoSelecionado == null){
+			} else if(ModalidadeDao.verificaModalidade(txNome.getText())  && modalidadeSelecionada == null){
 				txNome.requestFocus();
-				msgErro("Periferico Já Cadastrado!");
+				msgErro("Modalidade Já Cadastrada!");
 				return false;
 			}
 		}
 		if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
-			MenssageConfirmacao.setMenssage("Deletar Periferico", "Confirma a delecao do Periferico?\nTodos os vinculos iram ser perdidos\nPeriferico: "+this.perifericoSelecionado.getDescricao(),ParametroCrud.getModoCrudDeletar(), meio);
+			MenssageConfirmacao.setMenssage("Deletar Modalidade", "Confirma a delecao da Modalidade?\nModalidade: "+this.modalidadeSelecionada.getDescricao(),ParametroCrud.getModoCrudDeletar(), meio);
 			confirmado = MenssageConfirmacao.isConfirmado();
 		}
 		
@@ -216,16 +218,16 @@ public class DialogCrudPeriferico {
 		if(confirmado){
 			EntityManagerLocal.begin();
 			if (modoCrud == ParametroCrud.getModoCrudNovo()) {
-				Periferico periferico= new Periferico();
-				periferico.setDescricao(txNome.getText());
-				periferico.setAtivo(true);
-				EntityManagerLocal.persist(periferico);
+				Modalidade modalidade= new Modalidade();
+				modalidade.setDescricao(txNome.getText());
+				modalidade.setAtivo(true);
+				EntityManagerLocal.persist(modalidade);
 			} else if(modoCrud == ParametroCrud.getModoCrudAlterar()){
-				perifericoSelecionado.setDescricao(txNome.getText());
-				EntityManagerLocal.merge(perifericoSelecionado);
+				modalidadeSelecionada.setDescricao(txNome.getText());
+				EntityManagerLocal.merge(modalidadeSelecionada);
 			} else if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
-				perifericoSelecionado.setAtivo(false);
-				EntityManagerLocal.merge(perifericoSelecionado);
+				modalidadeSelecionada.setAtivo(false);
+				EntityManagerLocal.merge(modalidadeSelecionada);
 			}
 			EntityManagerLocal.commit();
 		}

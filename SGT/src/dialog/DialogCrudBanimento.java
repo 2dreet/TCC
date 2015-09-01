@@ -21,25 +21,29 @@ import org.omg.CORBA.TCKind;
 
 import componente.Menssage;
 import componente.MenssageConfirmacao;
+import dao.BanimentoDao;
 import dao.EntityManagerLocal;
-import dao.PerifericoDao;
+import dao.MarcaDao;
+import dao.ModalidadeDao;
 import utilitario.BordaSombreada;
 import utilitario.ParametroCrud;
 import utilitario.Parametros;
 import utilitario.UtilitarioTela;
-import entidade.Periferico;
+import entidade.Banimento;
+import entidade.Marca;
+import entidade.Modalidade;
 
-public class DialogCrudPeriferico {
+public class DialogCrudBanimento {
 	
 	public JTextField txNome;
 	private boolean confirmado;
-	private Periferico perifericoSelecionado;
+	private Banimento banimentoSelecionado;
 	private JLabel lblMsg;
 	private JPanel msg;
 	private JPanel meio;
 	
-	public void crudPeriferico(Periferico perifericoSelecionado, int modoCrud, JPanel painelPai){
-		this.perifericoSelecionado = perifericoSelecionado;
+	public void crudBanimento(Banimento banimentoSelecionado, int modoCrud, JPanel painelPai){
+		this.banimentoSelecionado = banimentoSelecionado;
 		
 		JDialog dialog = new JDialog(Parametros.getPai(), true);
 		dialog.setUndecorated(true);
@@ -67,11 +71,11 @@ public class DialogCrudPeriferico {
 		
 		String textoHeader = "";
 		if (modoCrud == ParametroCrud.getModoCrudNovo()) {
-			textoHeader = "Cadastrar Periférico";
+			textoHeader = "Cadastrar Banimento";
 		} else if (modoCrud == ParametroCrud.getModoCrudAlterar()) {
-			textoHeader = "Alterar Periférico";
+			textoHeader = "Alterar Banimento";
 		} else if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
-			textoHeader = "Deletar Periférico";
+			textoHeader = "Deletar Banimento";
 		} 
 		
 		JLabel lbHeader = new JLabel(textoHeader);
@@ -89,7 +93,7 @@ public class DialogCrudPeriferico {
 		meio.setBackground(new Color(232, 234, 239));
 		panel.add(meio);
 		
-		JLabel lbNome = new JLabel("Nome :");
+		JLabel lbNome = new JLabel("Descrição :");
 		lbNome.setBounds(20, 30, 50, 20);
 		lbNome.setFont(UtilitarioTela.getFont(14));
 		lbNome.setForeground(UtilitarioTela.getFontColorCrud());
@@ -167,8 +171,8 @@ public class DialogCrudPeriferico {
 			txNome.setEditable(false);
 		}
 		
-		if(perifericoSelecionado != null){
-			txNome.setText(this.perifericoSelecionado.getDescricao());
+		if(banimentoSelecionado != null){
+			txNome.setText(this.banimentoSelecionado.getDescricao());
 		}
 		
 		dialog.getContentPane().add(panel);
@@ -195,20 +199,20 @@ public class DialogCrudPeriferico {
 		if (modoCrud != ParametroCrud.getModoCrudDeletar()) {
 			if(txNome.getText() == null || txNome.getText().isEmpty()){
 				txNome.requestFocus();
-				msgErro("Campo Nome é Obrigatório!");
+				msgErro("Campo Descrição é Obrigatório!");
 				return false;
-			} else if(PerifericoDao.verificaPeriferico(txNome.getText()) && perifericoSelecionado != null && !perifericoSelecionado.getDescricao().equals(txNome.getText())){
+			} else if(BanimentoDao.verificaBanimento(txNome.getText()) && banimentoSelecionado != null && !banimentoSelecionado.getDescricao().equals(txNome.getText())){
 				txNome.requestFocus();
-				msgErro("Periferico Já Cadastrado!");
+				msgErro("Banimento Já Cadastrado!");
 				return false;
-			} else if(PerifericoDao.verificaPeriferico(txNome.getText()) && perifericoSelecionado == null){
+			} else if(BanimentoDao.verificaBanimento(txNome.getText())  && banimentoSelecionado == null){
 				txNome.requestFocus();
-				msgErro("Periferico Já Cadastrado!");
+				msgErro("Banimento Já Cadastrado!");
 				return false;
 			}
 		}
 		if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
-			MenssageConfirmacao.setMenssage("Deletar Periferico", "Confirma a delecao do Periferico?\nTodos os vinculos iram ser perdidos\nPeriferico: "+this.perifericoSelecionado.getDescricao(),ParametroCrud.getModoCrudDeletar(), meio);
+			MenssageConfirmacao.setMenssage("Deletar Banimento", "Confirma a delecao do Banimento?\nBanimento: "+this.banimentoSelecionado.getDescricao(),ParametroCrud.getModoCrudDeletar(), meio);
 			confirmado = MenssageConfirmacao.isConfirmado();
 		}
 		
@@ -216,16 +220,16 @@ public class DialogCrudPeriferico {
 		if(confirmado){
 			EntityManagerLocal.begin();
 			if (modoCrud == ParametroCrud.getModoCrudNovo()) {
-				Periferico periferico= new Periferico();
-				periferico.setDescricao(txNome.getText());
-				periferico.setAtivo(true);
-				EntityManagerLocal.persist(periferico);
+				Banimento banimento= new Banimento();
+				banimento.setDescricao(txNome.getText());
+				banimento.setAtivo(true);
+				EntityManagerLocal.persist(banimento);
 			} else if(modoCrud == ParametroCrud.getModoCrudAlterar()){
-				perifericoSelecionado.setDescricao(txNome.getText());
-				EntityManagerLocal.merge(perifericoSelecionado);
+				banimentoSelecionado.setDescricao(txNome.getText());
+				EntityManagerLocal.merge(banimentoSelecionado);
 			} else if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
-				perifericoSelecionado.setAtivo(false);
-				EntityManagerLocal.merge(perifericoSelecionado);
+				banimentoSelecionado.setAtivo(false);
+				EntityManagerLocal.merge(banimentoSelecionado);
 			}
 			EntityManagerLocal.commit();
 		}

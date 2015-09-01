@@ -25,17 +25,14 @@ import javax.swing.table.TableColumnModel;
 import componente.ComboBox;
 import componente.DadoComIcone;
 import componente.Menssage;
-import dao.DriverDao;
 import dao.MarcaDao;
-import dao.PerifericoDao;
+import dao.ModalidadeDao;
 import dao.TimeDao;
-import dialog.DialogCrudDriver;
 import dialog.DialogCrudMarca;
-import dialog.DialogCrudPeriferico;
-import entidade.Driver;
+import dialog.DialogCrudModalidade;
 import entidade.Jogador;
 import entidade.Marca;
-import entidade.Periferico;
+import entidade.Modalidade;
 import entidade.Time;
 import utilitario.BordaSombreada;
 import utilitario.ParametroCrud;
@@ -44,7 +41,7 @@ import utilitario.UtilitarioTela;
 import menu.MenuConfiguracoes;
 import menu.MenuJogador;
 
-public class CrudDriver extends JPanel{
+public class CrudModalidade extends JPanel{
 
 	private MenuConfiguracoes menuPai;
 	private JLabel lblMsg;
@@ -57,19 +54,19 @@ public class CrudDriver extends JPanel{
 	private JButton btDel;
 	private JTextField txBusca;
 	private ComboBox metodoBusca;
-	private Driver driverSelecionado;
-	private List<Driver> listaDriver;
+	private Modalidade modalidadeSelecionada;
+	private List<Modalidade> listaModalidade;
 	private static JTable tabela;
 	private static Object[][] colunas = new Object[][] { new String[] { "Código" },
 		new String[] { "Descrição" }};
 	private static String[] linhaBusca = new String[] { "Código", "Descrição"};
 	
-	public CrudDriver(MenuConfiguracoes menuPai){
+	public CrudModalidade(MenuConfiguracoes menuPai){
 		this.menuPai = menuPai;
 		setSize(UtilitarioTela.getTamanhoMeio());
 		setLayout(null);
 		setBackground(null);
-		driverSelecionado = null;
+		modalidadeSelecionada = null;
 		
 		header = new JPanel();
 		header.setSize(500, 30);
@@ -79,7 +76,7 @@ public class CrudDriver extends JPanel{
 		header.setBorder(null);
 		add(header);
 
-		lblHeader = new JLabel("");
+		lblHeader = new JLabel("Modalidade");
 		lblHeader.setHorizontalAlignment(SwingConstants.CENTER);
 		lblHeader.setBounds(0, 0, header.getWidth(), header.getHeight());
 		lblHeader.setFont(UtilitarioTela.getFont(14));
@@ -159,10 +156,10 @@ public class CrudDriver extends JPanel{
 		btAdd.setHorizontalAlignment(SwingConstants.LEFT);
 		btAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DialogCrudDriver c = new DialogCrudDriver();
-				c.crudDriver(null, ParametroCrud.getModoCrudNovo(),meio);
+				DialogCrudModalidade c = new DialogCrudModalidade();
+				c.crudModalidade(null, ParametroCrud.getModoCrudNovo(),meio);
 				if(c.getConfirmado()){
-					Menssage.setMenssage("Novo Driver", "Driver cadastrado com Sucesso!", ParametroCrud.getModoCrudNovo(), meio);
+					Menssage.setMenssage("Nova Modalidade", "Modalidade cadastrada com Sucesso!", ParametroCrud.getModoCrudNovo(), meio);
 					localizar();
 				}
 			}
@@ -178,10 +175,10 @@ public class CrudDriver extends JPanel{
 		btAlt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(selecionar()){
-					DialogCrudDriver c = new DialogCrudDriver();
-					c.crudDriver(driverSelecionado, ParametroCrud.getModoCrudAlterar(),meio);
+					DialogCrudModalidade c = new DialogCrudModalidade();
+					c.crudModalidade(modalidadeSelecionada, ParametroCrud.getModoCrudAlterar(),meio);
 					if(c.getConfirmado()){
-						Menssage.setMenssage("Altera Driver", "Driver alterado com Sucesso!", ParametroCrud.getModoCrudAlterar(), meio);
+						Menssage.setMenssage("Altera Modalidade", "Modalidade alterada com Sucesso!", ParametroCrud.getModoCrudAlterar(), meio);
 						localizar();
 					}
 				}
@@ -198,10 +195,10 @@ public class CrudDriver extends JPanel{
 		btDel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(selecionar()){
-					DialogCrudDriver c = new DialogCrudDriver();
-					c.crudDriver(driverSelecionado, ParametroCrud.getModoCrudDeletar(),meio);
+					DialogCrudModalidade c = new DialogCrudModalidade();
+					c.crudModalidade(modalidadeSelecionada, ParametroCrud.getModoCrudDeletar(),meio);
 					if(c.getConfirmado()){
-						Menssage.setMenssage("Deletar Driver", "Driver deletado com Sucesso!", ParametroCrud.getModoCrudDeletar(), meio);
+						Menssage.setMenssage("Deletar Modalidade", "Modalidade deletada com Sucesso!", ParametroCrud.getModoCrudDeletar(), meio);
 						localizar();
 					}
 				}
@@ -214,19 +211,19 @@ public class CrudDriver extends JPanel{
 	public boolean selecionar() {
 		if (tabela.getRowCount() > 0) {
 			if (tabela.getSelectedRow() > -1) {
-				driverSelecionado = DriverDao
-						.getDriver(Integer.parseInt(String.valueOf(tabela
+				modalidadeSelecionada = ModalidadeDao
+						.getModalidade(Integer.parseInt(String.valueOf(tabela
 								.getValueAt(tabela.getSelectedRow(), 0))));
 				return true;
 			} else {
-				Menssage.setMenssage("Driver não Selecionado",
-						"Deve selecionar um Driver!",
+				Menssage.setMenssage("Modalidade não Selecionada",
+						"Deve selecionar uma Modalidade!",
 						ParametroCrud.getModoCrudDeletar(), meio);
 				return false;
 			}
 		} else {
-			Menssage.setMenssage("Driver não Selecionado",
-					"Deve selecionar um Driver!",
+			Menssage.setMenssage("Modalidade não Selecionada",
+					"Deve selecionar uma Modalidade!",
 					ParametroCrud.getModoCrudDeletar(), meio);
 			return false;
 		}
@@ -234,19 +231,19 @@ public class CrudDriver extends JPanel{
 	}
 	
 	public void localizar() {
-		listaDriver = DriverDao.getListaPesquisa(metodoBusca.getSelectedItem()
+		listaModalidade = ModalidadeDao.getListaPesquisa(metodoBusca.getSelectedItem()
 				.toString(), txBusca.getText());
 		DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
 		modelo.setNumRows(0);
-		if (listaDriver != null && listaDriver.size() > 0) {
-			for (Driver d : listaDriver) {
+		if (listaModalidade != null && listaModalidade.size() > 0) {
+			for (Modalidade m : listaModalidade) {
 				modelo.addRow(new Object[] {
-						String.valueOf(d.getCodigoDriver()), d.getDescricao() });
+						String.valueOf(m.getCodigoModalidade()), m.getDescricao() });
 			}
 		} else {
-			listaDriver = new ArrayList<Driver>();
-			Menssage.setMenssage("Driver não Encontrado",
-					"Nenhum Driver foi encontrado!",
+			listaModalidade = new ArrayList<Modalidade>();
+			Menssage.setMenssage("Modalidade não Encontrada",
+					"Nenhuma Modalidade foi encontrada!",
 					ParametroCrud.getModoCrudDeletar(), meio);
 		}
 	}

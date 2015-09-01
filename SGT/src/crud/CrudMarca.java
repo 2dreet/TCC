@@ -35,12 +35,12 @@ import utilitario.BordaSombreada;
 import utilitario.ParametroCrud;
 import utilitario.UtilitarioTabela;
 import utilitario.UtilitarioTela;
-import menu.MenuDriver;
+import menu.MenuConfiguracoes;
 import menu.MenuJogador;
 
 public class CrudMarca extends JPanel{
 
-	private MenuDriver menuPai;
+	private MenuConfiguracoes menuPai;
 	private JLabel lblMsg;
 	private JPanel msg;
 	private JPanel header;
@@ -58,7 +58,7 @@ public class CrudMarca extends JPanel{
 		new String[] { "Descrição" }};
 	private static String[] linhaBusca = new String[] { "Código", "Descrição"};
 	
-	public CrudMarca(MenuDriver menuPai){
+	public CrudMarca(MenuConfiguracoes menuPai){
 		this.menuPai = menuPai;
 		setSize(UtilitarioTela.getTamanhoMeio());
 		setLayout(null);
@@ -73,7 +73,7 @@ public class CrudMarca extends JPanel{
 		header.setBorder(null);
 		add(header);
 
-		lblHeader = new JLabel("");
+		lblHeader = new JLabel("Marca");
 		lblHeader.setHorizontalAlignment(SwingConstants.CENTER);
 		lblHeader.setBounds(0, 0, header.getWidth(), header.getHeight());
 		lblHeader.setFont(UtilitarioTela.getFont(14));

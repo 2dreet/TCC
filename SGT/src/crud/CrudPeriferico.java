@@ -38,12 +38,12 @@ import utilitario.BordaSombreada;
 import utilitario.ParametroCrud;
 import utilitario.UtilitarioTabela;
 import utilitario.UtilitarioTela;
-import menu.MenuDriver;
+import menu.MenuConfiguracoes;
 import menu.MenuJogador;
 
 public class CrudPeriferico extends JPanel{
 
-	private MenuDriver menuPai;
+	private MenuConfiguracoes menuPai;
 	private JLabel lblMsg;
 	private JPanel msg;
 	private JPanel header;
@@ -61,7 +61,7 @@ public class CrudPeriferico extends JPanel{
 		new String[] { "Descrição" }};
 	private static String[] linhaBusca = new String[] { "Código", "Descrição"};
 	
-	public CrudPeriferico(MenuDriver menuPai){
+	public CrudPeriferico(MenuConfiguracoes menuPai){
 		this.menuPai = menuPai;
 		setSize(UtilitarioTela.getTamanhoMeio());
 		setLayout(null);
@@ -76,7 +76,7 @@ public class CrudPeriferico extends JPanel{
 		header.setBorder(null);
 		add(header);
 
-		lblHeader = new JLabel("");
+		lblHeader = new JLabel("Periférico");
 		lblHeader.setHorizontalAlignment(SwingConstants.CENTER);
 		lblHeader.setBounds(0, 0, header.getWidth(), header.getHeight());
 		lblHeader.setFont(UtilitarioTela.getFont(14));

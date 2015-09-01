@@ -332,7 +332,11 @@ public class CrudTime extends JPanel {
 				txDescricao.requestFocus();
 				msgErro("Campo Nome é Obrigatório!");
 				return false;
-			} else if(TimeDao.timeCadastrado(txDescricao.getText()) && !timeSelecionado.getDescricao().equals(txDescricao.getText())){
+			} else if(TimeDao.timeCadastrado(txDescricao.getText()) && timeSelecionado!= null && !timeSelecionado.getDescricao().equals(txDescricao.getText())){
+				txDescricao.requestFocus();
+				msgErro("Nome Já está sendo Usado\nInformar outro nome!");
+				return false;
+			} else if(TimeDao.timeCadastrado(txDescricao.getText()) && timeSelecionado== null){
 				txDescricao.requestFocus();
 				msgErro("Nome Já está sendo Usado\nInformar outro nome!");
 				return false;
