@@ -13,12 +13,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import crud.CrudComputador;
 import crud.CrudJogador;
 import entidade.Jogador;
 import entidade.Pc;
 import entidade.Usuario;
 import tela.HomeFuncionario;
 import utilitario.BordaEscura;
+import utilitario.Computador;
 import utilitario.ParametroCrud;
 import utilitario.Parametros;
 import utilitario.UtilitarioTela;
@@ -26,6 +28,7 @@ import utilitario.UtilitarioTela;
 import java.awt.Font;
 
 import localizar.LocalizarJogador;
+import localizar.LocalizarPc;
 
 public class MenuComputador extends JPanel {
 
@@ -39,6 +42,7 @@ public class MenuComputador extends JPanel {
 	private JButton btDeletar;
 	private JButton btVisualizar;
 	private Pc pcSelecionado;
+	private CrudComputador c;
 
 	public MenuComputador() {
 		pcSelecionado = null;
@@ -96,7 +100,8 @@ public class MenuComputador extends JPanel {
 				zeraSelecao();
 				getIcon(btLocalizar, true);
 				limpar();
-				//localizarJogador();
+				stopThread();
+				localizarPc();
 			}
 		});
 		btLocalizar.setBounds( 5, 5,  230, 30);
@@ -126,6 +131,7 @@ public class MenuComputador extends JPanel {
 				zeraSelecao();
 				getIcon(btNovo, true);
 				limpar();
+				stopThread();
 				alterarMenu(null, ParametroCrud.getModoCrudNovo());
 			}
 		});
@@ -148,6 +154,7 @@ public class MenuComputador extends JPanel {
 		btVisualizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
+				stopThread();
 				getIcon(btVisualizar, true);
 				alterarMenu(pcSelecionado,	ParametroCrud.getModoVisualizar());
 			}
@@ -172,6 +179,7 @@ public class MenuComputador extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btAlterar, true);
+				stopThread();
 				alterarMenu(pcSelecionado,
 						ParametroCrud.getModoCrudAlterar());
 			}
@@ -197,6 +205,7 @@ public class MenuComputador extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btDeletar, true);
+				stopThread();
 				alterarMenu(pcSelecionado,
 						ParametroCrud.getModoCrudDeletar());
 			}
@@ -243,11 +252,16 @@ public class MenuComputador extends JPanel {
 		limpar();
 	}
 
+	public void stopThread(){
+		Computador.stopPCconectado();
+	}
+	
 	public void home(){
 		zeraSelecao();
 		getIcon(btLocalizar, true);
+		stopThread();
 		limpar();
-//		localizarJogador();
+		localizarPc();
 	}
 	
 	public void limpar(){
@@ -266,8 +280,8 @@ public class MenuComputador extends JPanel {
 	
 	public void localizarPc() {
 		menuMeio.removeAll();
-		//LocalizarJogador localizar = new LocalizarJogador(this);
-		//menuMeio.add(localizar);
+		LocalizarPc localizar = new LocalizarPc(this);
+		menuMeio.add(localizar);
 		menuMeio.revalidate();
 		menuMeio.repaint();
 	}
@@ -278,11 +292,11 @@ public class MenuComputador extends JPanel {
 		btVisualizar.setEnabled(true);
 	}
 	
-	public void alterarMenu(Pc Pc, int modoCrud) {
+	public void alterarMenu(Pc pc, int modoCrud) {
 		menuMeio.removeAll();
-//		CrudJogador c = new CrudJogador(jogador, modoCrud, this);
-//		menuMeio.add(c);
-//		c.getTxNome().requestFocus();
+		c = new CrudComputador(pc, modoCrud, this);
+		menuMeio.add(c);
+		c.getTxDescricao().requestFocus();
 		menuMeio.revalidate();
 		menuMeio.repaint();
 	}
@@ -290,29 +304,29 @@ public class MenuComputador extends JPanel {
 	public void zeraSelecao() {
 		
 		btLocalizar.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/crud/locJog.png")));
+				.getResource("/imagem/crud/locPc.png")));
 		btLocalizar.setBackground(UtilitarioTela.getBtnFundo(false));
 		btLocalizar.setForeground(UtilitarioTela.getFontColorSelecao(false));
 		
 		btNovo.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/crud/addJog.png")));
+				.getResource("/imagem/crud/cadPc.png")));
 		btNovo.setBackground(UtilitarioTela.getBtnFundo(false));
 		btNovo.setForeground(UtilitarioTela.getFontColorSelecao(false));
 
 		btAlterar.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/crud/altJog.png")));
+				.getResource("/imagem/crud/altPc.png")));
 		btAlterar.setBackground(UtilitarioTela.getBtnFundo(false));
 		btAlterar.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
 
 		btDeletar.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/crud/delJog.png")));
+				.getResource("/imagem/crud/delPc.png")));
 		btDeletar.setBackground(UtilitarioTela.getBtnFundo(false));
 		btDeletar.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
 		
 		btVisualizar.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/crud/visuJog.png")));
+				.getResource("/imagem/crud/visuPc.png")));
 		btVisualizar.setBackground(UtilitarioTela.getBtnFundo(false));
 		btVisualizar.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
@@ -325,37 +339,37 @@ public class MenuComputador extends JPanel {
 		if (botao.getName() != null) {
 			if (botao.getName().equals("localizar")) {
 				if (selecionado) {
-					url = "/imagem/crud/locJogSelect.png";
+					url = "/imagem/crud/locPcSelect.png";
 				} else {
-					url = "/imagem/crud/locJog.png";
+					url = "/imagem/crud/locPc.png";
 				}
 			}
-			if (botao.getName().equals("cadastrarJogador")) {
+			if (botao.getName().equals("cadastrarComputador")) {
 				if (selecionado) {
-					url = "/imagem/crud/addJogSelect.png";
+					url = "/imagem/crud/cadPcSelect.png";
 				} else {
-					url = "/imagem/crud/addJog.png";
+					url = "/imagem/crud/cadPc.png";
 				}
 			}
-			if (botao.getName().equals("alterarJogador")) {
+			if (botao.getName().equals("alterarComputador")) {
 				if (selecionado) {
-					url = "/imagem/crud/altJogSelect.png";
+					url = "/imagem/crud/altPcSelect.png";
 				} else {
-					url = "/imagem/crud/altJog.png";
+					url = "/imagem/crud/altPc.png";
 				}
 			}
-			if (botao.getName().equals("deletarJogador")) {
+			if (botao.getName().equals("deletarComputador")) {
 				if (selecionado) {
-					url = "/imagem/crud/delJogSelect.png";
+					url = "/imagem/crud/delPcSelect.png";
 				} else {
-					url = "/imagem/crud/delJog.png";
+					url = "/imagem/crud/delPc.png";
 				}
 			}
-			if (botao.getName().equals("visualizarJogador")) {
+			if (botao.getName().equals("visualizarComputador")) {
 				if (selecionado) {
-					url = "/imagem/crud/visuJogSelect.png";
+					url = "/imagem/crud/visuPcSelect.png";
 				} else {
-					url = "/imagem/crud/visuJog.png";
+					url = "/imagem/crud/visuPc.png";
 				}
 			}
 			botao.setFocusPainted(false);

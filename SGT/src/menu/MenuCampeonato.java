@@ -13,29 +13,45 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import crud.CrudComputador;
+import crud.CrudJogador;
+import entidade.Campeonato;
+import entidade.Jogador;
+import entidade.Pc;
+import entidade.Usuario;
 import tela.HomeFuncionario;
 import utilitario.BordaEscura;
-import utilitario.UtilitarioIcone;
+import utilitario.Computador;
+import utilitario.ParametroCrud;
+import utilitario.Parametros;
 import utilitario.UtilitarioTela;
+
+import java.awt.Font;
+
+import localizar.LocalizarJogador;
+import localizar.LocalizarPc;
 
 public class MenuCampeonato extends JPanel {
 
 	/**
 	 * Create the panel.
 	 */
-
+	private JPanel menuMeio;
 	private JButton btLocalizar;
-	private JTextField txLocalizar;
-	private JButton btAdd;
-	private JButton btAlt;
-	private JButton btDel;
-
+	private JButton btNovo;
+	private JButton btAlterar;
+	private JButton btDeletar;
+	private JButton btVisualizar;
+	private Campeonato campSelecionado;
+	
 	public MenuCampeonato() {
+		campSelecionado = null;
+		
 		setSize(UtilitarioTela.getTamanhoMenuBaixo());
 		setBackground(null);
 		setLayout(null);
 		setVisible(true);
-
+		
 		JPanel menuLateral = new JPanel();
 		menuLateral.setSize(UtilitarioTela.getTamanhoMenuLateral());
 		menuLateral.setBorder(new BordaEscura());
@@ -51,16 +67,18 @@ public class MenuCampeonato extends JPanel {
 		menuLateral.add(menuLateralTopo);
 		menuLateralTopo.setLayout(null);
 
-		JLabel tituloMenu = new JLabel("Jogador");
+		JLabel tituloMenu = new JLabel("Campeonato");
+		tituloMenu.setForeground(Color.DARK_GRAY);
+		tituloMenu.setFont(new Font("SansSerif", Font.BOLD, 18));
 		tituloMenu.setHorizontalAlignment(SwingConstants.CENTER);
 		tituloMenu.setBounds(0, 0, 240, 25);
 		menuLateralTopo.add(tituloMenu);
 
-		JPanel menuMeio = new JPanel();
+		menuMeio = new JPanel();
 		menuMeio.setSize(UtilitarioTela.getTamanhoMeio());
 		menuMeio.setLocation(250, 0);
-		menuMeio.setBackground(new Color(46, 49, 56));
 		menuMeio.setLayout(null);
+		menuMeio.setBackground(new Color(46, 49, 56));
 		add(menuMeio);
 
 		JPanel menuLateralBaixo = new JPanel();
@@ -76,35 +94,21 @@ public class MenuCampeonato extends JPanel {
 		jp1.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp1);
 
-		txLocalizar = new JTextField();
-		txLocalizar.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent arg0) {
-				txLocalizar.setBorder(UtilitarioTela.jTextFieldComFocus());
-			}
-
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				txLocalizar.setBorder(UtilitarioTela.jTextFieldNormal());
-			}
-		});
-		txLocalizar.setBounds(5, 5, 200, 24);
-		txLocalizar.setLayout(null);
-		txLocalizar.setBorder(UtilitarioTela.jTextFieldNormal());
-
-		jp1.add(txLocalizar);
-
-		btLocalizar = new JButton("");
+		btLocalizar = new JButton("Localizar");
 		btLocalizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
+				zeraSelecao();
+				getIcon(btLocalizar, true);
+				limpar();
+				stopThread();
+				localizarCampeonato();
 			}
 		});
-		btLocalizar.setBounds(jp1.getWidth() - 30, 5, 24, 24);
+		btLocalizar.setBounds( 5, 5,  230, 30);
 		btLocalizar.setName("localizar");
 		btLocalizar.setBorderPainted(false);
-		btLocalizar.setBackground(getBtnFundo(false));
-		btLocalizar.setIcon(new ImageIcon(MenuCampeonato.class.getResource("/imagem/localizar.png")));
+		btLocalizar.setHorizontalAlignment(SwingConstants.LEFT);
+		getIcon(btLocalizar, false);
 		jp1.add(btLocalizar);
 
 		JPanel jp2 = new JPanel();
@@ -114,21 +118,24 @@ public class MenuCampeonato extends JPanel {
 		jp2.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp2);
 
-		btAdd = new JButton("");
-		btAdd.setBounds(5, 5, 230, 30);
-		btAdd.setName("cadastrarCampeonato");
-		btAdd.setFocusPainted(false);
-		btAdd.setBorderPainted(false);
-		btAdd.setBackground(null);
-		btAdd.setLayout(null);
-		btAdd.addActionListener(new ActionListener() {
+		btNovo = new JButton("Cadastrar");
+
+		btNovo.setBounds(5, 5, 230, 30);
+		btNovo.setBorderPainted(false);
+		btNovo.setBackground(null);
+		btNovo.setLayout(null);
+		btNovo.setName("cadastrarCampeonato");
+		btNovo.setHorizontalAlignment(SwingConstants.LEFT);
+		btNovo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
-				getIcone(btAdd, true);
+				getIcon(btNovo, true);
+				limpar();
+				stopThread();
+				alterarMenu(null, ParametroCrud.getModoCrudNovo());
 			}
 		});
-		getIcone(btAdd, true);
-		jp2.add(btAdd);
+		jp2.add(btNovo);
 
 		JPanel jp3 = new JPanel();
 		jp3.setBounds(0, 80, 240, 40);
@@ -136,6 +143,23 @@ public class MenuCampeonato extends JPanel {
 		jp3.setLayout(null);
 		jp3.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp3);
+		
+		btVisualizar = new JButton("Visualizar");
+		btVisualizar.setBounds(5, 5, 230, 30);
+		btVisualizar.setBorderPainted(false);
+		btVisualizar.setBackground(null);
+		btVisualizar.setLayout(null);
+		btVisualizar.setName("visualizarCampeonato");
+		btVisualizar.setHorizontalAlignment(SwingConstants.LEFT);
+		btVisualizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				zeraSelecao();
+				stopThread();
+				getIcon(btVisualizar, true);
+				alterarMenu(campSelecionado, ParametroCrud.getModoVisualizar());
+			}
+		});
+		jp3.add(btVisualizar);
 
 		JPanel jp4 = new JPanel();
 		jp4.setBounds(0, 120, 240, 40);
@@ -143,7 +167,26 @@ public class MenuCampeonato extends JPanel {
 		jp4.setLayout(null);
 		jp4.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp4);
+		
+		btAlterar = new JButton("Alterar");
+		btAlterar.setBounds(5, 5, 230, 30);
+		btAlterar.setBorderPainted(false);
+		btAlterar.setBackground(null);
+		btAlterar.setLayout(null);
+		btAlterar.setName("alterarCampeonato");
+		btAlterar.setHorizontalAlignment(SwingConstants.LEFT);
+		btAlterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				zeraSelecao();
+				getIcon(btAlterar, true);
+				stopThread();
+				alterarMenu(campSelecionado,
+						ParametroCrud.getModoCrudAlterar());
+			}
+		});
+		jp4.add(btAlterar);
 
+		
 		JPanel jp5 = new JPanel();
 		jp5.setBounds(0, 160, 240, 40);
 		jp5.setBackground(null);
@@ -151,6 +194,26 @@ public class MenuCampeonato extends JPanel {
 		jp5.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp5);
 
+		btDeletar = new JButton("Deletar");
+		btDeletar.setBounds(5, 5, 230, 30);
+		btDeletar.setBorderPainted(false);
+		btDeletar.setBackground(null);
+		btDeletar.setLayout(null);
+		btDeletar.setName("deletarCampeonato");
+		btDeletar.setHorizontalAlignment(SwingConstants.LEFT);
+		btDeletar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				zeraSelecao();
+				getIcon(btDeletar, true);
+				stopThread();
+				alterarMenu(campSelecionado,
+						ParametroCrud.getModoCrudDeletar());
+			}
+		});
+
+		jp5.add(btDeletar);
+
+		
 		JPanel jp6 = new JPanel();
 		jp6.setBounds(0, 200, 240, 40);
 		jp6.setBackground(null);
@@ -164,44 +227,146 @@ public class MenuCampeonato extends JPanel {
 		jp7.setLayout(null);
 		jp7.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp7);
+
+		getIcon(btNovo, false);
+		getIcon(btAlterar, false);
+		getIcon(btDeletar, false);
+		getIcon(btVisualizar, false);
+		getIcon(btLocalizar, false);
+		
+		btDeletar.setForeground(UtilitarioTela
+				.getFontColorSelecao(false));
+		btAlterar.setForeground(UtilitarioTela
+				.getFontColorSelecao(false));
+		btNovo.setForeground(UtilitarioTela.getFontColorSelecao(false));
+		btVisualizar.setForeground(UtilitarioTela.getFontColorSelecao(false));
+		btLocalizar.setForeground(UtilitarioTela
+				.getFontColorSelecao(false));
+		
+		btNovo.setFont(UtilitarioTela.getFont(14));
+		btAlterar.setFont(UtilitarioTela.getFont(14));
+		btDeletar.setFont(UtilitarioTela.getFont(14));
+		btVisualizar.setFont(UtilitarioTela.getFont(14));
+		btLocalizar.setFont(UtilitarioTela.getFont(14));
+		
+		limpar();
+	}
+
+	public void stopThread(){
+		Computador.stopPCconectado();
+	}
+	
+	public void limpar(){
+		btAlterar.setEnabled(false);
+		btDeletar.setEnabled(false);
+		btVisualizar.setEnabled(false);
+	}
+	
+	public void exibirCampeonato(Campeonato camp){
+		zeraSelecao();
+		getIcon(btVisualizar, true);
+		this.campSelecionado = camp;
+		liberarCrud();
+		alterarMenu(campSelecionado , ParametroCrud.getModoVisualizar());
+	}
+	
+	public void localizarCampeonato() {
+		menuMeio.removeAll();
+		
+		menuMeio.revalidate();
+		menuMeio.repaint();
+	}
+
+	public void liberarCrud(){
+		btAlterar.setEnabled(true);
+		btDeletar.setEnabled(true);
+		btVisualizar.setEnabled(true);
+	}
+	
+	public void alterarMenu(Campeonato camp, int modoCrud) {
+		menuMeio.removeAll();
+		
+		
+		menuMeio.revalidate();
+		menuMeio.repaint();
 	}
 
 	public void zeraSelecao() {
+		
+		btLocalizar.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/crud/locPc.png")));
+		btLocalizar.setBackground(UtilitarioTela.getBtnFundo(false));
+		btLocalizar.setForeground(UtilitarioTela.getFontColorSelecao(false));
+		
+		btNovo.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/crud/cadPc.png")));
+		btNovo.setBackground(UtilitarioTela.getBtnFundo(false));
+		btNovo.setForeground(UtilitarioTela.getFontColorSelecao(false));
+
+		btAlterar.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/crud/altPc.png")));
+		btAlterar.setBackground(UtilitarioTela.getBtnFundo(false));
+		btAlterar.setForeground(UtilitarioTela
+				.getFontColorSelecao(false));
+
+		btDeletar.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/crud/delPc.png")));
+		btDeletar.setBackground(UtilitarioTela.getBtnFundo(false));
+		btDeletar.setForeground(UtilitarioTela
+				.getFontColorSelecao(false));
+		
+		btVisualizar.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/crud/visuPc.png")));
+		btVisualizar.setBackground(UtilitarioTela.getBtnFundo(false));
+		btVisualizar.setForeground(UtilitarioTela
+				.getFontColorSelecao(false));
+		
 
 	}
 
-	public void getIcone(JButton botao, boolean selecionado) {
+	public void getIcon(JButton botao, boolean selecionado) {
 		String url = "";
-		
 		if (botao.getName() != null) {
-			if (botao.getName().equals("cadastrarCampeonato")) {
+			if (botao.getName().equals("localizar")) {
 				if (selecionado) {
-					url = "/imagem/addCamp.png";
+					url = "/imagem/crud/locPcSelect.png";
 				} else {
-					url = "/imagem/addCamp.png";
+					url = "/imagem/crud/locPc.png";
 				}
 			}
-
-			botao.setBackground(getBtnFundo(selecionado));
-			botao.setIcon(new ImageIcon(MenuCampeonato.class.getResource(url)));
+			if (botao.getName().equals("cadastrarCampeonato")) {
+				if (selecionado) {
+					url = "/imagem/crud/cadPcSelect.png";
+				} else {
+					url = "/imagem/crud/cadPc.png";
+				}
+			}
+			if (botao.getName().equals("alterarCampeonato")) {
+				if (selecionado) {
+					url = "/imagem/crud/altPcSelect.png";
+				} else {
+					url = "/imagem/crud/altPc.png";
+				}
+			}
+			if (botao.getName().equals("deletarCampeonato")) {
+				if (selecionado) {
+					url = "/imagem/crud/delPcSelect.png";
+				} else {
+					url = "/imagem/crud/delPc.png";
+				}
+			}
+			if (botao.getName().equals("visualizarCampeonato")) {
+				if (selecionado) {
+					url = "/imagem/crud/visuPcSelect.png";
+				} else {
+					url = "/imagem/crud/visuPc.png";
+				}
+			}
+			botao.setFocusPainted(false);
+			botao.setBackground(UtilitarioTela.getBtnFundo(selecionado));
+			botao.setIcon(new ImageIcon(HomeFuncionario.class.getResource(url)));
+			botao.setForeground(UtilitarioTela.getFontColorSelecao(true));
 			repaint();
 		}
 	}
-
-	public Color getBtnFundo(boolean selecionado) {
-		int r = 0, g = 0, b = 0;
-
-		if (selecionado) {
-			r = 252;
-			g = 79;
-			b = 63;
-		} else {
-			r = 46;
-			g = 49;
-			b = 56;
-		}
-
-		return new Color(r, g, b);
-	}
-
 }

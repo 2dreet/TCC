@@ -12,6 +12,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import utilitario.BordaEscura;
+import utilitario.Computador;
 import utilitario.UtilitarioTela;
 
 import javax.swing.border.LineBorder;
@@ -247,6 +248,7 @@ public class HomeFuncionario extends JPanel {
 	}
 	
 	public void abreMenu(JPanel panel){
+		Computador.stopPCconectado();
 		baixo.removeAll();
 		baixo.add(panel);
 		baixo.repaint();

@@ -3,7 +3,9 @@ package utilitario;
 import java.awt.event.KeyEvent;
 import java.util.Date;
 
+import dao.PcDao;
 import dao.UsuarioDao;
+import entidade.Pc;
 import entidade.Usuario;
 
 public class ValidadorCrud {
@@ -17,6 +19,70 @@ public class ValidadorCrud {
 		}
 	}
 
+	
+	public static boolean validarIP(String ip){
+		try {
+			if(ip != null && !ip.trim().isEmpty()){
+				ip = ip.replace(".", "p");
+				String [] aux = ip.split("p");
+				if(aux.length == 4){
+					if(isInt(aux[0])){
+						if(Integer.parseInt(aux[0]) < 0 || Integer.parseInt(aux[0]) > 255){
+							return false;
+						}
+					} else {
+						return false;
+					} 
+					
+					if(isInt(aux[1])){
+						if(Integer.parseInt(aux[1]) < 0 || Integer.parseInt(aux[1]) > 255){
+							return false;
+						}
+					} else {
+						return false;
+					}
+					
+					if(isInt(aux[2])){
+						if(Integer.parseInt(aux[2]) < 0 || Integer.parseInt(aux[2]) > 255){
+							return false;
+						}
+					} else {
+						return false;
+					}
+					
+					if(isInt(aux[3])){
+						if(Integer.parseInt(aux[3]) < 0 || Integer.parseInt(aux[3]) > 255){
+							return false;
+						}
+					} else {
+						return false;
+					}
+					
+					return true;
+										
+				} else {
+					return false;
+				}
+			}else{
+				return false;
+			}
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
+	public static boolean validarIpCadastrado(String ip){
+		try{
+			Pc pc = PcDao.getPcIp(ip);
+			if(pc == null){
+				return true;
+			}
+		} catch (Exception e) {
+			return false;
+		}
+		return false;
+	}
+	
 	public static boolean validarUsuario(String login) {
 		try {
 			Usuario usuario = UsuarioDao.validarUsuario(login);
@@ -119,6 +185,20 @@ public class ValidadorCrud {
 				evt.consume();
 			}
 			if ((texto.length() > 12)) {
+				evt.consume();
+			}
+		} catch (Exception e) {
+			evt.consume();
+		}
+	}
+	
+	public static void campoIp(KeyEvent evt, String texto) {
+		try {
+			String caracteres = "0987654321.";
+			if (!caracteres.contains(evt.getKeyChar() + "")) {
+				evt.consume();
+			}
+			if ((texto.length() > 14)) {
 				evt.consume();
 			}
 		} catch (Exception e) {
