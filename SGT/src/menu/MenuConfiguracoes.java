@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import crud.CrudBanimento;
 import crud.CrudDriver;
 import crud.CrudMarca;
 import crud.CrudModalidade;
@@ -207,8 +208,8 @@ public class MenuConfiguracoes extends JPanel {
 				zeraSelecao();
 				getIcon(btBanimento, true);
 				menuMeio.removeAll();
-//				CrudDriver c = new CrudDriver(MenuConfiguracoes.this);
-//				menuMeio.add(c);
+				CrudBanimento c = new CrudBanimento(MenuConfiguracoes.this);
+				menuMeio.add(c);
 				menuMeio.revalidate();
 				menuMeio.repaint();
 			}

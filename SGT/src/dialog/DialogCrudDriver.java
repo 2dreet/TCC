@@ -223,6 +223,7 @@ public class DialogCrudDriver {
 		lblMsg.setForeground(UtilitarioTela.getFontColorCrud());
 		msg.add(lblMsg);
 		msg.setBackground(UtilitarioTela.getColorErro());
+		msg.repaint();
 	}
 	
 	public boolean confirmar(int modoCrud){

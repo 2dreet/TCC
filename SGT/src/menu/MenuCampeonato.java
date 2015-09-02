@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import crud.CrudCampeonato;
 import crud.CrudComputador;
 import crud.CrudJogador;
 import entidade.Campeonato;
@@ -28,6 +29,7 @@ import utilitario.UtilitarioTela;
 
 import java.awt.Font;
 
+import localizar.LocalizarCampeonato;
 import localizar.LocalizarJogador;
 import localizar.LocalizarPc;
 
@@ -100,7 +102,6 @@ public class MenuCampeonato extends JPanel {
 				zeraSelecao();
 				getIcon(btLocalizar, true);
 				limpar();
-				stopThread();
 				localizarCampeonato();
 			}
 		});
@@ -131,7 +132,6 @@ public class MenuCampeonato extends JPanel {
 				zeraSelecao();
 				getIcon(btNovo, true);
 				limpar();
-				stopThread();
 				alterarMenu(null, ParametroCrud.getModoCrudNovo());
 			}
 		});
@@ -154,7 +154,6 @@ public class MenuCampeonato extends JPanel {
 		btVisualizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
-				stopThread();
 				getIcon(btVisualizar, true);
 				alterarMenu(campSelecionado, ParametroCrud.getModoVisualizar());
 			}
@@ -179,7 +178,6 @@ public class MenuCampeonato extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btAlterar, true);
-				stopThread();
 				alterarMenu(campSelecionado,
 						ParametroCrud.getModoCrudAlterar());
 			}
@@ -205,7 +203,6 @@ public class MenuCampeonato extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btDeletar, true);
-				stopThread();
 				alterarMenu(campSelecionado,
 						ParametroCrud.getModoCrudDeletar());
 			}
@@ -252,8 +249,11 @@ public class MenuCampeonato extends JPanel {
 		limpar();
 	}
 
-	public void stopThread(){
-		Computador.stopPCconectado();
+	public void home(){
+		zeraSelecao();
+		getIcon(btLocalizar, true);
+		limpar();
+		localizarCampeonato();
 	}
 	
 	public void limpar(){
@@ -272,7 +272,8 @@ public class MenuCampeonato extends JPanel {
 	
 	public void localizarCampeonato() {
 		menuMeio.removeAll();
-		
+		LocalizarCampeonato localizar = new LocalizarCampeonato(this);
+		menuMeio.add(localizar);
 		menuMeio.revalidate();
 		menuMeio.repaint();
 	}
@@ -285,8 +286,9 @@ public class MenuCampeonato extends JPanel {
 	
 	public void alterarMenu(Campeonato camp, int modoCrud) {
 		menuMeio.removeAll();
-		
-		
+		CrudCampeonato c = new CrudCampeonato(camp, modoCrud, this);
+		menuMeio.add(c);
+		c.getTxDescricao().requestFocus();
 		menuMeio.revalidate();
 		menuMeio.repaint();
 	}

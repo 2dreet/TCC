@@ -14,6 +14,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import crud.CrudJogador;
+import crud.CrudJogadorBanimento;
+import dao.JogadorBanimentoDao;
 import entidade.Jogador;
 import entidade.Usuario;
 import tela.HomeFuncionario;
@@ -224,8 +226,7 @@ public class MenuJogador extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btBanirJogador, true);
-				alterarMenu(jogadorSelecionado,
-						ParametroCrud.getModoCrudDeletar());
+				banirJogador(jogadorSelecionado);
 			}
 		});
 		jp6.add(btBanirJogador);
@@ -309,6 +310,14 @@ public class MenuJogador extends JPanel {
 		alterarMenu(jogadorSelecionado , ParametroCrud.getModoVisualizar());
 	}
 	
+	public void banirJogador(Jogador jogador){
+		menuMeio.removeAll();
+		CrudJogadorBanimento c = new CrudJogadorBanimento(this, jogador);
+		menuMeio.add(c);
+		menuMeio.revalidate();
+		menuMeio.repaint();
+	}
+	
 	public void localizarJogador() {
 		menuMeio.removeAll();
 		LocalizarJogador localizar = new LocalizarJogador(this);
@@ -321,6 +330,10 @@ public class MenuJogador extends JPanel {
 		btAlterar.setEnabled(true);
 		btDeletar.setEnabled(true);
 		btVisualizar.setEnabled(true);
+		btBanirJogador.setEnabled(true);
+		if(jogadorSelecionado != null && JogadorBanimentoDao.jogadorJaBanido(jogadorSelecionado.getCodigoJogador())){
+			btHistoricoBanimento.setEnabled(true);
+		}
 	}
 	
 	public void alterarMenu(Jogador jogador, int modoCrud) {

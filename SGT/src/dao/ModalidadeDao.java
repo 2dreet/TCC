@@ -7,6 +7,7 @@ import javax.persistence.NoResultException;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 
+import entidade.Banimento;
 import entidade.Marca;
 import entidade.Modalidade;
 
@@ -49,6 +50,33 @@ public class ModalidadeDao {
 			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Modalidade.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
 		} catch (NoResultException ex) {
 			return null;
+		}
+	}
+	
+	public static List<Modalidade> getListaModalidade(){
+		try {
+			String sql = "SELECT * FROM modalidade "
+					+ " where ativo = true order by descricao";
+			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Modalidade.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
+	public static Object[] getVetorModalidade(){
+		List<Modalidade> listaModalidade = getListaModalidade();
+		Object [] listaAux;
+		if(listaModalidade !=null && listaModalidade.size() > 0){
+			listaAux = new Object [listaModalidade.size()];
+			int i = 0;
+			for(Modalidade m : listaModalidade){
+				listaAux[i] = m.getDescricao();
+				i++;
+			}
+			return  listaAux;
+		}else{
+			listaAux = new Object [0];
+			return listaAux;
 		}
 	}
 	

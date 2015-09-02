@@ -46,42 +46,43 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
+import menu.MenuCampeonato;
 import menu.MenuFuncionario;
 import menu.MenuJogador;
+import dao.CampeonatoDao;
 import dao.FuncionarioDao;
 import dao.JogadorDao;
+import entidade.Campeonato;
 import entidade.Funcionario;
 import exemplos.Tabela;
 
 public class LocalizarCampeonato extends JPanel {
 
-	private List<Funcionario> listaFuncionario;
+	private List<Campeonato> listaCampeonato;
 	private JTable tabela;
 	private JTextField txBusca;
 	private ComboBox metodoBusca;
 	private Object[][] colunas = new Object[][] { new String[] { "Código" },
-			new String[] { "Nome" }, new String[] { "Usuário" },
-			new String[] { "RG" }, new String[] { "Telefone" },
-			new String[] { "Email" } };
-	private String[] linhaBusca = new String[] { "Código", "Nome", "Usuário",
-			"RG", "Telefone", "Email" };
-	private Funcionario funcionarioSelecionado;
-	private MenuFuncionario menuPai;
+			new String[] { "Descrição" }, new String[] { "Data Cadastro" },
+			new String[] { "Data Inicio" }, new String[] { "Modalidade" }};
+	private String[] linhaBusca = new String[] { "Código", "Descrição"};
+	private Campeonato campeonatoSelecionado;
+	private MenuCampeonato menuPai;
 	private JPanel meio;
 
 	/**
 	 * Create the panel.
 	 */
 
-	public LocalizarCampeonato(MenuFuncionario menuPai) {
+	public LocalizarCampeonato(MenuCampeonato menuPai) {
 		this();
 		this.menuPai = menuPai;
 	}
 
 	public LocalizarCampeonato() {
 		super();
-		funcionarioSelecionado = null;
-		listaFuncionario = new ArrayList<Funcionario>();
+		campeonatoSelecionado = null;
+		listaCampeonato = new ArrayList<Campeonato>();
 
 		setSize(UtilitarioTela.getTamanhoMeio());
 		setLayout(null);
@@ -95,7 +96,7 @@ public class LocalizarCampeonato extends JPanel {
 		header.setBorder(null);
 		add(header);
 
-		JLabel lblHeader = new JLabel("Localizar Funcionário");
+		JLabel lblHeader = new JLabel("Localizar Campeonato");
 		lblHeader.setHorizontalAlignment(SwingConstants.CENTER);
 		lblHeader.setBounds(0, 0, header.getWidth(), header.getHeight());
 		lblHeader.setFont(UtilitarioTela.getFont(14));
@@ -221,26 +222,26 @@ public class LocalizarCampeonato extends JPanel {
 	public void selecionar() {
 		if (tabela.getRowCount() > 0) {
 			if (tabela.getSelectedRow() > -1) {
-				funcionarioSelecionado = FuncionarioDao.getFuncionario(Integer
+				campeonatoSelecionado = CampeonatoDao.getCampeonato(Integer
 						.parseInt(String.valueOf(tabela.getValueAt(
 								tabela.getSelectedRow(), 0))));
-				if (funcionarioSelecionado != null) {
+				if (campeonatoSelecionado != null) {
 					if (menuPai != null) {
-						menuPai.exibirFuncionario(funcionarioSelecionado);
+						menuPai.exibirCampeonato(campeonatoSelecionado);
 					}
 				} else {
-					Menssage.setMenssage("Funcionário não Selecionado",
-							"Deve selecionar um Funcionário!",
+					Menssage.setMenssage("Campeonato não Selecionado",
+							"Deve selecionar um Campeonato!",
 							ParametroCrud.getModoCrudDeletar(), meio);
 				}
 			} else {
-				Menssage.setMenssage("Funcionário não Selecionado",
-						"Deve selecionar um Funcionário!",
+				Menssage.setMenssage("Campeonato não Selecionado",
+						"Deve selecionar um Campeonato!",
 						ParametroCrud.getModoCrudDeletar(), meio);
 			}
 		} else {
-			Menssage.setMenssage("Funcionário não Selecionado",
-					"Deve selecionar um Funcionário!",
+			Menssage.setMenssage("Campeonato não Selecionado",
+					"Deve selecionar um Campeonato!",
 					ParametroCrud.getModoCrudDeletar(), meio);
 		}
 
@@ -251,26 +252,24 @@ public class LocalizarCampeonato extends JPanel {
 	}
 
 	public void localizar() {
-		listaFuncionario = FuncionarioDao.getListaPesquisa(metodoBusca
+		listaCampeonato = CampeonatoDao.getListaPesquisa(metodoBusca
 				.getSelectedItem().toString(), txBusca.getText());
 		DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
 		modelo.setNumRows(0);
-		if (listaFuncionario != null && listaFuncionario.size() > 0) {
-			for (Funcionario f : listaFuncionario) {
+		if (listaCampeonato != null && listaCampeonato.size() > 0) {
+			for (Campeonato c : listaCampeonato) {
 				modelo.addRow(new String[] {
-						String.valueOf(f.getCodigoFuncionario()),
-						f.getUsuario().getNome() + " "
-								+ f.getUsuario().getSobreNome(),
-						f.getUsuario().getUsuario(),
-						f.getUsuario().getRg(),
-						MascaraCrud.mascaraTelefoneResult(f.getUsuario()
-								.getTelefone()), f.getUsuario().getEmail() });
+						String.valueOf(c.getCodigoCampeonato()),
+						c.getDescricao(),
+						MascaraCrud.macaraDataBanco(c.getDataCadastro()),
+						MascaraCrud.macaraDataBanco(c.getDataIncio()),
+						c.getModalidade().getDescricao()});
 
 			}
 		} else {
-			listaFuncionario = new ArrayList<Funcionario>();
-			Menssage.setMenssage("Funcionário não Encontrado",
-					"Nenhum Funcionário foi encontrado!",
+			listaCampeonato = new ArrayList<Campeonato>();
+			Menssage.setMenssage("Campeonato não Encontrado",
+					"Nenhum Campeonato foi encontrado!",
 					ParametroCrud.getModoCrudDeletar(), meio);
 		}
 	}

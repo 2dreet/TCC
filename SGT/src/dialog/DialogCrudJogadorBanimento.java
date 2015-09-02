@@ -8,7 +8,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.util.Date;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -19,8 +21,10 @@ import javax.swing.SwingConstants;
 
 import org.omg.CORBA.TCKind;
 
+import componente.ComboBox;
 import componente.Menssage;
 import componente.MenssageConfirmacao;
+import dao.BanimentoDao;
 import dao.EntityManagerLocal;
 import dao.MarcaDao;
 import dao.ModalidadeDao;
@@ -28,20 +32,26 @@ import utilitario.BordaSombreada;
 import utilitario.ParametroCrud;
 import utilitario.Parametros;
 import utilitario.UtilitarioTela;
+import entidade.Banimento;
+import entidade.Jogador;
+import entidade.JogadorBanimento;
 import entidade.Marca;
 import entidade.Modalidade;
 
-public class DialogCrudModalidade {
+public class DialogCrudJogadorBanimento {
 	
 	public JTextField txNome;
 	private boolean confirmado;
-	private Modalidade modalidadeSelecionada;
+	private JogadorBanimento JogadorBanimentoSelecionado;
 	private JLabel lblMsg;
 	private JPanel msg;
 	private JPanel meio;
+	private Jogador jogadorSelecionado;
+	private ComboBox cbBanimento;
 	
-	public void crudModalidade(Modalidade modalidadeSelecionada, int modoCrud, JPanel painelPai){
-		this.modalidadeSelecionada = modalidadeSelecionada;
+	public void crudJogadorBanimento(JogadorBanimento JogadorBanimentoSelecionado, int modoCrud, JPanel painelPai, Jogador jogadorSelecionado){
+		this.JogadorBanimentoSelecionado = JogadorBanimentoSelecionado;
+		this.jogadorSelecionado = jogadorSelecionado;
 		
 		JDialog dialog = new JDialog(Parametros.getPai(), true);
 		dialog.setUndecorated(true);
@@ -69,11 +79,11 @@ public class DialogCrudModalidade {
 		
 		String textoHeader = "";
 		if (modoCrud == ParametroCrud.getModoCrudNovo()) {
-			textoHeader = "Cadastrar Modalidade";
+			textoHeader = "Banir Jogador";
 		} else if (modoCrud == ParametroCrud.getModoCrudAlterar()) {
-			textoHeader = "Alterar Modalidade";
+			textoHeader = "Alterar Banimento";
 		} else if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
-			textoHeader = "Deletar Modalidade";
+			textoHeader = "Deletar Banimento";
 		} 
 		
 		JLabel lbHeader = new JLabel(textoHeader);
@@ -114,6 +124,17 @@ public class DialogCrudModalidade {
 		txNome.setLayout(null);
 		txNome.setBorder(UtilitarioTela.jTextFieldNormal());
 		meio.add(txNome);
+		
+		JLabel lbBanimento = new JLabel("Banimento :");
+		lbBanimento.setBounds(20, 80, 100, 20);
+		lbBanimento.setFont(UtilitarioTela.getFont(14));
+		lbBanimento.setForeground(UtilitarioTela.getFontColorCrud());
+		meio.add(lbBanimento);
+		
+		cbBanimento = new ComboBox(new Dimension(150, 25));
+		cbBanimento.setModel(new DefaultComboBoxModel(BanimentoDao.getVetorBanimento()));
+		cbBanimento.setLocation(150, 80);
+		meio.add(cbBanimento);
 		
 		msg = new JPanel();
 		msg.setSize(396, 35);
@@ -167,10 +188,12 @@ public class DialogCrudModalidade {
 		
 		if(modoCrud == ParametroCrud.getModoCrudDeletar()){
 			txNome.setEditable(false);
+			cbBanimento.setEnabled(false);
 		}
 		
-		if(modalidadeSelecionada != null){
-			txNome.setText(this.modalidadeSelecionada.getDescricao());
+		if(JogadorBanimentoSelecionado != null){
+			txNome.setText(this.JogadorBanimentoSelecionado.getDescricao());
+			cbBanimento.setSelectedItem(JogadorBanimentoSelecionado.getBanimento().getDescricao());
 		}
 		
 		dialog.getContentPane().add(panel);
@@ -200,18 +223,10 @@ public class DialogCrudModalidade {
 				txNome.requestFocus();
 				msgErro("Campo Descrição é Obrigatório!");
 				return false;
-			} else if(ModalidadeDao.verificaModalidade(txNome.getText()) && modalidadeSelecionada != null && !modalidadeSelecionada.getDescricao().equals(txNome.getText())){
-				txNome.requestFocus();
-				msgErro("Modalidade Já Cadastrada!");
-				return false;
-			} else if(ModalidadeDao.verificaModalidade(txNome.getText())  && modalidadeSelecionada == null){
-				txNome.requestFocus();
-				msgErro("Modalidade Já Cadastrada!");
-				return false;
-			}
+			} 
 		}
 		if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
-			MenssageConfirmacao.setMenssage("Deletar Modalidade", "Confirma a delecao da Modalidade?\nModalidade: "+this.modalidadeSelecionada.getDescricao(),ParametroCrud.getModoCrudDeletar(), meio);
+			MenssageConfirmacao.setMenssage("Deletar Banimento", "Confirma a delecao do Banimento?\nBanimento: "+this.JogadorBanimentoSelecionado.getDescricao(),ParametroCrud.getModoCrudDeletar(), meio);
 			confirmado = MenssageConfirmacao.isConfirmado();
 		}
 		
@@ -219,16 +234,22 @@ public class DialogCrudModalidade {
 		if(confirmado){
 			EntityManagerLocal.begin();
 			if (modoCrud == ParametroCrud.getModoCrudNovo()) {
-				Modalidade modalidade= new Modalidade();
-				modalidade.setDescricao(txNome.getText());
-				modalidade.setAtivo(true);
-				EntityManagerLocal.persist(modalidade);
+				JogadorBanimento jogadorBanimento= new JogadorBanimento();
+				jogadorBanimento.setDescricao(txNome.getText());
+				jogadorBanimento.setAtivo(true);
+				jogadorBanimento.setJogador(jogadorSelecionado);
+				Banimento banimento = BanimentoDao.getBanimentoNome(String.valueOf(cbBanimento.getSelectedItem()));
+				jogadorBanimento.setBanimento(banimento);
+				jogadorBanimento.setDataBanimento(new Date());
+				EntityManagerLocal.persist(jogadorBanimento);
 			} else if(modoCrud == ParametroCrud.getModoCrudAlterar()){
-				modalidadeSelecionada.setDescricao(txNome.getText());
-				EntityManagerLocal.merge(modalidadeSelecionada);
+				JogadorBanimentoSelecionado.setDescricao(txNome.getText());
+				Banimento banimento = BanimentoDao.getBanimentoNome(String.valueOf(cbBanimento.getSelectedItem()));
+				JogadorBanimentoSelecionado.setBanimento(banimento);
+				EntityManagerLocal.merge(JogadorBanimentoSelecionado);
 			} else if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
-				modalidadeSelecionada.setAtivo(false);
-				EntityManagerLocal.merge(modalidadeSelecionada);
+				JogadorBanimentoSelecionado.setAtivo(false);
+				EntityManagerLocal.merge(JogadorBanimentoSelecionado);
 			}
 			EntityManagerLocal.commit();
 		}

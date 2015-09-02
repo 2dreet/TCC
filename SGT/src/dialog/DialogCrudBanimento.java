@@ -94,14 +94,14 @@ public class DialogCrudBanimento {
 		panel.add(meio);
 		
 		JLabel lbNome = new JLabel("Descrição :");
-		lbNome.setBounds(20, 30, 50, 20);
+		lbNome.setBounds(20, 30, 120, 20);
 		lbNome.setFont(UtilitarioTela.getFont(14));
 		lbNome.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbNome);
 		
 		txNome = new JTextField();
 		txNome.setColumns(100);
-		txNome.setBounds(80, 30, 270, 25);
+		txNome.setBounds(150, 30, 180, 25);
 		txNome.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -192,6 +192,7 @@ public class DialogCrudBanimento {
 		lblMsg.setForeground(UtilitarioTela.getFontColorCrud());
 		msg.add(lblMsg);
 		msg.setBackground(UtilitarioTela.getColorErro());
+		msg.repaint();
 	}
 	
 	public boolean confirmar(int modoCrud){

@@ -26,24 +26,29 @@ import componente.ComboBox;
 import componente.DadoComIcone;
 import componente.Menssage;
 import dao.BanimentoDao;
+import dao.JogadorBanimentoDao;
 import dao.MarcaDao;
 import dao.TimeDao;
 import dialog.DialogCrudBanimento;
+import dialog.DialogCrudJogadorBanimento;
 import dialog.DialogCrudMarca;
 import entidade.Banimento;
 import entidade.Jogador;
+import entidade.JogadorBanimento;
 import entidade.Marca;
 import entidade.Time;
 import utilitario.BordaSombreada;
+import utilitario.MascaraCrud;
 import utilitario.ParametroCrud;
+import utilitario.UtilitarioCrud;
 import utilitario.UtilitarioTabela;
 import utilitario.UtilitarioTela;
 import menu.MenuConfiguracoes;
 import menu.MenuJogador;
 
-public class CrudBanimento extends JPanel{
+public class CrudJogadorBanimento extends JPanel{
 
-	private MenuConfiguracoes menuPai;
+	private MenuJogador menuPai;
 	private JLabel lblMsg;
 	private JPanel msg;
 	private JPanel header;
@@ -54,29 +59,33 @@ public class CrudBanimento extends JPanel{
 	private JButton btDel;
 	private JTextField txBusca;
 	private ComboBox metodoBusca;
-	private Banimento banimentoSelecionado;
-	private List<Banimento> listaBanimento;
+	private JogadorBanimento JogadorBanimentoSelecionado;
+	private Jogador jogadorSelecionado;
+	private List<JogadorBanimento> listaJogadorBanimento;
 	private static JTable tabela;
 	private static Object[][] colunas = new Object[][] { new String[] { "Código" },
-		new String[] { "Descrição" }};
+		new String[] { "Descrição" },
+		new String[] { "Banimento" },
+		new String[] { "Data Banimento" }};
 	private static String[] linhaBusca = new String[] { "Código", "Descrição"};
 	
-	public CrudBanimento(MenuConfiguracoes menuPai){
+	public CrudJogadorBanimento(MenuJogador menuPai, Jogador jogadorSelecionado){
 		this.menuPai = menuPai;
+		this.jogadorSelecionado = jogadorSelecionado;
 		setSize(UtilitarioTela.getTamanhoMeio());
 		setLayout(null);
 		setBackground(null);
-		banimentoSelecionado = null;
+		JogadorBanimentoSelecionado = null;
 		
 		header = new JPanel();
-		header.setSize(500, 30);
+		header.setSize(650, 30);
 		header.setLocation((getWidth() / 2) - 250, 10);
 		header.setLayout(null);
 		header.setBackground(null);
 		header.setBorder(null);
 		add(header);
 
-		lblHeader = new JLabel("Banimento");
+		lblHeader = new JLabel("Jogador Banimento");
 		lblHeader.setHorizontalAlignment(SwingConstants.CENTER);
 		lblHeader.setBounds(0, 0, header.getWidth(), header.getHeight());
 		lblHeader.setFont(UtilitarioTela.getFont(14));
@@ -84,7 +93,7 @@ public class CrudBanimento extends JPanel{
 		header.add(lblHeader);
 
 		meio = new JPanel();
-		meio.setSize(500, getHeight() - 50);
+		meio.setSize(650, getHeight() - 50);
 		meio.setLocation((getWidth() / 2) - 250, 40);
 		meio.setLayout(null);
 		meio.setBackground(UtilitarioTela.getFundoCrud());
@@ -133,9 +142,15 @@ public class CrudBanimento extends JPanel{
 		tcm.getColumn(0).setPreferredWidth(100);
 		tcm.getColumn(0).setMinWidth(100);
 		tcm.getColumn(0).setResizable(false);
-		tcm.getColumn(1).setPreferredWidth(297);
-		tcm.getColumn(1).setMinWidth(297);
+		tcm.getColumn(1).setPreferredWidth(220);
+		tcm.getColumn(1).setMinWidth(220);
 		tcm.getColumn(1).setResizable(false);
+		tcm.getColumn(2).setPreferredWidth(216);
+		tcm.getColumn(2).setMinWidth(216);
+		tcm.getColumn(2).setResizable(false);
+		tcm.getColumn(3).setPreferredWidth(100);
+		tcm.getColumn(3).setMinWidth(100);
+		tcm.getColumn(3).setResizable(false);
 		
 		UtilitarioTabela.pintarColona(UtilitarioTabela.getFundoHeaderPadrao(),
 				UtilitarioTabela.getFontColotHeaderPadrao(), tcm, colunas);
@@ -145,7 +160,7 @@ public class CrudBanimento extends JPanel{
 		tabela.getTableHeader().setReorderingAllowed(false);
 		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scroll = new JScrollPane(tabela);
-		scroll.setBounds(50, 55, 400, 300);
+		scroll.setBounds(5, 55, 640, 300);
 		meio.add(scroll);
 		
 		btAdd = new JButton("Adicionar");
@@ -156,10 +171,10 @@ public class CrudBanimento extends JPanel{
 		btAdd.setHorizontalAlignment(SwingConstants.LEFT);
 		btAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DialogCrudBanimento c = new DialogCrudBanimento();
-				c.crudBanimento(null, ParametroCrud.getModoCrudNovo(),meio);
+				DialogCrudJogadorBanimento c = new DialogCrudJogadorBanimento();
+				c.crudJogadorBanimento(null, ParametroCrud.getModoCrudNovo(), meio, jogadorSelecionado);
 				if(c.getConfirmado()){
-					Menssage.setMenssage("Novo Banimento", "Banimento cadastrado com Sucesso!", ParametroCrud.getModoCrudNovo(), meio);
+					Menssage.setMenssage("Banimento de Jogador", "Jogador Banido com Sucesso!", ParametroCrud.getModoCrudNovo(), meio);
 					localizar();
 				}
 			}
@@ -175,10 +190,10 @@ public class CrudBanimento extends JPanel{
 		btAlt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(selecionar()){
-					DialogCrudBanimento c = new DialogCrudBanimento();
-					c.crudBanimento(banimentoSelecionado, ParametroCrud.getModoCrudAlterar(),meio);
+					DialogCrudJogadorBanimento c = new DialogCrudJogadorBanimento();
+					c.crudJogadorBanimento(JogadorBanimentoSelecionado, ParametroCrud.getModoCrudAlterar(),meio, jogadorSelecionado);
 					if(c.getConfirmado()){
-						Menssage.setMenssage("Altera Banimento", "Banimento alterado com Sucesso!", ParametroCrud.getModoCrudAlterar(), meio);
+						Menssage.setMenssage("Banimento de Jogador", "Banimento alterado com Sucesso!", ParametroCrud.getModoCrudAlterar(), meio);
 						localizar();
 					}
 				}
@@ -195,10 +210,10 @@ public class CrudBanimento extends JPanel{
 		btDel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(selecionar()){
-					DialogCrudBanimento c = new DialogCrudBanimento();
-					c.crudBanimento(banimentoSelecionado, ParametroCrud.getModoCrudDeletar(),meio);
+					DialogCrudJogadorBanimento c = new DialogCrudJogadorBanimento();
+					c.crudJogadorBanimento(JogadorBanimentoSelecionado, ParametroCrud.getModoCrudDeletar(),meio, jogadorSelecionado);
 					if(c.getConfirmado()){
-						Menssage.setMenssage("Deletar Banimento", "Banimento deletado com Sucesso!", ParametroCrud.getModoCrudDeletar(), meio);
+						Menssage.setMenssage("Banimento de Jogador", "Banimento deletado com Sucesso!", ParametroCrud.getModoCrudDeletar(), meio);
 						localizar();
 					}
 				}
@@ -206,13 +221,18 @@ public class CrudBanimento extends JPanel{
 		});
 		meio.add(btDel);
 		localizar();
+		
+		if(!BanimentoDao.banimentosAtivos()){
+			btAdd.setEnabled(false);
+			btAlt.setEnabled(false);
+		}
 	}
 	
 	public boolean selecionar() {
 		if (tabela.getRowCount() > 0) {
 			if (tabela.getSelectedRow() > -1) {
-				banimentoSelecionado = BanimentoDao
-						.getBanimento(Integer.parseInt(String.valueOf(tabela
+				JogadorBanimentoSelecionado = JogadorBanimentoDao
+						.getJogadorBanimento(Integer.parseInt(String.valueOf(tabela
 								.getValueAt(tabela.getSelectedRow(), 0))));
 				return true;
 			} else {
@@ -231,17 +251,17 @@ public class CrudBanimento extends JPanel{
 	}
 	
 	public void localizar() {
-		listaBanimento = BanimentoDao.getListaPesquisa(metodoBusca.getSelectedItem()
-				.toString(), txBusca.getText());
+		listaJogadorBanimento = JogadorBanimentoDao.getListaPesquisa(metodoBusca.getSelectedItem()
+				.toString(), txBusca.getText(), jogadorSelecionado.getCodigoJogador());
 		DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
 		modelo.setNumRows(0);
-		if (listaBanimento != null && listaBanimento.size() > 0) {
-			for (Banimento b : listaBanimento) {
+		if (listaJogadorBanimento != null && listaJogadorBanimento.size() > 0) {
+			for (JogadorBanimento jb : listaJogadorBanimento) {
 				modelo.addRow(new Object[] {
-						String.valueOf(b.getCodigoBanimento()), b.getDescricao() });
+						String.valueOf(jb.getCodigoJogBan()), jb.getDescricao() , jb.getBanimento().getDescricao() , MascaraCrud.macaraDataBanco(jb.getDataBanimento()) });
 			}
 		} else {
-			listaBanimento = new ArrayList<Banimento>();
+			listaJogadorBanimento = new ArrayList<JogadorBanimento>();
 			Menssage.setMenssage("Banimento não Encontrado",
 					"Nenhum Banimento foi encontrado!",
 					ParametroCrud.getModoCrudDeletar(), meio);
