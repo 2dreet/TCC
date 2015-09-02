@@ -63,12 +63,12 @@ public class Time implements Serializable {
     private Collection<Classificacao> classificacaoCollection1;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "timePrimeiro")
     private Collection<Classificacao> classificacaoCollection2;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "time")
+    private Collection<TimePartida> timePartidaCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "time")
+    private Collection<CampeonatoTime> campeonatoTimeCollection;
     @OneToMany(mappedBy = "time")
     private Collection<Jogador> jogadorCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "time")
-    private Collection<Timepartida> timepartidaCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "time")
-    private Collection<Campeonatotime> campeonatotimeCollection;
 
     public Time() {
     }
@@ -151,30 +151,30 @@ public class Time implements Serializable {
     }
 
     @XmlTransient
+    public Collection<TimePartida> getTimePartidaCollection() {
+        return timePartidaCollection;
+    }
+
+    public void setTimePartidaCollection(Collection<TimePartida> timePartidaCollection) {
+        this.timePartidaCollection = timePartidaCollection;
+    }
+
+    @XmlTransient
+    public Collection<CampeonatoTime> getCampeonatoTimeCollection() {
+        return campeonatoTimeCollection;
+    }
+
+    public void setCampeonatoTimeCollection(Collection<CampeonatoTime> campeonatoTimeCollection) {
+        this.campeonatoTimeCollection = campeonatoTimeCollection;
+    }
+
+    @XmlTransient
     public Collection<Jogador> getJogadorCollection() {
         return jogadorCollection;
     }
 
     public void setJogadorCollection(Collection<Jogador> jogadorCollection) {
         this.jogadorCollection = jogadorCollection;
-    }
-
-    @XmlTransient
-    public Collection<Timepartida> getTimepartidaCollection() {
-        return timepartidaCollection;
-    }
-
-    public void setTimepartidaCollection(Collection<Timepartida> timepartidaCollection) {
-        this.timepartidaCollection = timepartidaCollection;
-    }
-
-    @XmlTransient
-    public Collection<Campeonatotime> getCampeonatotimeCollection() {
-        return campeonatotimeCollection;
-    }
-
-    public void setCampeonatotimeCollection(Collection<Campeonatotime> campeonatotimeCollection) {
-        this.campeonatotimeCollection = campeonatotimeCollection;
     }
 
     @Override

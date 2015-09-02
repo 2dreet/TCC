@@ -27,16 +27,16 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jose
  */
 @Entity
-@Table(name = "jogadorbanimento")
+@Table(name = "jogador_banimento")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Jogadorbanimento.findAll", query = "SELECT j FROM Jogadorbanimento j"),
-    @NamedQuery(name = "Jogadorbanimento.findByCodigoJogBan", query = "SELECT j FROM Jogadorbanimento j WHERE j.codigoJogBan = :codigoJogBan"),
-    @NamedQuery(name = "Jogadorbanimento.findByDescricao", query = "SELECT j FROM Jogadorbanimento j WHERE j.descricao = :descricao"),
-    @NamedQuery(name = "Jogadorbanimento.findByDataBanimento", query = "SELECT j FROM Jogadorbanimento j WHERE j.dataBanimento = :dataBanimento"),
-    @NamedQuery(name = "Jogadorbanimento.findByDataSaidaBanimento", query = "SELECT j FROM Jogadorbanimento j WHERE j.dataSaidaBanimento = :dataSaidaBanimento"),
-    @NamedQuery(name = "Jogadorbanimento.findByAtivo", query = "SELECT j FROM Jogadorbanimento j WHERE j.ativo = :ativo")})
-public class Jogadorbanimento implements Serializable {
+    @NamedQuery(name = "JogadorBanimento.findAll", query = "SELECT j FROM JogadorBanimento j"),
+    @NamedQuery(name = "JogadorBanimento.findByCodigoJogBan", query = "SELECT j FROM JogadorBanimento j WHERE j.codigoJogBan = :codigoJogBan"),
+    @NamedQuery(name = "JogadorBanimento.findByDescricao", query = "SELECT j FROM JogadorBanimento j WHERE j.descricao = :descricao"),
+    @NamedQuery(name = "JogadorBanimento.findByDataBanimento", query = "SELECT j FROM JogadorBanimento j WHERE j.dataBanimento = :dataBanimento"),
+    @NamedQuery(name = "JogadorBanimento.findByDataSaidaBanimento", query = "SELECT j FROM JogadorBanimento j WHERE j.dataSaidaBanimento = :dataSaidaBanimento"),
+    @NamedQuery(name = "JogadorBanimento.findByAtivo", query = "SELECT j FROM JogadorBanimento j WHERE j.ativo = :ativo")})
+public class JogadorBanimento implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,14 +61,14 @@ public class Jogadorbanimento implements Serializable {
     @ManyToOne(optional = false)
     private Banimento banimento;
 
-    public Jogadorbanimento() {
+    public JogadorBanimento() {
     }
 
-    public Jogadorbanimento(Integer codigoJogBan) {
+    public JogadorBanimento(Integer codigoJogBan) {
         this.codigoJogBan = codigoJogBan;
     }
 
-    public Jogadorbanimento(Integer codigoJogBan, boolean ativo) {
+    public JogadorBanimento(Integer codigoJogBan, boolean ativo) {
         this.codigoJogBan = codigoJogBan;
         this.ativo = ativo;
     }
@@ -112,7 +112,7 @@ public class Jogadorbanimento implements Serializable {
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
-
+    
     public Jogador getJogador() {
 		return jogador;
 	}
@@ -139,10 +139,10 @@ public class Jogadorbanimento implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Jogadorbanimento)) {
+        if (!(object instanceof JogadorBanimento)) {
             return false;
         }
-        Jogadorbanimento other = (Jogadorbanimento) object;
+        JogadorBanimento other = (JogadorBanimento) object;
         if ((this.codigoJogBan == null && other.codigoJogBan != null) || (this.codigoJogBan != null && !this.codigoJogBan.equals(other.codigoJogBan))) {
             return false;
         }
@@ -151,7 +151,7 @@ public class Jogadorbanimento implements Serializable {
 
     @Override
     public String toString() {
-        return "entidade.Jogadorbanimento[ codigoJogBan=" + codigoJogBan + " ]";
+        return "entidade.JogadorBanimento[ codigoJogBan=" + codigoJogBan + " ]";
     }
     
 }

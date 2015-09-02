@@ -37,6 +37,8 @@ public class MenuJogador extends JPanel {
 	private JButton btAlterar;
 	private JButton btDeletar;
 	private JButton btVisualizar;
+	private JButton btBanirJogador;
+	private JButton btHistoricoBanimento;
 	private Jogador jogadorSelecionado;
 
 	public MenuJogador() {
@@ -210,6 +212,23 @@ public class MenuJogador extends JPanel {
 		jp6.setLayout(null);
 		jp6.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp6);
+		
+		btBanirJogador = new JButton("Banir");
+		btBanirJogador.setBounds(5, 5, 230, 30);
+		btBanirJogador.setBorderPainted(false);
+		btBanirJogador.setBackground(null);
+		btBanirJogador.setLayout(null);
+		btBanirJogador.setName("banirJogador");
+		btBanirJogador.setHorizontalAlignment(SwingConstants.LEFT);
+		btBanirJogador.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				zeraSelecao();
+				getIcon(btBanirJogador, true);
+				alterarMenu(jogadorSelecionado,
+						ParametroCrud.getModoCrudDeletar());
+			}
+		});
+		jp6.add(btBanirJogador);
 
 		JPanel jp7 = new JPanel();
 		jp7.setBounds(0, 240, 240, 40);
@@ -217,12 +236,31 @@ public class MenuJogador extends JPanel {
 		jp7.setLayout(null);
 		jp7.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp7);
+		
+		btHistoricoBanimento = new JButton("Histórico Banimento");
+		btHistoricoBanimento.setBounds(5, 5, 230, 30);
+		btHistoricoBanimento.setBorderPainted(false);
+		btHistoricoBanimento.setBackground(null);
+		btHistoricoBanimento.setLayout(null);
+		btHistoricoBanimento.setName("historicoBanimentoJogador");
+		btHistoricoBanimento.setHorizontalAlignment(SwingConstants.LEFT);
+		btHistoricoBanimento.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				zeraSelecao();
+				getIcon(btHistoricoBanimento, true);
+				alterarMenu(jogadorSelecionado,
+						ParametroCrud.getModoCrudDeletar());
+			}
+		});
+		jp7.add(btHistoricoBanimento);
 
 		getIcon(btNovo, false);
 		getIcon(btAlterar, false);
 		getIcon(btDeletar, false);
 		getIcon(btVisualizar, false);
 		getIcon(btLocalizar, false);
+		getIcon(btBanirJogador, false);
+		getIcon(btHistoricoBanimento, false);
 		
 		btDeletar.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
@@ -232,12 +270,18 @@ public class MenuJogador extends JPanel {
 		btVisualizar.setForeground(UtilitarioTela.getFontColorSelecao(false));
 		btLocalizar.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
+		btBanirJogador.setForeground(UtilitarioTela
+				.getFontColorSelecao(false));
+		btHistoricoBanimento.setForeground(UtilitarioTela
+				.getFontColorSelecao(false));
 		
 		btNovo.setFont(UtilitarioTela.getFont(14));
 		btAlterar.setFont(UtilitarioTela.getFont(14));
 		btDeletar.setFont(UtilitarioTela.getFont(14));
 		btVisualizar.setFont(UtilitarioTela.getFont(14));
 		btLocalizar.setFont(UtilitarioTela.getFont(14));
+		btBanirJogador.setFont(UtilitarioTela.getFont(14));
+		btHistoricoBanimento.setFont(UtilitarioTela.getFont(14));
 		
 		limpar();
 	}
@@ -253,6 +297,8 @@ public class MenuJogador extends JPanel {
 		btAlterar.setEnabled(false);
 		btDeletar.setEnabled(false);
 		btVisualizar.setEnabled(false);
+		btBanirJogador.setEnabled(false);
+		btHistoricoBanimento.setEnabled(false);
 	}
 	
 	public void exibirJogador(Jogador jogador){
@@ -316,6 +362,18 @@ public class MenuJogador extends JPanel {
 		btVisualizar.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
 		
+		btBanirJogador.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/crud/visuJog.png")));
+		btBanirJogador.setBackground(UtilitarioTela.getBtnFundo(false));
+		btBanirJogador.setForeground(UtilitarioTela
+				.getFontColorSelecao(false));
+		
+		btHistoricoBanimento.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/crud/visuJog.png")));
+		btHistoricoBanimento.setBackground(UtilitarioTela.getBtnFundo(false));
+		btHistoricoBanimento.setForeground(UtilitarioTela
+				.getFontColorSelecao(false));
+		
 
 	}
 
@@ -351,6 +409,20 @@ public class MenuJogador extends JPanel {
 				}
 			}
 			if (botao.getName().equals("visualizarJogador")) {
+				if (selecionado) {
+					url = "/imagem/crud/visuJogSelect.png";
+				} else {
+					url = "/imagem/crud/visuJog.png";
+				}
+			}
+			if (botao.getName().equals("banirJogador")) {
+				if (selecionado) {
+					url = "/imagem/crud/visuJogSelect.png";
+				} else {
+					url = "/imagem/crud/visuJog.png";
+				}
+			}
+			if (botao.getName().equals("historicoBanimentoJogador")) {
 				if (selecionado) {
 					url = "/imagem/crud/visuJogSelect.png";
 				} else {

@@ -24,12 +24,12 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jose
  */
 @Entity
-@Table(name = "funcionariocampeonato")
+@Table(name = "funcionario_campeonato")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Funcionariocampeonato.findAll", query = "SELECT f FROM Funcionariocampeonato f"),
-    @NamedQuery(name = "Funcionariocampeonato.findByCodigoFuncCamp", query = "SELECT f FROM Funcionariocampeonato f WHERE f.codigoFuncCamp = :codigoFuncCamp")})
-public class Funcionariocampeonato implements Serializable {
+    @NamedQuery(name = "FuncionarioCampeonato.findAll", query = "SELECT f FROM FuncionarioCampeonato f"),
+    @NamedQuery(name = "FuncionarioCampeonato.findByCodigoFuncCamp", query = "SELECT f FROM FuncionarioCampeonato f WHERE f.codigoFuncCamp = :codigoFuncCamp")})
+public class FuncionarioCampeonato implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,10 +43,10 @@ public class Funcionariocampeonato implements Serializable {
     @ManyToOne(optional = false)
     private Campeonato campeonato;
 
-    public Funcionariocampeonato() {
+    public FuncionarioCampeonato() {
     }
 
-    public Funcionariocampeonato(Integer codigoFuncCamp) {
+    public FuncionarioCampeonato(Integer codigoFuncCamp) {
         this.codigoFuncCamp = codigoFuncCamp;
     }
 
@@ -84,10 +84,10 @@ public class Funcionariocampeonato implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Funcionariocampeonato)) {
+        if (!(object instanceof FuncionarioCampeonato)) {
             return false;
         }
-        Funcionariocampeonato other = (Funcionariocampeonato) object;
+        FuncionarioCampeonato other = (FuncionarioCampeonato) object;
         if ((this.codigoFuncCamp == null && other.codigoFuncCamp != null) || (this.codigoFuncCamp != null && !this.codigoFuncCamp.equals(other.codigoFuncCamp))) {
             return false;
         }
@@ -96,7 +96,7 @@ public class Funcionariocampeonato implements Serializable {
 
     @Override
     public String toString() {
-        return "entidade.Funcionariocampeonato[ codigoFuncCamp=" + codigoFuncCamp + " ]";
+        return "entidade.FuncionarioCampeonato[ codigoFuncCamp=" + codigoFuncCamp + " ]";
     }
     
 }

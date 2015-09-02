@@ -24,21 +24,21 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jose
  */
 @Entity
-@Table(name = "timepartida")
+@Table(name = "time_partida")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Timepartida.findAll", query = "SELECT t FROM Timepartida t"),
-    @NamedQuery(name = "Timepartida.findByCodigoTimePartida", query = "SELECT t FROM Timepartida t WHERE t.codigoTimePartida = :codigoTimePartida"),
-    @NamedQuery(name = "Timepartida.findByTimeVencedor", query = "SELECT t FROM Timepartida t WHERE t.timeVencedor = :timeVencedor"),
-    @NamedQuery(name = "Timepartida.findByPlacarTimeVencedor", query = "SELECT t FROM Timepartida t WHERE t.placarTimeVencedor = :placarTimeVencedor"),
-    @NamedQuery(name = "Timepartida.findByPlacarTimePerdedor", query = "SELECT t FROM Timepartida t WHERE t.placarTimePerdedor = :placarTimePerdedor")})
-public class Timepartida implements Serializable {
+    @NamedQuery(name = "TimePartida.findAll", query = "SELECT t FROM TimePartida t"),
+    @NamedQuery(name = "TimePartida.findByCodigotimePartida", query = "SELECT t FROM TimePartida t WHERE t.codigotimePartida = :codigotimePartida"),
+    @NamedQuery(name = "TimePartida.findByTimeVencedor", query = "SELECT t FROM TimePartida t WHERE t.timeVencedor = :timeVencedor"),
+    @NamedQuery(name = "TimePartida.findByPlacarTimeVencedor", query = "SELECT t FROM TimePartida t WHERE t.placarTimeVencedor = :placarTimeVencedor"),
+    @NamedQuery(name = "TimePartida.findByPlacarTimePerdedor", query = "SELECT t FROM TimePartida t WHERE t.placarTimePerdedor = :placarTimePerdedor")})
+public class TimePartida implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "codigoTimePartida")
-    private Integer codigoTimePartida;
+    @Column(name = "codigotime_partida")
+    private Integer codigotimePartida;
     @Column(name = "timeVencedor")
     private Integer timeVencedor;
     @Column(name = "placarTimeVencedor")
@@ -52,19 +52,19 @@ public class Timepartida implements Serializable {
     @ManyToOne(optional = false)
     private Partida partida;
 
-    public Timepartida() {
+    public TimePartida() {
     }
 
-    public Timepartida(Integer codigoTimePartida) {
-        this.codigoTimePartida = codigoTimePartida;
+    public TimePartida(Integer codigotimePartida) {
+        this.codigotimePartida = codigotimePartida;
     }
 
-    public Integer getCodigoTimePartida() {
-        return codigoTimePartida;
+    public Integer getCodigotimePartida() {
+        return codigotimePartida;
     }
 
-    public void setCodigoTimePartida(Integer codigoTimePartida) {
-        this.codigoTimePartida = codigoTimePartida;
+    public void setCodigotimePartida(Integer codigotimePartida) {
+        this.codigotimePartida = codigotimePartida;
     }
 
     public Integer getTimeVencedor() {
@@ -110,18 +110,18 @@ public class Timepartida implements Serializable {
 	@Override
     public int hashCode() {
         int hash = 0;
-        hash += (codigoTimePartida != null ? codigoTimePartida.hashCode() : 0);
+        hash += (codigotimePartida != null ? codigotimePartida.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Timepartida)) {
+        if (!(object instanceof TimePartida)) {
             return false;
         }
-        Timepartida other = (Timepartida) object;
-        if ((this.codigoTimePartida == null && other.codigoTimePartida != null) || (this.codigoTimePartida != null && !this.codigoTimePartida.equals(other.codigoTimePartida))) {
+        TimePartida other = (TimePartida) object;
+        if ((this.codigotimePartida == null && other.codigotimePartida != null) || (this.codigotimePartida != null && !this.codigotimePartida.equals(other.codigotimePartida))) {
             return false;
         }
         return true;
@@ -129,7 +129,7 @@ public class Timepartida implements Serializable {
 
     @Override
     public String toString() {
-        return "entidade.Timepartida[ codigoTimePartida=" + codigoTimePartida + " ]";
+        return "entidade.TimePartida[ codigotimePartida=" + codigotimePartida + " ]";
     }
     
 }

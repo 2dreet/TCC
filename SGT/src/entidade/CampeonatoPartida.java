@@ -24,12 +24,12 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jose
  */
 @Entity
-@Table(name = "campeonatopartida")
+@Table(name = "campeonato_partida")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Campeonatopartida.findAll", query = "SELECT c FROM Campeonatopartida c"),
-    @NamedQuery(name = "Campeonatopartida.findByCodigoCampPartida", query = "SELECT c FROM Campeonatopartida c WHERE c.codigoCampPartida = :codigoCampPartida")})
-public class Campeonatopartida implements Serializable {
+    @NamedQuery(name = "CampeonatoPartida.findAll", query = "SELECT c FROM CampeonatoPartida c"),
+    @NamedQuery(name = "CampeonatoPartida.findByCodigoCampPartida", query = "SELECT c FROM CampeonatoPartida c WHERE c.codigoCampPartida = :codigoCampPartida")})
+public class CampeonatoPartida implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,10 +43,10 @@ public class Campeonatopartida implements Serializable {
     @ManyToOne(optional = false)
     private Campeonato campeonato;
 
-    public Campeonatopartida() {
+    public CampeonatoPartida() {
     }
 
-    public Campeonatopartida(Integer codigoCampPartida) {
+    public CampeonatoPartida(Integer codigoCampPartida) {
         this.codigoCampPartida = codigoCampPartida;
     }
 
@@ -57,7 +57,6 @@ public class Campeonatopartida implements Serializable {
     public void setCodigoCampPartida(Integer codigoCampPartida) {
         this.codigoCampPartida = codigoCampPartida;
     }
-
     
     public Partida getPartida() {
 		return partida;
@@ -85,10 +84,10 @@ public class Campeonatopartida implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Campeonatopartida)) {
+        if (!(object instanceof CampeonatoPartida)) {
             return false;
         }
-        Campeonatopartida other = (Campeonatopartida) object;
+        CampeonatoPartida other = (CampeonatoPartida) object;
         if ((this.codigoCampPartida == null && other.codigoCampPartida != null) || (this.codigoCampPartida != null && !this.codigoCampPartida.equals(other.codigoCampPartida))) {
             return false;
         }
@@ -97,7 +96,7 @@ public class Campeonatopartida implements Serializable {
 
     @Override
     public String toString() {
-        return "entidade.Campeonatopartida[ codigoCampPartida=" + codigoCampPartida + " ]";
+        return "entidade.CampeonatoPartida[ codigoCampPartida=" + codigoCampPartida + " ]";
     }
     
 }

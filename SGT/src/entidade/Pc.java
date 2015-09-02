@@ -49,7 +49,7 @@ public class Pc implements Serializable {
     @Column(name = "ativo")
     private boolean ativo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pc")
-    private Collection<Pcpartida> pcpartidaCollection;
+    private Collection<PcPartida> pcPartidaCollection;
 
     public Pc() {
     }
@@ -96,12 +96,12 @@ public class Pc implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Pcpartida> getPcpartidaCollection() {
-        return pcpartidaCollection;
+    public Collection<PcPartida> getPcPartidaCollection() {
+        return pcPartidaCollection;
     }
 
-    public void setPcpartidaCollection(Collection<Pcpartida> pcpartidaCollection) {
-        this.pcpartidaCollection = pcpartidaCollection;
+    public void setPcPartidaCollection(Collection<PcPartida> pcPartidaCollection) {
+        this.pcPartidaCollection = pcPartidaCollection;
     }
 
     @Override

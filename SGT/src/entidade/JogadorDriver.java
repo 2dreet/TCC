@@ -24,71 +24,71 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jose
  */
 @Entity
-@Table(name = "jogadorpartida")
+@Table(name = "jogador_driver")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Jogadorpartida.findAll", query = "SELECT j FROM Jogadorpartida j"),
-    @NamedQuery(name = "Jogadorpartida.findByCodigoJP", query = "SELECT j FROM Jogadorpartida j WHERE j.codigoJP = :codigoJP")})
-public class Jogadorpartida implements Serializable {
+    @NamedQuery(name = "JogadorDriver.findAll", query = "SELECT j FROM JogadorDriver j"),
+    @NamedQuery(name = "JogadorDriver.findByCodigoJD", query = "SELECT j FROM JogadorDriver j WHERE j.codigoJD = :codigoJD")})
+public class JogadorDriver implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "codigoJP")
-    private Integer codigoJP;
+    @Column(name = "codigoJD")
+    private Integer codigoJD;
     @JoinColumn(name = "codigoJogador", referencedColumnName = "codigoJogador")
     @ManyToOne(optional = false)
     private Jogador jogador;
-    @JoinColumn(name = "codigoPartida", referencedColumnName = "codigoPartida")
+    @JoinColumn(name = "codigoDriver", referencedColumnName = "codigoDriver")
     @ManyToOne(optional = false)
-    private Partida partida;
+    private Driver driver;
 
-    public Jogadorpartida() {
+    public JogadorDriver() {
     }
 
-    public Jogadorpartida(Integer codigoJP) {
-        this.codigoJP = codigoJP;
+    public JogadorDriver(Integer codigoJD) {
+        this.codigoJD = codigoJD;
     }
 
-    public Integer getCodigoJP() {
-        return codigoJP;
+    public Integer getCodigoJD() {
+        return codigoJD;
     }
 
-    public void setCodigoJP(Integer codigoJP) {
-        this.codigoJP = codigoJP;
+    public void setCodigoJD(Integer codigoJD) {
+        this.codigoJD = codigoJD;
     }
-
+    
     public Jogador getJogador() {
-        return jogador;
-    }
+		return jogador;
+	}
 
-    public void setJogador(Jogador jogador) {
-        this.jogador = jogador;
-    }
+	public void setJogador(Jogador jogador) {
+		this.jogador = jogador;
+	}
 
-    public Partida getPartida() {
-        return partida;
-    }
+	public Driver getDriver() {
+		return driver;
+	}
 
-    public void setPartida(Partida partida) {
-        this.partida = partida;
-    }
+	public void setDriver(Driver driver) {
+		this.driver = driver;
+	}
 
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
-        hash += (codigoJP != null ? codigoJP.hashCode() : 0);
+        hash += (codigoJD != null ? codigoJD.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Jogadorpartida)) {
+        if (!(object instanceof JogadorDriver)) {
             return false;
         }
-        Jogadorpartida other = (Jogadorpartida) object;
-        if ((this.codigoJP == null && other.codigoJP != null) || (this.codigoJP != null && !this.codigoJP.equals(other.codigoJP))) {
+        JogadorDriver other = (JogadorDriver) object;
+        if ((this.codigoJD == null && other.codigoJD != null) || (this.codigoJD != null && !this.codigoJD.equals(other.codigoJD))) {
             return false;
         }
         return true;
@@ -96,7 +96,7 @@ public class Jogadorpartida implements Serializable {
 
     @Override
     public String toString() {
-        return "entidade.Jogadorpartida[ codigoJP=" + codigoJP + " ]";
+        return "entidade.JogadorDriver[ codigoJD=" + codigoJD + " ]";
     }
     
 }

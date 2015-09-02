@@ -51,7 +51,7 @@ public class Funcionario implements Serializable {
     @ManyToOne(optional = false)
     private Usuario usuario;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "funcionario")
-    private Collection<Funcionariocampeonato> funcionariocampeonatoCollection;
+    private Collection<FuncionarioCampeonato> funcionarioCampeonatoCollection;
 
     public Funcionario() {
     }
@@ -85,12 +85,12 @@ public class Funcionario implements Serializable {
 	}
 
 	@XmlTransient
-    public Collection<Funcionariocampeonato> getFuncionariocampeonatoCollection() {
-        return funcionariocampeonatoCollection;
+    public Collection<FuncionarioCampeonato> getFuncionarioCampeonatoCollection() {
+        return funcionarioCampeonatoCollection;
     }
 
-    public void setFuncionariocampeonatoCollection(Collection<Funcionariocampeonato> funcionariocampeonatoCollection) {
-        this.funcionariocampeonatoCollection = funcionariocampeonatoCollection;
+    public void setFuncionarioCampeonatoCollection(Collection<FuncionarioCampeonato> funcionarioCampeonatoCollection) {
+        this.funcionarioCampeonatoCollection = funcionarioCampeonatoCollection;
     }
 
     @Override

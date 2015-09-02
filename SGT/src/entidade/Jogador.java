@@ -52,11 +52,11 @@ public class Jogador implements Serializable {
     @Column(name = "titular")
     private boolean titular;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "jogador")
-    private Collection<Jogadorbanimento> jogadorbanimentoCollection;
+    private Collection<JogadorBanimento> jogadorBanimentoCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "jogador")
-    private Collection<Jogadorpartida> jogadorpartidaCollection;
+    private Collection<JogadorDriver> jogadorDriverCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "jogador")
-    private Collection<Jogadordriver> jogadordriverCollection;
+    private Collection<JogadorPartida> jogadorPartidaCollection;
     @JoinColumn(name = "codigoUsuario", referencedColumnName = "codigoUsuario")
     @ManyToOne(optional = false)
     private Usuario usuario;
@@ -101,30 +101,30 @@ public class Jogador implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Jogadorbanimento> getJogadorbanimentoCollection() {
-        return jogadorbanimentoCollection;
+    public Collection<JogadorBanimento> getJogadorBanimentoCollection() {
+        return jogadorBanimentoCollection;
     }
 
-    public void setJogadorbanimentoCollection(Collection<Jogadorbanimento> jogadorbanimentoCollection) {
-        this.jogadorbanimentoCollection = jogadorbanimentoCollection;
-    }
-
-    @XmlTransient
-    public Collection<Jogadorpartida> getJogadorpartidaCollection() {
-        return jogadorpartidaCollection;
-    }
-
-    public void setJogadorpartidaCollection(Collection<Jogadorpartida> jogadorpartidaCollection) {
-        this.jogadorpartidaCollection = jogadorpartidaCollection;
+    public void setJogadorBanimentoCollection(Collection<JogadorBanimento> jogadorBanimentoCollection) {
+        this.jogadorBanimentoCollection = jogadorBanimentoCollection;
     }
 
     @XmlTransient
-    public Collection<Jogadordriver> getJogadordriverCollection() {
-        return jogadordriverCollection;
+    public Collection<JogadorDriver> getJogadorDriverCollection() {
+        return jogadorDriverCollection;
     }
 
-    public void setJogadordriverCollection(Collection<Jogadordriver> jogadordriverCollection) {
-        this.jogadordriverCollection = jogadordriverCollection;
+    public void setJogadorDriverCollection(Collection<JogadorDriver> jogadorDriverCollection) {
+        this.jogadorDriverCollection = jogadorDriverCollection;
+    }
+
+    @XmlTransient
+    public Collection<JogadorPartida> getJogadorPartidaCollection() {
+        return jogadorPartidaCollection;
+    }
+
+    public void setJogadorPartidaCollection(Collection<JogadorPartida> jogadorPartidaCollection) {
+        this.jogadorPartidaCollection = jogadorPartidaCollection;
     }
     
     public Usuario getUsuario() {

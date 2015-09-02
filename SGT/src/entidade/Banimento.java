@@ -46,7 +46,7 @@ public class Banimento implements Serializable {
     @Column(name = "ativo")
     private boolean ativo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "banimento")
-    private Collection<Jogadorbanimento> jogadorbanimentoCollection;
+    private Collection<JogadorBanimento> jogadorBanimentoCollection;
 
     public Banimento() {
     }
@@ -85,12 +85,12 @@ public class Banimento implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Jogadorbanimento> getJogadorbanimentoCollection() {
-        return jogadorbanimentoCollection;
+    public Collection<JogadorBanimento> getJogadorBanimentoCollection() {
+        return jogadorBanimentoCollection;
     }
 
-    public void setJogadorbanimentoCollection(Collection<Jogadorbanimento> jogadorbanimentoCollection) {
-        this.jogadorbanimentoCollection = jogadorbanimentoCollection;
+    public void setJogadorBanimentoCollection(Collection<JogadorBanimento> jogadorBanimentoCollection) {
+        this.jogadorBanimentoCollection = jogadorBanimentoCollection;
     }
 
     @Override

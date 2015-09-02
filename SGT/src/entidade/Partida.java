@@ -63,13 +63,13 @@ public class Partida implements Serializable {
     @Column(name = "ativo")
     private boolean ativo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "partida")
-    private Collection<Campeonatopartida> campeonatopartidaCollection;
+    private Collection<PcPartida> pcPartidaCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "partida")
-    private Collection<Jogadorpartida> jogadorpartidaCollection;
+    private Collection<TimePartida> timePartidaCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "partida")
-    private Collection<Pcpartida> pcpartidaCollection;
+    private Collection<JogadorPartida> jogadorPartidaCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "partida")
-    private Collection<Timepartida> timepartidaCollection;
+    private Collection<CampeonatoPartida> campeonatoPartidaCollection;
 
     public Partida() {
     }
@@ -140,39 +140,39 @@ public class Partida implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Campeonatopartida> getCampeonatopartidaCollection() {
-        return campeonatopartidaCollection;
+    public Collection<PcPartida> getPcPartidaCollection() {
+        return pcPartidaCollection;
     }
 
-    public void setCampeonatopartidaCollection(Collection<Campeonatopartida> campeonatopartidaCollection) {
-        this.campeonatopartidaCollection = campeonatopartidaCollection;
-    }
-
-    @XmlTransient
-    public Collection<Jogadorpartida> getJogadorpartidaCollection() {
-        return jogadorpartidaCollection;
-    }
-
-    public void setJogadorpartidaCollection(Collection<Jogadorpartida> jogadorpartidaCollection) {
-        this.jogadorpartidaCollection = jogadorpartidaCollection;
+    public void setPcPartidaCollection(Collection<PcPartida> pcPartidaCollection) {
+        this.pcPartidaCollection = pcPartidaCollection;
     }
 
     @XmlTransient
-    public Collection<Pcpartida> getPcpartidaCollection() {
-        return pcpartidaCollection;
+    public Collection<TimePartida> getTimePartidaCollection() {
+        return timePartidaCollection;
     }
 
-    public void setPcpartidaCollection(Collection<Pcpartida> pcpartidaCollection) {
-        this.pcpartidaCollection = pcpartidaCollection;
+    public void setTimePartidaCollection(Collection<TimePartida> timePartidaCollection) {
+        this.timePartidaCollection = timePartidaCollection;
     }
 
     @XmlTransient
-    public Collection<Timepartida> getTimepartidaCollection() {
-        return timepartidaCollection;
+    public Collection<JogadorPartida> getJogadorPartidaCollection() {
+        return jogadorPartidaCollection;
     }
 
-    public void setTimepartidaCollection(Collection<Timepartida> timepartidaCollection) {
-        this.timepartidaCollection = timepartidaCollection;
+    public void setJogadorPartidaCollection(Collection<JogadorPartida> jogadorPartidaCollection) {
+        this.jogadorPartidaCollection = jogadorPartidaCollection;
+    }
+
+    @XmlTransient
+    public Collection<CampeonatoPartida> getCampeonatoPartidaCollection() {
+        return campeonatoPartidaCollection;
+    }
+
+    public void setCampeonatoPartidaCollection(Collection<CampeonatoPartida> campeonatoPartidaCollection) {
+        this.campeonatoPartidaCollection = campeonatoPartidaCollection;
     }
 
     @Override

@@ -18,6 +18,9 @@ public class ParametroDao {
 				case 1: {
 					atualizarBanco("INSERT INTO permissao(descricao, ativo) values('Funcionario',true)", 2);
 				}
+				case 2: {
+					atualizarBanco("INSERT INTO permissao(descricao, ativo) values('Administrador',true)", 3);
+				}
 				default: {
 					return;
 				}

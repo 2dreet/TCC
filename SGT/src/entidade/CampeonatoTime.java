@@ -27,13 +27,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jose
  */
 @Entity
-@Table(name = "campeonatotime")
+@Table(name = "campeonato_time")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Campeonatotime.findAll", query = "SELECT c FROM Campeonatotime c"),
-    @NamedQuery(name = "Campeonatotime.findByCodigoCampTime", query = "SELECT c FROM Campeonatotime c WHERE c.codigoCampTime = :codigoCampTime"),
-    @NamedQuery(name = "Campeonatotime.findByDataInscricao", query = "SELECT c FROM Campeonatotime c WHERE c.dataInscricao = :dataInscricao")})
-public class Campeonatotime implements Serializable {
+    @NamedQuery(name = "CampeonatoTime.findAll", query = "SELECT c FROM CampeonatoTime c"),
+    @NamedQuery(name = "CampeonatoTime.findByCodigoCampTime", query = "SELECT c FROM CampeonatoTime c WHERE c.codigoCampTime = :codigoCampTime"),
+    @NamedQuery(name = "CampeonatoTime.findByDataInscricao", query = "SELECT c FROM CampeonatoTime c WHERE c.dataInscricao = :dataInscricao")})
+public class CampeonatoTime implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,10 +50,10 @@ public class Campeonatotime implements Serializable {
     @ManyToOne(optional = false)
     private Campeonato campeonato;
 
-    public Campeonatotime() {
+    public CampeonatoTime() {
     }
 
-    public Campeonatotime(Integer codigoCampTime) {
+    public CampeonatoTime(Integer codigoCampTime) {
         this.codigoCampTime = codigoCampTime;
     }
 
@@ -72,7 +72,6 @@ public class Campeonatotime implements Serializable {
     public void setDataInscricao(Date dataInscricao) {
         this.dataInscricao = dataInscricao;
     }
-
     
     public Time getTime() {
 		return time;
@@ -100,10 +99,10 @@ public class Campeonatotime implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Campeonatotime)) {
+        if (!(object instanceof CampeonatoTime)) {
             return false;
         }
-        Campeonatotime other = (Campeonatotime) object;
+        CampeonatoTime other = (CampeonatoTime) object;
         if ((this.codigoCampTime == null && other.codigoCampTime != null) || (this.codigoCampTime != null && !this.codigoCampTime.equals(other.codigoCampTime))) {
             return false;
         }
@@ -112,7 +111,7 @@ public class Campeonatotime implements Serializable {
 
     @Override
     public String toString() {
-        return "entidade.Campeonatotime[ codigoCampTime=" + codigoCampTime + " ]";
+        return "entidade.CampeonatoTime[ codigoCampTime=" + codigoCampTime + " ]";
     }
     
 }
