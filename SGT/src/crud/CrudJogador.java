@@ -676,6 +676,7 @@ public class CrudJogador extends JPanel {
 				Jogador jogador = new Jogador();
 				jogador.setUsuario(usuario);
 				jogador.setDataCadastro(new Date());
+				jogador.setTitular(false);
 				EntityManagerLocal.persist(jogador);
 				jogadorSelecionado = jogador;
 

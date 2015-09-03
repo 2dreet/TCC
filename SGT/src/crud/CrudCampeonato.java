@@ -317,8 +317,7 @@ public class CrudCampeonato extends JPanel {
 		lbModalidadeV.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbModalidadeV);
 		
-		linha += 35;
-		linha += 35;
+		linha += 70;
 		tabela = new JTable();
 		tabela.setModel(UtilitarioTabela.getModelo(colunas));
 
@@ -349,6 +348,7 @@ public class CrudCampeonato extends JPanel {
 		scroll.setBounds(5, linha, 640, 250);
 		scroll.setBackground(Color.red);
 		meio.add(scroll);
+		
 
 		if (modoCrud == ParametroCrud.getModoVisualizar()) {
 			JButton btAddTime = new JButton("Adicionar Time");

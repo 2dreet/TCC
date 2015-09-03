@@ -712,7 +712,7 @@ public class CrudFuncionario extends JPanel {
 			String menssage = "";
 			if (modoCrud == ParametroCrud.getModoCrudNovo()) {
 				modo = "Cadastro de Funcionário";
-				menssage = "<html>Funcionário Cadastrado com Sucesso!</html>";
+				menssage = "Funcionário Cadastrado com Sucesso!";
 				Usuario usuario = new Usuario();
 				usuario.setAtivo(true);
 				usuario.setNome(txNome.getText());
@@ -741,7 +741,7 @@ public class CrudFuncionario extends JPanel {
 
 			} else if (modoCrud == ParametroCrud.getModoCrudAlterar()) {
 				modo = "Alteração de Funcionário";
-				menssage = "<html>Funcionário Alterado com Sucesso!</html>";
+				menssage = "Funcionário Alterado com Sucesso!";
 				Usuario usuario = funcionarioSelecionado.getUsuario();
 				usuario.setNome(txNome.getText());
 				usuario.setSobreNome(txSobreNome.getText());
@@ -762,7 +762,7 @@ public class CrudFuncionario extends JPanel {
 				EntityManagerLocal.merge(funcionarioSelecionado);
 			} else if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
 				modo = "Deleção de Funcionário";
-				menssage = "<html>Funcionário Deletado com Sucesso!</html>";
+				menssage = "Funcionário Deletado com Sucesso!";
 				Usuario usuario = funcionarioSelecionado.getUsuario();
 				usuario.setAtivo(false);
 				EntityManagerLocal.merge(usuario);

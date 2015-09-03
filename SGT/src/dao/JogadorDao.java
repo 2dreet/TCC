@@ -75,11 +75,38 @@ public class JogadorDao {
 		try {
 			String sql = "SELECT * FROM jogador j INNER JOIN usuario u"
 					+ "	ON j.codigoUsuario = u.codigoUsuario"
-					+ " where codigoTime = ' " + codigoTime + " ' AND u.ativo = true";
+					+ " where codigoTime = ' " + codigoTime + " ' AND u.ativo = true j.titular = false";
 			
 			System.out.println(sql);
 			
 			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Jogador.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
+	public static List<Jogador> getListaJogadorTitularTime(int codigoTime){
+		try {
+			String sql = "SELECT * FROM jogador j INNER JOIN usuario u"
+					+ "	ON j.codigoUsuario = u.codigoUsuario"
+					+ " where codigoTime = ' " + codigoTime + " ' AND u.ativo = true j.titular = true";
+			
+			System.out.println(sql);
+			
+			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Jogador.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
+	public static Integer getQtdeJogadorTitular(int codigoTime){
+		try {
+			String sql = "SELECT count(*) FROM jogador j INNER JOIN usuario u"
+					+ "	ON j.codigoUsuario = u.codigoUsuario"
+					+ " where codigoTime = ' " + codigoTime + " ' AND u.ativo = true j.titular = true";
+			return (Integer) EntityManagerLocal.getEntityManager().createNativeQuery(sql, Integer.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.setMaxResults(1).getSingleResult();
 		} catch (NoResultException ex) {
 			return null;
 		}
