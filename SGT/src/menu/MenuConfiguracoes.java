@@ -280,12 +280,12 @@ public class MenuConfiguracoes extends JPanel {
 				.getFontColorSelecao(false));
 		
 		btModalidade.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/crud/peri.png")));
+				.getResource("/imagem/modalidade.png")));
 		btModalidade.setBackground(UtilitarioTela.getBtnFundo(false));
 		btModalidade.setForeground(UtilitarioTela.getFontColorSelecao(false));
 		
 		btBanimento.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/crud/peri.png")));
+				.getResource("/imagem/ban.png")));
 		btBanimento.setBackground(UtilitarioTela.getBtnFundo(false));
 		btBanimento.setForeground(UtilitarioTela.getFontColorSelecao(false));
 	}
@@ -316,16 +316,16 @@ public class MenuConfiguracoes extends JPanel {
 			}
 			if (botao.getName().equals("modalidade")) {
 				if (selecionado) {
-					url = "/imagem/crud/driverSelect.png";
+					url = "/imagem/modalidadeSelect.png";
 				} else {
-					url = "/imagem/crud/driver.png";
+					url = "/imagem/modalidade.png";
 				}
 			}
 			if (botao.getName().equals("banimento")) {
 				if (selecionado) {
-					url = "/imagem/crud/driverSelect.png";
+					url = "/imagem/ban_select.png";
 				} else {
-					url = "/imagem/crud/driver.png";
+					url = "/imagem/ban.png";
 				}
 			}
 			botao.setFocusPainted(false);

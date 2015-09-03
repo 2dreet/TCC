@@ -90,7 +90,7 @@ public class LocalizarCampeonato extends JPanel {
 
 		JPanel header = new JPanel();
 		header.setSize(650, 30);
-		header.setLocation((getWidth() / 2) - 400, 10);
+		header.setLocation((getWidth() / 2) - 325, 10);
 		header.setLayout(null);
 		header.setBackground(Color.white);
 		header.setBorder(null);
@@ -105,7 +105,7 @@ public class LocalizarCampeonato extends JPanel {
 
 		meio = new JPanel();
 		meio.setSize(650, getHeight() - 50);
-		meio.setLocation((getWidth() / 2) - 400, 40);
+		meio.setLocation((getWidth() / 2) - 325, 40);
 		meio.setLayout(null);
 		meio.setBackground(new Color(232, 234, 239));
 		meio.setBorder(new BordaSombreada());
@@ -159,8 +159,8 @@ public class LocalizarCampeonato extends JPanel {
 		tcm.getColumn(0).setPreferredWidth(60);
 		tcm.getColumn(0).setMinWidth(60);
 		tcm.getColumn(0).setResizable(false);
-		tcm.getColumn(1).setPreferredWidth(170);
-		tcm.getColumn(1).setMinWidth(170);
+		tcm.getColumn(1).setPreferredWidth(200);
+		tcm.getColumn(1).setMinWidth(200);
 		tcm.getColumn(1).setResizable(false);
 		tcm.getColumn(2).setPreferredWidth(100);
 		tcm.getColumn(2).setMinWidth(100);
@@ -168,12 +168,10 @@ public class LocalizarCampeonato extends JPanel {
 		tcm.getColumn(3).setPreferredWidth(83);
 		tcm.getColumn(3).setMinWidth(83);
 		tcm.getColumn(3).setResizable(false);
-		tcm.getColumn(4).setPreferredWidth(100);
-		tcm.getColumn(4).setMinWidth(100);
+		tcm.getColumn(4).setPreferredWidth(200);
+		tcm.getColumn(4).setMinWidth(200);
 		tcm.getColumn(4).setResizable(false);
-		tcm.getColumn(5).setPreferredWidth(130);
-		tcm.getColumn(5).setMinWidth(130);
-		tcm.getColumn(5).setResizable(false);
+		
 
 		UtilitarioTabela.pintarColona(UtilitarioTabela.getFundoHeaderPadrao(),
 				UtilitarioTabela.getFontColotHeaderPadrao(), tcm, colunas);

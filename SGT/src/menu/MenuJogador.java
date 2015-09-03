@@ -376,7 +376,7 @@ public class MenuJogador extends JPanel {
 				.getFontColorSelecao(false));
 		
 		btBanirJogador.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/crud/visuJog.png")));
+				.getResource("/imagem/crud/banJog.png")));
 		btBanirJogador.setBackground(UtilitarioTela.getBtnFundo(false));
 		btBanirJogador.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
@@ -430,9 +430,9 @@ public class MenuJogador extends JPanel {
 			}
 			if (botao.getName().equals("banirJogador")) {
 				if (selecionado) {
-					url = "/imagem/crud/visuJogSelect.png";
+					url = "/imagem/crud/banJogSelect.png";
 				} else {
-					url = "/imagem/crud/visuJog.png";
+					url = "/imagem/crud/banJog.png";
 				}
 			}
 			if (botao.getName().equals("historicoBanimentoJogador")) {

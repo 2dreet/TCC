@@ -22,6 +22,9 @@ public class MascaraCrud {
 	}
 	
 	public static String macaraDataBanco(Date data){
+		if(data==null){
+			return "";
+		}
 		return format.format(data);
 	}
 	

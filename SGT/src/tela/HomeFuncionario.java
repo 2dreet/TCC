@@ -63,7 +63,7 @@ public class HomeFuncionario extends JPanel {
 	private JButton btCampeonato;
 	private JButton btTime;
 	private JButton btJogador;
-	private JButton btDriver;
+	private JButton btConfiguracao;
 	private JButton btRelatorio;
 	private JButton btPc;
 	private JButton btFunc;
@@ -189,19 +189,19 @@ public class HomeFuncionario extends JPanel {
 		});
 		menuIconesTopo.add(btJogador);
 
-		btDriver = new JButton("");
-		btDriver.setBounds(268, 10, 42, 42);
-		btDriver.setName("driver");
-		btDriver.setBorderPainted(false);
-		getIcon(btDriver, false);
-		btDriver.addActionListener(new ActionListener() {
+		btConfiguracao = new JButton("");
+		btConfiguracao.setBounds(268, 10, 42, 42);
+		btConfiguracao.setName("configuracao");
+		btConfiguracao.setBorderPainted(false);
+		getIcon(btConfiguracao, false);
+		btConfiguracao.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
-				getIcon(btDriver, true);
+				getIcon(btConfiguracao, true);
 				abreMenu(new MenuConfiguracoes());
 			}
 		});
-		menuIconesTopo.add(btDriver);
+		menuIconesTopo.add(btConfiguracao);
 
 		btRelatorio = new JButton("");
 		btRelatorio.setBounds(330, 10, 42, 42);
@@ -275,9 +275,9 @@ public class HomeFuncionario extends JPanel {
 				.getResource("/imagem/relatorio.png")));
 		btRelatorio.setBackground(getBtnFundo(false));
 
-		btDriver.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/controle.png")));
-		btDriver.setBackground(getBtnFundo(false));
+		btConfiguracao.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/conf.png")));
+		btConfiguracao.setBackground(getBtnFundo(false));
 
 		btPc.setIcon(new ImageIcon(HomeFuncionario.class
 				.getResource("/imagem/pc.png")));
@@ -319,11 +319,11 @@ public class HomeFuncionario extends JPanel {
 				} else {
 					url = "/imagem/jogador.png";
 				}
-			} else if (botao.getName().equals("driver")) {
+			} else if (botao.getName().equals("configuracao")) {
 				if (selecionado) {
-					url = "/imagem/controle_select.png";
+					url = "/imagem/conf_select.png";
 				} else {
-					url = "/imagem/controle.png";
+					url = "/imagem/conf.png";
 				}
 			} else if (botao.getName().equals("relatorio")) {
 				if (selecionado) {

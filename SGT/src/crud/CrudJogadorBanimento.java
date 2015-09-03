@@ -174,6 +174,7 @@ public class CrudJogadorBanimento extends JPanel{
 				DialogCrudJogadorBanimento c = new DialogCrudJogadorBanimento();
 				c.crudJogadorBanimento(null, ParametroCrud.getModoCrudNovo(), meio, jogadorSelecionado);
 				if(c.getConfirmado()){
+					menuPai.liberarCrud();
 					Menssage.setMenssage("Banimento de Jogador", "Jogador Banido com Sucesso!", ParametroCrud.getModoCrudNovo(), meio);
 					localizar();
 				}

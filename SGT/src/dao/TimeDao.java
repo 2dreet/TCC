@@ -31,6 +31,25 @@ public class TimeDao {
 		}
 	}
 	
+	public static List<Time> getListaPesquisaTime(String metodoPesquisa, String valorPesquisa, int codigoCampeonato){
+		try {
+			String condicao = "";
+			if(metodoPesquisa.equals("Código")){
+				condicao = " t.codigoTime like '"+valorPesquisa+"%'";
+			} else if (metodoPesquisa.equals("Descrição")){
+				condicao = " t.descricao like '%"+valorPesquisa+"%'";
+			} 
+			
+			String sql = "SELECT * FROM time t "
+					+ " where "+condicao+" AND t.ativo = true AND "
+					+ " t.codigoTime NOT IN (SELECT codigoTime from campeonato_time ct where ct.codigoTime = t.codigoTime AND ct.codigoCampeonato = '"+codigoCampeonato+"')";
+			
+			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Time.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
 	public static Time getTime(int codigo){
 		try {
 			String sql = "SELECT * FROM time "

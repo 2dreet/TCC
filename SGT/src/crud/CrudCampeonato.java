@@ -7,8 +7,10 @@ import java.awt.event.FocusEvent;
 
 import javax.swing.JPanel;
 
+import componente.DadoComIcone;
 import componente.Menssage;
 import componente.MenssageConfirmacao;
+import componente.TextoIconeCell;
 import utilitario.BordaEscura;
 import utilitario.BordaSombreada;
 import utilitario.Computador;
@@ -16,23 +18,33 @@ import utilitario.MascaraCrud;
 import utilitario.ParametroCrud;
 import utilitario.Parametros;
 import utilitario.UtilitarioCrud;
+import utilitario.UtilitarioTabela;
 import utilitario.UtilitarioTela;
 import utilitario.ValidadorCrud;
 
 import javax.swing.JButton;
 
 import dao.BanimentoDao;
+import dao.CampeonatoTimeDao;
 import dao.EntityManagerLocal;
+import dao.JogadorDao;
 import dao.ModalidadeDao;
 import dao.PermissaoDao;
+import dao.TimeDao;
+import dialog.DialogLocalizarJogador;
+import dialog.DialogLocalizarTime;
 import entidade.Campeonato;
+import entidade.CampeonatoTime;
 import entidade.Jogador;
 import entidade.Pc;
+import entidade.Time;
 import entidade.Usuario;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -40,6 +52,10 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
@@ -48,7 +64,9 @@ import javax.swing.DefaultComboBoxModel;
 import componente.ComboBox;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.JTextArea;
 
@@ -67,11 +85,18 @@ public class CrudCampeonato extends JPanel {
 	private JLabel lblHeader;
 	private JPanel meio;
 	private ComboBox cbModalidade;
+	private List<CampeonatoTime> listaTime;
+	private Time timeSelecionado;
+	private JTable tabela;
+	private Object[][] colunas = new Object[][] { new String[] { "Logo" },
+			new String[] { "Código" }, new String[] { "Nome" } };
 	/**
 	 * Create the panel.
 	 */
 	public CrudCampeonato(Campeonato campeonato, int modoCrud, MenuCampeonato menuPai) {
 		this.menuPai = menuPai;
+		listaTime = new ArrayList<CampeonatoTime>();
+		timeSelecionado = null;
 		setSize(UtilitarioTela.getTamanhoMeio());
 		setLayout(null);
 		setBackground(null);
@@ -79,8 +104,8 @@ public class CrudCampeonato extends JPanel {
 		campeonatoSelecionado = campeonato;
 
 		header = new JPanel();
-		header.setSize(500, 30);
-		header.setLocation((getWidth() / 2) - 250, 10);
+		header.setSize(650, 30);
+		header.setLocation((getWidth() / 2) - 325, 10);
 		header.setLayout(null);
 		header.setBackground(UtilitarioTela.getColorCrud(modoCrud));
 		header.setBorder(null);
@@ -105,8 +130,8 @@ public class CrudCampeonato extends JPanel {
 		header.add(lblHeader);
 
 		meio = new JPanel();
-		meio.setSize(500, getHeight() - 50);
-		meio.setLocation((getWidth() / 2) - 250, 40);
+		meio.setSize(650, getHeight() - 50);
+		meio.setLocation((getWidth() / 2) - 325, 40);
 		meio.setLayout(null);
 		meio.setBackground(UtilitarioTela.getFundoCrud());
 		meio.setBorder(new BordaSombreada(modoCrud));
@@ -254,54 +279,159 @@ public class CrudCampeonato extends JPanel {
 			});
 		}
 
-		int linha = 20;
-
-		JPanel jpLabel = new JPanel();
-		jpLabel.setSize(80, 80);
-		jpLabel.setLocation(20, linha);
-		jpLabel.setLayout(null);
-		jpLabel.setBackground(UtilitarioTela.getFundoCrud());
-		jpLabel.setBorder(new BordaSombreada(modoCrud));
-		meio.add(jpLabel);
 		
+		int linha = 20;
 		JLabel lbCodigo = new JLabel("Código :");
-		lbCodigo.setBounds(120, linha, 100, 20);
+		lbCodigo.setBounds(20, linha, 100, 20);
 		lbCodigo.setFont(UtilitarioTela.getFont(14));
 		lbCodigo.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbCodigo);
 		JLabel lbCodigoV = new JLabel(String.valueOf(campeonatoSelecionado
 				.getCodigoCampeonato()));
-		lbCodigoV.setBounds(205, linha, 300, 20);
+		lbCodigoV.setBounds(130, linha, 300, 20);
 		lbCodigoV.setFont(UtilitarioTela.getFont(14));
 		lbCodigoV.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbCodigoV);
 
 		linha += 30;
 		JLabel lbNome = new JLabel("Descrição :");
-		lbNome.setBounds(120, linha, 100, 20);
+		lbNome.setBounds(20, linha, 100, 20);
 		lbNome.setFont(UtilitarioTela.getFont(14));
 		lbNome.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbNome);
 		JLabel lbNomeV = new JLabel(campeonatoSelecionado.getDescricao());
-		lbNomeV.setBounds(205, linha, 300, 20);
+		lbNomeV.setBounds(130, linha, 300, 20);
 		lbNomeV.setFont(UtilitarioTela.getFont(14));
 		lbNomeV.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbNomeV);
 		
 		linha += 30;
 		JLabel lbModalidade = new JLabel("Modalidade :");
-		lbModalidade.setBounds(120, linha, 100, 20);
+		lbModalidade.setBounds(20, linha, 100, 20);
 		lbModalidade.setFont(UtilitarioTela.getFont(14));
 		lbModalidade.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbModalidade);
 		JLabel lbModalidadeV = new JLabel(campeonatoSelecionado.getModalidade().getDescricao());
-		lbModalidadeV.setBounds(205, linha, 300, 20);
+		lbModalidadeV.setBounds(130, linha, 300, 20);
 		lbModalidadeV.setFont(UtilitarioTela.getFont(14));
 		lbModalidadeV.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbModalidadeV);
+		
+		linha += 35;
+		linha += 35;
+		tabela = new JTable();
+		tabela.setModel(UtilitarioTabela.getModelo(colunas));
 
+		TableColumnModel tcm = tabela.getColumnModel();
+		TextoIconeCell renderer = new TextoIconeCell();
+		tcm.getColumn(0).setCellRenderer(renderer);
+		tcm.getColumn(0).setPreferredWidth(50);
+		tcm.getColumn(0).setMinWidth(50);
+		tcm.getColumn(0).setResizable(false);
+		tcm.getColumn(1).setPreferredWidth(120);
+		tcm.getColumn(1).setMinWidth(120);
+		tcm.getColumn(1).setResizable(false);
+		tcm.getColumn(2).setPreferredWidth(465);
+		tcm.getColumn(2).setMinWidth(465);
+		tcm.getColumn(2).setResizable(false);
+
+		UtilitarioTabela.pintarColona(UtilitarioTabela.getFundoHeaderPadrao(),
+				UtilitarioTabela.getFontColotHeaderPadrao(), tcm, colunas);
+		UtilitarioTabela.pintarLinha(new Color(255, 153, 153), Color.black,
+				tabela);
+		tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		tabela.setPreferredScrollableViewportSize(tabela.getPreferredSize());
+		tabela.getTableHeader().setReorderingAllowed(false);
+		tabela.setRowHeight(50);
+		tabela.setFont(UtilitarioTela.getFont(14));
+		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		JScrollPane scroll = new JScrollPane(tabela);
+		scroll.setBounds(5, linha, 640, 250);
+		scroll.setBackground(Color.red);
+		meio.add(scroll);
+
+		if (modoCrud == ParametroCrud.getModoVisualizar()) {
+			JButton btAddTime = new JButton("Adicionar Time");
+			btAddTime.setBounds(80, meio.getHeight() - 70, 220, 35);
+			btAddTime.setFont(UtilitarioTela.getFont(14));
+			btAddTime.setFocusPainted(false);
+			btAddTime.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudNovo()));
+			btAddTime.setIcon((new ImageIcon(CrudTime.class.getResource("/imagem/crud/addJogSelect.png"))));
+			meio.add(btAddTime);
+			btAddTime.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					DialogLocalizarTime.localizarTime(meio, campeonatoSelecionado);
+					if(DialogLocalizarTime.getTimeSelecionado() != null){
+						Time time = DialogLocalizarTime.getTimeSelecionado();
+						boolean confirmado = true;
+						MenssageConfirmacao.setMenssage("Adicionar Time no Campeonato",
+								"Deseja Adicionar Esse Time no Campeonato?\nTime: "+time.getDescricao(), modoCrud, meio);
+						confirmado = MenssageConfirmacao.isConfirmado();
+						if(confirmado){
+							EntityManagerLocal.begin();
+							CampeonatoTime campTime = new CampeonatoTime();
+							campTime.setTime(time);
+							campTime.setCampeonato(campeonatoSelecionado);
+							campTime.setDataInscricao(new Date());
+							EntityManagerLocal.merge(campTime);
+							EntityManagerLocal.commit();
+						}
+						atualizarTabela();
+					}
+				}
+			});
+			
+			JButton btRemoverTime = new JButton("Remover Time");
+			btRemoverTime.setBounds(360, meio.getHeight() - 70, 220, 35);
+			btRemoverTime.setFont(UtilitarioTela.getFont(14));
+			btRemoverTime.setFocusPainted(false);
+			btRemoverTime.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudDeletar()));
+			btRemoverTime.setIcon((new ImageIcon(CrudTime.class.getResource("/imagem/crud/delJogSelect.png"))));
+			meio.add(btRemoverTime);
+			btRemoverTime.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					if(tabela.getRowCount() > 0 ){
+						if(tabela.getSelectedRow() > -1){
+							CampeonatoTime campTime = CampeonatoTimeDao.getCampeonatoTime(Integer.parseInt(String.valueOf(tabela.getValueAt(tabela.getSelectedRow(), 0))));
+							boolean confirmado = true;
+							MenssageConfirmacao.setMenssage("Remover Time do Campeonato",
+								"Deseja Remover Esse Time do Campeonato?\nTime: "+campTime.getTime().getDescricao(), modoCrud, meio);
+							confirmado = MenssageConfirmacao.isConfirmado();
+							if(confirmado){
+								EntityManagerLocal.begin();
+								EntityManagerLocal.delete(campTime);
+								EntityManagerLocal.commit();
+							}
+						} else{
+							Menssage.setMenssage("Time não Selecionado", "Deve selecionar um Time!", ParametroCrud.getModoCrudDeletar(), meio);
+						}
+					} else{
+						Menssage.setMenssage("Time não Selecionado", "Deve selecionar um Time!", ParametroCrud.getModoCrudDeletar(), meio);
+					}
+					atualizarTabela();
+				}
+			});
+		}
+		atualizarTabela();
 	}
 
+	public void atualizarTabela(){
+		listaTime = CampeonatoTimeDao.getListaCampeonatoTimeCamp(campeonatoSelecionado.getCodigoCampeonato());
+		DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
+		modelo.setNumRows(0);
+		if (listaTime != null) {
+			for (CampeonatoTime t : listaTime) {
+				modelo.addRow(new Object[] {
+						new DadoComIcone("", new ImageIcon("logo/"
+								+ t.getTime().getLogo())),
+						String.valueOf(t.getTime().getCodigoTime()), t.getTime().getDescricao() });
+
+			}
+		} else {
+			listaTime = new ArrayList<CampeonatoTime>();
+		}
+	}
+	
 	private void save(int modoCrud) {
 		boolean confirmado = true;
 
@@ -320,7 +450,7 @@ public class CrudCampeonato extends JPanel {
 				menssage = "Campeonato Cadastrado com Sucesso!";
 				Campeonato campeonato = new Campeonato();
 				campeonato.setDescricao(txDescricao.getText());
-				campeonato.setDataIncio(new Date());
+				campeonato.setDataCadastro(new Date());
 				campeonato.setModalidade(ModalidadeDao.getModalidadeNome(String.valueOf(cbModalidade.getSelectedItem())));
 				campeonato.setAtivo(true);
 				EntityManagerLocal.persist(campeonato);

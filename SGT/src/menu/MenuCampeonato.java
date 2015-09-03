@@ -301,18 +301,18 @@ public class MenuCampeonato extends JPanel {
 		btLocalizar.setForeground(UtilitarioTela.getFontColorSelecao(false));
 		
 		btNovo.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/crud/cadPc.png")));
+				.getResource("/imagem/crud/cadCamp.png")));
 		btNovo.setBackground(UtilitarioTela.getBtnFundo(false));
 		btNovo.setForeground(UtilitarioTela.getFontColorSelecao(false));
 
 		btAlterar.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/crud/altPc.png")));
+				.getResource("/imagem/crud/altCamp.png")));
 		btAlterar.setBackground(UtilitarioTela.getBtnFundo(false));
 		btAlterar.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
 
 		btDeletar.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/crud/delPc.png")));
+				.getResource("/imagem/crud/delCamp.png")));
 		btDeletar.setBackground(UtilitarioTela.getBtnFundo(false));
 		btDeletar.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
@@ -338,23 +338,23 @@ public class MenuCampeonato extends JPanel {
 			}
 			if (botao.getName().equals("cadastrarCampeonato")) {
 				if (selecionado) {
-					url = "/imagem/crud/cadPcSelect.png";
+					url = "/imagem/crud/cadCampSelect.png";
 				} else {
-					url = "/imagem/crud/cadPc.png";
+					url = "/imagem/crud/cadCamp.png";
 				}
 			}
 			if (botao.getName().equals("alterarCampeonato")) {
 				if (selecionado) {
-					url = "/imagem/crud/altPcSelect.png";
+					url = "/imagem/crud/altCampSelect.png";
 				} else {
-					url = "/imagem/crud/altPc.png";
+					url = "/imagem/crud/altCamp.png";
 				}
 			}
 			if (botao.getName().equals("deletarCampeonato")) {
 				if (selecionado) {
-					url = "/imagem/crud/delPcSelect.png";
+					url = "/imagem/crud/delCampSelect.png";
 				} else {
-					url = "/imagem/crud/delPc.png";
+					url = "/imagem/crud/delCamp.png";
 				}
 			}
 			if (botao.getName().equals("visualizarCampeonato")) {
