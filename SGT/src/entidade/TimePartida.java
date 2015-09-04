@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "TimePartida.findAll", query = "SELECT t FROM TimePartida t"),
-    @NamedQuery(name = "TimePartida.findByCodigotimePartida", query = "SELECT t FROM TimePartida t WHERE t.codigotimePartida = :codigotimePartida"),
+    @NamedQuery(name = "TimePartida.findByCodigoTimePartida", query = "SELECT t FROM TimePartida t WHERE t.codigoTimePartida = :codigoTimePartida"),
     @NamedQuery(name = "TimePartida.findByTimeVencedor", query = "SELECT t FROM TimePartida t WHERE t.timeVencedor = :timeVencedor"),
     @NamedQuery(name = "TimePartida.findByPlacarTimeVencedor", query = "SELECT t FROM TimePartida t WHERE t.placarTimeVencedor = :placarTimeVencedor"),
     @NamedQuery(name = "TimePartida.findByPlacarTimePerdedor", query = "SELECT t FROM TimePartida t WHERE t.placarTimePerdedor = :placarTimePerdedor")})
@@ -37,8 +37,8 @@ public class TimePartida implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "codigotime_partida")
-    private Integer codigotimePartida;
+    @Column(name = "codigoTimePartida")
+    private Integer codigoTimePartida;
     @Column(name = "timeVencedor")
     private Integer timeVencedor;
     @Column(name = "placarTimeVencedor")
@@ -55,16 +55,16 @@ public class TimePartida implements Serializable {
     public TimePartida() {
     }
 
-    public TimePartida(Integer codigotimePartida) {
-        this.codigotimePartida = codigotimePartida;
+    public TimePartida(Integer codigoTimePartida) {
+        this.codigoTimePartida = codigoTimePartida;
     }
 
-    public Integer getCodigotimePartida() {
-        return codigotimePartida;
+    public Integer getCodigoTimePartida() {
+        return codigoTimePartida;
     }
 
-    public void setCodigotimePartida(Integer codigotimePartida) {
-        this.codigotimePartida = codigotimePartida;
+    public void setCodigoTimePartida(Integer codigoTimePartida) {
+        this.codigoTimePartida = codigoTimePartida;
     }
 
     public Integer getTimeVencedor() {
@@ -110,7 +110,7 @@ public class TimePartida implements Serializable {
 	@Override
     public int hashCode() {
         int hash = 0;
-        hash += (codigotimePartida != null ? codigotimePartida.hashCode() : 0);
+        hash += (codigoTimePartida != null ? codigoTimePartida.hashCode() : 0);
         return hash;
     }
 
@@ -121,7 +121,7 @@ public class TimePartida implements Serializable {
             return false;
         }
         TimePartida other = (TimePartida) object;
-        if ((this.codigotimePartida == null && other.codigotimePartida != null) || (this.codigotimePartida != null && !this.codigotimePartida.equals(other.codigotimePartida))) {
+        if ((this.codigoTimePartida == null && other.codigoTimePartida != null) || (this.codigoTimePartida != null && !this.codigoTimePartida.equals(other.codigoTimePartida))) {
             return false;
         }
         return true;
@@ -129,7 +129,7 @@ public class TimePartida implements Serializable {
 
     @Override
     public String toString() {
-        return "entidade.TimePartida[ codigotimePartida=" + codigotimePartida + " ]";
+        return "entidade.TimePartida[ codigoTimePartida=" + codigoTimePartida + " ]";
     }
     
 }

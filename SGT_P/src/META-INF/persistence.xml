@@ -2,29 +2,6 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 	
 	<persistence-unit name="GTGS" transaction-type="RESOURCE_LOCAL">
-		<class>entidade.Permissao</class>
-		<class>entidade.Banimento</class>
-		<class>entidade.Campeonato</class>
-		<class>entidade.Campeonatopartida</class>
-		<class>entidade.Campeonatotime</class>
-		<class>entidade.Chave</class>
-		<class>entidade.Classificacao</class>
-		<class>entidade.Driver</class>
-		<class>entidade.Funcionario</class>
-		<class>entidade.Funcionariocampeonato</class>
-		<class>entidade.Jogador</class>
-		<class>entidade.Jogadorbanimento</class>
-		<class>entidade.Jogadorperiferico</class>
-		<class>entidade.Marca</class>
-		<class>entidade.Marcaperiferico</class>
-		<class>entidade.Modalidade</class>
-		<class>entidade.Partida</class>
-		<class>entidade.Pc</class>
-		<class>entidade.Pcpartida</class>
-		<class>entidade.Periferico</class>
-		<class>entidade.Time</class>
-		<class>entidade.Timepartida</class>
-		<class>entidade.Usuario</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		
 		<properties> 

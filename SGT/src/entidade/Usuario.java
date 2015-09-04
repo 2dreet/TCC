@@ -95,7 +95,7 @@ public class Usuario implements Serializable {
         this.codigoUsuario = codigoUsuario;
     }
 
-    public Usuario(Integer codigoUsuario, String nome, String sobreNome, String rg, Date dataNascimento, String usuario, boolean ativo, int sexo) {
+    public Usuario(Integer codigoUsuario, String nome, String sobreNome, Date dataNascimento, String usuario, boolean ativo, int sexo) {
         this.codigoUsuario = codigoUsuario;
         this.nome = nome;
         this.sobreNome = sobreNome;

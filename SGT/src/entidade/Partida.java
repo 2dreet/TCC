@@ -15,6 +15,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -68,8 +70,9 @@ public class Partida implements Serializable {
     private Collection<TimePartida> timePartidaCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "partida")
     private Collection<JogadorPartida> jogadorPartidaCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "partida")
-    private Collection<CampeonatoPartida> campeonatoPartidaCollection;
+    @JoinColumn(name = "codigoCampeonato", referencedColumnName = "codigoCampeonato")
+    @ManyToOne(optional = false)
+    private Campeonato campeonato;
 
     public Partida() {
     }
@@ -165,17 +168,16 @@ public class Partida implements Serializable {
     public void setJogadorPartidaCollection(Collection<JogadorPartida> jogadorPartidaCollection) {
         this.jogadorPartidaCollection = jogadorPartidaCollection;
     }
+    
+    public Campeonato getCampeonato() {
+		return campeonato;
+	}
 
-    @XmlTransient
-    public Collection<CampeonatoPartida> getCampeonatoPartidaCollection() {
-        return campeonatoPartidaCollection;
-    }
+	public void setCampeonato(Campeonato campeonato) {
+		this.campeonato = campeonato;
+	}
 
-    public void setCampeonatoPartidaCollection(Collection<CampeonatoPartida> campeonatoPartidaCollection) {
-        this.campeonatoPartidaCollection = campeonatoPartidaCollection;
-    }
-
-    @Override
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (codigoPartida != null ? codigoPartida.hashCode() : 0);

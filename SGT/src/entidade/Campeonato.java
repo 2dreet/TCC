@@ -63,16 +63,21 @@ public class Campeonato implements Serializable {
     @Column(name = "ativo")
     private boolean ativo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "campeonato")
+    private Collection<Grupo> grupoCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "campeonato")
     private Collection<Classificacao> classificacaoCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "campeonato")
     private Collection<CampeonatoTime> campeonatoTimeCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "campeonato")
     private Collection<FuncionarioCampeonato> funcionarioCampeonatoCollection;
+    @JoinColumn(name = "codigoChave", referencedColumnName = "codigoChave")
+    @ManyToOne(optional = false)
+    private Chave chave;
     @JoinColumn(name = "codigoModalidade", referencedColumnName = "codigoModalidade")
     @ManyToOne(optional = false)
     private Modalidade modalidade;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "campeonato")
-    private Collection<CampeonatoPartida> campeonatoPartidaCollection;
+    private Collection<Partida> partidaCollection;
 
     public Campeonato() {
     }
@@ -135,6 +140,15 @@ public class Campeonato implements Serializable {
     }
 
     @XmlTransient
+    public Collection<Grupo> getGrupoCollection() {
+        return grupoCollection;
+    }
+
+    public void setGrupoCollection(Collection<Grupo> grupoCollection) {
+        this.grupoCollection = grupoCollection;
+    }
+
+    @XmlTransient
     public Collection<Classificacao> getClassificacaoCollection() {
         return classificacaoCollection;
     }
@@ -161,7 +175,15 @@ public class Campeonato implements Serializable {
         this.funcionarioCampeonatoCollection = funcionarioCampeonatoCollection;
     }
     
-    public Modalidade getModalidade() {
+    public Chave getChave() {
+		return chave;
+	}
+
+	public void setChave(Chave chave) {
+		this.chave = chave;
+	}
+
+	public Modalidade getModalidade() {
 		return modalidade;
 	}
 
@@ -170,12 +192,12 @@ public class Campeonato implements Serializable {
 	}
 
 	@XmlTransient
-    public Collection<CampeonatoPartida> getCampeonatoPartidaCollection() {
-        return campeonatoPartidaCollection;
+    public Collection<Partida> getPartidaCollection() {
+        return partidaCollection;
     }
 
-    public void setCampeonatoPartidaCollection(Collection<CampeonatoPartida> campeonatoPartidaCollection) {
-        this.campeonatoPartidaCollection = campeonatoPartidaCollection;
+    public void setPartidaCollection(Collection<Partida> partidaCollection) {
+        this.partidaCollection = partidaCollection;
     }
 
     @Override

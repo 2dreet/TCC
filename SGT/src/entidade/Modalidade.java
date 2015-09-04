@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Modalidade.findAll", query = "SELECT m FROM Modalidade m"),
     @NamedQuery(name = "Modalidade.findByCodigoModalidade", query = "SELECT m FROM Modalidade m WHERE m.codigoModalidade = :codigoModalidade"),
     @NamedQuery(name = "Modalidade.findByDescricao", query = "SELECT m FROM Modalidade m WHERE m.descricao = :descricao"),
+    @NamedQuery(name = "Modalidade.findByQuantidadeJogadores", query = "SELECT m FROM Modalidade m WHERE m.quantidadeJogadores = :quantidadeJogadores"),
     @NamedQuery(name = "Modalidade.findByAtivo", query = "SELECT m FROM Modalidade m WHERE m.ativo = :ativo")})
 public class Modalidade implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -42,6 +43,8 @@ public class Modalidade implements Serializable {
     private Integer codigoModalidade;
     @Column(name = "descricao")
     private String descricao;
+    @Column(name = "quantidadeJogadores")
+    private Integer quantidadeJogadores;
     @Basic(optional = false)
     @Column(name = "ativo")
     private boolean ativo;
@@ -74,6 +77,14 @@ public class Modalidade implements Serializable {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public Integer getQuantidadeJogadores() {
+        return quantidadeJogadores;
+    }
+
+    public void setQuantidadeJogadores(Integer quantidadeJogadores) {
+        this.quantidadeJogadores = quantidadeJogadores;
     }
 
     public boolean getAtivo() {
