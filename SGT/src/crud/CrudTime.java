@@ -429,11 +429,11 @@ public class CrudTime extends JPanel {
 		linha += 35;
 
 		// Titulares
-		linha += 35;
+		linha += 25;
 		JPanel pTitulares = new JPanel();
 		pTitulares.setLayout(null);
 		pTitulares.setBackground(null);
-		pTitulares.setBounds(2, linha, 646, 147);
+		pTitulares.setBounds(2, linha, 646, 157);
 		pTitulares.setBorder(null);
 
 		JLabel lbTitulares = new JLabel("JOGADORES TITULARES");
@@ -479,8 +479,7 @@ public class CrudTime extends JPanel {
 		tabelaTitular.setFont(UtilitarioTela.getFont(12));
 		tabelaTitular.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scrollTitular = new JScrollPane(tabelaTitular);
-		scrollTitular.setBounds(1, 20, 646, 100);
-		scrollTitular.setBackground(Color.red);
+		scrollTitular.setBounds(1, 20, 646, 110);
 		pTitulares.add(scrollTitular);
 
 		JButton btDelTitular = new JButton("Remover Titular");
@@ -832,7 +831,7 @@ public class CrudTime extends JPanel {
 			Menssage.setMenssage(
 					"Maxímo de Jogador",
 					"Time já possui 5 Jogadores Titulares\nPara adiconar outro Jogador\nDevera remover um Titular!",
-					ParametroCrud.getModoErro(), meio);
+					ParametroCrud.getModoCrudDeletar(), meio);
 		}
 		atualizarTabela();
 	}
