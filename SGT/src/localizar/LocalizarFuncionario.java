@@ -31,6 +31,7 @@ import javax.swing.JButton;
 
 import componente.ComboBox;
 import componente.Menssage;
+import componente.MenssageConfirmacao;
 import componente.TabelaCell;
 import componente.TextoIconeCell;
 
@@ -48,6 +49,7 @@ import javax.swing.table.TableColumnModel;
 
 import menu.MenuFuncionario;
 import menu.MenuJogador;
+import dao.EntityManagerLocal;
 import dao.FuncionarioDao;
 import dao.JogadorDao;
 import entidade.Funcionario;
@@ -61,10 +63,10 @@ public class LocalizarFuncionario extends JPanel {
 	private ComboBox metodoBusca;
 	private Object[][] colunas = new Object[][] { new String[] { "Código" },
 			new String[] { "Nome" }, new String[] { "Usuário" },
-			new String[] { "RG" }, new String[] { "Telefone" },
+			new String[] { "Cpf" }, new String[] { "Telefone" },
 			new String[] { "Email" } };
 	private String[] linhaBusca = new String[] { "Código", "Nome", "Usuário",
-			"RG", "Telefone", "Email" };
+			"Cpf", "Telefone", "Email" };
 	private Funcionario funcionarioSelecionado;
 	private MenuFuncionario menuPai;
 	private JPanel meio;
@@ -221,13 +223,31 @@ public class LocalizarFuncionario extends JPanel {
 	public void selecionar() {
 		if (tabela.getRowCount() > 0) {
 			if (tabela.getSelectedRow() > -1) {
-				funcionarioSelecionado = FuncionarioDao.getFuncionario(Integer
+				funcionarioSelecionado = FuncionarioDao.getAllFuncionario(Integer
 						.parseInt(String.valueOf(tabela.getValueAt(
 								tabela.getSelectedRow(), 0))));
 				if (funcionarioSelecionado != null) {
-					if (menuPai != null) {
-						menuPai.exibirFuncionario(funcionarioSelecionado);
+					if(funcionarioSelecionado.getUsuario().getAtivo()){
+						if (menuPai != null) {
+							menuPai.exibirFuncionario(funcionarioSelecionado);
+						}
+					}else{
+						boolean confirmado = false;
+						MenssageConfirmacao.setMenssage("Funcionário Desativado", "Deseja Ativar esse Funcionário?", ParametroCrud.getModoCrudDeletar(), meio);
+						confirmado = MenssageConfirmacao.isConfirmado();
+						if(confirmado){
+							EntityManagerLocal.begin();
+							funcionarioSelecionado.getUsuario().setAtivo(true);
+							EntityManagerLocal.merge(funcionarioSelecionado.getUsuario());
+							EntityManagerLocal.commit();
+							
+							if (menuPai != null) {
+								menuPai.exibirFuncionario(funcionarioSelecionado);
+							}
+						}
 					}
+					
+					
 				} else {
 					Menssage.setMenssage("Funcionário não Selecionado",
 							"Deve selecionar um Funcionário!",
@@ -262,7 +282,7 @@ public class LocalizarFuncionario extends JPanel {
 						f.getUsuario().getNome() + " "
 								+ f.getUsuario().getSobreNome(),
 						f.getUsuario().getUsuario(),
-						f.getUsuario().getRg(),
+						f.getUsuario().getCpf(),
 						MascaraCrud.mascaraTelefoneResult(f.getUsuario()
 								.getTelefone()), f.getUsuario().getEmail() });
 

@@ -52,7 +52,7 @@ import menu.MenuJogador;
 public class CrudJogador extends JPanel {
 	private JTextField txNome;
 	private JTextField txSobreNome;
-	private JTextField txRg;
+	private JTextField txCpf;
 	private JTextField txDataNascimento;
 	private JTextField txTelefone;
 	private JTextField txEmail;
@@ -162,37 +162,37 @@ public class CrudJogador extends JPanel {
 		meio.add(txSobreNome);
 		setVisible(true);
 
-		JLabel lbRg = new JLabel("RG :");
-		lbRg.setBounds(20, 90, 100, 20);
-		lbRg.setFont(UtilitarioTela.getFont(14));
-		lbRg.setForeground(UtilitarioTela.getFontColorCrud());
-		meio.add(lbRg);
+		JLabel lbCpf = new JLabel("CPF :");
+		lbCpf.setBounds(20, 90, 100, 20);
+		lbCpf.setFont(UtilitarioTela.getFont(14));
+		lbCpf.setForeground(UtilitarioTela.getFontColorCrud());
+		meio.add(lbCpf);
 
-		txRg = new JTextField();
-		txRg.setColumns(50);
-		txRg.setBounds(155, 90, 100, 25);
-		txRg.addKeyListener(new KeyAdapter() {
+		txCpf = new JTextField();
+		txCpf.setColumns(50);
+		txCpf.setBounds(155, 90, 100, 25);
+		txCpf.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent arg0) {
-				ValidadorCrud.campoRG(arg0, txRg.getText());
+				ValidadorCrud.campoCPF(arg0, txCpf.getText());
 			}
 
 		});
-		txRg.addFocusListener(new FocusAdapter() {
+		txCpf.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				txRg.setBorder(UtilitarioTela.jTextFieldComFocus());
+				txCpf.setBorder(UtilitarioTela.jTextFieldComFocus());
 			}
 
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				txRg.setBorder(UtilitarioTela.jTextFieldNormal());
+				txCpf.setBorder(UtilitarioTela.jTextFieldNormal());
 				limpaErro();
 			}
 		});
-		txRg.setLayout(null);
-		txRg.setBorder(UtilitarioTela.jTextFieldNormal());
-		meio.add(txRg);
+		txCpf.setLayout(null);
+		txCpf.setBorder(UtilitarioTela.jTextFieldNormal());
+		meio.add(txCpf);
 		setVisible(true);
 
 		JLabel lbDataNascimento = new JLabel("Data Nascimento :");
@@ -382,7 +382,7 @@ public class CrudJogador extends JPanel {
 	public void setarCampos() {
 		txNome.setText(jogadorSelecionado.getUsuario().getNome());
 		txSobreNome.setText(jogadorSelecionado.getUsuario().getSobreNome());
-		txRg.setText(jogadorSelecionado.getUsuario().getRg());
+		txCpf.setText(jogadorSelecionado.getUsuario().getCpf());
 		txTelefone.setText(MascaraCrud.mascaraTelefoneResult(jogadorSelecionado
 				.getUsuario().getTelefone()));
 		txEmail.setText(jogadorSelecionado.getUsuario().getEmail());
@@ -433,16 +433,25 @@ public class CrudJogador extends JPanel {
 				return false;
 			}
 
-			if (txRg.getText() == null || txRg.getText().trim().isEmpty()) {
-				msgErro("Campo RG é Obrigatório!");
-				txRg.requestFocus();
+			if (txCpf.getText() == null || txCpf.getText().trim().isEmpty()) {
+				msgErro("Campo CPF é Obrigatório!");
+				txCpf.requestFocus();
 				return false;
-			} else if (!ValidadorCrud.validarRg(txRg.getText())) {
-				msgErro("RG é Inválido!");
-				txRg.requestFocus();
+			} else if (!ValidadorCrud.isCpf(txCpf.getText())) {
+				msgErro("CPF é Inválido!");
+				txCpf.requestFocus();
+				return false;
+			} else if (ValidadorCrud.cpfJaCadastrado(txCpf.getText()) && jogadorSelecionado == null) {
+				msgErro("CPF já Cadastrado!");
+				txCpf.requestFocus();
+				return false;
+			} else if (ValidadorCrud.cpfJaCadastrado(txCpf.getText()) && jogadorSelecionado != null
+					&& !txCpf.getText().equals(jogadorSelecionado.getUsuario().getCpf())) {
+				msgErro("CPF já Cadastrado!");
+				txCpf.requestFocus();
 				return false;
 			}
-
+			
 			if (txDataNascimento.getText() == null
 					|| txDataNascimento.getText().trim().isEmpty()) {
 				txDataNascimento.requestFocus();
@@ -560,16 +569,16 @@ public class CrudJogador extends JPanel {
 		meio.add(lbSobrenomeV);
 
 		linha += 35;
-		JLabel lbRg = new JLabel("RG :");
-		lbRg.setBounds(20, linha, 100, 20);
-		lbRg.setFont(UtilitarioTela.getFont(14));
-		lbRg.setForeground(UtilitarioTela.getFontColorCrud());
-		meio.add(lbRg);
-		JLabel lbRgV = new JLabel(jogadorSelecionado.getUsuario().getRg());
-		lbRgV.setBounds(155, linha, 300, 20);
-		lbRgV.setFont(UtilitarioTela.getFont(14));
-		lbRgV.setForeground(UtilitarioTela.getFontColorCrud());
-		meio.add(lbRgV);
+		JLabel lbCPF = new JLabel("CPF :");
+		lbCPF.setBounds(20, linha, 100, 20);
+		lbCPF.setFont(UtilitarioTela.getFont(14));
+		lbCPF.setForeground(UtilitarioTela.getFontColorCrud());
+		meio.add(lbCPF);
+		JLabel lbCPFV = new JLabel(jogadorSelecionado.getUsuario().getCpf());
+		lbCPFV.setBounds(155, linha, 300, 20);
+		lbCPFV.setFont(UtilitarioTela.getFont(14));
+		lbCPFV.setForeground(UtilitarioTela.getFontColorCrud());
+		meio.add(lbCPFV);
 
 		linha += 35;
 		JLabel lbDataNascimento = new JLabel("Data Nascimento :");
@@ -658,7 +667,7 @@ public class CrudJogador extends JPanel {
 				usuario.setAtivo(true);
 				usuario.setNome(txNome.getText());
 				usuario.setSobreNome(txSobreNome.getText());
-				usuario.setRg(txRg.getText());
+				usuario.setCpf(txCpf.getText());
 				usuario.setDataNascimento(UtilitarioCrud
 						.getData(txDataNascimento.getText()));
 				usuario.setTelefone(txTelefone.getText().replace("(", "")
@@ -686,7 +695,7 @@ public class CrudJogador extends JPanel {
 				Usuario usuario = jogadorSelecionado.getUsuario();
 				usuario.setNome(txNome.getText());
 				usuario.setSobreNome(txSobreNome.getText());
-				usuario.setRg(txRg.getText());
+				usuario.setCpf(txCpf.getText());
 				usuario.setDataNascimento(UtilitarioCrud
 						.getData(txDataNascimento.getText()));
 				usuario.setTelefone(txTelefone.getText().replace("(", "")

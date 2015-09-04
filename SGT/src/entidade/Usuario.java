@@ -38,7 +38,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Usuario.findByCodigoUsuario", query = "SELECT u FROM Usuario u WHERE u.codigoUsuario = :codigoUsuario"),
     @NamedQuery(name = "Usuario.findByNome", query = "SELECT u FROM Usuario u WHERE u.nome = :nome"),
     @NamedQuery(name = "Usuario.findBySobreNome", query = "SELECT u FROM Usuario u WHERE u.sobreNome = :sobreNome"),
-    @NamedQuery(name = "Usuario.findByRg", query = "SELECT u FROM Usuario u WHERE u.rg = :rg"),
     @NamedQuery(name = "Usuario.findByCpf", query = "SELECT u FROM Usuario u WHERE u.cpf = :cpf"),
     @NamedQuery(name = "Usuario.findByDataNascimento", query = "SELECT u FROM Usuario u WHERE u.dataNascimento = :dataNascimento"),
     @NamedQuery(name = "Usuario.findByTelefone", query = "SELECT u FROM Usuario u WHERE u.telefone = :telefone"),
@@ -60,9 +59,6 @@ public class Usuario implements Serializable {
     @Basic(optional = false)
     @Column(name = "sobreNome")
     private String sobreNome;
-    @Basic(optional = false)
-    @Column(name = "rg")
-    private String rg;
     @Column(name = "cpf")
     private String cpf;
     @Basic(optional = false)
@@ -103,7 +99,6 @@ public class Usuario implements Serializable {
         this.codigoUsuario = codigoUsuario;
         this.nome = nome;
         this.sobreNome = sobreNome;
-        this.rg = rg;
         this.dataNascimento = dataNascimento;
         this.usuario = usuario;
         this.ativo = ativo;
@@ -132,14 +127,6 @@ public class Usuario implements Serializable {
 
     public void setSobreNome(String sobreNome) {
         this.sobreNome = sobreNome;
-    }
-
-    public String getRg() {
-        return rg;
-    }
-
-    public void setRg(String rg) {
-        this.rg = rg;
     }
 
     public String getCpf() {

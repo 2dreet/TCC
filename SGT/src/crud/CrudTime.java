@@ -26,6 +26,7 @@ import utilitario.ValidadorCrud;
 import javax.swing.JButton;
 
 import dao.EntityManagerLocal;
+import dao.JogadorBanimentoDao;
 import dao.JogadorDao;
 import dao.PermissaoDao;
 import dao.TimeDao;
@@ -91,7 +92,7 @@ public class CrudTime extends JPanel {
 	private List<Jogador> listaJogador;
 	private Object[][] colunas = new Object[][] { new String[] { "Código" },
 			new String[] { "Nome" }, new String[] { "Usuário" },
-			new String[] { "RG" }, new String[] { "Telefone" },
+			new String[] { "Cpf" }, new String[] { "Telefone" },
 			new String[] { "Email" } };
 
 	/**
@@ -475,8 +476,7 @@ public class CrudTime extends JPanel {
 		tabelaTitular.setPreferredScrollableViewportSize(tabelaTitular
 				.getPreferredSize());
 		tabelaTitular.getTableHeader().setReorderingAllowed(false);
-		tabelaTitular.setRowHeight(50);
-		tabelaTitular.setFont(UtilitarioTela.getFont(14));
+		tabelaTitular.setFont(UtilitarioTela.getFont(12));
 		tabelaTitular.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scrollTitular = new JScrollPane(tabelaTitular);
 		scrollTitular.setBounds(1, 20, 646, 100);
@@ -485,7 +485,7 @@ public class CrudTime extends JPanel {
 
 		JButton btDelTitular = new JButton("Remover Titular");
 		btDelTitular.setBounds(2, pTitulares.getHeight() - 25, 150, 25);
-		btDelTitular.setFont(UtilitarioTela.getFont(10));
+		btDelTitular.setFont(UtilitarioTela.getFont(12));
 		btDelTitular.setFocusPainted(false);
 		btDelTitular.setBackground(UtilitarioTela.getFontColorPadrao());
 		btDelTitular.setIcon((new ImageIcon(CrudTime.class
@@ -561,7 +561,7 @@ public class CrudTime extends JPanel {
 
 		JButton btAddTitular = new JButton("Adicionar Titular");
 		btAddTitular.setBounds(2, pReservas.getHeight() - 25, 150, 25);
-		btAddTitular.setFont(UtilitarioTela.getFont(10));
+		btAddTitular.setFont(UtilitarioTela.getFont(12));
 		btAddTitular.setForeground(UtilitarioTela.getFontColorSelecao(false));
 		btAddTitular.setFocusPainted(false);
 		btAddTitular.setBackground(UtilitarioTela.getFontColorCrud());
@@ -590,14 +590,14 @@ public class CrudTime extends JPanel {
 
 		if (modoCrud == ParametroCrud.getModoVisualizar()) {
 			JButton btAddJogador = new JButton("Adicionar Jogador");
-			btAddJogador.setBounds(80, meio.getHeight() - 70, 220, 35);
-			btAddJogador.setFont(UtilitarioTela.getFont(14));
+			btAddJogador.setBounds(162, pReservas.getHeight() - 25, 170, 25);
+			btAddJogador.setFont(UtilitarioTela.getFont(12));
 			btAddJogador.setFocusPainted(false);
 			btAddJogador.setBackground(UtilitarioTela
 					.getColorCrud(ParametroCrud.getModoCrudNovo()));
 			btAddJogador.setIcon((new ImageIcon(CrudTime.class
-					.getResource("/imagem/crud/addJogSelect.png"))));
-			meio.add(btAddJogador);
+					.getResource("/imagem/diverssos/add2.png"))));
+			pReservas.add(btAddJogador);
 			btAddJogador.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					DialogLocalizarJogador.localizarJogador(meio);
@@ -613,10 +613,16 @@ public class CrudTime extends JPanel {
 								modoCrud, meio);
 						confirmado = MenssageConfirmacao.isConfirmado();
 						if (confirmado) {
-							EntityManagerLocal.begin();
-							jogador.setTime(timeSelecionado);
-							EntityManagerLocal.merge(jogador);
-							EntityManagerLocal.commit();
+							if(JogadorBanimentoDao.jogadorBanido(jogador.getCodigoJogador())){
+								Menssage.setMenssage("Jogador Banido",
+										"Jogador Selecionado não pode ser adicionado no time. Pois o Jogador está Banido!",
+										ParametroCrud.getModoCrudDeletar(), meio);
+							}else{
+								EntityManagerLocal.begin();
+								jogador.setTime(timeSelecionado);
+								EntityManagerLocal.merge(jogador);
+								EntityManagerLocal.commit();
+							}
 						}
 						atualizarTabela();
 					}
@@ -624,14 +630,14 @@ public class CrudTime extends JPanel {
 			});
 
 			JButton btRemoveJogador = new JButton("Remover Jogador");
-			btRemoveJogador.setBounds(360, meio.getHeight() - 70, 220, 35);
-			btRemoveJogador.setFont(UtilitarioTela.getFont(14));
+			btRemoveJogador.setBounds(342, pReservas.getHeight() - 25, 170, 25);
+			btRemoveJogador.setFont(UtilitarioTela.getFont(12));
 			btRemoveJogador.setFocusPainted(false);
 			btRemoveJogador.setBackground(UtilitarioTela
 					.getColorCrud(ParametroCrud.getModoCrudDeletar()));
 			btRemoveJogador.setIcon((new ImageIcon(CrudTime.class
-					.getResource("/imagem/crud/delJogSelect.png"))));
-			meio.add(btRemoveJogador);
+					.getResource("/imagem/diverssos/del.png"))));
+			pReservas.add(btRemoveJogador);
 			btRemoveJogador.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					if (tabela.getRowCount() > 0) {
@@ -692,7 +698,7 @@ public class CrudTime extends JPanel {
 						j.getUsuario().getNome() + " "
 								+ j.getUsuario().getSobreNome(),
 						j.getUsuario().getUsuario(),
-						j.getUsuario().getRg(),
+						j.getUsuario().getCpf(),
 						MascaraCrud.mascaraTelefoneResult(j.getUsuario()
 								.getTelefone()), j.getUsuario().getEmail() });
 
@@ -704,9 +710,9 @@ public class CrudTime extends JPanel {
 	}
 
 	public void atualizarTabelaTitular() {
-		listaJogadorTitular = JogadorDao.getListaJogadorTime(timeSelecionado
+		listaJogadorTitular = JogadorDao.getListaJogadorTitularTime(timeSelecionado
 				.getCodigoTime());
-		DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
+		DefaultTableModel modelo = (DefaultTableModel) tabelaTitular.getModel();
 		modelo.setNumRows(0);
 		if (listaJogadorTitular != null) {
 			for (Jogador j : listaJogadorTitular) {
@@ -715,7 +721,7 @@ public class CrudTime extends JPanel {
 						j.getUsuario().getNome() + " "
 								+ j.getUsuario().getSobreNome(),
 						j.getUsuario().getUsuario(),
-						j.getUsuario().getRg(),
+						j.getUsuario().getCpf(),
 						MascaraCrud.mascaraTelefoneResult(j.getUsuario()
 								.getTelefone()), j.getUsuario().getEmail() });
 
@@ -812,7 +818,7 @@ public class CrudTime extends JPanel {
 	}
 
 	public void adicionarJogadorTitular() {
-		Integer qtd = JogadorDao.getQtdeJogadorTitular(timeSelecionado
+		Long qtd = JogadorDao.getQtdeJogadorTitular(timeSelecionado
 				.getCodigoTime());
 		if (qtd < 5) {
 			Jogador jogadorSelecionado = JogadorDao.getJogador(Integer

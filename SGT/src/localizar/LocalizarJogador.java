@@ -31,6 +31,7 @@ import javax.swing.JButton;
 
 import componente.ComboBox;
 import componente.Menssage;
+import componente.MenssageConfirmacao;
 import componente.TabelaCell;
 import componente.TextoIconeCell;
 
@@ -47,6 +48,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
 import menu.MenuJogador;
+import dao.EntityManagerLocal;
 import dao.JogadorDao;
 import entidade.Jogador;
 import exemplos.Tabela;
@@ -59,10 +61,10 @@ public class LocalizarJogador extends JPanel {
 	private ComboBox metodoBusca;
 	private Object[][] colunas = new Object[][] { new String[] { "Código" },
 			new String[] { "Nome" }, new String[] { "Usuário" },
-			new String[] { "RG" }, new String[] { "Telefone" },
+			new String[] { "Cpf" }, new String[] { "Telefone" },
 			new String[] { "Email" } };
 	private String[] linhaBusca = new String[] { "Código", "Nome", "Usuário",
-			"RG", "Telefone", "Email" };
+			"Cpf", "Telefone", "Email" };
 	private Jogador jogadorSelecionado;
 	private MenuJogador menuPai;
 	private JPanel meio;
@@ -219,12 +221,29 @@ public class LocalizarJogador extends JPanel {
 	public void selecionar() {
 		if (tabela.getRowCount() > 0) {
 			if (tabela.getSelectedRow() > -1) {
-				jogadorSelecionado = JogadorDao.getJogador(Integer
+				jogadorSelecionado = JogadorDao.getAllJogador(Integer
 						.parseInt(String.valueOf(tabela.getValueAt(
 								tabela.getSelectedRow(), 0))));
 				if (jogadorSelecionado != null) {
-					if (menuPai != null) {
-						menuPai.exibirJogador(jogadorSelecionado);
+					if(jogadorSelecionado.getUsuario().getAtivo()){
+						if (menuPai != null) {
+							menuPai.exibirJogador(jogadorSelecionado);
+						}
+					}else{
+						boolean confirmado = false;
+						MenssageConfirmacao.setMenssage("Jogador Desativado", "Deseja Ativar esse Jogador?", ParametroCrud.getModoCrudDeletar(), meio);
+						confirmado = MenssageConfirmacao.isConfirmado();
+						if(confirmado){
+							EntityManagerLocal.begin();
+							jogadorSelecionado.getUsuario().setAtivo(true);
+							jogadorSelecionado.setTitular(false);
+							EntityManagerLocal.merge(jogadorSelecionado.getUsuario());
+							EntityManagerLocal.commit();
+							
+							if (menuPai != null) {
+								menuPai.exibirJogador(jogadorSelecionado);
+							}
+						}
 					}
 				} 
 			} else {
@@ -255,7 +274,7 @@ public class LocalizarJogador extends JPanel {
 						j.getUsuario().getNome() + " "
 								+ j.getUsuario().getSobreNome(),
 						j.getUsuario().getUsuario(),
-						j.getUsuario().getRg(),
+						j.getUsuario().getCpf(),
 						MascaraCrud.mascaraTelefoneResult(j.getUsuario()
 								.getTelefone()), j.getUsuario().getEmail() });
 

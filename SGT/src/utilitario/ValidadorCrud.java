@@ -19,6 +19,14 @@ public class ValidadorCrud {
 		}
 	}
 
+	public static boolean cpfJaCadastrado(String cpf){
+		Usuario usuario = UsuarioDao.getCpf(cpf);
+		if(usuario == null){
+			return false;
+		}
+		return true;
+	}
+	
 	
 	public static boolean validarIP(String ip){
 		try {

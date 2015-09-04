@@ -54,7 +54,6 @@ import menu.MenuJogador;
 public class CrudFuncionario extends JPanel {
 	private JTextField txNome;
 	private JTextField txSobreNome;
-	private JTextField txRg;
 	private JTextField txCpf;
 	private JTextField txDataNascimento;
 	private JTextField txTelefone;
@@ -163,50 +162,16 @@ public class CrudFuncionario extends JPanel {
 		txSobreNome.setLayout(null);
 		txSobreNome.setBorder(UtilitarioTela.jTextFieldNormal());
 		meio.add(txSobreNome);
-		setVisible(true);
-
-		JLabel lbRg = new JLabel("RG :");
-		lbRg.setBounds(20, 90, 100, 20);
-		lbRg.setFont(UtilitarioTela.getFont(14));
-		lbRg.setForeground(UtilitarioTela.getFontColorCrud());
-		meio.add(lbRg);
-
-		txRg = new JTextField();
-		txRg.setColumns(50);
-		txRg.setBounds(155, 90, 100, 25);
-		txRg.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				ValidadorCrud.campoRG(arg0, txRg.getText());
-			}
-
-		});
-		txRg.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent arg0) {
-				txRg.setBorder(UtilitarioTela.jTextFieldComFocus());
-			}
-
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				txRg.setBorder(UtilitarioTela.jTextFieldNormal());
-				limpaErro();
-			}
-		});
-		txRg.setLayout(null);
-		txRg.setBorder(UtilitarioTela.jTextFieldNormal());
-		meio.add(txRg);
-		setVisible(true);
-
+		
 		JLabel lbCpf = new JLabel("CPF :");
-		lbCpf.setBounds(20, 125, 100, 20);
+		lbCpf.setBounds(20, 90, 100, 20);
 		lbCpf.setFont(UtilitarioTela.getFont(14));
 		lbCpf.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbCpf);
 
 		txCpf = new JTextField();
 		txCpf.setColumns(50);
-		txCpf.setBounds(155, 125, 100, 25);
+		txCpf.setBounds(155, 90, 100, 25);
 		txCpf.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent arg0) {
@@ -230,16 +195,16 @@ public class CrudFuncionario extends JPanel {
 		txCpf.setBorder(UtilitarioTela.jTextFieldNormal());
 		meio.add(txCpf);
 		setVisible(true);
-		
+
 		JLabel lbDataNascimento = new JLabel("Data Nascimento :");
-		lbDataNascimento.setBounds(20, 160, 130, 20);
+		lbDataNascimento.setBounds(20, 125, 130, 20);
 		lbDataNascimento.setFont(UtilitarioTela.getFont(14));
 		lbDataNascimento.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbDataNascimento);
 
 		txDataNascimento = new JTextField();
 		txDataNascimento.setColumns(50);
-		txDataNascimento.setBounds(155, 160, 100, 25);
+		txDataNascimento.setBounds(155, 125, 100, 25);
 		txDataNascimento.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -271,7 +236,7 @@ public class CrudFuncionario extends JPanel {
 		setVisible(true);
 
 		JLabel lbTelefone = new JLabel("Telefone :");
-		lbTelefone.setBounds(20, 195, 100, 20);
+		lbTelefone.setBounds(20, 160, 100, 20);
 		lbTelefone.setFont(UtilitarioTela.getFont(14));
 		lbTelefone.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbTelefone);
@@ -290,7 +255,7 @@ public class CrudFuncionario extends JPanel {
 			}
 		});
 		txTelefone.setColumns(50);
-		txTelefone.setBounds(155, 195, 100, 25);
+		txTelefone.setBounds(155, 160, 100, 25);
 		txTelefone.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -309,7 +274,7 @@ public class CrudFuncionario extends JPanel {
 		setVisible(true);
 
 		JLabel lbSexo = new JLabel("Sexo :");
-		lbSexo.setBounds(20, 230, 100, 20);
+		lbSexo.setBounds(20, 195, 100, 20);
 		lbSexo.setFont(UtilitarioTela.getFont(14));
 		lbSexo.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbSexo);
@@ -317,18 +282,18 @@ public class CrudFuncionario extends JPanel {
 		comboSexo = new ComboBox(new Dimension(150, 25));
 		comboSexo.setModel(new DefaultComboBoxModel(new String[] { "Masculino",
 				"Feminino" }));
-		comboSexo.setLocation(155, 230);
+		comboSexo.setLocation(155, 195);
 		meio.add(comboSexo);
 
 		JLabel lbEmail = new JLabel("Email :");
-		lbEmail.setBounds(20, 265, 100, 20);
+		lbEmail.setBounds(20, 230, 100, 20);
 		lbEmail.setFont(UtilitarioTela.getFont(14));
 		lbEmail.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbEmail);
 
 		txEmail = new JTextField();
 		txEmail.setColumns(100);
-		txEmail.setBounds(155, 265, 320, 25);
+		txEmail.setBounds(155, 230, 320, 25);
 		txEmail.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -347,14 +312,14 @@ public class CrudFuncionario extends JPanel {
 		setVisible(true);
 
 		JLabel lbUsuario = new JLabel("Usuário :");
-		lbUsuario.setBounds(20, 300, 100, 20);
+		lbUsuario.setBounds(20, 265, 100, 20);
 		lbUsuario.setFont(UtilitarioTela.getFont(14));
 		lbUsuario.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbUsuario);
 
 		txUsuario = new JTextField();
 		txUsuario.setColumns(100);
-		txUsuario.setBounds(155, 300, 320, 25);
+		txUsuario.setBounds(155, 265, 320, 25);
 		txUsuario.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -399,7 +364,7 @@ public class CrudFuncionario extends JPanel {
 
 		msg = new JPanel();
 		msg.setSize(490, 35);
-		msg.setLocation(5, 330);
+		msg.setLocation(5, 300);
 		msg.setLayout(null);
 		msg.setBackground(null);
 		meio.add(msg);
@@ -418,7 +383,6 @@ public class CrudFuncionario extends JPanel {
 	public void setarCampos() {
 		txNome.setText(funcionarioSelecionado.getUsuario().getNome());
 		txSobreNome.setText(funcionarioSelecionado.getUsuario().getSobreNome());
-		txRg.setText(funcionarioSelecionado.getUsuario().getRg());
 		txCpf.setText(funcionarioSelecionado.getUsuario().getCpf());
 		txTelefone.setText(MascaraCrud.mascaraTelefoneResult(funcionarioSelecionado
 				.getUsuario().getTelefone()));
@@ -470,22 +434,21 @@ public class CrudFuncionario extends JPanel {
 				return false;
 			}
 
-			if (txRg.getText() == null || txRg.getText().trim().isEmpty()) {
-				msgErro("Campo RG é Obrigatório!");
-				txRg.requestFocus();
-				return false;
-			} else if (!ValidadorCrud.validarRg(txRg.getText())) {
-				msgErro("RG é Inválido!");
-				txRg.requestFocus();
-				return false;
-			}
-			
 			if (txCpf.getText() == null || txCpf.getText().trim().isEmpty()) {
 				msgErro("Campo CPF é Obrigatório!");
 				txCpf.requestFocus();
 				return false;
 			} else if (!ValidadorCrud.isCpf(txCpf.getText())) {
 				msgErro("CPF é Inválido!");
+				txCpf.requestFocus();
+				return false;
+			} else if (ValidadorCrud.cpfJaCadastrado(txCpf.getText()) && funcionarioSelecionado == null) {
+				msgErro("CPF já Cadastrado!");
+				txCpf.requestFocus();
+				return false;
+			} else if (ValidadorCrud.cpfJaCadastrado(txCpf.getText()) && funcionarioSelecionado != null
+					&& !txCpf.getText().equals(funcionarioSelecionado.getUsuario().getCpf())) {
+				msgErro("CPF já Cadastrado!");
 				txCpf.requestFocus();
 				return false;
 			}
@@ -607,18 +570,6 @@ public class CrudFuncionario extends JPanel {
 		meio.add(lbSobrenomeV);
 
 		linha += 35;
-		JLabel lbRg = new JLabel("RG :");
-		lbRg.setBounds(20, linha, 100, 20);
-		lbRg.setFont(UtilitarioTela.getFont(14));
-		lbRg.setForeground(UtilitarioTela.getFontColorCrud());
-		meio.add(lbRg);
-		JLabel lbRgV = new JLabel(funcionarioSelecionado.getUsuario().getRg());
-		lbRgV.setBounds(155, linha, 300, 20);
-		lbRgV.setFont(UtilitarioTela.getFont(14));
-		lbRgV.setForeground(UtilitarioTela.getFontColorCrud());
-		meio.add(lbRgV);
-		
-		linha += 35;
 		JLabel lbCpf = new JLabel("CPF :");
 		lbCpf.setBounds(20, linha, 100, 20);
 		lbCpf.setFont(UtilitarioTela.getFont(14));
@@ -717,7 +668,6 @@ public class CrudFuncionario extends JPanel {
 				usuario.setAtivo(true);
 				usuario.setNome(txNome.getText());
 				usuario.setSobreNome(txSobreNome.getText());
-				usuario.setRg(txRg.getText());
 				usuario.setCpf(txCpf.getText());
 				usuario.setDataNascimento(UtilitarioCrud
 						.getData(txDataNascimento.getText()));
@@ -745,7 +695,6 @@ public class CrudFuncionario extends JPanel {
 				Usuario usuario = funcionarioSelecionado.getUsuario();
 				usuario.setNome(txNome.getText());
 				usuario.setSobreNome(txSobreNome.getText());
-				usuario.setRg(txRg.getText());
 				usuario.setCpf(txCpf.getText());
 				usuario.setDataNascimento(UtilitarioCrud
 						.getData(txDataNascimento.getText()));

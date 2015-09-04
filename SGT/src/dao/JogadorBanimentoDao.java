@@ -28,6 +28,21 @@ public class JogadorBanimentoDao {
 		
 	}
 	
+	public static boolean jogadorBanido(int codigoJogador){
+		try{
+			String sql = "SELECT * FROM jogador_banimento where codigoJogador = '" + codigoJogador + "' AND ativo = true";
+			List<JogadorBanimento> lista = EntityManagerLocal.getEntityManager().createNativeQuery(sql, JogadorBanimento.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
+			if(lista == null || lista.size() == 0){
+				return false;
+			}
+			return true;
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+	
 	public static JogadorBanimento getJogadorBanimento(int codigoJogadorBanimento){
 		try {
 			String sql = "SELECT * FROM jogador_banimento where codigoJogBan = '"+codigoJogadorBanimento+"' AND ativo = true";

@@ -45,10 +45,10 @@ public class DialogLocalizarJogador {
 	private static ComboBox metodoBusca;
 	private static Object[][] colunas = new Object[][] { new String[] { "Código" },
 			new String[] { "Nome" }, new String[] { "Usuário" },
-			new String[] { "RG" }, new String[] { "Telefone" },
+			new String[] { "Cpf" }, new String[] { "Telefone" },
 			new String[] { "Email" } };
 	private static String[] linhaBusca = new String[] { "Código", "Nome", "Usuário",
-			"RG", "Telefone", "Email" };
+			"Cpf", "Telefone", "Email" };
 	private static Jogador jogadorSelecionado;
 	private static JDialog dialog;
 	private static JPanel meio;
@@ -238,7 +238,7 @@ public class DialogLocalizarJogador {
 						j.getUsuario().getNome() + " "
 								+ j.getUsuario().getSobreNome(),
 						j.getUsuario().getUsuario(),
-						j.getUsuario().getRg(),
+						j.getUsuario().getCpf(),
 						MascaraCrud.mascaraTelefoneResult(j.getUsuario()
 								.getTelefone()), j.getUsuario().getEmail() });
 
