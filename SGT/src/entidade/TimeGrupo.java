@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "TimeGrupo.findAll", query = "SELECT t FROM TimeGrupo t"),
     @NamedQuery(name = "TimeGrupo.findByCodigoTimeGrupo", query = "SELECT t FROM TimeGrupo t WHERE t.codigoTimeGrupo = :codigoTimeGrupo"),
     @NamedQuery(name = "TimeGrupo.findByPontuacao", query = "SELECT t FROM TimeGrupo t WHERE t.pontuacao = :pontuacao"),
+    @NamedQuery(name = "TimeGrupo.findByClasse", query = "SELECT t FROM TimeGrupo t WHERE t.classe = :classe"),
     @NamedQuery(name = "TimeGrupo.findByAtivo", query = "SELECT t FROM TimeGrupo t WHERE t.ativo = :ativo")})
 public class TimeGrupo implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -40,6 +41,8 @@ public class TimeGrupo implements Serializable {
     private Integer codigoTimeGrupo;
     @Column(name = "pontuacao")
     private Integer pontuacao;
+    @Column(name = "classe")
+    private Integer classe;
     @Column(name = "ativo")
     private Integer ativo;
     @JoinColumn(name = "codigoTime", referencedColumnName = "codigoTime")
@@ -72,6 +75,14 @@ public class TimeGrupo implements Serializable {
         this.pontuacao = pontuacao;
     }
 
+    public Integer getClasse() {
+        return classe;
+    }
+
+    public void setClasse(Integer classe) {
+        this.classe = classe;
+    }
+
     public Integer getAtivo() {
         return ativo;
     }
@@ -79,24 +90,24 @@ public class TimeGrupo implements Serializable {
     public void setAtivo(Integer ativo) {
         this.ativo = ativo;
     }
-    
+
     public Time getTime() {
-		return time;
-	}
+        return time;
+    }
 
-	public void setTime(Time time) {
-		this.time = time;
-	}
+    public void setTime(Time time) {
+        this.time = time;
+    }
 
-	public Grupo getGrupo() {
-		return grupo;
-	}
+    public Grupo getGrupo() {
+        return grupo;
+    }
 
-	public void setGrupo(Grupo grupo) {
-		this.grupo = grupo;
-	}
-
-	@Override
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
+    }
+    
+    @Override
     public int hashCode() {
         int hash = 0;
         hash += (codigoTimeGrupo != null ? codigoTimeGrupo.hashCode() : 0);

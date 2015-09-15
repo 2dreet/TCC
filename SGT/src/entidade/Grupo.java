@@ -36,6 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Grupo.findByDescricao", query = "SELECT g FROM Grupo g WHERE g.descricao = :descricao"),
     @NamedQuery(name = "Grupo.findByAtivo", query = "SELECT g FROM Grupo g WHERE g.ativo = :ativo")})
 public class Grupo implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "grupo")
+    private Collection<TimeGrupo> timeGrupoCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,7 +53,7 @@ public class Grupo implements Serializable {
     @ManyToOne(optional = false)
     private Campeonato campeonato;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "grupo")
-    private Collection<TimeGrupo> timeGrupoCollection;
+    private Collection<Partida> partidaCollection;
 
     public Grupo() {
     }
@@ -88,22 +90,22 @@ public class Grupo implements Serializable {
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
-    
+
     public Campeonato getCampeonato() {
-		return campeonato;
-	}
-
-	public void setCampeonato(Campeonato campeonato) {
-		this.campeonato = campeonato;
-	}
-
-	@XmlTransient
-    public Collection<TimeGrupo> getTimeGrupoCollection() {
-        return timeGrupoCollection;
+        return campeonato;
     }
 
-    public void setTimeGrupoCollection(Collection<TimeGrupo> timeGrupoCollection) {
-        this.timeGrupoCollection = timeGrupoCollection;
+    public void setCampeonato(Campeonato campeonato) {
+        this.campeonato = campeonato;
+    }
+    
+    @XmlTransient
+    public Collection<Partida> getPartidaCollection() {
+        return partidaCollection;
+    }
+
+    public void setPartidaCollection(Collection<Partida> partidaCollection) {
+        this.partidaCollection = partidaCollection;
     }
 
     @Override
@@ -129,6 +131,15 @@ public class Grupo implements Serializable {
     @Override
     public String toString() {
         return "entidade.Grupo[ codigoGrupo=" + codigoGrupo + " ]";
+    }
+
+    @XmlTransient
+    public Collection<TimeGrupo> getTimeGrupoCollection() {
+        return timeGrupoCollection;
+    }
+
+    public void setTimeGrupoCollection(Collection<TimeGrupo> timeGrupoCollection) {
+        this.timeGrupoCollection = timeGrupoCollection;
     }
     
 }

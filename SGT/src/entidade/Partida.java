@@ -65,11 +65,10 @@ public class Partida implements Serializable {
     @Column(name = "ativo")
     private boolean ativo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "partida")
-    private Collection<PcPartida> pcPartidaCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "partida")
     private Collection<TimePartida> timePartidaCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "partida")
-    private Collection<JogadorPartida> jogadorPartidaCollection;
+    @JoinColumn(name = "codigoGrupo", referencedColumnName = "codigoGrupo")
+    @ManyToOne(optional = false)
+    private Grupo grupo;
     @JoinColumn(name = "codigoCampeonato", referencedColumnName = "codigoCampeonato")
     @ManyToOne(optional = false)
     private Campeonato campeonato;
@@ -143,15 +142,6 @@ public class Partida implements Serializable {
     }
 
     @XmlTransient
-    public Collection<PcPartida> getPcPartidaCollection() {
-        return pcPartidaCollection;
-    }
-
-    public void setPcPartidaCollection(Collection<PcPartida> pcPartidaCollection) {
-        this.pcPartidaCollection = pcPartidaCollection;
-    }
-
-    @XmlTransient
     public Collection<TimePartida> getTimePartidaCollection() {
         return timePartidaCollection;
     }
@@ -160,24 +150,23 @@ public class Partida implements Serializable {
         this.timePartidaCollection = timePartidaCollection;
     }
 
-    @XmlTransient
-    public Collection<JogadorPartida> getJogadorPartidaCollection() {
-        return jogadorPartidaCollection;
+    public Grupo getGrupo() {
+        return grupo;
     }
 
-    public void setJogadorPartidaCollection(Collection<JogadorPartida> jogadorPartidaCollection) {
-        this.jogadorPartidaCollection = jogadorPartidaCollection;
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
+    }
+
+    public Campeonato getCampeonato() {
+        return campeonato;
+    }
+
+    public void setCampeonato(Campeonato campeonato) {
+        this.campeonato = campeonato;
     }
     
-    public Campeonato getCampeonato() {
-		return campeonato;
-	}
-
-	public void setCampeonato(Campeonato campeonato) {
-		this.campeonato = campeonato;
-	}
-
-	@Override
+    @Override
     public int hashCode() {
         int hash = 0;
         hash += (codigoPartida != null ? codigoPartida.hashCode() : 0);
