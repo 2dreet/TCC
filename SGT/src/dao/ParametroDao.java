@@ -21,6 +21,15 @@ public class ParametroDao {
 				case 2: {
 					atualizarBanco("INSERT INTO permissao(descricao, ativo) values('Administrador',true)", 3);
 				}
+				case 3: {
+					atualizarBanco("INSERT INTO chave(descricao, ativo) values('Mata-Mata',true)", 4);
+				}
+				case 4: {
+					atualizarBanco("INSERT INTO chave(descricao, ativo) values('Winner e Lower',true)", 5);
+				}
+				case 5: {
+					atualizarBanco("INSERT INTO chave(descricao, ativo) values('Grupo',true)", 6);
+				}
 				
 				default: {
 					return;

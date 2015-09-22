@@ -26,6 +26,7 @@ import javax.swing.JButton;
 
 import dao.BanimentoDao;
 import dao.CampeonatoTimeDao;
+import dao.ChaveDao;
 import dao.EntityManagerLocal;
 import dao.JogadorDao;
 import dao.ModalidadeDao;
@@ -85,6 +86,7 @@ public class CrudCampeonato extends JPanel {
 	private JLabel lblHeader;
 	private JPanel meio;
 	private ComboBox cbModalidade;
+	private ComboBox cbChave;
 	private List<CampeonatoTime> listaTime;
 	private Time timeSelecionado;
 	private JTable tabela;
@@ -162,16 +164,27 @@ public class CrudCampeonato extends JPanel {
 		txDescricao.setBorder(UtilitarioTela.jTextFieldNormal());
 		meio.add(txDescricao);
 
-		JLabel lbIp = new JLabel("Modalidade :");
-		lbIp.setBounds(20, 60, 100, 20);
-		lbIp.setFont(UtilitarioTela.getFont(14));
-		lbIp.setForeground(UtilitarioTela.getFontColorCrud());
-		meio.add(lbIp);
+		JLabel lbModalidade = new JLabel("Modalidade :");
+		lbModalidade.setBounds(20, 60, 100, 20);
+		lbModalidade.setFont(UtilitarioTela.getFont(14));
+		lbModalidade.setForeground(UtilitarioTela.getFontColorCrud());
+		meio.add(lbModalidade);
 
 		cbModalidade = new ComboBox(new Dimension(150, 25));
 		cbModalidade.setModel(new DefaultComboBoxModel(ModalidadeDao.getVetorModalidade()));
 		cbModalidade.setLocation(130, 60);
 		meio.add(cbModalidade);
+		
+		JLabel lbChave = new JLabel("Chave :");
+		lbChave.setBounds(20, 100, 100, 20);
+		lbChave.setFont(UtilitarioTela.getFont(14));
+		lbChave.setForeground(UtilitarioTela.getFontColorCrud());
+		meio.add(lbChave);
+
+		cbChave = new ComboBox(new Dimension(150, 25));
+		cbChave.setModel(new DefaultComboBoxModel(ChaveDao.getVetorChave()));
+		cbChave.setLocation(130, 100);
+		meio.add(cbChave);
 
 		String texto = "";
 		if (modoCrud == ParametroCrud.getModoCrudAlterar()) {
@@ -182,7 +195,7 @@ public class CrudCampeonato extends JPanel {
 
 		if (modoCrud != ParametroCrud.getModoVisualizar()) {
 			JButton btSalvar = new JButton(texto);
-			btSalvar.setBounds(175, meio.getHeight() - 70, 150, 35);
+			btSalvar.setBounds(175, meio.getHeight() - 75, 150, 35);
 			btSalvar.setFont(UtilitarioTela.getFont(14));
 			btSalvar.setFocusPainted(false);
 			btSalvar.setBackground(UtilitarioTela.getColorCrud(modoCrud));
@@ -251,6 +264,11 @@ public class CrudCampeonato extends JPanel {
 				msgErro("Campo Descrição é Obrigatório!");
 				return false;
 			}
+			
+			if (String.valueOf(cbModalidade.getSelectedItem()) == null || String.valueOf(cbModalidade.getSelectedItem()).trim().isEmpty()) {
+				msgErro("Casdatrar Modalidade em Casdatro de modalidade");
+				return false;
+			} 
 			
 
 			return true;
@@ -452,6 +470,7 @@ public class CrudCampeonato extends JPanel {
 				campeonato.setDescricao(txDescricao.getText());
 				campeonato.setDataCadastro(new Date());
 				campeonato.setModalidade(ModalidadeDao.getModalidadeNome(String.valueOf(cbModalidade.getSelectedItem())));
+				campeonato.setChave(ChaveDao.getChaveNome(String.valueOf(cbChave.getSelectedItem())));
 				campeonato.setAtivo(true);
 				EntityManagerLocal.persist(campeonato);
 				campeonatoSelecionado = campeonato;
@@ -461,6 +480,7 @@ public class CrudCampeonato extends JPanel {
 				menssage = "Campeonato Alterado com Sucesso!";
 				campeonatoSelecionado.setDescricao(txDescricao.getText());
 				campeonatoSelecionado.setModalidade(ModalidadeDao.getModalidadeNome(String.valueOf(cbModalidade.getSelectedItem())));
+				campeonatoSelecionado.setChave(ChaveDao.getChaveNome(String.valueOf(cbChave.getSelectedItem())));
 				EntityManagerLocal.merge(campeonatoSelecionado);
 			} else if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
 				modo = "Deleção de Campeonato";

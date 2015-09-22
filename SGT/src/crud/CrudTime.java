@@ -758,7 +758,7 @@ public class CrudTime extends JPanel {
 								+ txDescricao.getText() + ".png");
 						MoverArquivo.copyFile(logo,
 								MoverArquivo.getLocalLogo(logo));
-						time.setLogo(logo.getName());
+						time.setLogo(logo.);
 					} catch (Exception e) {
 						e.printStackTrace();
 						Menssage.setMenssage("Erro ao mover Logo",

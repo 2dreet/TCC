@@ -49,7 +49,7 @@ public class Time implements Serializable {
     private String descricao;
     @Lob
     @Column(name = "logo")
-    private String logo;
+    private byte[] logo;
     @Basic(optional = false)
     @Column(name = "dataCadastro")
     @Temporal(TemporalType.DATE)
@@ -101,11 +101,11 @@ public class Time implements Serializable {
         this.descricao = descricao;
     }
 
-    public String getLogo() {
+    public byte[] getLogo() {
         return logo;
     }
 
-    public void setLogo(String logo) {
+    public void setLogo(byte[] logo) {
         this.logo = logo;
     }
 
