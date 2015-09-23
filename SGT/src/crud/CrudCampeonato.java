@@ -18,6 +18,7 @@ import utilitario.MascaraCrud;
 import utilitario.ParametroCrud;
 import utilitario.Parametros;
 import utilitario.UtilitarioCrud;
+import utilitario.UtilitarioImagem;
 import utilitario.UtilitarioTabela;
 import utilitario.UtilitarioTela;
 import utilitario.ValidadorCrud;
@@ -440,8 +441,7 @@ public class CrudCampeonato extends JPanel {
 		if (listaTime != null) {
 			for (CampeonatoTime t : listaTime) {
 				modelo.addRow(new Object[] {
-						new DadoComIcone("", new ImageIcon("logo/"
-								+ t.getTime().getLogo())),
+						new DadoComIcone("", UtilitarioImagem.converterImage(t.getTime().getLogo())),
 						String.valueOf(t.getTime().getCodigoTime()), t.getTime().getDescricao() });
 
 			}

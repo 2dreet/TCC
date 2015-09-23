@@ -30,6 +30,7 @@ import utilitario.BordaSombreada;
 import utilitario.MascaraCrud;
 import utilitario.ParametroCrud;
 import utilitario.Parametros;
+import utilitario.UtilitarioImagem;
 import utilitario.UtilitarioTabela;
 import utilitario.UtilitarioTela;
 import componente.ComboBox;
@@ -237,8 +238,7 @@ public class DialogLocalizarTime {
 		if (listaTime != null && listaTime.size() > 0 ) {
 			for (Time t : listaTime) {
 				modelo.addRow(new Object[] {
-						new DadoComIcone("", new ImageIcon("logo/"
-								+ t.getLogo())),
+						new DadoComIcone("", UtilitarioImagem.converterImage(t.getLogo())),
 						String.valueOf(t.getCodigoTime()), t.getDescricao() });
 
 			}

@@ -22,6 +22,7 @@ import utilitario.MascaraCrud;
 import utilitario.ParametroCrud;
 import utilitario.Parametros;
 import utilitario.UtilitarioCrud;
+import utilitario.UtilitarioImagem;
 import utilitario.UtilitarioTabela;
 import utilitario.UtilitarioTela;
 
@@ -254,8 +255,7 @@ public class LocalizarTime extends JPanel {
 		if (listaTime != null && listaTime.size() > 0) {
 			for (Time t : listaTime) {
 				modelo.addRow(new Object[] {
-						new DadoComIcone("", new ImageIcon("logo/"
-								+ t.getLogo())),
+						new DadoComIcone("", UtilitarioImagem.converterImage(t.getLogo())),
 						String.valueOf(t.getCodigoTime()), t.getDescricao() });
 
 			}

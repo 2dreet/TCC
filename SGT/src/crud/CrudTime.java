@@ -18,6 +18,7 @@ import utilitario.MoverArquivo;
 import utilitario.ParametroCrud;
 import utilitario.Parametros;
 import utilitario.UtilitarioCrud;
+import utilitario.UtilitarioImagem;
 import utilitario.UtilitarioLogo;
 import utilitario.UtilitarioTabela;
 import utilitario.UtilitarioTela;
@@ -389,8 +390,7 @@ public class CrudTime extends JPanel {
 
 		int linha = 20;
 
-		JLabel lbLogoV = new JLabel(new ImageIcon("logo/"
-				+ timeSelecionado.getLogo()));
+		JLabel lbLogoV = new JLabel(UtilitarioImagem.converterImage(timeSelecionado.getLogo()));
 		lbLogoV.setFont(UtilitarioTela.getFont(14));
 		lbLogoV.setForeground(UtilitarioTela.getFontColorCrud());
 		lbLogoV.setBounds(2, 2, 50, 50);
@@ -750,20 +750,10 @@ public class CrudTime extends JPanel {
 				Time time = new Time();
 				if (logo != null) {
 					try {
-						logo.renameTo(new File(logo.getPath().replace(
-								logo.getName(), "")
-								+ txDescricao.getText() + ".png"));
-						logo = new File(logo.getPath().replace(logo.getName(),
-								"")
-								+ txDescricao.getText() + ".png");
-						MoverArquivo.copyFile(logo,
-								MoverArquivo.getLocalLogo(logo));
-						time.setLogo(logo.);
+						time.setLogo(UtilitarioImagem.converterImageByte(logo));
 					} catch (Exception e) {
 						e.printStackTrace();
-						Menssage.setMenssage("Erro ao mover Logo",
-								"Não foi possivel mover a logo!",
-								ParametroCrud.getModoErro(), meio);
+						
 					}
 				}
 				time.setDescricao(txDescricao.getText());
@@ -777,20 +767,11 @@ public class CrudTime extends JPanel {
 				menssage = "Time Alterado com Sucesso!";
 				if (logo != null) {
 					try {
-						logo.renameTo(new File(logo.getPath().replace(
-								logo.getName(), "")
-								+ txDescricao.getText() + ".png"));
-						logo = new File(logo.getPath().replace(logo.getName(),
-								"")
-								+ txDescricao.getText() + ".png");
-						MoverArquivo.copyFile(logo,
-								MoverArquivo.getLocalLogo(logo));
-						timeSelecionado.setLogo(logo.getName());
+						
+						timeSelecionado.setLogo(UtilitarioImagem.converterImageByte(logo));
 					} catch (Exception e) {
 						e.printStackTrace();
-						Menssage.setMenssage("Erro ao mover Logo",
-								"Não foi possivel mover a logo!",
-								ParametroCrud.getModoErro(), meio);
+						
 					}
 				}
 
