@@ -8,6 +8,7 @@ package entidade;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -61,6 +62,13 @@ public class Partida implements Serializable {
     @Column(name = "horaFim")
     @Temporal(TemporalType.DATE)
     private Date horaFim;
+    @JoinColumn(name = "timeVencedor", referencedColumnName = "codigoTime")
+    @ManyToOne(optional = false)
+    private Time timeVencedor;
+    @Column(name = "placarTimeVencedor")
+    private Integer placarTimeVencedor;
+    @Column(name = "placarTimePerdedor")
+    private Integer placarTimePerdedor;
     @Basic(optional = false)
     @Column(name = "ativo")
     private boolean ativo;
@@ -72,6 +80,10 @@ public class Partida implements Serializable {
     @JoinColumn(name = "codigoCampeonato", referencedColumnName = "codigoCampeonato")
     @ManyToOne(optional = false)
     private Campeonato campeonato;
+    @JoinColumn(name = "codigoPartidaFilho", referencedColumnName = "codigoPartida")
+    @ManyToOne(optional = false)
+    private Partida partidaFilho;
+    
 
     public Partida() {
     }
@@ -166,7 +178,39 @@ public class Partida implements Serializable {
         this.campeonato = campeonato;
     }
     
-    @Override
+    public Time getTimeVencedor() {
+		return timeVencedor;
+	}
+
+	public void setTimeVencedor(Time timeVencedor) {
+		this.timeVencedor = timeVencedor;
+	}
+
+	public Integer getPlacarTimeVencedor() {
+		return placarTimeVencedor;
+	}
+
+	public void setPlacarTimeVencedor(Integer placarTimeVencedor) {
+		this.placarTimeVencedor = placarTimeVencedor;
+	}
+
+	public Integer getPlacarTimePerdedor() {
+		return placarTimePerdedor;
+	}
+
+	public void setPlacarTimePerdedor(Integer placarTimePerdedor) {
+		this.placarTimePerdedor = placarTimePerdedor;
+	}
+
+	public Partida getPartidaFilho() {
+		return partidaFilho;
+	}
+
+	public void setPartidaFilho(Partida partidaFilho) {
+		this.partidaFilho = partidaFilho;
+	}
+
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (codigoPartida != null ? codigoPartida.hashCode() : 0);

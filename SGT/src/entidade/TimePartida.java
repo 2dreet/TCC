@@ -28,10 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "TimePartida.findAll", query = "SELECT t FROM TimePartida t"),
-    @NamedQuery(name = "TimePartida.findByCodigoTimePartida", query = "SELECT t FROM TimePartida t WHERE t.codigoTimePartida = :codigoTimePartida"),
-    @NamedQuery(name = "TimePartida.findByTimeVencedor", query = "SELECT t FROM TimePartida t WHERE t.timeVencedor = :timeVencedor"),
-    @NamedQuery(name = "TimePartida.findByPlacarTimeVencedor", query = "SELECT t FROM TimePartida t WHERE t.placarTimeVencedor = :placarTimeVencedor"),
-    @NamedQuery(name = "TimePartida.findByPlacarTimePerdedor", query = "SELECT t FROM TimePartida t WHERE t.placarTimePerdedor = :placarTimePerdedor")})
+    @NamedQuery(name = "TimePartida.findByCodigoTimePartida", query = "SELECT t FROM TimePartida t WHERE t.codigoTimePartida = :codigoTimePartida")})
 public class TimePartida implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -39,12 +36,6 @@ public class TimePartida implements Serializable {
     @Basic(optional = false)
     @Column(name = "codigoTimePartida")
     private Integer codigoTimePartida;
-    @Column(name = "timeVencedor")
-    private Integer timeVencedor;
-    @Column(name = "placarTimeVencedor")
-    private Integer placarTimeVencedor;
-    @Column(name = "placarTimePerdedor")
-    private Integer placarTimePerdedor;
     @JoinColumn(name = "codigoTime", referencedColumnName = "codigoTime")
     @ManyToOne(optional = false)
     private Time time;
@@ -67,30 +58,6 @@ public class TimePartida implements Serializable {
         this.codigoTimePartida = codigoTimePartida;
     }
 
-    public Integer getTimeVencedor() {
-        return timeVencedor;
-    }
-
-    public void setTimeVencedor(Integer timeVencedor) {
-        this.timeVencedor = timeVencedor;
-    }
-
-    public Integer getPlacarTimeVencedor() {
-        return placarTimeVencedor;
-    }
-
-    public void setPlacarTimeVencedor(Integer placarTimeVencedor) {
-        this.placarTimeVencedor = placarTimeVencedor;
-    }
-
-    public Integer getPlacarTimePerdedor() {
-        return placarTimePerdedor;
-    }
-
-    public void setPlacarTimePerdedor(Integer placarTimePerdedor) {
-        this.placarTimePerdedor = placarTimePerdedor;
-    }
-    
     public Time getTime() {
 		return time;
 	}
