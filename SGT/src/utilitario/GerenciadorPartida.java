@@ -15,7 +15,7 @@ import entidade.TimePartida;
 
 public class GerenciadorPartida {
 
-	public static void adicionarPatida(Campeonato campeonato) {
+	public static boolean adicionarPatidas(Campeonato campeonato) {
 		try {
 			List<CampeonatoTime> listaTime = CampeonatoTimeDao
 					.getListaCampeonatoTimeCamp(campeonato
@@ -36,8 +36,9 @@ public class GerenciadorPartida {
 			Menssage.setMenssage("Erro",
 					"Erro ao criar partidas\nEntrar em contato com o suporte!",
 					ParametroCrud.getModoErro(), Parametros.getPai());
+			return false;
 		}
-
+		return true;
 	}
 
 	public static void gerarPartidasMataMata(List<Time> listaTime,

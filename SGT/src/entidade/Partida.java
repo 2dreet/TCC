@@ -70,6 +70,9 @@ public class Partida implements Serializable {
     @Column(name = "placarTimePerdedor")
     private Integer placarTimePerdedor;
     @Basic(optional = false)
+    @Column(name = "winerLower")
+    private boolean winerLower;
+    @Basic(optional = false)
     @Column(name = "ativo")
     private boolean ativo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "partida")
@@ -208,6 +211,14 @@ public class Partida implements Serializable {
 
 	public void setPartidaFilho(Partida partidaFilho) {
 		this.partidaFilho = partidaFilho;
+	}
+
+	public boolean isWinerLower() {
+		return winerLower;
+	}
+
+	public void setWinerLower(boolean winerLower) {
+		this.winerLower = winerLower;
 	}
 
 	@Override
