@@ -44,7 +44,7 @@ public class TimeGrupo implements Serializable {
     @Column(name = "classe")
     private Integer classe;
     @Column(name = "ativo")
-    private Integer ativo;
+    private boolean ativo;
     @JoinColumn(name = "codigoTime", referencedColumnName = "codigoTime")
     @ManyToOne(optional = false)
     private Time time;
@@ -83,11 +83,11 @@ public class TimeGrupo implements Serializable {
         this.classe = classe;
     }
 
-    public Integer getAtivo() {
+    public boolean getAtivo() {
         return ativo;
     }
 
-    public void setAtivo(Integer ativo) {
+    public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
 

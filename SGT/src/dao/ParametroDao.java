@@ -49,7 +49,7 @@ public class ParametroDao {
 			query.executeUpdate();
 			EntityManagerLocal.commit();
 			setVersaoBanco(versaoBanco + 1);
-		} catch (NoResultException ex) {
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}

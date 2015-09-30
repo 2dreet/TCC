@@ -23,6 +23,18 @@ public class CampeonatoTimeDao {
 		}
 	}
 	
+	public static List<Time> getListaCampeonatoListaTime(int codigoCampeonato){
+		try{
+			String sql = "SELECT t.* FROM campeonato_time ct INNER JOIN time t"
+					+ "	ON ct.codigoTime = t.codigoTime "
+					+ "  where codigoCampeonato = '"+codigoCampeonato+"'";
+			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Time.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public static List<CampeonatoTime> getListaCampeonatoTimeCamp(int codigoCampeonato){
 		try{
 			String sql = "SELECT * FROM campeonato_time where codigoCampeonato = '"+codigoCampeonato+"'";

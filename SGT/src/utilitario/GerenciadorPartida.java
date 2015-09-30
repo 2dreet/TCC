@@ -9,6 +9,7 @@ import dao.CampeonatoTimeDao;
 import dao.EntityManagerLocal;
 import entidade.Campeonato;
 import entidade.CampeonatoTime;
+import entidade.Grupo;
 import entidade.Partida;
 import entidade.Time;
 import entidade.TimePartida;
@@ -17,20 +18,18 @@ public class GerenciadorPartida {
 
 	public static boolean adicionarPatidas(Campeonato campeonato) {
 		try {
-			List<CampeonatoTime> listaTime = CampeonatoTimeDao
-					.getListaCampeonatoTimeCamp(campeonato
+			List<Time> listaTime = CampeonatoTimeDao
+					.getListaCampeonatoListaTime(campeonato
 							.getCodigoCampeonato());
 			if (listaTime != null && listaTime.size() > 0) {
-				if (campeonato.getChave().getCodigoChave() == 1) {
-					// Mata - Mata
-
-				} else if (campeonato.getChave().getCodigoChave() == 2) {
-					// Winer - Lower
-
+				if (campeonato.getChave().getCodigoChave() == 1 || campeonato.getChave().getCodigoChave() == 2) {
+					// Winer - Lower  MATA MATA
+					gerarPartidasMataMata( listaTime, campeonato, false);
 				} else if (campeonato.getChave().getCodigoChave() == 3) {
 					// Grupo
-
+					
 				}
+				return true;
 			}
 		} catch (Exception e) {
 			Menssage.setMenssage("Erro",
@@ -38,11 +37,11 @@ public class GerenciadorPartida {
 					ParametroCrud.getModoErro(), Parametros.getPai());
 			return false;
 		}
-		return true;
+		return false;
 	}
 
 	public static void gerarPartidasMataMata(List<Time> listaTime,
-			Campeonato campeonato) {
+			Campeonato campeonato, boolean winerLower) {
 		List<Time> listaTimeA = new ArrayList<Time>();
 		List<Time> listaTimeB = new ArrayList<Time>();
 		List<Partida> listaPartida = new ArrayList<Partida>();
@@ -79,6 +78,7 @@ public class GerenciadorPartida {
 			partida.setAtivo(true);
 			partida.setCampeonato(campeonato);
 			partida.setCancelada(false);
+			partida.setWinerLower(winerLower);
 			EntityManagerLocal.persist(partida);
 
 			TimePartida tpA = new TimePartida();
@@ -94,7 +94,7 @@ public class GerenciadorPartida {
 			listaPartida.add(partida);
 		}
 		EntityManagerLocal.commit();
-
+		EntityManagerLocal.clear();
 		if (listaPartida.size() > 1) {
 			boolean partidaA = true;
 			if (listaPartida.size() % 2 == 0) {
@@ -122,12 +122,12 @@ public class GerenciadorPartida {
 		}
 		
 		if (listaPartidaA.size() > 1) {
-			listaPartidaA = criarPartidasMataMataFilho(listaPartidaA, campeonato);
+			listaPartidaA = criarPartidasMataMataFilho(listaPartidaA, campeonato, winerLower);
 		}
 		
 
 		if (listaPartidaB.size() > 1) {
-			listaPartidaB = criarPartidasMataMataFilho(listaPartidaB, campeonato);
+			listaPartidaB = criarPartidasMataMataFilho(listaPartidaB, campeonato, winerLower);
 		}
 		
 		EntityManagerLocal.begin();
@@ -146,10 +146,10 @@ public class GerenciadorPartida {
 		listaPartidaB.get(0).setPartidaFilho(partida);
 		EntityManagerLocal.merge(listaPartidaB.get(0));
 		EntityManagerLocal.commit();
-
+		EntityManagerLocal.clear();
 	}
 
-	public static List<Partida> criarPartidasMataMataFilho(List<Partida> lista, Campeonato campeonato) {
+	public static List<Partida> criarPartidasMataMataFilho(List<Partida> lista, Campeonato campeonato, boolean winerLower) {
 		List<Partida> novaLista = new ArrayList<Partida>();
 		if (lista.size() > 1) {
 			if (lista.size() % 2 == 0) {
@@ -172,9 +172,10 @@ public class GerenciadorPartida {
 					lista.get(i).setPartidaFilho(partida);
 					EntityManagerLocal.merge(lista.get(i));
 					EntityManagerLocal.commit();
+					EntityManagerLocal.clear();
 					novaLista.add(partida);
 				}
-				return criarPartidasMataMataFilho(novaLista, campeonato);
+				return criarPartidasMataMataFilho(novaLista, campeonato, winerLower);
 			} else {
 				for (int i = 0; i < lista.size() - 1; i++) {
 					EntityManagerLocal.begin();
@@ -194,6 +195,7 @@ public class GerenciadorPartida {
 					lista.get(i).setPartidaFilho(partida);
 					EntityManagerLocal.merge(lista.get(i));
 					EntityManagerLocal.commit();
+					EntityManagerLocal.clear();
 					novaLista.add(partida);
 				}
 				EntityManagerLocal.begin();
@@ -211,12 +213,13 @@ public class GerenciadorPartida {
 				lista.get(lista.size()-1).setPartidaFilho(partida);
 				EntityManagerLocal.merge(lista.get(lista.size()-1));
 				EntityManagerLocal.commit();
+				EntityManagerLocal.clear();
 				novaLista.add(partida);
-				return criarPartidasMataMataFilho(novaLista, campeonato);
+				return criarPartidasMataMataFilho(novaLista, campeonato, winerLower);
 			}
 		}
 
-		return null;
+		return lista;
 	}
 
 	public static void gerarPartidasWinerLower(List<CampeonatoTime> listaTime) {

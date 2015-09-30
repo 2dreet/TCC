@@ -14,6 +14,7 @@ import componente.TextoIconeCell;
 import utilitario.BordaEscura;
 import utilitario.BordaSombreada;
 import utilitario.Computador;
+import utilitario.GerenciadorGupos;
 import utilitario.MascaraCrud;
 import utilitario.ParametroCrud;
 import utilitario.Parametros;
@@ -29,6 +30,7 @@ import dao.BanimentoDao;
 import dao.CampeonatoTimeDao;
 import dao.ChaveDao;
 import dao.EntityManagerLocal;
+import dao.GrupoDao;
 import dao.JogadorDao;
 import dao.ModalidadeDao;
 import dao.PermissaoDao;
@@ -37,6 +39,7 @@ import dialog.DialogLocalizarJogador;
 import dialog.DialogLocalizarTime;
 import entidade.Campeonato;
 import entidade.CampeonatoTime;
+import entidade.Grupo;
 import entidade.Jogador;
 import entidade.Pc;
 import entidade.Time;
@@ -301,20 +304,33 @@ public class CrudCampeonato extends JPanel {
 				}
 			});
 		} else {
-			if(campeonatoSelecionado.getDataIncio() == null){
-			JButton btIniciar = new JButton("Iniciar Campeonato");
-			btIniciar.setBounds(175, meio.getHeight() - 70, 150, 35);
-			btIniciar.setFont(UtilitarioTela.getFont(14));
-			btIniciar.setFocusPainted(false);
-			btIniciar.setBackground(UtilitarioTela.getColorCrud(modoCrud));
-			btIniciar.setIcon(UtilitarioCrud.getIconeCrud(modoCrud));
-			meio.add(btIniciar);
-			btIniciar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					
-				}
-			});
-			}else{
+			if (campeonatoSelecionado.getDataIncio() == null) {
+				JButton btIniciar = new JButton("Iniciar Campeonato");
+				btIniciar.setBounds(175, meio.getHeight() - 70, 150, 35);
+				btIniciar.setFont(UtilitarioTela.getFont(14));
+				btIniciar.setFocusPainted(false);
+				btIniciar.setBackground(UtilitarioTela.getColorCrud(modoCrud));
+				btIniciar.setIcon(UtilitarioCrud.getIconeCrud(modoCrud));
+				meio.add(btIniciar);
+				btIniciar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						if (campeonatoSelecionado.getChave().getCodigoChave() == 3) {
+							// Grupo
+							if (listaTime.size() >= 12) {
+								if (GerenciadorGupos.gerarGrupos(campeonatoSelecionado)) {
+									List<Grupo> listaGrupo = GrupoDao.getListaGrupo(campeonatoSelecionado.getCodigoCampeonato());
+									
+								}
+							} else {
+								Menssage.setMenssage("Times insuficientes",
+										"Deve adicionar Mais Times para iniciar o campeonato!",
+										ParametroCrud.getModoCrudDeletar(),
+										meio);
+							}
+						}
+					}
+				});
+			} else {
 				JButton btCancelar = new JButton("Cancelar Campeonato");
 				btCancelar.setBounds(175, meio.getHeight() - 70, 150, 35);
 				btCancelar.setFont(UtilitarioTela.getFont(14));
@@ -324,7 +340,7 @@ public class CrudCampeonato extends JPanel {
 				meio.add(btCancelar);
 				btCancelar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						
+
 					}
 				});
 			}
