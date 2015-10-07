@@ -27,7 +27,19 @@ public class CampeonatoTimeDao {
 		try{
 			String sql = "SELECT t.* FROM campeonato_time ct INNER JOIN time t"
 					+ "	ON ct.codigoTime = t.codigoTime "
-					+ "  where codigoCampeonato = '"+codigoCampeonato+"'";
+					+ "  where codigoCampeonato = '"+codigoCampeonato+"' AND ativo = true";
+			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Time.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static List<Time> getListaCampeonatoListaTimeSemGrupo(int codigoCampeonato){
+		try{
+			String sql = "SELECT t.* FROM campeonato_time ct INNER JOIN time t"
+					+ "	ON ct.codigoTime = t.codigoTime "
+					+ "  where codigoCampeonato = '"+codigoCampeonato+"' AND ativo = true AND codigoTime not in(SELECT codigoTime FROM time_grupo);";
 			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Time.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -38,6 +50,16 @@ public class CampeonatoTimeDao {
 	public static List<CampeonatoTime> getListaCampeonatoTimeCamp(int codigoCampeonato){
 		try{
 			String sql = "SELECT * FROM campeonato_time where codigoCampeonato = '"+codigoCampeonato+"'";
+			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, CampeonatoTime.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static List<CampeonatoTime> getListaCampeonatoTimeCampSemGrupo(int codigoCampeonato){
+		try{
+			String sql = "SELECT * FROM campeonato_time where codigoCampeonato = '"+codigoCampeonato+"' AND codigoTime not in(SELECT codigoTime FROM time_grupo);";
 			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, CampeonatoTime.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
 		}catch(Exception e){
 			e.printStackTrace();

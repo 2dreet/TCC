@@ -6,6 +6,7 @@ import java.util.List;
 import componente.Menssage;
 import dao.CampeonatoTimeDao;
 import dao.EntityManagerLocal;
+import dialog.DialogGrupoSelectTime;
 import entidade.Campeonato;
 import entidade.Grupo;
 import entidade.Time;
@@ -13,17 +14,17 @@ import entidade.TimeGrupo;
 
 public class GerenciadorGupos {
 
-	public static boolean gerarGrupos(Campeonato campeonato){
+	public static boolean gerarGrupos(Campeonato campeonato) {
 		try {
 			List<Time> listaTime = CampeonatoTimeDao
 					.getListaCampeonatoListaTime(campeonato
 							.getCodigoCampeonato());
 			if (listaTime != null && listaTime.size() > 12) {
-				
+
 				int quantidadeGrupo = getQuantidadeGrupo(listaTime);
 				List<Grupo> listaGrupo = new ArrayList<Grupo>();
-				
-				for(int i = 0; i < quantidadeGrupo; i++){
+
+				for (int i = 0; i < quantidadeGrupo; i++) {
 					EntityManagerLocal.begin();
 					Grupo grupo = new Grupo();
 					grupo.setCampeonato(campeonato);
@@ -32,34 +33,58 @@ public class GerenciadorGupos {
 					EntityManagerLocal.commit();
 					EntityManagerLocal.clear();
 					listaGrupo.add(grupo);
-					
-					for(int x = 0; x < 3; x ++){
-						EntityManagerLocal.begin();
-						TimeGrupo timeGrupo = new TimeGrupo();
-						timeGrupo.setTime(listaTime.get(0));
-						timeGrupo.setGrupo(grupo);
-						timeGrupo.setAtivo(true);
-						timeGrupo.setClasse(3);
-						EntityManagerLocal.persist(timeGrupo);
-						EntityManagerLocal.commit();
-						EntityManagerLocal.clear();
-						listaTime.remove(0);
-					}
+
+					DialogGrupoSelectTime dialogTime = new DialogGrupoSelectTime();
+					dialogTime.getGrupoSelectTime(grupo, campeonato,
+							Parametros.getPai(), i + 1, quantidadeGrupo);
+
+					EntityManagerLocal.begin();
+					TimeGrupo timeGrupo = new TimeGrupo();
+					timeGrupo.setTime(dialogTime.getSeedA());
+					timeGrupo.setGrupo(grupo);
+					timeGrupo.setAtivo(true);
+					timeGrupo.setClasse(1);
+					EntityManagerLocal.persist(timeGrupo);
+
+					timeGrupo = new TimeGrupo();
+					timeGrupo.setTime(dialogTime.getSeedB());
+					timeGrupo.setGrupo(grupo);
+					timeGrupo.setAtivo(true);
+					timeGrupo.setClasse(2);
+					EntityManagerLocal.persist(timeGrupo);
+
+					EntityManagerLocal.commit();
+					EntityManagerLocal.clear();
 				}
-				if(listaTime.size() > 0){
-					for(int i = 0; i < listaTime.size(); i++){
-						EntityManagerLocal.begin();
-						TimeGrupo timeGrupo = new TimeGrupo();
-						timeGrupo.setTime(listaTime.get(i));
-						timeGrupo.setGrupo(listaGrupo.get(i));
-						timeGrupo.setClasse(3);
-						timeGrupo.setAtivo(true);
-						EntityManagerLocal.persist(timeGrupo);
-						EntityManagerLocal.commit();
-						EntityManagerLocal.clear();
-					}
-				}
+
+				listaTime = CampeonatoTimeDao
+						.getListaCampeonatoListaTimeSemGrupo(campeonato
+								.getCodigoCampeonato());
 				
+				boolean continua = true;
+				while (continua) {
+					if (listaTime.size() > 0) {
+						for (Grupo grupo : listaGrupo) {
+							try {
+								EntityManagerLocal.begin();
+								TimeGrupo timeGrupo = new TimeGrupo();
+								timeGrupo.setTime(listaTime.get(0));
+								timeGrupo.setGrupo(grupo);
+								timeGrupo.setClasse(3);
+								timeGrupo.setAtivo(true);
+								EntityManagerLocal.persist(timeGrupo);
+								EntityManagerLocal.commit();
+								EntityManagerLocal.clear();
+								listaTime.remove(0);
+							} catch (Exception e) {
+								EntityManagerLocal.clear();
+							}
+						}
+					} else {
+						continua = false;
+					}
+				}
+
 				return true;
 			}
 		} catch (Exception e) {
@@ -70,11 +95,11 @@ public class GerenciadorGupos {
 		}
 		return false;
 	}
-	
-	private static int getQuantidadeGrupo(List<Time> listaTime){
+
+	private static int getQuantidadeGrupo(List<Time> listaTime) {
 		int quantidade = 0;
 		quantidade = listaTime.size() / 3;
 		return quantidade;
 	}
-	
+
 }
