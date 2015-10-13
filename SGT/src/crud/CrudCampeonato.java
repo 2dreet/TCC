@@ -58,6 +58,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -220,8 +221,8 @@ public class CrudCampeonato extends JPanel {
 		}
 
 		msg = new JPanel();
-		msg.setSize(490, 35);
-		msg.setLocation(5, 100);
+		msg.setSize(630, 35);
+		msg.setLocation(5, 180);
 		msg.setLayout(null);
 		msg.setBackground(null);
 		meio.add(msg);
@@ -245,7 +246,7 @@ public class CrudCampeonato extends JPanel {
 		msg.removeAll();
 		lblMsg = new JLabel(erro);
 		lblMsg.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMsg.setBounds(0, 0, 490, 35);
+		lblMsg.setBounds(0, 0, 630, 35);
 		lblMsg.setFont(UtilitarioTela.getFont(14));
 		lblMsg.setForeground(UtilitarioTela.getFontColorCrud());
 		msg.add(lblMsg);
@@ -256,7 +257,7 @@ public class CrudCampeonato extends JPanel {
 		msg.removeAll();
 		lblMsg = new JLabel("");
 		lblMsg.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMsg.setBounds(0, 0, 490, 35);
+		lblMsg.setBounds(0, 0, 630, 35);
 		lblMsg.setFont(UtilitarioTela.getFont(12));
 		lblMsg.setForeground(UtilitarioTela.getFontColorCrud());
 		msg.add(lblMsg);
@@ -273,7 +274,11 @@ public class CrudCampeonato extends JPanel {
 				return false;
 			}
 
+			String modalidade = String.valueOf(cbModalidade.getSelectedItem());
+			
+			
 			if (String.valueOf(cbModalidade.getSelectedItem()) == null
+					|| String.valueOf(cbModalidade.getSelectedItem()).equals("null") 
 					|| String.valueOf(cbModalidade.getSelectedItem()).trim()
 							.isEmpty()) {
 				msgErro("Casdatrar Modalidade em Casdatro de modalidade");
