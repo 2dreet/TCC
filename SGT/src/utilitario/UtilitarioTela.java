@@ -136,9 +136,9 @@ public class UtilitarioTela {
 			g = 153;
 			b = 153;
 		} else if (modoCrud == ParametroCrud.getModoVisualizar()){
-			r = 232;
-			g = 234;
-			b = 239;
+			r = 255;
+			g = 255;
+			b = 255;
 		}
 		return new Color(r, g, b);
 	}

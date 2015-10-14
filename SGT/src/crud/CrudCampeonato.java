@@ -31,6 +31,7 @@ import dao.CampeonatoTimeDao;
 import dao.ChaveDao;
 import dao.EntityManagerLocal;
 import dao.GrupoDao;
+import dao.JogadorBanimentoDao;
 import dao.JogadorDao;
 import dao.ModalidadeDao;
 import dao.PermissaoDao;
@@ -311,11 +312,11 @@ public class CrudCampeonato extends JPanel {
 		} else {
 			if (campeonatoSelecionado.getDataIncio() == null) {
 				JButton btIniciar = new JButton("Iniciar Campeonato");
-				btIniciar.setBounds(175, meio.getHeight() - 70, 150, 35);
+				btIniciar.setBounds(225, meio.getHeight() - 130, 210, 35);
 				btIniciar.setFont(UtilitarioTela.getFont(14));
 				btIniciar.setFocusPainted(false);
-				btIniciar.setBackground(UtilitarioTela.getColorCrud(modoCrud));
-				btIniciar.setIcon(UtilitarioCrud.getIconeCrud(modoCrud));
+				btIniciar.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudAlterar()));
+				//btIniciar.setIcon(UtilitarioCrud.getIconeCrud(modoCrud));
 				meio.add(btIniciar);
 				btIniciar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
@@ -402,8 +403,8 @@ public class CrudCampeonato extends JPanel {
 		tcm.getColumn(1).setPreferredWidth(120);
 		tcm.getColumn(1).setMinWidth(120);
 		tcm.getColumn(1).setResizable(false);
-		tcm.getColumn(2).setPreferredWidth(465);
-		tcm.getColumn(2).setMinWidth(465);
+		tcm.getColumn(2).setPreferredWidth(450);
+		tcm.getColumn(2).setMinWidth(450);
 		tcm.getColumn(2).setResizable(false);
 
 		UtilitarioTabela.pintarColona(UtilitarioTabela.getFundoHeaderPadrao(),
@@ -579,6 +580,30 @@ public class CrudCampeonato extends JPanel {
 
 	public JTextField getTxDescricao() {
 		return txDescricao;
+	}
+	
+	public boolean validarCampeonato(){
+		if(listaTime == null || listaTime.size() < 12){
+			Menssage.setMenssage("valor de times invalido", "Adicionar No minimo 12 times no campeonato", ParametroCrud.getModoCrudDeletar(), meio);
+			return false;
+		}
+		
+		for(CampeonatoTime ct : listaTime){
+			List<Jogador> listaJogador = JogadorDao.getListaJogadorTitularTime(ct.getTime().getCodigoTime());
+			if(listaJogador == null || listaJogador.size() < 5){
+				Menssage.setMenssage("valor de Jogadores invalido", "Adicionar 5 Jogadores Titulares para o Time\n"+ct.getTime().getDescricao(), ParametroCrud.getModoCrudDeletar(), meio);
+				return false;
+			}
+			for(Jogador jogador : listaJogador){
+				if(JogadorBanimentoDao.jogadorBanido(jogador.getCodigoJogador())){
+					Menssage.setMenssage("Jogador Banido ", "Jogador "+ jogador.getUsuario().getNome()+" do Time "+ct.getTime().getDescricao()+"\nEstá Banido deve ser subistituido!", ParametroCrud.getModoCrudDeletar(), meio);
+					return false;
+				}
+			}
+			
+		}
+		
+		return true;
 	}
 
 	public void setTxDescricao(JTextField txDescricao) {
