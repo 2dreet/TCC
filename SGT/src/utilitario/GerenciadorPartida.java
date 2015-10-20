@@ -23,12 +23,9 @@ public class GerenciadorPartida {
 							.getCodigoCampeonato());
 			if (listaTime != null && listaTime.size() > 0) {
 				if (campeonato.getChave().getCodigoChave() == 1 || campeonato.getChave().getCodigoChave() == 2) {
-					// Winer - Lower  MATA MATA
+					// Mata - Mata
 					gerarPartidasMataMata( listaTime, campeonato, false);
-				} else if (campeonato.getChave().getCodigoChave() == 3) {
-					// Grupo
-					
-				}
+				} 
 				return true;
 			}
 		} catch (Exception e) {
@@ -40,6 +37,27 @@ public class GerenciadorPartida {
 		return false;
 	}
 
+	public static boolean gerarLowers(Campeonato campeonato){
+		try {
+			List<Time> listaTime = CampeonatoTimeDao
+					.getListaCampeonatoListaTimeLowers(campeonato
+							.getCodigoCampeonato());
+			if (listaTime != null && listaTime.size() > 0) {
+				if (campeonato.getChave().getCodigoChave() == 1 || campeonato.getChave().getCodigoChave() == 2) {
+					// Lowers
+					gerarPartidasMataMata( listaTime, campeonato, true);
+				} 
+				return true;
+			}
+		} catch (Exception e) {
+			Menssage.setMenssage("Erro",
+					"Erro ao criar partidas\nEntrar em contato com o suporte!",
+					ParametroCrud.getModoErro(), Parametros.getPai());
+			return false;
+		}
+		return false;
+	}
+	
 	public static void gerarPartidasMataMata(List<Time> listaTime,
 			Campeonato campeonato, boolean winerLower) {
 		List<Time> listaTimeA = new ArrayList<Time>();

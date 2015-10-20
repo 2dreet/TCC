@@ -15,6 +15,7 @@ import utilitario.BordaEscura;
 import utilitario.BordaSombreada;
 import utilitario.Computador;
 import utilitario.GerenciadorGupos;
+import utilitario.GerenciadorPartida;
 import utilitario.MascaraCrud;
 import utilitario.ParametroCrud;
 import utilitario.Parametros;
@@ -333,8 +334,33 @@ public class CrudCampeonato extends JPanel {
 										ParametroCrud.getModoCrudDeletar(),
 										meio);
 							}
+						} else if (campeonatoSelecionado.getChave().getCodigoChave() == 2) {
+							// Winner Lower
+							if (listaTime.size() >= 4) {
+								if (GerenciadorPartida.adicionarPatidas(campeonatoSelecionado)) {
+									
+								}
+							} else {
+								Menssage.setMenssage("Times insuficientes",
+										"Deve adicionar Mais Times para iniciar o campeonato!",
+										ParametroCrud.getModoCrudDeletar(),
+										meio);
+							}
+						} else if (campeonatoSelecionado.getChave().getCodigoChave() == 1) {
+						// Winner Lower
+						if (listaTime.size() >= 2) {
+							if (GerenciadorGupos.gerarGrupos(campeonatoSelecionado)) {
+								List<Grupo> listaGrupo = GrupoDao.getListaGrupo(campeonatoSelecionado.getCodigoCampeonato());
+								
+							}
+						} else {
+							Menssage.setMenssage("Times insuficientes",
+									"Deve adicionar Mais Times para iniciar o campeonato!",
+									ParametroCrud.getModoCrudDeletar(),
+									meio);
 						}
 					}
+				}
 				});
 			} else {
 				JButton btCancelar = new JButton("Cancelar Campeonato");

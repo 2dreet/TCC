@@ -16,6 +16,7 @@ import javax.swing.SwingConstants;
 import crud.CrudCampeonato;
 import crud.CrudComputador;
 import crud.CrudJogador;
+import crud.CrudPartida;
 import entidade.Campeonato;
 import entidade.Jogador;
 import entidade.Pc;
@@ -44,16 +45,17 @@ public class MenuCampeonato extends JPanel {
 	private JButton btAlterar;
 	private JButton btDeletar;
 	private JButton btVisualizar;
+	private JButton btPartida;
 	private Campeonato campSelecionado;
-	
+
 	public MenuCampeonato() {
 		campSelecionado = null;
-		
+
 		setSize(UtilitarioTela.getTamanhoMenuBaixo());
 		setBackground(null);
 		setLayout(null);
 		setVisible(true);
-		
+
 		JPanel menuLateral = new JPanel();
 		menuLateral.setSize(UtilitarioTela.getTamanhoMenuLateral());
 		menuLateral.setBorder(new BordaEscura());
@@ -105,7 +107,7 @@ public class MenuCampeonato extends JPanel {
 				localizarCampeonato();
 			}
 		});
-		btLocalizar.setBounds( 5, 5,  230, 30);
+		btLocalizar.setBounds(5, 5, 230, 30);
 		btLocalizar.setName("localizar");
 		btLocalizar.setBorderPainted(false);
 		btLocalizar.setHorizontalAlignment(SwingConstants.LEFT);
@@ -143,7 +145,7 @@ public class MenuCampeonato extends JPanel {
 		jp3.setLayout(null);
 		jp3.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp3);
-		
+
 		btVisualizar = new JButton("Visualizar");
 		btVisualizar.setBounds(5, 5, 230, 30);
 		btVisualizar.setBorderPainted(false);
@@ -166,7 +168,7 @@ public class MenuCampeonato extends JPanel {
 		jp4.setLayout(null);
 		jp4.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp4);
-		
+
 		btAlterar = new JButton("Alterar");
 		btAlterar.setBounds(5, 5, 230, 30);
 		btAlterar.setBorderPainted(false);
@@ -178,13 +180,11 @@ public class MenuCampeonato extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btAlterar, true);
-				alterarMenu(campSelecionado,
-						ParametroCrud.getModoCrudAlterar());
+				alterarMenu(campSelecionado, ParametroCrud.getModoCrudAlterar());
 			}
 		});
 		jp4.add(btAlterar);
 
-		
 		JPanel jp5 = new JPanel();
 		jp5.setBounds(0, 160, 240, 40);
 		jp5.setBackground(null);
@@ -203,20 +203,35 @@ public class MenuCampeonato extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btDeletar, true);
-				alterarMenu(campSelecionado,
-						ParametroCrud.getModoCrudDeletar());
+				alterarMenu(campSelecionado, ParametroCrud.getModoCrudDeletar());
 			}
 		});
 
 		jp5.add(btDeletar);
 
-		
 		JPanel jp6 = new JPanel();
 		jp6.setBounds(0, 200, 240, 40);
 		jp6.setBackground(null);
 		jp6.setLayout(null);
 		jp6.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp6);
+
+		btPartida = new JButton("Partidas");
+		btPartida.setBounds(5, 5, 230, 30);
+		btPartida.setBorderPainted(false);
+		btPartida.setBackground(null);
+		btPartida.setLayout(null);
+		btPartida.setName("partida");
+		btPartida.setHorizontalAlignment(SwingConstants.LEFT);
+		btPartida.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				zeraSelecao();
+				getIcon(btPartida, true);
+				abreMenuPartida(campSelecionado);
+			}
+		});
+
+		jp6.add(btPartida);
 
 		JPanel jp7 = new JPanel();
 		jp7.setBounds(0, 240, 240, 40);
@@ -230,46 +245,47 @@ public class MenuCampeonato extends JPanel {
 		getIcon(btDeletar, false);
 		getIcon(btVisualizar, false);
 		getIcon(btLocalizar, false);
-		
-		btDeletar.setForeground(UtilitarioTela
-				.getFontColorSelecao(false));
-		btAlterar.setForeground(UtilitarioTela
-				.getFontColorSelecao(false));
+		getIcon(btPartida, false);
+
+		btDeletar.setForeground(UtilitarioTela.getFontColorSelecao(false));
+		btAlterar.setForeground(UtilitarioTela.getFontColorSelecao(false));
 		btNovo.setForeground(UtilitarioTela.getFontColorSelecao(false));
 		btVisualizar.setForeground(UtilitarioTela.getFontColorSelecao(false));
-		btLocalizar.setForeground(UtilitarioTela
-				.getFontColorSelecao(false));
-		
+		btLocalizar.setForeground(UtilitarioTela.getFontColorSelecao(false));
+		btPartida.setForeground(UtilitarioTela.getFontColorSelecao(false));
+
 		btNovo.setFont(UtilitarioTela.getFont(14));
 		btAlterar.setFont(UtilitarioTela.getFont(14));
 		btDeletar.setFont(UtilitarioTela.getFont(14));
 		btVisualizar.setFont(UtilitarioTela.getFont(14));
 		btLocalizar.setFont(UtilitarioTela.getFont(14));
+		btPartida.setFont(UtilitarioTela.getFont(14));
 		
 		limpar();
 	}
 
-	public void home(){
+	public void home() {
 		zeraSelecao();
 		getIcon(btLocalizar, true);
 		limpar();
 		localizarCampeonato();
 	}
-	
-	public void limpar(){
+
+	public void limpar() {
 		btAlterar.setEnabled(false);
 		btDeletar.setEnabled(false);
 		btVisualizar.setEnabled(false);
+		btPartida.setEnabled(false);
 	}
-	
-	public void exibirCampeonato(Campeonato camp){
+
+	public void exibirCampeonato(Campeonato camp) {
 		zeraSelecao();
 		getIcon(btVisualizar, true);
 		this.campSelecionado = camp;
 		liberarCrud();
-		alterarMenu(campSelecionado , ParametroCrud.getModoVisualizar());
+		alterarMenu(campSelecionado, ParametroCrud.getModoVisualizar());
 	}
-	
+
 	public void localizarCampeonato() {
 		menuMeio.removeAll();
 		LocalizarCampeonato localizar = new LocalizarCampeonato(this);
@@ -278,10 +294,23 @@ public class MenuCampeonato extends JPanel {
 		menuMeio.repaint();
 	}
 
-	public void liberarCrud(){
+	public void liberarCrud() {
 		btAlterar.setEnabled(true);
 		btDeletar.setEnabled(true);
 		btVisualizar.setEnabled(true);
+		if(campSelecionado.getDataIncio()!=null){
+			btPartida.setEnabled(true);
+		} else{	
+			btPartida.setEnabled(false);
+		}
+	}
+
+	public void abreMenuPartida(Campeonato camp){
+		menuMeio.removeAll();
+		CrudPartida c = new CrudPartida(camp, this);
+		menuMeio.add(c);
+		menuMeio.revalidate();
+		menuMeio.repaint();
 	}
 	
 	public void alterarMenu(Campeonato camp, int modoCrud) {
@@ -294,12 +323,12 @@ public class MenuCampeonato extends JPanel {
 	}
 
 	public void zeraSelecao() {
-		
+
 		btLocalizar.setIcon(new ImageIcon(HomeFuncionario.class
 				.getResource("/imagem/crud/locPc.png")));
 		btLocalizar.setBackground(UtilitarioTela.getBtnFundo(false));
 		btLocalizar.setForeground(UtilitarioTela.getFontColorSelecao(false));
-		
+
 		btNovo.setIcon(new ImageIcon(HomeFuncionario.class
 				.getResource("/imagem/crud/cadCamp.png")));
 		btNovo.setBackground(UtilitarioTela.getBtnFundo(false));
@@ -308,22 +337,20 @@ public class MenuCampeonato extends JPanel {
 		btAlterar.setIcon(new ImageIcon(HomeFuncionario.class
 				.getResource("/imagem/crud/altCamp.png")));
 		btAlterar.setBackground(UtilitarioTela.getBtnFundo(false));
-		btAlterar.setForeground(UtilitarioTela
-				.getFontColorSelecao(false));
+		btAlterar.setForeground(UtilitarioTela.getFontColorSelecao(false));
 
 		btDeletar.setIcon(new ImageIcon(HomeFuncionario.class
 				.getResource("/imagem/crud/delCamp.png")));
 		btDeletar.setBackground(UtilitarioTela.getBtnFundo(false));
-		btDeletar.setForeground(UtilitarioTela
-				.getFontColorSelecao(false));
-		
+		btDeletar.setForeground(UtilitarioTela.getFontColorSelecao(false));
+
 		btVisualizar.setIcon(new ImageIcon(HomeFuncionario.class
 				.getResource("/imagem/crud/visuPc.png")));
 		btVisualizar.setBackground(UtilitarioTela.getBtnFundo(false));
-		btVisualizar.setForeground(UtilitarioTela
-				.getFontColorSelecao(false));
+		btVisualizar.setForeground(UtilitarioTela.getFontColorSelecao(false));
 		
-
+		btPartida.setBackground(UtilitarioTela.getBtnFundo(false));
+		btPartida.setForeground(UtilitarioTela.getFontColorSelecao(false));
 	}
 
 	public void getIcon(JButton botao, boolean selecionado) {
@@ -364,11 +391,13 @@ public class MenuCampeonato extends JPanel {
 					url = "/imagem/crud/visuPc.png";
 				}
 			}
-			botao.setFocusPainted(false);
-			botao.setBackground(UtilitarioTela.getBtnFundo(selecionado));
-			botao.setIcon(new ImageIcon(HomeFuncionario.class.getResource(url)));
-			botao.setForeground(UtilitarioTela.getFontColorSelecao(true));
-			repaint();
 		}
+		botao.setFocusPainted(false);
+		botao.setBackground(UtilitarioTela.getBtnFundo(selecionado));
+		if (url != null) {
+			botao.setIcon(new ImageIcon(HomeFuncionario.class.getResource(url)));
+		}
+		botao.setForeground(UtilitarioTela.getFontColorSelecao(true));
+		repaint();
 	}
 }

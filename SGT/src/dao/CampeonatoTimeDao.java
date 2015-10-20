@@ -35,6 +35,18 @@ public class CampeonatoTimeDao {
 		}
 	}
 	
+	public static List<Time> getListaCampeonatoListaTimeLowers(int codigoCampeonato){
+		try{
+			String sql = "SELECT t.* FROM campeonato_time ct INNER JOIN time t"
+					+ "	ON ct.codigoTime = t.codigoTime "
+					+ "  where codigoCampeonato = '"+codigoCampeonato+"' AND ativo = true AND ct.codigoTime not in(SELECT timeVencedor FROM partida where codigoCampeonato = '"+codigoCampeonato+"')";
+			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Time.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public static List<Time> getListaCampeonatoListaTimeSemGrupo(int codigoCampeonato){
 		try{
 			String sql = "SELECT t.* FROM campeonato_time ct INNER JOIN time t"

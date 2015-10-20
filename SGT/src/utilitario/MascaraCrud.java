@@ -7,6 +7,7 @@ import java.util.Date;
 public class MascaraCrud {
 	
 	private static SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+	private static SimpleDateFormat format2 = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 	
 	public static String mascaraTelefone(String telefone){
 		if(telefone.length() == 2){
@@ -33,6 +34,13 @@ public class MascaraCrud {
 				telefone = "("+telefone.substring(0, 2)+")"+telefone.substring(2, 6)+"-"+telefone.substring(6, 10);
 		}
 		 return telefone;
+	}
+	
+	public static String mascaraDataHora(Date data){
+		if(data==null){
+			return "";
+		}
+		return format2.format(data);
 	}
 	
 	public static String mascaraData(String data){
