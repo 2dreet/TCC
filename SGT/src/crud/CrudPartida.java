@@ -95,8 +95,6 @@ public class CrudPartida extends JPanel {
 	private JTable tabelaLower;
 	private JButton btPartidasIniciadas;
 	private JButton btPartidasNaoIniciadas;
-	private JButton btPartidasIniciadasLower;
-	private JButton btPartidasNaoIniciadasLower;
 	private JScrollPane scrollTitularLower;
 	private Object[][] colunas = new Object[][] { new String[] { "Código" },
 			new String[] { "Time 1" }, new String[] { "Time 2" },
@@ -178,7 +176,7 @@ public class CrudPartida extends JPanel {
 		meio.add(scrollTitular);
 		
 		btPartidasNaoIniciadas = new JButton("Partidas não Iniciadas");
-		btPartidasNaoIniciadas.setBounds(70, 215, 250, 35);
+		btPartidasNaoIniciadas.setBounds(70, 220, 250, 35);
 		btPartidasNaoIniciadas.setFont(UtilitarioTela.getFont(14));
 		btPartidasNaoIniciadas.setFocusPainted(false);
 		btPartidasNaoIniciadas.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudAlterar()));
@@ -192,7 +190,7 @@ public class CrudPartida extends JPanel {
 		});
 		
 		btPartidasIniciadas = new JButton("Partidas Iniciadas");
-		btPartidasIniciadas.setBounds(350, 215, 250, 35);
+		btPartidasIniciadas.setBounds(350, 220, 250, 35);
 		btPartidasIniciadas.setFont(UtilitarioTela.getFont(14));
 		btPartidasIniciadas.setFocusPainted(false);
 		btPartidasIniciadas.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudNovo()));
@@ -208,7 +206,7 @@ public class CrudPartida extends JPanel {
 		
 		headerLower = new JPanel();
 		headerLower.setSize(646, 30);
-		headerLower.setLocation(1, 290);
+		headerLower.setLocation(1, 265);
 		headerLower.setLayout(null);
 		headerLower.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoVisualizar()));
 		headerLower.setBorder(null);
@@ -251,44 +249,16 @@ public class CrudPartida extends JPanel {
 				UtilitarioTabela.getFontColotHeaderPadrao(), tcmTitularLower,
 				colunas);
 		UtilitarioTabela.pintarLinha(new Color(255, 153, 153), Color.black,
-				tabela);
+				tabelaLower);
 		tabelaLower.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tabelaLower.setPreferredScrollableViewportSize(tabela
 				.getPreferredSize());
 		tabelaLower.getTableHeader().setReorderingAllowed(false);
 		tabelaLower.setFont(UtilitarioTela.getFont(12));
 		tabelaLower.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		scrollTitularLower = new JScrollPane(tabela);
-		scrollTitularLower.setBounds(1, 320, 646, 210);
+		scrollTitularLower = new JScrollPane(tabelaLower);
+		scrollTitularLower.setBounds(1, 295, 646, 210);
 		meio.add(scrollTitularLower);
-		
-		btPartidasNaoIniciadasLower = new JButton("Partidas não Iniciadas Lower");
-		btPartidasNaoIniciadasLower.setBounds(70, 535, 250, 35);
-		btPartidasNaoIniciadasLower.setFont(UtilitarioTela.getFont(14));
-		btPartidasNaoIniciadasLower.setFocusPainted(false);
-		btPartidasNaoIniciadasLower.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudAlterar()));
-		meio.add(btPartidasNaoIniciadasLower);
-		btPartidasNaoIniciadasLower.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				limparSelecao();
-				mudaCorBotao(btPartidasNaoIniciadasLower, true);
-				atualizarTabela(false);
-			}
-		});
-		
-		btPartidasIniciadasLower = new JButton("Partidas Iniciadas Lower");
-		btPartidasIniciadasLower.setBounds(350, 535, 250, 35);
-		btPartidasIniciadasLower.setFont(UtilitarioTela.getFont(14));
-		btPartidasIniciadasLower.setFocusPainted(false);
-		btPartidasIniciadasLower.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudNovo()));
-		meio.add(btPartidasIniciadasLower);
-		btPartidasIniciadasLower.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				limparSelecao();
-				mudaCorBotao(btPartidasIniciadasLower, true);
-				atualizarTabela(true);
-			}
-		});
 		
 		limparSelecao();
 		mudaCorBotao(btPartidasNaoIniciadas, true);
@@ -302,11 +272,6 @@ public class CrudPartida extends JPanel {
 		btPartidasNaoIniciadas.setBackground(UtilitarioTela.getBtnFundo(false));
 		btPartidasNaoIniciadas.setForeground(UtilitarioTela.getFontColorSelecao(false));
 		
-		btPartidasNaoIniciadasLower.setBackground(UtilitarioTela.getBtnFundo(false));
-		btPartidasNaoIniciadasLower.setForeground(UtilitarioTela.getFontColorSelecao(false));
-		
-		btPartidasIniciadasLower.setBackground(UtilitarioTela.getBtnFundo(false));
-		btPartidasIniciadasLower.setForeground(UtilitarioTela.getFontColorSelecao(false));
 	}
 	
 	public void mudaCorBotao(JButton botao, boolean selecionado){
@@ -328,8 +293,15 @@ public class CrudPartida extends JPanel {
 		modelo.setNumRows(0);
 		if (listaPartida != null) {
 			for (Partida partida : listaPartida) {
-				Time time1 = PartidaDao.getTimePartida(campeonatoSelecionado.getCodigoCampeonato(), partidaSelecionada.getCodigoPartida(), "ASC").getTime();
-				Time time2 = PartidaDao.getTimePartida(campeonatoSelecionado.getCodigoCampeonato(), partidaSelecionada.getCodigoPartida(), "ASC").getTime();
+				Time time1 = null;
+				if(PartidaDao.getTimePartida(campeonatoSelecionado.getCodigoCampeonato(), partida.getCodigoPartida(), "ASC") != null){
+					time1 = PartidaDao.getTimePartida(campeonatoSelecionado.getCodigoCampeonato(), partida.getCodigoPartida(), "ASC").getTime();
+				}
+				Time time2 = null; 
+				if(PartidaDao.getTimePartida(campeonatoSelecionado.getCodigoCampeonato(), partida.getCodigoPartida(), "DESC") != null){
+					time2 = PartidaDao.getTimePartida(campeonatoSelecionado.getCodigoCampeonato(), partida.getCodigoPartida(), "DESC").getTime();
+				}
+				if(time1 != null && time2 != null){
 				modelo.addRow(new String[] {
 						String.valueOf(partida.getCodigoPartida()),
 						UtilitarioImagem.converterImage(time1.getLogo()) + time1.getDescricao(),
@@ -337,6 +309,7 @@ public class CrudPartida extends JPanel {
 						MascaraCrud.mascaraDataHora(partida.getHoraInicio()),
 						MascaraCrud.mascaraDataHora(partida.getHoraFim())
 						});
+				}
 
 			}
 		} else {

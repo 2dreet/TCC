@@ -14,7 +14,7 @@ public class ChaveDao {
 	public static List<Chave> getListaChave(){
 		try {
 			String sql = "SELECT * FROM chave "
-					+ " where ativo = true order by descricao";
+					+ " where ativo = true";
 			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Chave.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
 		} catch (NoResultException ex) {
 			return null;

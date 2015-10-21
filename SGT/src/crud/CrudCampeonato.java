@@ -242,6 +242,7 @@ public class CrudCampeonato extends JPanel {
 
 	public void setarCampos() {
 		txDescricao.setText(campeonatoSelecionado.getDescricao());
+		cbChave.setSelectedItem(campeonatoSelecionado.getChave().getDescricao());
 	}
 
 	public void msgErro(String erro) {
@@ -334,11 +335,21 @@ public class CrudCampeonato extends JPanel {
 										ParametroCrud.getModoCrudDeletar(),
 										meio);
 							}
-						} else if (campeonatoSelecionado.getChave().getCodigoChave() == 2) {
-							// Winner Lower
+						} else if (campeonatoSelecionado.getChave().getCodigoChave() == 2 || campeonatoSelecionado.getChave().getCodigoChave() == 1) {
+							// Winner Lower MATA MATA
 							if (listaTime.size() >= 4) {
 								if (GerenciadorPartida.adicionarPatidas(campeonatoSelecionado)) {
-									
+									Menssage.setMenssage("Partidas Geradas",
+											"Partidas Geradas\nClicar em partidas para ver as partidas!",
+											ParametroCrud.getModoCrudDeletar(),
+											meio);
+									menuPai.btPartida.setEnabled(true);
+									iniciarCampeonato();
+								}else{
+									Menssage.setMenssage("Erro",
+											"Erro ao gerrar partidas!",
+											ParametroCrud.getModoCrudDeletar(),
+											meio);
 								}
 							} else {
 								Menssage.setMenssage("Times insuficientes",
@@ -346,25 +357,12 @@ public class CrudCampeonato extends JPanel {
 										ParametroCrud.getModoCrudDeletar(),
 										meio);
 							}
-						} else if (campeonatoSelecionado.getChave().getCodigoChave() == 1) {
-						// Winner Lower
-						if (listaTime.size() >= 2) {
-							if (GerenciadorGupos.gerarGrupos(campeonatoSelecionado)) {
-								List<Grupo> listaGrupo = GrupoDao.getListaGrupo(campeonatoSelecionado.getCodigoCampeonato());
-								
-							}
-						} else {
-							Menssage.setMenssage("Times insuficientes",
-									"Deve adicionar Mais Times para iniciar o campeonato!",
-									ParametroCrud.getModoCrudDeletar(),
-									meio);
-						}
-					}
+						} 
 				}
 				});
 			} else {
 				JButton btCancelar = new JButton("Cancelar Campeonato");
-				btCancelar.setBounds(175, meio.getHeight() - 70, 150, 35);
+				btCancelar.setBounds(225, meio.getHeight() - 130, 210, 35);
 				btCancelar.setFont(UtilitarioTela.getFont(14));
 				btCancelar.setFocusPainted(false);
 				btCancelar.setBackground(UtilitarioTela.getColorCrud(modoCrud));
@@ -606,6 +604,13 @@ public class CrudCampeonato extends JPanel {
 
 	public JTextField getTxDescricao() {
 		return txDescricao;
+	}
+	
+	public void iniciarCampeonato(){
+		EntityManagerLocal.begin();
+		campeonatoSelecionado.setDataIncio(new Date());
+		EntityManagerLocal.merge(campeonatoSelecionado);
+		EntityManagerLocal.commit();
 	}
 	
 	public boolean validarCampeonato(){

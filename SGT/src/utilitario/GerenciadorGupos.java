@@ -19,7 +19,7 @@ public class GerenciadorGupos {
 			List<Time> listaTime = CampeonatoTimeDao
 					.getListaCampeonatoListaTime(campeonato
 							.getCodigoCampeonato());
-			if (listaTime != null && listaTime.size() > 12) {
+			if (listaTime != null && listaTime.size() >= 12) {
 
 				int quantidadeGrupo = getQuantidadeGrupo(listaTime);
 				List<Grupo> listaGrupo = new ArrayList<Grupo>();

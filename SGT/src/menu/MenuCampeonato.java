@@ -45,7 +45,7 @@ public class MenuCampeonato extends JPanel {
 	private JButton btAlterar;
 	private JButton btDeletar;
 	private JButton btVisualizar;
-	private JButton btPartida;
+	public JButton btPartida;
 	private Campeonato campSelecionado;
 
 	public MenuCampeonato() {
@@ -298,7 +298,7 @@ public class MenuCampeonato extends JPanel {
 		btAlterar.setEnabled(true);
 		btDeletar.setEnabled(true);
 		btVisualizar.setEnabled(true);
-		if(campSelecionado.getDataIncio()!=null){
+		if(campSelecionado.getDataIncio() != null){
 			btPartida.setEnabled(true);
 		} else{	
 			btPartida.setEnabled(false);

@@ -7,6 +7,7 @@ import java.util.Random;
 import componente.Menssage;
 import dao.CampeonatoTimeDao;
 import dao.EntityManagerLocal;
+import dao.TimeDao;
 import entidade.Campeonato;
 import entidade.CampeonatoTime;
 import entidade.Grupo;
@@ -16,19 +17,23 @@ import entidade.TimePartida;
 
 public class GerenciadorPartida {
 
+	private static Campeonato camp;	
 	public static boolean adicionarPatidas(Campeonato campeonato) {
+		camp = campeonato;
 		try {
+			
 			List<Time> listaTime = CampeonatoTimeDao
 					.getListaCampeonatoListaTime(campeonato
 							.getCodigoCampeonato());
 			if (listaTime != null && listaTime.size() > 0) {
 				if (campeonato.getChave().getCodigoChave() == 1 || campeonato.getChave().getCodigoChave() == 2) {
 					// Mata - Mata
-					gerarPartidasMataMata( listaTime, campeonato, false);
+					gerarPartidasMataMata( listaTime,  false);
 				} 
 				return true;
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			Menssage.setMenssage("Erro",
 					"Erro ao criar partidas\nEntrar em contato com o suporte!",
 					ParametroCrud.getModoErro(), Parametros.getPai());
@@ -45,11 +50,12 @@ public class GerenciadorPartida {
 			if (listaTime != null && listaTime.size() > 0) {
 				if (campeonato.getChave().getCodigoChave() == 1 || campeonato.getChave().getCodigoChave() == 2) {
 					// Lowers
-					gerarPartidasMataMata( listaTime, campeonato, true);
+					gerarPartidasMataMata( listaTime,  true);
 				} 
 				return true;
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			Menssage.setMenssage("Erro",
 					"Erro ao criar partidas\nEntrar em contato com o suporte!",
 					ParametroCrud.getModoErro(), Parametros.getPai());
@@ -58,8 +64,7 @@ public class GerenciadorPartida {
 		return false;
 	}
 	
-	public static void gerarPartidasMataMata(List<Time> listaTime,
-			Campeonato campeonato, boolean winerLower) {
+	public static void gerarPartidasMataMata(List<Time> listaTime, boolean winerLower) {
 		List<Time> listaTimeA = new ArrayList<Time>();
 		List<Time> listaTimeB = new ArrayList<Time>();
 		List<Partida> listaPartida = new ArrayList<Partida>();
@@ -69,7 +74,7 @@ public class GerenciadorPartida {
 		List<Partida> listaPartidaBFilho = new ArrayList<Partida>();
 
 		boolean timeA = true;
-		for (int i = 0; i < listaTime.size(); i++) {
+		for (int i = 0; i <= listaTime.size(); i++) {
 			Random gerador = new Random();
 			int numero = gerador.nextInt(listaTime.size());
 			if (timeA) {
@@ -84,9 +89,9 @@ public class GerenciadorPartida {
 		}
 
 		if (listaTimeA.size() > listaTimeB.size()) {
-			listaTimeB.add(new Time());
+			listaTimeB.add(TimeDao.getTime(30));
 		} else if (listaTimeA.size() < listaTimeB.size()) {
-			listaTimeA.add(new Time());
+			listaTimeA.add(TimeDao.getTime(30));
 		}
 
 		EntityManagerLocal.begin();
@@ -94,7 +99,7 @@ public class GerenciadorPartida {
 
 			Partida partida = new Partida();
 			partida.setAtivo(true);
-			partida.setCampeonato(campeonato);
+			partida.setCampeonato(camp);
 			partida.setCancelada(false);
 			partida.setWinerLower(winerLower);
 			EntityManagerLocal.persist(partida);
@@ -113,7 +118,9 @@ public class GerenciadorPartida {
 		}
 		EntityManagerLocal.commit();
 		EntityManagerLocal.clear();
-		if (listaPartida.size() > 1) {
+		
+		
+		if (listaPartida.size() > 0) {
 			boolean partidaA = true;
 			if (listaPartida.size() % 2 == 0) {
 				for (int i = 0; i < listaPartida.size(); i++) {
@@ -139,23 +146,27 @@ public class GerenciadorPartida {
 			}
 		}
 		
-		if (listaPartidaA.size() > 1) {
-			listaPartidaA = criarPartidasMataMataFilho(listaPartidaA, campeonato, winerLower);
+		if (listaPartidaA.size() > 0) {
+			listaPartidaA = criarPartidasMataMataFilho(listaPartidaA,  winerLower);
 		}
 		
 
-		if (listaPartidaB.size() > 1) {
-			listaPartidaB = criarPartidasMataMataFilho(listaPartidaB, campeonato, winerLower);
+		if (listaPartidaB.size() > 0) {
+			listaPartidaB = criarPartidasMataMataFilho(listaPartidaB,  winerLower);
 		}
 		
 		EntityManagerLocal.begin();
 		Partida partida = new Partida();
 		partida.setAtivo(true);
-		partida.setCampeonato(campeonato);
+		partida.setCampeonato(camp);
 		partida.setCancelada(false);
 		EntityManagerLocal.persist(partida);
 		
 		TimePartida tpA = new TimePartida();
+		tpA.setPartida(partida);
+		EntityManagerLocal.persist(tpA);
+		
+		tpA = new TimePartida();
 		tpA.setPartida(partida);
 		EntityManagerLocal.persist(tpA);
 		
@@ -167,23 +178,26 @@ public class GerenciadorPartida {
 		EntityManagerLocal.clear();
 	}
 
-	public static List<Partida> criarPartidasMataMataFilho(List<Partida> lista, Campeonato campeonato, boolean winerLower) {
+	public static List<Partida> criarPartidasMataMataFilho(List<Partida> lista,  boolean winerLower) {
 		List<Partida> novaLista = new ArrayList<Partida>();
 		if (lista.size() > 1) {
 			if (lista.size() % 2 == 0) {
-				EntityManagerLocal.begin();
 				for (int i = 0; i < lista.size(); i++) {
 					EntityManagerLocal.begin();
 					Partida partida = new Partida();
 					partida.setAtivo(true);
-					partida.setCampeonato(campeonato);
+					partida.setCampeonato(camp);
 					partida.setCancelada(false);
 					EntityManagerLocal.persist(partida);
 					
 					TimePartida tpA = new TimePartida();
 					tpA.setPartida(partida);
 					EntityManagerLocal.persist(tpA);
-
+					
+					tpA = new TimePartida();
+					tpA.setPartida(partida);
+					EntityManagerLocal.persist(tpA);
+					
 					lista.get(i).setPartidaFilho(partida);
 					EntityManagerLocal.merge(lista.get(i));
 					i++;
@@ -193,13 +207,13 @@ public class GerenciadorPartida {
 					EntityManagerLocal.clear();
 					novaLista.add(partida);
 				}
-				return criarPartidasMataMataFilho(novaLista, campeonato, winerLower);
+				return criarPartidasMataMataFilho(novaLista,  winerLower);
 			} else {
 				for (int i = 0; i < lista.size() - 1; i++) {
 					EntityManagerLocal.begin();
 					Partida partida = new Partida();
 					partida.setAtivo(true);
-					partida.setCampeonato(campeonato);
+					partida.setCampeonato(camp);
 					partida.setCancelada(false);
 					EntityManagerLocal.persist(partida);
 					
@@ -207,6 +221,10 @@ public class GerenciadorPartida {
 					tpA.setPartida(partida);
 					EntityManagerLocal.persist(tpA);
 
+					tpA = new TimePartida();
+					tpA.setPartida(partida);
+					EntityManagerLocal.persist(tpA);
+					
 					lista.get(i).setPartidaFilho(partida);
 					EntityManagerLocal.merge(lista.get(i));
 					i++;
@@ -216,24 +234,8 @@ public class GerenciadorPartida {
 					EntityManagerLocal.clear();
 					novaLista.add(partida);
 				}
-				EntityManagerLocal.begin();
-				Partida partida = new Partida();
-				EntityManagerLocal.persist(partida);
-				
-				TimePartida tpA = new TimePartida();
-				tpA.setPartida(partida);
-				EntityManagerLocal.persist(tpA);
-				
-				Partida filho = lista.get(lista.size()-2).getPartidaFilho();
-				filho.setPartidaFilho(partida);
-				EntityManagerLocal.merge(filho);
-				
-				lista.get(lista.size()-1).setPartidaFilho(partida);
-				EntityManagerLocal.merge(lista.get(lista.size()-1));
-				EntityManagerLocal.commit();
-				EntityManagerLocal.clear();
-				novaLista.add(partida);
-				return criarPartidasMataMataFilho(novaLista, campeonato, winerLower);
+				novaLista.add(lista.get(lista.size()-1));
+				return criarPartidasMataMataFilho(novaLista,  winerLower);
 			}
 		}
 

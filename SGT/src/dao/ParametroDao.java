@@ -30,6 +30,9 @@ public class ParametroDao {
 				case 5: {
 					atualizarBanco("INSERT INTO chave(descricao, ativo) values('Grupo',true)", 6);
 				}
+				case 6: {
+					atualizarBanco("INSERT INTO time(codigoTime, ativo, dataCadastro) values(0, true, now())", 7);
+				}
 				
 				default: {
 					return;
@@ -48,7 +51,7 @@ public class ParametroDao {
 					.createNativeQuery(sql);
 			query.executeUpdate();
 			EntityManagerLocal.commit();
-			setVersaoBanco(versaoBanco + 1);
+			setVersaoBanco(versaoBanco);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
