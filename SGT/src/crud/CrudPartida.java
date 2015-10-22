@@ -152,11 +152,11 @@ public class CrudPartida extends JPanel {
 		tcmTitular.getColumn(2).setPreferredWidth(170);
 		tcmTitular.getColumn(2).setMinWidth(170);
 		tcmTitular.getColumn(2).setResizable(false);
-		tcmTitular.getColumn(3).setPreferredWidth(120);
-		tcmTitular.getColumn(3).setMinWidth(120);
+		tcmTitular.getColumn(3).setPreferredWidth(110);
+		tcmTitular.getColumn(3).setMinWidth(110);
 		tcmTitular.getColumn(3).setResizable(false);
-		tcmTitular.getColumn(4).setPreferredWidth(120);
-		tcmTitular.getColumn(4).setMinWidth(120);
+		tcmTitular.getColumn(4).setPreferredWidth(110);
+		tcmTitular.getColumn(4).setMinWidth(110);
 		tcmTitular.getColumn(4).setResizable(false);
 		
 
@@ -170,6 +170,7 @@ public class CrudPartida extends JPanel {
 				.getPreferredSize());
 		tabela.getTableHeader().setReorderingAllowed(false);
 		tabela.setFont(UtilitarioTela.getFont(12));
+		tabela.setRowHeight(50);
 		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scrollTitular = new JScrollPane(tabela);
 		scrollTitular.setBounds(1, 0, 646, 210);
@@ -237,11 +238,11 @@ public class CrudPartida extends JPanel {
 		tcmTitularLower.getColumn(2).setPreferredWidth(170);
 		tcmTitularLower.getColumn(2).setMinWidth(170);
 		tcmTitularLower.getColumn(2).setResizable(false);
-		tcmTitularLower.getColumn(3).setPreferredWidth(120);
-		tcmTitularLower.getColumn(3).setMinWidth(120);
+		tcmTitularLower.getColumn(3).setPreferredWidth(110);
+		tcmTitularLower.getColumn(3).setMinWidth(110);
 		tcmTitularLower.getColumn(3).setResizable(false);
-		tcmTitularLower.getColumn(4).setPreferredWidth(120);
-		tcmTitularLower.getColumn(4).setMinWidth(120);
+		tcmTitularLower.getColumn(4).setPreferredWidth(110);
+		tcmTitularLower.getColumn(4).setMinWidth(110);
 		tcmTitularLower.getColumn(4).setResizable(false);
 		
 
@@ -255,6 +256,7 @@ public class CrudPartida extends JPanel {
 				.getPreferredSize());
 		tabelaLower.getTableHeader().setReorderingAllowed(false);
 		tabelaLower.setFont(UtilitarioTela.getFont(12));
+		tabelaLower.setRowHeight(50);
 		tabelaLower.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollTitularLower = new JScrollPane(tabelaLower);
 		scrollTitularLower.setBounds(1, 295, 646, 210);

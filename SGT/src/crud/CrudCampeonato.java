@@ -314,7 +314,7 @@ public class CrudCampeonato extends JPanel {
 		} else {
 			if (campeonatoSelecionado.getDataIncio() == null) {
 				JButton btIniciar = new JButton("Iniciar Campeonato");
-				btIniciar.setBounds(225, meio.getHeight() - 130, 210, 35);
+				btIniciar.setBounds(225, 110, 210, 35);
 				btIniciar.setFont(UtilitarioTela.getFont(14));
 				btIniciar.setFocusPainted(false);
 				btIniciar.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudAlterar()));

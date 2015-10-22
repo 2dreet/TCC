@@ -126,7 +126,7 @@ public class DialogPartidasMataMata {
 		header.add(btFechar);
 		
 		meio = new JPanel();
-		meio.setSize(panel.getSize().width-2, panel.getSize().height-30);
+		meio.setSize(panel.getSize().width-4, panel.getSize().height-32);
 		meio.setLayout(null);
 		meio.setLocation(2, 30);
 		meio.setBackground(new Color(232, 234, 239));
