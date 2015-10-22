@@ -56,6 +56,8 @@ public class DialogCrudPartida {
 	private JLabel lblMsg;
 	private JPanel msg;
 	private JPanel meio;
+	private JPanel meioTime1;
+	private JPanel meioTime2;
 	private TimePartida time1;
 	private TimePartida time2;
 	
@@ -135,15 +137,32 @@ public class DialogCrudPartida {
 		meio.setBackground(new Color(232, 234, 239));
 		panel.add(meio);
 		
+		meioTime1 = new JPanel();
+		meioTime1.setSize((meio.getWidth()/2) - 5, meio.getSize().height-82);
+		meioTime1.setLayout(null);
+		meioTime1.setLocation(2, 80);
+		meioTime1.setBackground(UtilitarioTela.getBtnFundo(false));
+		meioTime1.setBorder(new BordaSombreada(new Color(46, 49, 56), new Color(102, 102, 102)));
+		meio.add(meioTime1);
+		
+		meioTime2 = new JPanel();
+		meioTime2.setSize((meio.getWidth()/2) - 2, meio.getSize().height-82);
+		meioTime2.setLayout(null);
+		meioTime2.setLocation((meio.getWidth()/2), 80);
+		meioTime2.setBackground(UtilitarioTela.getBtnFundo(false));
+		meioTime2.setBorder(new BordaSombreada(new Color(46, 49, 56), new Color(102, 102, 102)));
+		meio.add(meioTime2);
+		
 		JLabel lbNome = new JLabel("Time 1 :");
-		lbNome.setBounds(60, 10, 300, 50);
+		lbNome.setBounds(70, 10, 300, 50);
 		lbNome.setFont(UtilitarioTela.getFont(14));
-		lbNome.setForeground(UtilitarioTela.getFontColorCrud());
-		meio.add(lbNome);
+		lbNome.setForeground(UtilitarioTela.getFontColorPadrao());
+		meioTime1.add(lbNome);
 		
 		txtPlacar = new JTextField();
 		txtPlacar.setColumns(100);
-		txtPlacar.setBounds(10, 25, 50, 25);
+		txtPlacar.setBounds(10, 10, 50, 50);
+		txtPlacar.setFont(UtilitarioTela.getFont(30));
 		txtPlacar.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -157,17 +176,18 @@ public class DialogCrudPartida {
 		});
 		txtPlacar.setLayout(null);
 		txtPlacar.setBorder(UtilitarioTela.jTextFieldNormal());
-		meio.add(txtPlacar);
+		meioTime1.add(txtPlacar);
 		
 		JLabel lbNome2 = new JLabel("Time 2 :");
-		lbNome2.setBounds((meio.getSize().width/2) + 110, 10, 300, 50);
+		lbNome2.setBounds(70, 10, 300, 50);
 		lbNome2.setFont(UtilitarioTela.getFont(14));
-		lbNome2.setForeground(UtilitarioTela.getFontColorCrud());
-		meio.add(lbNome2);
+		lbNome2.setForeground(UtilitarioTela.getFontColorPadrao());
+		meioTime2.add(lbNome2);
 		
 		txtPlacar2 = new JTextField();
 		txtPlacar2.setColumns(100);
-		txtPlacar2.setBounds((meio.getSize().width/2) + 50, 25, 50, 25);
+		txtPlacar2.setBounds(10 , 10, 50, 50);
+		txtPlacar2.setFont(UtilitarioTela.getFont(30));
 		txtPlacar2.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -181,13 +201,7 @@ public class DialogCrudPartida {
 		});
 		txtPlacar2.setLayout(null);
 		txtPlacar2.setBorder(UtilitarioTela.jTextFieldNormal());
-		meio.add(txtPlacar2);
-		
-		JLabel lbPeriferico = new JLabel("Periférico :");
-		lbPeriferico.setBounds(20, 45, 90, 20);
-		lbPeriferico.setFont(UtilitarioTela.getFont(14));
-		lbPeriferico.setForeground(UtilitarioTela.getFontColorCrud());
-		meio.add(lbPeriferico);
+		meioTime2.add(txtPlacar2);
 		
 		msg = new JPanel();
 		msg.setSize(396, 35);
@@ -206,7 +220,7 @@ public class DialogCrudPartida {
 		
 		JButton confirmar = new JButton(texto);
 		confirmar.setSize(150,30);
-		confirmar.setLocation(20, 160);
+		confirmar.setLocation(20, 10);
 		confirmar.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudNovo()));
 		confirmar.setFocusPainted(false);
 		confirmar.addActionListener(new ActionListener() {
@@ -219,7 +233,7 @@ public class DialogCrudPartida {
 		
 		JButton cancelar = new JButton("Cancelar");
 		cancelar.setSize(150,30);
-		cancelar.setLocation(223, 160);
+		cancelar.setLocation(223, 10);
 		cancelar.setBackground(UtilitarioTela.getFundoLocalizar());
 		cancelar.setFocusPainted(false);
 		cancelar.setIcon(new ImageIcon(Menssage.class.getResource("/imagem/cancelBlack.png")));
