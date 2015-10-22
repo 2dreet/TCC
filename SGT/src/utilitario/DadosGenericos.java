@@ -5,11 +5,25 @@ import java.util.Date;
 import dao.EntityManagerLocal;
 import dao.PermissaoDao;
 import entidade.Jogador;
+import entidade.Pc;
 import entidade.Time;
 import entidade.Usuario;
 
 public class DadosGenericos {
 
+	public static void gerarPc(){
+		for(int i = 0; i < 13; i++){
+			Pc pc = new Pc();
+			pc.setAtivo(true);
+			pc.setDescricao("PC "+i);
+			pc.setIp("127.0.0.1");
+			EntityManagerLocal.begin();
+			EntityManagerLocal.persist(pc);
+			EntityManagerLocal.commit();
+			EntityManagerLocal.clear();
+		}
+	}
+	
 	public static void gerarTimes(){
 		for(int i = 0; i < 13; i++){
 			Time time = new Time();
@@ -54,5 +68,6 @@ public class DadosGenericos {
 	
 	public static void main(String [] args){
 		gerarTimes();
+		gerarPc();
 	}
 }

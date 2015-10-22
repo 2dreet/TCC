@@ -1,6 +1,7 @@
 package dialog;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Window;
@@ -8,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
@@ -24,6 +26,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import localizar.LocalizarPc;
+
 import org.omg.CORBA.TCKind;
 
 import componente.ComboBox;
@@ -33,9 +37,11 @@ import dao.CampeonatoDao;
 import dao.EntityManagerLocal;
 import dao.MarcaDao;
 import dao.PartidaDao;
+import dao.PcDao;
 import dao.PerifericoDao;
 import tela.HomeFuncionario;
 import utilitario.BordaSombreada;
+import utilitario.Computador;
 import utilitario.ParametroCrud;
 import utilitario.Parametros;
 import utilitario.UtilitarioLogo;
@@ -60,6 +66,20 @@ public class DialogCrudPartida {
 	private JPanel meioTime2;
 	private TimePartida time1;
 	private TimePartida time2;
+	private List<Container> pcs1;
+	private List<Container> pcs2;
+	
+	private JPanel jpPc1Time1;
+	private JPanel jpPc2Time1;
+	private JPanel jpPc3Time1;
+	private JPanel jpPc4Time1;
+	private JPanel jpPc5Time1;
+	
+	private JPanel jpPc1Time2;
+	private JPanel jpPc2Time2;
+	private JPanel jpPc3Time2;
+	private JPanel jpPc4Time2;
+	private JPanel jpPc5Time2;
 	
 	public DialogCrudPartida() {
 		JFrame jf = new JFrame();
@@ -68,31 +88,34 @@ public class DialogCrudPartida {
 			jf.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		}
 		Parametros.setPai(jf);
-		crudPartida(PartidaDao.getPartida(1));
+		crudPartida(PartidaDao.getPartida(86), jf);
 
 	}
 	
-	public void crudPartida(Partida partidaSelecionado){
+	public void crudPartida(Partida partidaSelecionado, JFrame jf){
 		this.partidaSelecionado = partidaSelecionado;
+		pcs1 = new ArrayList<Container>();
+		pcs2 = new ArrayList<Container>();
 		setTimes();
-		JDialog dialog = new JDialog(Parametros.getPai(), true);
-		dialog.setUndecorated(true);
-		dialog.getContentPane().setLayout(null);
-		dialog.setSize(Parametros.getPai().getSize());
-		dialog.getContentPane().setBackground(new Color(232, 234, 239));
-		dialog.setLocationRelativeTo(Parametros.getPai());
+		
+		
+		jf.setUndecorated(true);
+		jf.getContentPane().setLayout(null);
+		jf.setSize(Parametros.getPai().getSize());
+		jf.getContentPane().setBackground(new Color(232, 234, 239));
+		jf.setLocationRelativeTo(Parametros.getPai());
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new BordaSombreada(new Color(46, 49, 56), new Color(102, 102, 102)));
 		panel.setLayout(null);
-		panel.setSize(dialog.getSize());
+		panel.setSize(jf.getSize());
 		panel.setBackground(null);
 		panel.setLocation(0, 0);
 		panel.setFocusable(true);
 		panel.requestFocusInWindow();
 		
 		JPanel header = new JPanel();
-		header.setSize(dialog.getWidth()-4, 30);
+		header.setSize(jf.getWidth()-4, 30);
 		header.setLayout(null);
 		header.setLocation(2, 2);
 		header.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoVisualizar()));
@@ -125,7 +148,7 @@ public class DialogCrudPartida {
 		btFechar.setBorder(new BordaSombreada(false, true, false, false));
 		btFechar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				dialog.dispose();
+				jf.dispose();
 			}
 		});
 		header.add(btFechar);
@@ -178,6 +201,51 @@ public class DialogCrudPartida {
 		txtPlacar.setBorder(UtilitarioTela.jTextFieldNormal());
 		meioTime1.add(txtPlacar);
 		
+		jpPc1Time1 = new JPanel();
+		jpPc1Time1.setSize((meioTime1.getWidth()) - 50, 50);
+		jpPc1Time1.setLayout(null);
+		jpPc1Time1.setLocation(10 , 100);
+		jpPc1Time1.setBackground(UtilitarioTela.getBtnFundo(false));
+		jpPc1Time1.setBorder(null);
+		meioTime1.add(jpPc1Time1);
+		pcs1.add(jpPc1Time1);
+		
+		jpPc2Time1 = new JPanel();
+		jpPc2Time1.setSize((meioTime1.getWidth()) - 50, 50);
+		jpPc2Time1.setLayout(null);
+		jpPc2Time1.setLocation(10 , 160);
+		jpPc2Time1.setBackground(UtilitarioTela.getBtnFundo(false));
+		jpPc2Time1.setBorder(null);
+		meioTime1.add(jpPc2Time1);
+		pcs1.add(jpPc2Time1);
+		
+		jpPc3Time1 = new JPanel();
+		jpPc3Time1.setSize((meioTime1.getWidth()) - 50, 50);
+		jpPc3Time1.setLayout(null);
+		jpPc3Time1.setLocation(10 , 220);
+		jpPc3Time1.setBackground(UtilitarioTela.getBtnFundo(false));
+		jpPc3Time1.setBorder(null);
+		meioTime1.add(jpPc3Time1);
+		pcs1.add(jpPc3Time1);
+		
+		jpPc4Time1 = new JPanel();
+		jpPc4Time1.setSize((meioTime1.getWidth()) - 50, 50);
+		jpPc4Time1.setLayout(null);
+		jpPc4Time1.setLocation(10 , 280);
+		jpPc4Time1.setBackground(UtilitarioTela.getBtnFundo(false));
+		jpPc4Time1.setBorder(null);
+		meioTime1.add(jpPc4Time1);
+		pcs1.add(jpPc4Time1);
+		
+		jpPc5Time1 = new JPanel();
+		jpPc5Time1.setSize((meioTime1.getWidth()) - 50, 50);
+		jpPc5Time1.setLayout(null);
+		jpPc5Time1.setLocation(10 , 340);
+		jpPc5Time1.setBackground(UtilitarioTela.getBtnFundo(false));
+		jpPc5Time1.setBorder(null);
+		meioTime1.add(jpPc5Time1);
+		pcs1.add(jpPc5Time1);
+		
 		JLabel lbNome2 = new JLabel("Time 2 :");
 		lbNome2.setBounds(70, 10, 300, 50);
 		lbNome2.setFont(UtilitarioTela.getFont(14));
@@ -203,6 +271,51 @@ public class DialogCrudPartida {
 		txtPlacar2.setBorder(UtilitarioTela.jTextFieldNormal());
 		meioTime2.add(txtPlacar2);
 		
+		jpPc1Time2 = new JPanel();
+		jpPc1Time2.setSize((meioTime2.getWidth()) - 50, 50);
+		jpPc1Time2.setLayout(null);
+		jpPc1Time2.setLocation(10 , 100);
+		jpPc1Time2.setBackground(UtilitarioTela.getBtnFundo(false));
+		jpPc1Time2.setBorder(null);
+		meioTime2.add(jpPc1Time2);
+		pcs2.add(jpPc1Time2);
+		
+		jpPc2Time2 = new JPanel();
+		jpPc2Time2.setSize((meioTime2.getWidth()) - 50, 50);
+		jpPc2Time2.setLayout(null);
+		jpPc2Time2.setLocation(10 , 160);
+		jpPc2Time2.setBackground(UtilitarioTela.getBtnFundo(false));
+		jpPc2Time2.setBorder(null);
+		meioTime2.add(jpPc2Time2);
+		pcs2.add(jpPc2Time2);
+		
+		jpPc3Time2 = new JPanel();
+		jpPc3Time2.setSize((meioTime2.getWidth()) - 50, 50);
+		jpPc3Time2.setLayout(null);
+		jpPc3Time2.setLocation(10 , 220);
+		jpPc3Time2.setBackground(UtilitarioTela.getBtnFundo(false));
+		jpPc3Time2.setBorder(null);
+		meioTime2.add(jpPc3Time2);
+		pcs2.add(jpPc3Time2);
+		
+		jpPc4Time2 = new JPanel();
+		jpPc4Time2.setSize((meioTime2.getWidth()) - 50, 50);
+		jpPc4Time2.setLayout(null);
+		jpPc4Time2.setLocation(10 , 280);
+		jpPc4Time2.setBackground(UtilitarioTela.getBtnFundo(false));
+		jpPc4Time2.setBorder(null);
+		meioTime2.add(jpPc4Time2);
+		pcs2.add(jpPc4Time2);
+		
+		jpPc5Time2 = new JPanel();
+		jpPc5Time2.setSize((meioTime2.getWidth()) - 50, 50);
+		jpPc5Time2.setLayout(null);
+		jpPc5Time2.setLocation(10 , 340);
+		jpPc5Time2.setBackground(UtilitarioTela.getBtnFundo(false));
+		jpPc5Time2.setBorder(null);
+		meioTime2.add(jpPc5Time2);
+		pcs2.add(jpPc5Time2);
+		
 		msg = new JPanel();
 		msg.setSize(396, 35);
 		msg.setLocation(0, 70);
@@ -226,26 +339,25 @@ public class DialogCrudPartida {
 		confirmar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(confirmar()){
-					dialog.setVisible(false);
+					jf.setVisible(false);
 				}
 			}
 		});
 		
-		JButton cancelar = new JButton("Cancelar");
-		cancelar.setSize(150,30);
-		cancelar.setLocation(223, 10);
-		cancelar.setBackground(UtilitarioTela.getFundoLocalizar());
-		cancelar.setFocusPainted(false);
-		cancelar.setIcon(new ImageIcon(Menssage.class.getResource("/imagem/cancelBlack.png")));
-		cancelar.addActionListener(new ActionListener() {
+		JButton btPcPartida = new JButton("PC Partida");
+		btPcPartida.setSize(150,30);
+		btPcPartida.setLocation(223, 10);
+		btPcPartida.setBackground(UtilitarioTela.getFundoLocalizar());
+		btPcPartida.setFocusPainted(false);
+		btPcPartida.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				cancelar();
-				dialog.setVisible(false);
+				DialogPcPartida lp = new DialogPcPartida();
+				lp.localizarPc(jf.getContentPane(), partidaSelecionado);
 			}
 		});
 		
 		meio.add(confirmar);
-		meio.add(cancelar);
+		meio.add(btPcPartida);
 		
 		
 		if(partidaSelecionado.getHoraInicio() != null){
@@ -256,13 +368,44 @@ public class DialogCrudPartida {
 			txtPlacar2.setEditable(false);
 		}
 		
-		
-		dialog.getContentPane().add(panel);
-		dialog.setVisible(true);
+		atualizarPc();
+		jf.getContentPane().add(panel);
+		jf.setVisible(true);
+		if(PcDao.getListaPcPartida(partidaSelecionado.getCodigoPartida())==null || PcDao.getListaPcPartida(partidaSelecionado.getCodigoPartida()).size() < 10){
+			Menssage.setMenssage("Numero Pc's",
+					"Deve Adicionar Mais PC's Para Iniciar Partida!",
+					ParametroCrud.getModoCrudDeletar(), meio);
+			DialogPcPartida lp = new DialogPcPartida();
+			lp.localizarPc(jf.getContentPane(), partidaSelecionado);
+		}
 	}
 	
 	public void cancelar(){
 		this.confirmado = false;
+	}
+	
+	public void atualizarPc(){
+		Computador.t2 = new Thread() {
+			@Override
+			public void run() {
+				try {
+					while (true) {
+						meio.repaint();
+						Computador.getJogadorConectado(partidaSelecionado, time1.getTime(), pcs1);
+						meio.repaint();
+						Computador.getJogadorConectado(partidaSelecionado, time2.getTime(), pcs2);
+						sleep(1000);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		Computador.t2.start();
+	}
+	
+	public void atualizarJogadorLogado(){
+		
 	}
 	
 	public void msgErro(String erro) {

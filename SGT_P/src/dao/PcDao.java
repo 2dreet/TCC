@@ -63,32 +63,4 @@ public class PcDao {
 		}
 	}
 	
-
-	public static List<Pc> getListaPcNaoPartida(String metodoPesquisa, String valorPesquisa, int codigoPartida){
-		try {
-			String condicao = "";
-			if(metodoPesquisa.equals("Código")){
-				condicao = " codigoPc like '"+valorPesquisa+"%'";
-			} else if (metodoPesquisa.equals("Descrição")){
-				condicao = " descricao like '%"+valorPesquisa+"%'";
-			} else if (metodoPesquisa.equals("IP")){
-				condicao = " ip like '%"+valorPesquisa+"%'";
-			} 
-			String sql = "SELECT * FROM pc where "+condicao+" AND ativo = true AND codigoPc not in (SELECT codigoPc from pc_partida where codigoPartida = '"+codigoPartida+"')";
-			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Pc.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
-		} catch (NoResultException ex) {
-			return null;
-		}
-	}
-	
-	public static List<Pc> getListaPc(){
-		try {
-			String condicao = "";
-			String sql = "SELECT * FROM pc where ativo = true";
-			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, PcPartida.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
-		} catch (NoResultException ex) {
-			return null;
-		}
-	}
-	
 }
