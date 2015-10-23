@@ -7,6 +7,7 @@ import java.util.Random;
 import componente.Menssage;
 import dao.CampeonatoTimeDao;
 import dao.EntityManagerLocal;
+import dao.PartidaDao;
 import dao.TimeDao;
 import entidade.Campeonato;
 import entidade.CampeonatoTime;
@@ -21,17 +22,18 @@ public class GerenciadorPartida {
 	public static boolean adicionarPatidas(Campeonato campeonato) {
 		camp = campeonato;
 		try {
-			
-			List<Time> listaTime = CampeonatoTimeDao
-					.getListaCampeonatoListaTime(campeonato
-							.getCodigoCampeonato());
-			if (listaTime != null && listaTime.size() > 0) {
-				if (campeonato.getChave().getCodigoChave() == 1 || campeonato.getChave().getCodigoChave() == 2) {
-					// Mata - Mata
-					gerarPartidasMataMata( listaTime,  false);
-				} 
+				if (campeonato.getChave().getCodigoChave() == 1) {
+					List<Time> listaTime = CampeonatoTimeDao
+							.getListaCampeonatoListaTime(campeonato
+									.getCodigoCampeonato());
+					if (listaTime != null && listaTime.size() > 0) {
+						// Mata - Mata
+						gerarPartidasMataMata( listaTime,  false);
+					}
+				} else if(campeonato.getChave().getCodigoChave() == 2){
+					gerarLowers(campeonato);
+				}
 				return true;
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			Menssage.setMenssage("Erro",
@@ -39,19 +41,46 @@ public class GerenciadorPartida {
 					ParametroCrud.getModoErro(), Parametros.getPai());
 			return false;
 		}
-		return false;
 	}
 
 	public static boolean gerarLowers(Campeonato campeonato){
 		try {
-			List<Time> listaTime = CampeonatoTimeDao
-					.getListaCampeonatoListaTimeLowers(campeonato
+			Partida partidaWiner = PartidaDao.getPartidaFinal(camp.getCodigoCampeonato(),false);
+			List<Time> listaTime = PartidaDao
+					.getTimesParaLower (campeonato
 							.getCodigoCampeonato());
 			if (listaTime != null && listaTime.size() > 0) {
-				if (campeonato.getChave().getCodigoChave() == 1 || campeonato.getChave().getCodigoChave() == 2) {
+				if (campeonato.getChave().getCodigoChave() == 2) {
 					// Lowers
 					gerarPartidasMataMata( listaTime,  true);
-				} 
+				}
+				EntityManagerLocal.begin();
+				Partida partidaLower = PartidaDao.getPartidaFinal(camp.getCodigoCampeonato(),true);
+				
+				Partida partida = new Partida();
+				partida.setAtivo(true);
+				partida.setCampeonato(camp);
+				partida.setCancelada(false);
+				partida.setWinerLower(true);
+				EntityManagerLocal.persist(partida);
+
+				TimePartida tpA = new TimePartida();
+				tpA.setPartida(partida);
+				tpA.setTime(null);
+				EntityManagerLocal.persist(tpA);
+
+				TimePartida tpB = new TimePartida();
+				tpB.setPartida(partida);
+				tpB.setTime(null);
+				EntityManagerLocal.persist(tpB);
+				
+				partidaWiner.setPartidaFilho(partida);
+				partidaLower.setPartidaFilho(partida);
+				EntityManagerLocal.merge(partidaWiner);
+				EntityManagerLocal.merge(partidaLower);
+				EntityManagerLocal.commit();
+				EntityManagerLocal.clear();
+				
 				return true;
 			}
 		} catch (Exception e) {

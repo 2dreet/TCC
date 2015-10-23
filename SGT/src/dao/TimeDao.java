@@ -31,6 +31,17 @@ public class TimeDao {
 		}
 	}
 	
+	public static List<Time> getListaTime(){
+		try {
+			String sql = "SELECT * FROM time "
+					+ " order by descricao";
+			
+			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Time.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
 	public static List<Time> getListaPesquisaTime(String metodoPesquisa, String valorPesquisa, int codigoCampeonato){
 		try {
 			String condicao = "";

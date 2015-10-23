@@ -12,5 +12,6 @@
 	<classpathentry kind="lib" path="libs/EclipseLink/org.eclipse.persistence.jpars_2.6.0.v20150309-bf26070.jar"/>
 	<classpathentry kind="lib" path="libs/EclipseLink/org.eclipse.persistence.jpars.source_2.6.0.v20150309-bf26070.jar"/>
 	<classpathentry kind="lib" path="miglayout15-swing.jar" sourcepath="miglayout-src.zip"/>
+	<classpathentry kind="lib" path="libs/EclipseLink/jxl.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

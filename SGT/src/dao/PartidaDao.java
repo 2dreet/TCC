@@ -10,6 +10,7 @@ import org.eclipse.persistence.config.QueryHints;
 import entidade.Jogador;
 import entidade.Partida;
 import entidade.Pc;
+import entidade.Time;
 import entidade.TimePartida;
 
 public class PartidaDao {
@@ -27,6 +28,23 @@ public class PartidaDao {
 		}
 	}
 
+	public static List<Time> getTimesParaLower(int codigoCampeonato) {
+		try {
+			String sql = " SELECT * FROM partida p INNER JOIN time_partida tp ON p.codigoPartida = tp.codigoPartida"+
+						 " INNER JOIN time t ON t.codigoTime = tp.codigoTime" +
+						 " where p.codigoPartida not in (SELECT codigoPartidaFilho FROM partida where codigoPartidaFilho is not null AND codigoCampeonato = '"+codigoCampeonato+"')" + 
+						 " AND codigoCampeonato = '"+codigoCampeonato+"' AND tp.codigoTime not in (SELECT timeVencedor FROM partida where timeVencedor is not null AND codigoCampeonato = '1')"+
+						 " AND p.cancelada = false"+
+						 " AND horaFim is not null;";
+			return EntityManagerLocal.getEntityManager()
+					.createNativeQuery(sql, Time.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
 	public static List<Partida> getPartidasNaoIniciadas(int codigoCampeonato) {
 		try {
 			String sql = "SELECT * FROM partida WHERE ativo = true AND cancelada = false AND horaInicio is null AND codigoCampeonato = '"
@@ -40,6 +58,21 @@ public class PartidaDao {
 		}
 	}
 	
+	public static List<Partida> getPartidasSoPaiNaoIniciadas(int codigoCampeonato) {
+		try {
+			String sql = " SELECT * FROM partida "+ 
+ 						 " where codigoPartida not in (SELECT codigoPartidaFilho FROM partida where codigoPartidaFilho is not null)"+
+ 						 " AND codigoCampeonato = '"+codigoCampeonato+"'"+
+ 						 " AND cancelada <> true" +
+						 " AND horaFim is null;";
+			return EntityManagerLocal.getEntityManager()
+					.createNativeQuery(sql, Partida.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
 	
 	public static TimePartida getTimePartida(int codigoCampeonato,
 			int codigoPartida, String ordem) {
