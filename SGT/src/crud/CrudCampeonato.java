@@ -362,7 +362,7 @@ public class CrudCampeonato extends JPanel {
 				});
 			} else {
 				JButton btCancelar = new JButton("Cancelar Campeonato");
-				btCancelar.setBounds(225, meio.getHeight() - 130, 210, 35);
+				btCancelar.setBounds(225, 110, 210, 35);
 				btCancelar.setFont(UtilitarioTela.getFont(14));
 				btCancelar.setFocusPainted(false);
 				btCancelar.setBackground(UtilitarioTela.getColorCrud(modoCrud));

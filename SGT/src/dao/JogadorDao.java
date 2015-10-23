@@ -125,6 +125,19 @@ public class JogadorDao {
 		}
 	}
 	
+	public static Jogador getJogadorPorUsuario(int codigo){
+		try {
+			String sql = "SELECT * FROM jogador j INNER JOIN usuario u"
+					+ "	ON j.codigoUsuario = u.codigoUsuario"
+					+ " where u.codigoUsuario = '"+codigo+"' AND u.ativo = true";
+			return (Jogador) EntityManagerLocal.getEntityManager().createNativeQuery(sql, Jogador.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.setMaxResults(1).getSingleResult();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
 	public static Jogador getAllJogador(int codigo){
 		try {
 			String sql = "SELECT * FROM jogador j INNER JOIN usuario u"

@@ -16,7 +16,7 @@ public class EntityManagerLocal{
 	}
 	
 	private static void openEntityManager(){
-		emf = Persistence.createEntityManagerFactory("GTGS");
+		emf = Persistence.createEntityManagerFactory("Jogador");
 		em = emf.createEntityManager();
 	}
 	

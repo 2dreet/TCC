@@ -89,9 +89,9 @@ public class GerenciadorPartida {
 		}
 
 		if (listaTimeA.size() > listaTimeB.size()) {
-			listaTimeB.add(TimeDao.getTime(30));
+			listaTimeB.add(null);
 		} else if (listaTimeA.size() < listaTimeB.size()) {
-			listaTimeA.add(TimeDao.getTime(30));
+			listaTimeA.add(null);
 		}
 
 		EntityManagerLocal.begin();

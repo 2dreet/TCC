@@ -145,25 +145,31 @@ public class DialogPcPartida {
 		meio.add(btSelecionar);
 		btSelecionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				DialogLocalizarPc.localizarPc(meio,
-						partidaSelecionado);
-				if (DialogLocalizarPc.getPcSelecionado() != null) {
-					Pc pc = DialogLocalizarPc.getPcSelecionado();
-					boolean confirmado = true;
-					MenssageConfirmacao.setMenssage(
-							"Adicionar Pc na Partida",
-							"Deseja Adicionar Esse Pc na Partida?\nIP: "
-									+ pc.getIp(), ParametroCrud.getModoCrudNovo(), meio);
-					confirmado = MenssageConfirmacao.isConfirmado();
-					if (confirmado) {
-						EntityManagerLocal.begin();
-						PcPartida pcP = new PcPartida();
-						pcP.setPc(pc);
-						pcP.setPartida(partidaSelecionado);
-						EntityManagerLocal.merge(pcP);
-						EntityManagerLocal.commit();
+				if(PcDao.getListaPcPartida(partidaSelecionado.getCodigoPartida()).size() < 10){
+					DialogLocalizarPc.localizarPc(meio,
+							partidaSelecionado);
+					if (DialogLocalizarPc.getPcSelecionado() != null) {
+						Pc pc = DialogLocalizarPc.getPcSelecionado();
+						boolean confirmado = true;
+						MenssageConfirmacao.setMenssage(
+								"Adicionar Pc na Partida",
+								"Deseja Adicionar Esse Pc na Partida?\nIP: "
+										+ pc.getIp(), ParametroCrud.getModoCrudNovo(), meio);
+						confirmado = MenssageConfirmacao.isConfirmado();
+						if (confirmado) {
+							EntityManagerLocal.begin();
+							PcPartida pcP = new PcPartida();
+							pcP.setPc(pc);
+							pcP.setPartida(partidaSelecionado);
+							EntityManagerLocal.merge(pcP);
+							EntityManagerLocal.commit();
+						}
+						localizar();
 					}
-					localizar();
+				} else {
+					Menssage.setMenssage("Numero de Computadores",
+							"A Partida não pode adicionar mais Computadores!",
+							ParametroCrud.getModoCrudDeletar(), meio);
 				}
 			}
 		});

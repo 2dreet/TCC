@@ -12,7 +12,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		Login.usuario = JogadorDao.getJogador(41).getUsuario();
+		Login.usuario = JogadorDao.getJogador(42).getUsuario();
 //		
 //		try {
 //			ServerSocket listener = new ServerSocket(2020);
@@ -41,14 +41,10 @@ public class Main {
 				while (true) {
 					Socket socket = listener.accept();
 					try {
-						BufferedReader input = new BufferedReader(new InputStreamReader(
-								socket.getInputStream()));
-						String retorno = input.readLine();
-						System.out.println(retorno);
 						PrintWriter out = new PrintWriter(
 								socket.getOutputStream(), true);
-						if(Login.usuario != null && Integer.parseInt(retorno) == Login.usuario.getCodigoUsuario()){
-							out.println(true);
+						if(Login.usuario != null ){
+							out.println(Login.usuario.getCodigoUsuario());
 						} else {
 							out.println(false);
 						}

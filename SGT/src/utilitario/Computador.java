@@ -59,23 +59,24 @@ public class Computador {
 		}
 	}
 
-	public static boolean verificaPcLogadoJogador(Pc pc, Jogador jogador) {
+	public static Jogador verificaJogadorLogado(Pc pc) {
 		try {
-			Socket s = new Socket(pc.getIp(), 3030);
-			PrintWriter out = new PrintWriter(s.getOutputStream(), true);
-			out.println(jogador.getUsuario().getCodigoUsuario());
-			BufferedReader input = new BufferedReader(new InputStreamReader(
-					s.getInputStream()));
-			String retorno = input.readLine();
-			if (retorno != null && retorno.equals("true")) {
-				return true;
-			} else {
-				return false;
+			if(pc.getIp() != null && !pc.getIp().trim().isEmpty()){
+				Socket s = new Socket(pc.getIp(), 3030);
+				BufferedReader input = new BufferedReader(new InputStreamReader(
+						s.getInputStream()));
+				String retorno = input.readLine();
+				if (retorno != null) {
+					return JogadorDao.getJogadorPorUsuario(Integer.parseInt(retorno));
+				} else {
+					return null;
+				}
 			}
 
 		} catch (Exception e) {
-			return false;
+			return null;
 		}
+		return null;
 	}
 
 	public static void getPcConectado(Pc pc, Container parent) {
@@ -108,69 +109,5 @@ public class Computador {
 		t.start();
 	}
 
-	public static void getJogadorConectado(Partida partida, Time time, List<Container> listParent) {
-		try {
-			List<Jogador> listaJogador = JogadorDao
-					.getListaJogadorTitularTime(time
-							.getCodigoTime());
-			List<PcPartida> listaPc = PcDao
-					.getListaPcPartida(partida.getCodigoPartida());
-			int i = 0;
-			boolean logados = false;
-			for (Container parent : listParent) {
-				if(listaPc != null && listaPc.size() > 0){
-					parent.removeAll();
-					JLabel lbPc = null;
-					for (PcPartida pcPartida : listaPc) {
-						if (verificaPcLogadoJogador(pcPartida.getPc(), listaJogador.get(i))) {
-							lbPc = new JLabel(new ImageIcon(Computador.class.getResource("/imagem/pcon.png")));
-						} else {
-							lbPc = new JLabel(new ImageIcon(Computador.class.getResource("/imagem/pcoff.png")));
-						}
-					}
-					lbPc.setBounds(10, 0, 35, 35);
-					
-					JLabel lbcJogador;
-					lbcJogador = new JLabel("Jogador: "+listaJogador.get(i).getUsuario().getCodigoUsuario()+" - "+listaJogador.get(i).getUsuario().getNome());
-					lbcJogador.setFont(UtilitarioTela.getFont(12));
-					lbcJogador.setForeground(UtilitarioTela.getFontColorPadrao());
-					lbcJogador.setBounds(100, 0, 300, 15);
-					
-					JLabel lbcIp;
-					lbcIp = new JLabel("Pc IP: ");
-					lbcIp.setFont(UtilitarioTela.getFont(12));
-					lbcIp.setForeground(UtilitarioTela.getFontColorPadrao());
-					lbcIp.setBounds(100, 16, 200, 15);
-					
-					parent.add(lbPc);
-					parent.add(lbcJogador);
-					parent.add(lbcIp);
-				}else{
-					parent.removeAll();
-					JLabel lbPc;
-					lbPc = new JLabel(new ImageIcon(Computador.class.getResource("/imagem/pcoff.png")));
-					lbPc.setBounds(10, 0, 35, 35);
-					
-					JLabel lbcJogador;
-					lbcJogador = new JLabel("Jogador: "+listaJogador.get(i).getUsuario().getCodigoUsuario()+" - "+listaJogador.get(i).getUsuario().getNome());
-					lbcJogador.setFont(UtilitarioTela.getFont(12));
-					lbcJogador.setForeground(UtilitarioTela.getFontColorPadrao());
-					lbcJogador.setBounds(100, 0, 300, 15);
-					
-					JLabel lbcIp;
-					lbcIp = new JLabel("Pc IP: ");
-					lbcIp.setFont(UtilitarioTela.getFont(12));
-					lbcIp.setForeground(UtilitarioTela.getFontColorPadrao());
-					lbcIp.setBounds(100, 16, 200, 15);
-					
-					parent.add(lbPc);
-					parent.add(lbcJogador);
-					parent.add(lbcIp);
-				}
-				i++;
-			}
-		} catch (Exception e) {
-			//e.printStackTrace();
-		}
-	}
+
 }
