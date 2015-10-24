@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Campeonato.findByCodigoCampeonato", query = "SELECT c FROM Campeonato c WHERE c.codigoCampeonato = :codigoCampeonato"),
     @NamedQuery(name = "Campeonato.findByDescricao", query = "SELECT c FROM Campeonato c WHERE c.descricao = :descricao"),
     @NamedQuery(name = "Campeonato.findByDataCadastro", query = "SELECT c FROM Campeonato c WHERE c.dataCadastro = :dataCadastro"),
-    @NamedQuery(name = "Campeonato.findByDataIncio", query = "SELECT c FROM Campeonato c WHERE c.dataIncio = :dataIncio"),
+    @NamedQuery(name = "Campeonato.findByDataIncio", query = "SELECT c FROM Campeonato c WHERE c.dataInicio = :dataIncio"),
     @NamedQuery(name = "Campeonato.findByDataFim", query = "SELECT c FROM Campeonato c WHERE c.dataFim = :dataFim"),
     @NamedQuery(name = "Campeonato.findByAtivo", query = "SELECT c FROM Campeonato c WHERE c.ativo = :ativo")})
 public class Campeonato implements Serializable {
@@ -53,9 +53,9 @@ public class Campeonato implements Serializable {
     @Column(name = "dataCadastro")
     @Temporal(TemporalType.DATE)
     private Date dataCadastro;
-    @Column(name = "dataIncio")
+    @Column(name = "dataInicio")
     @Temporal(TemporalType.DATE)
-    private Date dataIncio;
+    private Date dataInicio;
     @Column(name = "dataFim")
     @Temporal(TemporalType.DATE)
     private Date dataFim;
@@ -115,12 +115,12 @@ public class Campeonato implements Serializable {
         this.dataCadastro = dataCadastro;
     }
 
-    public Date getDataIncio() {
-        return dataIncio;
+    public Date getDataInicio() {
+        return dataInicio;
     }
 
-    public void setDataIncio(Date dataIncio) {
-        this.dataIncio = dataIncio;
+    public void setDataInicio(Date dataInicio) {
+        this.dataInicio = dataInicio;
     }
 
     public Date getDataFim() {

@@ -8,6 +8,7 @@ package entidade;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -62,21 +63,16 @@ public class Partida implements Serializable {
     @Column(name = "horaFim")
     @Temporal(TemporalType.DATE)
     private Date horaFim;
-    @JoinColumn(name = "timeVencedor", referencedColumnName = "codigoTime")
-    @ManyToOne(optional = false)
-    private Time timeVencedor;
-    @Column(name = "placarTimeVencedor")
-    private Integer placarTimeVencedor;
-    @Column(name = "placarTimePerdedor")
-    private Integer placarTimePerdedor;
     @Basic(optional = false)
     @Column(name = "winerLower")
     private boolean winerLower;
+    @Column(name = "indice")
+    private Integer indice;
     @Basic(optional = false)
     @Column(name = "ativo")
     private boolean ativo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "partida")
-    private Collection<TimePartida> timePartidaCollection;
+    private List<TimePartida> timePartidaCollection;
     @JoinColumn(name = "codigoGrupo", referencedColumnName = "codigoGrupo")
     @ManyToOne(optional = false)
     private Grupo grupo;
@@ -155,13 +151,21 @@ public class Partida implements Serializable {
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
+   
+	public Integer getIndice() {
+		return indice;
+	}
 
-    @XmlTransient
+	public void setIndice(Integer indice) {
+		this.indice = indice;
+	}
+
+	@XmlTransient
     public Collection<TimePartida> getTimePartidaCollection() {
         return timePartidaCollection;
     }
 
-    public void setTimePartidaCollection(Collection<TimePartida> timePartidaCollection) {
+    public void setTimePartidaCollection(List<TimePartida> timePartidaCollection) {
         this.timePartidaCollection = timePartidaCollection;
     }
 
@@ -181,31 +185,7 @@ public class Partida implements Serializable {
         this.campeonato = campeonato;
     }
     
-    public Time getTimeVencedor() {
-		return timeVencedor;
-	}
-
-	public void setTimeVencedor(Time timeVencedor) {
-		this.timeVencedor = timeVencedor;
-	}
-
-	public Integer getPlacarTimeVencedor() {
-		return placarTimeVencedor;
-	}
-
-	public void setPlacarTimeVencedor(Integer placarTimeVencedor) {
-		this.placarTimeVencedor = placarTimeVencedor;
-	}
-
-	public Integer getPlacarTimePerdedor() {
-		return placarTimePerdedor;
-	}
-
-	public void setPlacarTimePerdedor(Integer placarTimePerdedor) {
-		this.placarTimePerdedor = placarTimePerdedor;
-	}
-
-	public Partida getPartidaFilho() {
+    public Partida getPartidaFilho() {
 		return partidaFilho;
 	}
 

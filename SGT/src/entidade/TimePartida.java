@@ -6,6 +6,7 @@
 package entidade;
 
 import java.io.Serializable;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,12 +37,25 @@ public class TimePartida implements Serializable {
     @Basic(optional = false)
     @Column(name = "codigoTimePartida")
     private Integer codigoTimePartida;
-    @JoinColumn(name = "codigoTime", referencedColumnName = "codigoTime")
+    @JoinColumn(name = "codigoTime1", referencedColumnName = "codigoTime")
     @ManyToOne(optional = false)
-    private Time time;
+    private Time time1;
+    @JoinColumn(name = "codigoTime2", referencedColumnName = "codigoTime")
+    @ManyToOne(optional = false)
+    private Time time2;
     @JoinColumn(name = "codigoPartida", referencedColumnName = "codigoPartida")
     @ManyToOne(optional = false)
     private Partida partida;
+    @JoinColumn(name = "timeVencedor", referencedColumnName = "codigoTime")
+    @ManyToOne(optional = false)
+    private Time timeVencedor;
+    @JoinColumn(name = "timePerdedor", referencedColumnName = "codigoTime")
+    @ManyToOne(optional = false)
+    private Time timePerdedor;
+    @Column(name = "placarTimeVencedor")
+    private Integer placarTimeVencedor;
+    @Column(name = "placarTimePerdedor")
+    private Integer placarTimePerdedor;
 
     public TimePartida() {
     }
@@ -58,20 +72,60 @@ public class TimePartida implements Serializable {
         this.codigoTimePartida = codigoTimePartida;
     }
 
-    public Time getTime() {
-		return time;
-	}
-
-	public void setTime(Time time) {
-		this.time = time;
-	}
-
-	public Partida getPartida() {
+    public Partida getPartida() {
 		return partida;
 	}
 
 	public void setPartida(Partida partida) {
 		this.partida = partida;
+	}
+	
+	public Time getTime1() {
+		return time1;
+	}
+
+	public void setTime1(Time time1) {
+		this.time1 = time1;
+	}
+
+	public Time getTime2() {
+		return time2;
+	}
+
+	public void setTime2(Time time2) {
+		this.time2 = time2;
+	}
+
+	public Time getTimeVencedor() {
+		return timeVencedor;
+	}
+
+	public void setTimeVencedor(Time timeVencedor) {
+		this.timeVencedor = timeVencedor;
+	}
+
+	public Time getTimePerdedor() {
+		return timePerdedor;
+	}
+
+	public void setTimePerdedor(Time timePerdedor) {
+		this.timePerdedor = timePerdedor;
+	}
+
+	public Integer getPlacarTimeVencedor() {
+		return placarTimeVencedor;
+	}
+
+	public void setPlacarTimeVencedor(Integer placarTimeVencedor) {
+		this.placarTimeVencedor = placarTimeVencedor;
+	}
+
+	public Integer getPlacarTimePerdedor() {
+		return placarTimePerdedor;
+	}
+
+	public void setPlacarTimePerdedor(Integer placarTimePerdedor) {
+		this.placarTimePerdedor = placarTimePerdedor;
 	}
 
 	@Override

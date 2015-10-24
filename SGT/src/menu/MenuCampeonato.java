@@ -225,8 +225,7 @@ public class MenuCampeonato extends JPanel {
 		btPartida.setHorizontalAlignment(SwingConstants.LEFT);
 		btPartida.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				zeraSelecao();
-				getIcon(btPartida, true);
+				
 				abreMenuPartida(campSelecionado);
 			}
 		});
@@ -298,7 +297,7 @@ public class MenuCampeonato extends JPanel {
 		btAlterar.setEnabled(true);
 		btDeletar.setEnabled(true);
 		btVisualizar.setEnabled(true);
-		if(campSelecionado.getDataIncio() != null){
+		if(campSelecionado.getDataInicio() != null){
 			btPartida.setEnabled(true);
 		} else{	
 			btPartida.setEnabled(false);
@@ -306,6 +305,8 @@ public class MenuCampeonato extends JPanel {
 	}
 
 	public void abreMenuPartida(Campeonato camp){
+		zeraSelecao();
+		getIcon(btPartida, true);
 		menuMeio.removeAll();
 		CrudPartida c = new CrudPartida(camp, this);
 		menuMeio.add(c);

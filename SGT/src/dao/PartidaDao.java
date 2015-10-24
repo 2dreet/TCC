@@ -7,6 +7,7 @@ import javax.persistence.NoResultException;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 
+import entidade.Campeonato;
 import entidade.Jogador;
 import entidade.Partida;
 import entidade.Pc;
@@ -19,6 +20,20 @@ public class PartidaDao {
 		try {
 			String sql = "SELECT * FROM partida WHERE ativo = true AND cancelada = false AND horaInicio is not null AND codigoCampeonato = '"
 					+ codigoCampeonato + "'";
+			return EntityManagerLocal.getEntityManager()
+					.createNativeQuery(sql, Partida.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
+	public static List<Partida> getPartidasApenas1Time(int codigoCampeonato) {
+		try {
+			String sql = " SELECT * FROM partida p INNER JOIN time_partida tp ON p.codigoPartida = tp.codigoPartida "
+					   + " WHERE p.ativo = true AND p.cancelada = false AND p.codigoCampeonato = '"
+					+ codigoCampeonato + "' AND tp.codigoTime1 is not null AND tp.codigoTime2 is null";
 			return EntityManagerLocal.getEntityManager()
 					.createNativeQuery(sql, Partida.class)
 					.setHint(QueryHints.REFRESH, HintValues.TRUE)
@@ -58,13 +73,74 @@ public class PartidaDao {
 		}
 	}
 	
-	public static List<Partida> getPartidasSoPaiNaoIniciadas(int codigoCampeonato) {
+
+	
+	public static Integer [] getIndicesPartidaParaGerarLowers(int codigoCampeonato) {
 		try {
-			String sql = " SELECT * FROM partida "+ 
- 						 " where codigoPartida not in (SELECT codigoPartidaFilho FROM partida where codigoPartidaFilho is not null)"+
- 						 " AND codigoCampeonato = '"+codigoCampeonato+"'"+
- 						 " AND cancelada <> true" +
-						 " AND horaFim is null;";
+			String sql = " SELECT * FROM partida p INNER join campeonato c on p.codigoCampeonato = c.codigoCampeonato"+
+						 " where p.codigoCampeonato = '"+codigoCampeonato+"' AND c.codigoChave = 1 AND p.winerLower = false"+
+						 " GROUP BY indice ORDER BY indice";
+			List<Partida> lista= EntityManagerLocal.getEntityManager()
+					.createNativeQuery(sql, Partida.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.getResultList();
+			Integer[] indices = new Integer[lista.size()];
+			int i =0;
+			for(Partida partida: lista){
+				indices[i]=partida.getIndice();
+				i++;
+			}
+			return indices;
+			
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
+	public static List<TimePartida> getPartidasPorIndiceParaGerarLowers(int codigoCampeonato, int indice) {
+		try {
+			String sql = " SELECT * FROM time_partida tp INNER JOIN partida p ON p.codigoPartida = tp.codigoPartida"
+					   + " INNER JOIN campeonato c on p.codigoCampeonato = c.codigoCampeonato"
+					   + " WHERE p.ativo = true AND p.cancelada = false AND p.codigoCampeonato = '"+codigoCampeonato+"'"+
+ 						 " AND p.indice = '"+indice+"'" +
+						 " AND tp.timePerdedor is not null"+
+						 " AND c.codigoChave = 1"+
+						 " AND p.winerLower = false;";
+			return EntityManagerLocal.getEntityManager()
+					.createNativeQuery(sql, TimePartida.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
+	public static List<TimePartida> getPartidasPorIndice(int codigoCampeonato, int indice, boolean winerLower) {
+		try {
+			String sql = " SELECT * FROM time_partida tp INNER JOIN partida p ON p.codigoPartida = tp.codigoPartida"
+					   + " INNER JOIN campeonato c on p.codigoCampeonato = c.codigoCampeonato"
+					   + " WHERE p.ativo = true AND p.cancelada = false AND p.codigoCampeonato = '"+codigoCampeonato+"'"+
+ 						 " AND p.indice = '"+indice+"'" +
+						 " AND tp.timePerdedor is not null"+
+						 " AND c.codigoChave = 1"+
+						 " AND p.winerLower = '"+winerLower+"';";
+			return EntityManagerLocal.getEntityManager()
+					.createNativeQuery(sql, TimePartida.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
+	public static List<Partida> getPartidasNaoFinalizadasIniciadasMataMata(int codigoCampeonato) {
+		try {
+			String sql = " SELECT * FROM partida inner join campeonato c on p.codigoCampeonato = c.codigoCampeonato"+ 
+ 						 " where c.codigoChave = 1"+
+ 						 " AND c.codigoCampeonato = '"+codigoCampeonato+"'"+
+ 						 " AND p.cancelada <> true" +
+						 " AND p.horaFim is null"+
+						 " AND p.winerLower = false;";
 			return EntityManagerLocal.getEntityManager()
 					.createNativeQuery(sql, Partida.class)
 					.setHint(QueryHints.REFRESH, HintValues.TRUE)
@@ -74,8 +150,7 @@ public class PartidaDao {
 		}
 	}
 	
-	public static TimePartida getTimePartida(int codigoCampeonato,
-			int codigoPartida, String ordem) {
+	public static TimePartida getTimePartida(int codigoCampeonato,int codigoPartida) {
 		try {
 			String sql = " SELECT * FROM time_partida tp INNER JOIN partida p ON p.codigoPartida = tp.codigoPartida"
 					+ " WHERE p.ativo = true AND p.cancelada = false AND p.codigoCampeonato = '"
@@ -83,9 +158,7 @@ public class PartidaDao {
 					+ "'"
 					+ " AND p.codigoPartida = '"
 					+ codigoPartida
-					+ "'"
-					+ " ORDER BY tp.codigoTimePartida "
-					+ ordem + " LIMIT 1; ";
+					+ "'";
 			return (TimePartida) EntityManagerLocal.getEntityManager()
 					.createNativeQuery(sql, TimePartida.class)
 					.setHint(QueryHints.REFRESH, HintValues.TRUE)
@@ -95,8 +168,7 @@ public class PartidaDao {
 		}
 	}
 	
-	public static TimePartida getTimePartidaTimeNull(int codigoCampeonato,
-			int codigoPartida, String ordem) {
+	public static TimePartida getTimePartidaTime1Null(int codigoCampeonato, int codigoPartida) {
 		try {
 			String sql = " SELECT * FROM time_partida tp INNER JOIN partida p ON p.codigoPartida = tp.codigoPartida"
 					+ " WHERE p.ativo = true AND p.cancelada = false AND p.codigoCampeonato = '"
@@ -105,7 +177,26 @@ public class PartidaDao {
 					+ " AND p.codigoPartida = '"
 					+ codigoPartida
 					+ "'"
-					+ " AND tp.codigoTime is null LIMIT 1; ";
+					+ " AND tp.codigoTime1 is null LIMIT 1; ";
+			return (TimePartida) EntityManagerLocal.getEntityManager()
+					.createNativeQuery(sql, TimePartida.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.setMaxResults(1).getSingleResult();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
+	public static TimePartida getTimePartidaTime2Null(int codigoCampeonato, int codigoPartida) {
+		try {
+			String sql = " SELECT * FROM time_partida tp INNER JOIN partida p ON p.codigoPartida = tp.codigoPartida"
+					+ " WHERE p.ativo = true AND p.cancelada = false AND p.codigoCampeonato = '"
+					+ codigoCampeonato
+					+ "'"
+					+ " AND p.codigoPartida = '"
+					+ codigoPartida
+					+ "'"
+					+ " AND tp.codigoTime2 is null LIMIT 1; ";
 			return (TimePartida) EntityManagerLocal.getEntityManager()
 					.createNativeQuery(sql, TimePartida.class)
 					.setHint(QueryHints.REFRESH, HintValues.TRUE)
@@ -173,6 +264,22 @@ public class PartidaDao {
 					.createNativeQuery(sql, Partida.class)
 					.setHint(QueryHints.REFRESH, HintValues.TRUE)
 					.getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
+	public static Partida getProximaPartidaPartida(Campeonato campeonato){
+		try {
+			String sql = " SELECT * FROM time_partida tp INNER JOIN partida p ON p.codigoPartida = tp.codigoPartida"
+					   + " INNER JOIN campeonato c on p.codigoCampeonato = c.codigoCampeonato"
+					   + " WHERE p.ativo = true AND p.cancelada = false AND p.codigoCampeonato = '"+campeonato.getCodigoCampeonato()+"'"+
+						 " AND p.horaFim is null"+
+						 " AND c.codigoChave = '"+campeonato.getChave().getCodigoChave()+"'"+
+						 "  ORDER BY p.indice, p.codigoPartidaFilho, p.codigoPartida";
+			return (Partida) EntityManagerLocal.getEntityManager().createNativeQuery(sql, Partida.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.setMaxResults(1).getSingleResult();
 		} catch (NoResultException ex) {
 			return null;
 		}

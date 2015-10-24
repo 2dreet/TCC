@@ -312,7 +312,7 @@ public class CrudCampeonato extends JPanel {
 				}
 			});
 		} else {
-			if (campeonatoSelecionado.getDataIncio() == null) {
+			if (campeonatoSelecionado.getDataInicio() == null) {
 				JButton btIniciar = new JButton("Iniciar Campeonato");
 				btIniciar.setBounds(225, 110, 210, 35);
 				btIniciar.setFont(UtilitarioTela.getFont(14));
@@ -446,7 +446,7 @@ public class CrudCampeonato extends JPanel {
 		scroll.setBackground(Color.red);
 		meio.add(scroll);
 
-		if (modoCrud == ParametroCrud.getModoVisualizar()) {
+		if (modoCrud == ParametroCrud.getModoVisualizar() && campeonatoSelecionado.getDataInicio() == null) {
 			JButton btAddTime = new JButton("Adicionar Time");
 			btAddTime.setBounds(80, meio.getHeight() - 70, 220, 35);
 			btAddTime.setFont(UtilitarioTela.getFont(14));
@@ -608,9 +608,10 @@ public class CrudCampeonato extends JPanel {
 	
 	public void iniciarCampeonato(){
 		EntityManagerLocal.begin();
-		campeonatoSelecionado.setDataIncio(new Date());
+		campeonatoSelecionado.setDataInicio(new Date());
 		EntityManagerLocal.merge(campeonatoSelecionado);
 		EntityManagerLocal.commit();
+		menuPai.abreMenuPartida(campeonatoSelecionado);
 	}
 	
 	public boolean validarCampeonato(){

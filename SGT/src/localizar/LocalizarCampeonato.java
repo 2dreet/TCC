@@ -260,7 +260,7 @@ public class LocalizarCampeonato extends JPanel {
 						String.valueOf(c.getCodigoCampeonato()),
 						c.getDescricao(),
 						MascaraCrud.macaraDataBanco(c.getDataCadastro()),
-						MascaraCrud.macaraDataBanco(c.getDataIncio()),
+						MascaraCrud.macaraDataBanco(c.getDataInicio()),
 						c.getModalidade().getDescricao()});
 
 			}

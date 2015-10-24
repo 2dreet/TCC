@@ -45,6 +45,7 @@ import dao.PerifericoDao;
 import tela.HomeFuncionario;
 import utilitario.BordaSombreada;
 import utilitario.Computador;
+import utilitario.GerenciadorPartida;
 import utilitario.ParametroCrud;
 import utilitario.Parametros;
 import utilitario.UtilitarioImagem;
@@ -73,14 +74,10 @@ public class DialogCrudPartida {
 	private JPanel meio;
 	private JPanel meioTime;
 	private JFrame pai;
-	
-	private TimePartida time1;
-	private TimePartida time2;
-	private Time timePerdedor;
-	private Time timeVencedor;
-	
+
+	private TimePartida timePartida;
 	private List<Container> pcs;
-	
+
 	private List<Jogador> jogadores;
 
 	private JPanel jpPc0;
@@ -94,10 +91,10 @@ public class DialogCrudPartida {
 	private JPanel jpPc8;
 	private JPanel jpPc9;
 	private JPanel header;
-	
+
 	private JButton confirmar;
-	private JButton btPcPartida; 
-	
+	private JButton btPcPartida;
+
 	public DialogCrudPartida(Partida partida) {
 		JFrame jf = new JFrame();
 		jf.setSize(455, 555);
@@ -111,7 +108,9 @@ public class DialogCrudPartida {
 		pcs = new ArrayList<Container>();
 		jogadores = new ArrayList<Jogador>();
 		pai = jf;
-		setTimes();
+		timePartida = PartidaDao.getTimePartida(partidaSelecionado
+				.getCampeonato().getCodigoCampeonato(), partidaSelecionado
+				.getCodigoPartida());
 
 		jf.setUndecorated(true);
 		jf.getContentPane().setLayout(null);
@@ -143,14 +142,14 @@ public class DialogCrudPartida {
 		} else {
 			partidaIniciada = true;
 		}
-		
+
 		String textoHeader = "";
 		if (partidaIniciada) {
 			textoHeader = "Partida Iniciada!";
 		} else {
 			textoHeader = "Partida não Iniciada!";
 		}
-		
+
 		JLabel lbHeader = new JLabel(textoHeader);
 		lbHeader.setHorizontalAlignment(SwingConstants.CENTER);
 		lbHeader.setSize(header.getSize().width - 30, 30);
@@ -189,7 +188,7 @@ public class DialogCrudPartida {
 		meioTime.setBorder(new BordaSombreada(new Color(46, 49, 56), new Color(
 				102, 102, 102)));
 		meio.add(meioTime);
-		
+
 		JPanel meioT1 = new JPanel();
 		meioT1.setSize(430, 70);
 		meioT1.setLayout(null);
@@ -199,18 +198,19 @@ public class DialogCrudPartida {
 				102, 102, 102)));
 		meio.add(meioT1);
 
-		JLabel lbLg = new JLabel(UtilitarioImagem.converterImage(time1.getTime().getLogo()));
+		JLabel lbLg = new JLabel(UtilitarioImagem.converterImage(timePartida
+				.getTime1().getLogo()));
 		lbLg.setBounds(70, 10, 50, 50);
 		lbLg.setFont(UtilitarioTela.getFont(14));
 		lbLg.setForeground(UtilitarioTela.getFontColorPadrao());
 		meioT1.add(lbLg);
-		
-		JLabel lbNome = new JLabel(time1.getTime().getDescricao());
+
+		JLabel lbNome = new JLabel(timePartida.getTime1().getDescricao());
 		lbNome.setBounds(130, 10, 250, 50);
 		lbNome.setFont(UtilitarioTela.getFont(14));
 		lbNome.setForeground(UtilitarioTela.getFontColorPadrao());
 		meioT1.add(lbNome);
-		
+
 		txtPlacar = new JTextField();
 		txtPlacar.setColumns(100);
 		txtPlacar.setBounds(10, 10, 50, 50);
@@ -245,14 +245,15 @@ public class DialogCrudPartida {
 		meioT2.setBorder(new BordaSombreada(new Color(46, 49, 56), new Color(
 				102, 102, 102)));
 		meio.add(meioT2);
-		
-		JLabel lbLg2 = new JLabel(UtilitarioImagem.converterImage(time2.getTime().getLogo()));
+
+		JLabel lbLg2 = new JLabel(UtilitarioImagem.converterImage(timePartida
+				.getTime2().getLogo()));
 		lbLg2.setBounds(70, 10, 50, 50);
 		lbLg2.setFont(UtilitarioTela.getFont(14));
 		lbLg2.setForeground(UtilitarioTela.getFontColorPadrao());
 		meioT2.add(lbLg2);
-		
-		JLabel lbNome2 = new JLabel(time2.getTime().getDescricao());
+
+		JLabel lbNome2 = new JLabel(timePartida.getTime2().getDescricao());
 		lbNome2.setBounds(130, 10, 300, 50);
 		lbNome2.setFont(UtilitarioTela.getFont(14));
 		lbNome2.setForeground(UtilitarioTela.getFontColorPadrao());
@@ -292,7 +293,7 @@ public class DialogCrudPartida {
 		meio.add(msg);
 
 		String texto = "";
-		
+
 		if (partidaIniciada) {
 			texto = "Terminar";
 		} else {
@@ -312,7 +313,7 @@ public class DialogCrudPartida {
 				}
 			}
 		});
-		
+
 		texto = "";
 		if (partidaIniciada) {
 			texto = "Cancelar Partida";
@@ -327,9 +328,9 @@ public class DialogCrudPartida {
 		btPcPartida.setFocusPainted(false);
 		btPcPartida.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(partidaIniciada){
-					
-				}else{
+				if (partidaIniciada) {
+
+				} else {
 					DialogPcPartida lp = new DialogPcPartida();
 					lp.localizarPc(jf.getContentPane(), partidaSelecionado);
 				}
@@ -355,8 +356,8 @@ public class DialogCrudPartida {
 			lp.localizarPc(jf.getContentPane(), partidaSelecionado);
 		}
 	}
-	
-	public void atualiarPlacar(){
+
+	public void atualiarPlacar() {
 		if (partidaIniciada) {
 			txtPlacar.setEditable(true);
 			txtPlacar2.setEditable(true);
@@ -474,7 +475,7 @@ public class DialogCrudPartida {
 			public void run() {
 				try {
 					while (true) {
-						
+
 						meio.repaint();
 						List<PcPartida> listaPc = PcDao
 								.getListaPcPartida(partidaSelecionado
@@ -489,14 +490,17 @@ public class DialogCrudPartida {
 							JLabel lbcJogador;
 							JLabel lbcIp;
 							if (jogador == null) {
-								lbPc = new JLabel(new ImageIcon(Computador.class.getResource("/imagem/pcoff.png")));
-								
+								lbPc = new JLabel(
+										new ImageIcon(
+												Computador.class
+														.getResource("/imagem/pcoff.png")));
+
 								lbcJogador = new JLabel("");
 								lbcJogador.setFont(UtilitarioTela.getFont(12));
 								lbcJogador.setForeground(UtilitarioTela
 										.getFontColorPadrao());
 								lbcJogador.setBounds(40, 0, 160, 15);
-								
+
 								lbcIp = new JLabel("");
 								lbcIp.setFont(UtilitarioTela.getFont(12));
 								lbcIp.setForeground(UtilitarioTela
@@ -504,27 +508,30 @@ public class DialogCrudPartida {
 								lbcIp.setBounds(40, 16, 160, 15);
 								jogadores = new ArrayList<Jogador>();
 							} else {
-								if(jogadores.size() < 10){
+								if (jogadores.size() < 10) {
 									jogadores.add(jogador);
 								}
-								lbPc = new JLabel(new ImageIcon(Computador.class.getResource("/imagem/pcon.png")));
-								
+								lbPc = new JLabel(
+										new ImageIcon(
+												Computador.class
+														.getResource("/imagem/pcon.png")));
+
 								lbcJogador = new JLabel(""
-										+ jogador.getUsuario().getCodigoUsuario()
-										+ " - " + jogador.getUsuario().getNome());
+										+ jogador.getUsuario()
+												.getCodigoUsuario() + " - "
+										+ jogador.getUsuario().getNome());
 								lbcJogador.setFont(UtilitarioTela.getFont(12));
 								lbcJogador.setForeground(UtilitarioTela
 										.getFontColorPadrao());
 								lbcJogador.setBounds(40, 0, 160, 15);
-								
+
 								lbcIp = new JLabel(""
 										+ listaPc.get(i).getPc().getIp());
 								lbcIp.setFont(UtilitarioTela.getFont(12));
 								lbcIp.setForeground(UtilitarioTela
 										.getFontColorPadrao());
 								lbcIp.setBounds(40, 16, 160, 15);
-								
-								
+
 							}
 							lbPc.setBounds(0, 0, 35, 35);
 							parent.add(lbPc);
@@ -550,15 +557,13 @@ public class DialogCrudPartida {
 		boolean confirmado = false;
 		if (partidaIniciada) {
 			if (txtPlacar.getText() == null || txtPlacar.getText().isEmpty()) {
-				Menssage.setMenssage("Erro",
-						"Placar é Obrigatório!",
+				Menssage.setMenssage("Erro", "Placar é Obrigatório!",
 						ParametroCrud.getModoCrudDeletar(), meio);
 				txtPlacar.requestFocus();
 				return false;
 			} else if (txtPlacar2.getText() == null
 					|| txtPlacar2.getText().isEmpty()) {
-				Menssage.setMenssage("Erro",
-						"Placar é Obrigatório!",
+				Menssage.setMenssage("Erro", "Placar é Obrigatório!",
 						ParametroCrud.getModoCrudDeletar(), meio);
 				txtPlacar2.requestFocus();
 				return false;
@@ -581,47 +586,70 @@ public class DialogCrudPartida {
 						Integer.parseInt(txtPlacar2.getText()));
 				partidaSelecionado.setAtivo(false);
 				partidaSelecionado.setHoraFim(new Date());
-				if (partidaSelecionado.getCampeonato().getChave().getCodigoChave() == 1) {
+				if (partidaSelecionado.getCampeonato().getChave()
+						.getCodigoChave() == 1) {
 					if (partidaSelecionado.getPartidaFilho() != null) {
-						TimePartida time = PartidaDao.getTimePartidaTimeNull(
+						TimePartida time = PartidaDao.getTimePartidaTime1Null(
 								partidaSelecionado.getCampeonato()
 										.getCodigoCampeonato(),
-								partidaSelecionado.getCodigoPartida(), "ASC");
-						time.setTime(timeVencedor);
+								partidaSelecionado.getPartidaFilho().getCodigoPartida());
+
+						if (time == null) {
+							time = PartidaDao.getTimePartidaTime2Null(
+									partidaSelecionado.getCampeonato()
+											.getCodigoCampeonato(),
+											partidaSelecionado.getPartidaFilho().getCodigoPartida());
+							time.setTime2(timePartida.getTimeVencedor());
+						} else {
+							time.setTime1(timePartida.getTimeVencedor());
+						}
+
 						EntityManagerLocal.begin();
 						EntityManagerLocal.merge(time);
 						EntityManagerLocal.commit();
 						EntityManagerLocal.clear();
 					}
-				} else if(partidaSelecionado.getCampeonato().getChave().getCodigoChave() == 2){
+				} else if (partidaSelecionado.getCampeonato().getChave()
+						.getCodigoChave() == 2) {
 					if (partidaSelecionado.getPartidaFilho() != null) {
-						TimePartida time = PartidaDao.getTimePartidaTimeNull(
+						TimePartida time = PartidaDao.getTimePartidaTime1Null(
 								partidaSelecionado.getCampeonato()
 										.getCodigoCampeonato(),
-								partidaSelecionado.getCodigoPartida(), "ASC");
-						time.setTime(timeVencedor);
+										partidaSelecionado.getPartidaFilho().getCodigoPartida());
+
+						if (time == null) {
+							time = PartidaDao.getTimePartidaTime2Null(
+									partidaSelecionado.getCampeonato()
+											.getCodigoCampeonato(),
+											partidaSelecionado.getPartidaFilho().getCodigoPartida());
+							time.setTime2(timePartida.getTimeVencedor());
+						} else {
+							time.setTime1(timePartida.getTimeVencedor());
+						}
+
 						EntityManagerLocal.begin();
 						EntityManagerLocal.merge(time);
 						EntityManagerLocal.commit();
 						EntityManagerLocal.clear();
 					}
-					if(iniciarWinerLower()){
+					if (iniciarWinerLower()) {
 						
 					}
 				}
 
 				EntityManagerLocal.begin();
 				EntityManagerLocal.merge(partidaSelecionado);
+				EntityManagerLocal.merge(timePartida);
 				EntityManagerLocal.commit();
 				EntityManagerLocal.clear();
 			}
 		} else {
-			if(jogadores.size() == 10){
-				for(Jogador jogador : jogadores){
+			if (jogadores.size() == 10) {
+				for (Jogador jogador : jogadores) {
 					JogadorPartida jp = new JogadorPartida();
 					jp.setJogador(jogador);
 					jp.setPartida(partidaSelecionado);
-					
+
 					partidaSelecionado.setHoraInicio(new Date());
 					EntityManagerLocal.begin();
 					EntityManagerLocal.merge(jp);
@@ -630,25 +658,29 @@ public class DialogCrudPartida {
 					EntityManagerLocal.clear();
 					atualizarTela();
 				}
-			}else{
-				Menssage.setMenssage("Não Poder Iniciar",
-						"Não pode Inicar Partida Pois\nPois falta Jogadores logado!\nJogadores Logados "+jogadores.size(),
+			} else {
+				Menssage.setMenssage(
+						"Não Poder Iniciar",
+						"Não pode Inicar Partida Pois\nPois falta Jogadores logado!\nJogadores Logados "
+								+ jogadores.size(),
 						ParametroCrud.getModoCrudDeletar(), meio);
 			}
-			
+
 		}
 		return confirmado;
 	}
-	
-	public boolean iniciarWinerLower(){
-		List<Partida> auxLista = PartidaDao.getPartidasSoPaiNaoIniciadas(partidaSelecionado.getCampeonato().getCodigoCampeonato());
-		if(auxLista != null && auxLista.size() > 0){
+
+	public boolean iniciarWinerLower() {
+		List<Partida> auxLista = PartidaDao
+				.getPartidasNaoFinalizadasIniciadasMataMata(partidaSelecionado
+						.getCampeonato().getCodigoCampeonato());
+		if (auxLista != null && auxLista.size() > 0) {
 			return false;
 		}
 		return true;
 	}
 
-	public void atualizarTela(){
+	public void atualizarTela() {
 		atualiarPlacar();
 		partidaIniciada = true;
 		header.removeAll();
@@ -659,11 +691,27 @@ public class DialogCrudPartida {
 		lbHeader.setForeground(UtilitarioTela.getFontColorCrud());
 		lbHeader.setBorder(new BordaSombreada(false, true, false, false));
 		header.add(lbHeader);
+
+		JButton btFechar = new JButton("");
+		btFechar.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/cancelBlack.png")));
+		btFechar.setSize(30, 30);
+		btFechar.setLocation(header.getSize().width - 30, 0);
+		btFechar.setBackground(UtilitarioTela.getFontColorPadrao());
+		btFechar.setFocusPainted(false);
+		btFechar.setBorder(new BordaSombreada(false, true, false, false));
+		btFechar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				pai.dispose();
+			}
+		});
+		header.add(btFechar);
+
 		header.repaint();
 		btPcPartida.setText("Cancelar Partida");
 		confirmar.setText("Terminar");
 	}
-	
+
 	public boolean getConfirmado() {
 		return this.confirmado;
 	}
@@ -678,34 +726,16 @@ public class DialogCrudPartida {
 	public void getTimeVencedor(int valor1, int valor2) {
 
 		if (valor1 > valor2) {
-			partidaSelecionado.setPlacarTimeVencedor(valor1);
-			partidaSelecionado.setPlacarTimePerdedor(valor2);
-			timeVencedor = time1.getTime();
-			timePerdedor = time2.getTime();
+			timePartida.setPlacarTimeVencedor(valor1);
+			timePartida.setPlacarTimePerdedor(valor2);
+			timePartida.setTimeVencedor(timePartida.getTime1());
+			timePartida.setTimePerdedor(timePartida.getTime2());
 		} else {
-			partidaSelecionado.setPlacarTimeVencedor(valor2);
-			partidaSelecionado.setPlacarTimePerdedor(valor1);
-			timeVencedor = time2.getTime();
-			timePerdedor = time1.getTime();
+			timePartida.setPlacarTimeVencedor(valor2);
+			timePartida.setPlacarTimePerdedor(valor1);
+			timePartida.setTimeVencedor(timePartida.getTime2());
+			timePartida.setTimePerdedor(timePartida.getTime1());
 		}
-	}
-
-	public void setTimes() {
-		if (PartidaDao.getTimePartida(partidaSelecionado.getCampeonato()
-				.getCodigoCampeonato(), partidaSelecionado.getCodigoPartida(),
-				"ASC") != null) {
-			time1 = PartidaDao.getTimePartida(partidaSelecionado
-					.getCampeonato().getCodigoCampeonato(), partidaSelecionado
-					.getCodigoPartida(), "ASC");
-		}
-		if (PartidaDao.getTimePartida(partidaSelecionado.getCampeonato()
-				.getCodigoCampeonato(), partidaSelecionado.getCodigoPartida(),
-				"DESC") != null) {
-			time2 = PartidaDao.getTimePartida(partidaSelecionado
-					.getCampeonato().getCodigoCampeonato(), partidaSelecionado
-					.getCodigoPartida(), "DESC");
-		}
-
 	}
 
 	public void pcOff(Container parent) {
@@ -732,6 +762,7 @@ public class DialogCrudPartida {
 	}
 
 	public static void main(String[] args) {
-		DialogCrudPartida dp = new DialogCrudPartida(PartidaDao.getPartida(86));
+		//GerenciadorPartida.gerarLowers(CampeonatoDao.getCampeonato(1));
+		
 	}
 }
