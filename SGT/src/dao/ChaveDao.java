@@ -32,6 +32,17 @@ public class ChaveDao {
 		}
 	}
 	
+	public static Chave getChave(int codigoChave){
+		try {
+			String sql = "SELECT * FROM chave where codigoChave = '"+codigoChave+"' and ativo = true";
+			return (Chave) EntityManagerLocal.getEntityManager().createNativeQuery(sql, Chave.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.setMaxResults(1).getSingleResult();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
 	public static Object[] getVetorChave(){
 		List<Chave> listaChave = getListaChave();
 		Object [] listaAux;

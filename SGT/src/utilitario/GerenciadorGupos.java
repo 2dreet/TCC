@@ -68,7 +68,7 @@ public class GerenciadorGupos {
 						gerarPartidaGrupo(listaGrupoTime.get(0).getTime(), listaGrupoTime.get(2).getTime(), grupo, indice);
 						indice++;
 						gerarPartidaGrupo(listaGrupoTime.get(1).getTime(), listaGrupoTime.get(2).getTime(), grupo, indice);
-					} else if(listaGrupoTime.size() == 3){
+					} else if(listaGrupoTime.size() == 4){
 						gerarPartidaGrupo(listaGrupoTime.get(0).getTime(), listaGrupoTime.get(1).getTime(), grupo, indice);
 						indice++;
 						gerarPartidaGrupo(listaGrupoTime.get(0).getTime(), listaGrupoTime.get(2).getTime(), grupo, indice);

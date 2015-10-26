@@ -43,6 +43,7 @@ import dao.MarcaDao;
 import dao.PartidaDao;
 import dao.PcDao;
 import dao.PerifericoDao;
+import dao.TimeDao;
 import tela.HomeFuncionario;
 import utilitario.BordaSombreada;
 import utilitario.Computador;
@@ -62,6 +63,7 @@ import entidade.Pc;
 import entidade.PcPartida;
 import entidade.Periferico;
 import entidade.Time;
+import entidade.TimeGrupo;
 import entidade.TimePartida;
 
 public class DialogCrudPartida {
@@ -593,6 +595,8 @@ public class DialogCrudPartida {
 			confirmado = MenssageConfirmacao.isConfirmado();
 
 			if (confirmado) {
+				TimeGrupo timeGrupo = null;
+				
 				getTimeVencedor(Integer.parseInt(txtPlacar.getText()),
 						Integer.parseInt(txtPlacar2.getText()));
 				partidaSelecionado.setAtivo(false);
@@ -624,9 +628,20 @@ public class DialogCrudPartida {
 						EntityManagerLocal.commit();
 						EntityManagerLocal.clear();
 					}
+				} else if(partidaSelecionado.getCampeonato().getChave()
+						.getCodigoChave() == 3){
+						timeGrupo = TimeDao.getTimeGrupo(timePartida.getTimeVencedor().getCodigoTime(), partidaSelecionado.getCampeonato().getCodigoCampeonato());
+				}
+				EntityManagerLocal.begin();
+				
+				if(timeGrupo != null){
+					if(timeGrupo.getPontuacao() == null){
+						timeGrupo.setPontuacao(0);
+					}
+					timeGrupo.setPontuacao(timeGrupo.getPontuacao() + 1);
+					EntityManagerLocal.merge(timeGrupo);
 				}
 				
-				EntityManagerLocal.begin();
 				EntityManagerLocal.merge(partidaSelecionado);
 				EntityManagerLocal.merge(timePartida);
 				EntityManagerLocal.commit();
@@ -662,9 +677,6 @@ public class DialogCrudPartida {
 	}
 
 	
-	
-	
-
 	public void atualizarTela() {
 		atualiarPlacar();
 		partidaIniciada = true;

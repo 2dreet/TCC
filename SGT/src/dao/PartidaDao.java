@@ -185,6 +185,25 @@ public class PartidaDao {
 			return null;
 		}
 	}
+	
+	public static List<Partida> getPartidasWinnerLower(
+			int codigoCampeonato) {
+		try {
+			String sql = " SELECT * FROM partida p inner join campeonato c on p.codigoCampeonato = c.codigoCampeonato"
+					+ " where c.codigoChave = 2"
+					+ " AND c.codigoCampeonato = '"
+					+ codigoCampeonato
+					+ "'"
+					+ " AND p.cancelada <> true"
+					+ " AND p.winerLower = true;";
+			return EntityManagerLocal.getEntityManager()
+					.createNativeQuery(sql, Partida.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
 
 	public static List<Partida> getPartidasNaoFinalizadasIniciadasGrupo(
 			int codigoCampeonato) {

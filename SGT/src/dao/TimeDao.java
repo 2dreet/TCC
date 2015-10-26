@@ -8,6 +8,7 @@ import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 
 import entidade.Time;
+import entidade.TimeGrupo;
 
 
 
@@ -78,6 +79,18 @@ public class TimeDao {
 			String sql = "SELECT * FROM time "
 					+ " where descricao = '"+nome+"' AND ativo = true";
 			return (Time) EntityManagerLocal.getEntityManager().createNativeQuery(sql, Time.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.setMaxResults(1).getSingleResult();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
+	public static TimeGrupo getTimeGrupo(int codigoTime, int codigoCampeonato){
+		try {
+			String sql = "SELECT * FROM time_grupo tg INNER JOIN grupo g ON tg.codigoGrupo = g.codigoGrupo"
+					+ " where tg.codigoTime = '"+codigoTime+"' AND g.codigoCampeonato = '"+codigoCampeonato+"' AND tg.ativo = true";
+			return (TimeGrupo) EntityManagerLocal.getEntityManager().createNativeQuery(sql, TimeGrupo.class)
 					.setHint(QueryHints.REFRESH, HintValues.TRUE)
 					.setMaxResults(1).getSingleResult();
 		} catch (NoResultException ex) {

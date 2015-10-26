@@ -7,11 +7,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import javax.swing.JPanel;
+
 import componente.Menssage;
 import dao.CampeonatoTimeDao;
 import dao.EntityManagerLocal;
 import dao.PartidaDao;
 import dao.TimeDao;
+import dialog.DialogLocalizarNovaChave;
 import entidade.Campeonato;
 import entidade.CampeonatoTime;
 import entidade.Grupo;
@@ -46,7 +49,13 @@ public class GerenciadorPartida {
 		}
 	}
 
-	public static boolean adicionarPatidasDeGrupo(Campeonato campeonato) {
+	public static boolean adicionarPatidasDeGrupo(Campeonato campeonato, JPanel pai) {
+		
+		DialogLocalizarNovaChave dialog = new DialogLocalizarNovaChave();
+		dialog.localizarChave(pai, campeonato);
+		if(dialog.isSelecionado() == null){
+			return adicionarPatidasDeGrupo(campeonato, pai);
+		}
 		camp = campeonato;
 		try {
 			
@@ -182,6 +191,7 @@ public class GerenciadorPartida {
 					partida.setAtivo(true);
 					partida.setCampeonato(camp);
 					partida.setCancelada(false);
+					partida.setWinerLower(false);
 					partida.setIndice(partidaFinalLower.getIndice() + 1);
 					EntityManagerLocal.persist(partida);
 

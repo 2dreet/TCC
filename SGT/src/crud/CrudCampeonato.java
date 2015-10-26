@@ -288,7 +288,7 @@ public class CrudCampeonato extends JPanel {
 				return false;
 			}
 			
-			if(campeonatoSelecionado.getDataInicio() != null){
+			if(campeonatoSelecionado != null && campeonatoSelecionado.getDataInicio() != null){
 				Menssage.setMenssage("Campeonato Iniciado",
 						"Campeonato Iniciado não pode ser Deletado",
 						ParametroCrud.getModoCrudDeletar(),
@@ -320,7 +320,7 @@ public class CrudCampeonato extends JPanel {
 				}
 			});
 		} else {
-			if (campeonatoSelecionado.getDataInicio() == null) {
+			if (campeonatoSelecionado != null && campeonatoSelecionado.getDataInicio() == null) {
 				JButton btIniciar = new JButton("Iniciar Campeonato");
 				btIniciar.setBounds(225, 110, 210, 35);
 				btIniciar.setFont(UtilitarioTela.getFont(14));
@@ -453,10 +453,9 @@ public class CrudCampeonato extends JPanel {
 		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scroll = new JScrollPane(tabela);
 		scroll.setBounds(5, linha, 640, 250);
-		scroll.setBackground(Color.red);
 		meio.add(scroll);
 
-		if (modoCrud == ParametroCrud.getModoVisualizar() && campeonatoSelecionado.getDataInicio() == null) {
+		if (modoCrud == ParametroCrud.getModoVisualizar() && campeonatoSelecionado != null && campeonatoSelecionado.getDataInicio() == null) {
 			JButton btAddTime = new JButton("Adicionar Time");
 			btAddTime.setBounds(80, meio.getHeight() - 70, 220, 35);
 			btAddTime.setFont(UtilitarioTela.getFont(14));
