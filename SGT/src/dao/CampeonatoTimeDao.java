@@ -49,9 +49,9 @@ public class CampeonatoTimeDao {
 	
 	public static List<Time> getListaCampeonatoListaTimeSemGrupo(int codigoCampeonato){
 		try{
-			String sql = "SELECT t.* FROM campeonato_time ct INNER JOIN time t"
+			String sql = "SELECT * FROM campeonato_time ct INNER JOIN time t"
 					+ "	ON ct.codigoTime = t.codigoTime "
-					+ "  where codigoCampeonato = '"+codigoCampeonato+"' AND ativo = true AND codigoTime not in(SELECT codigoTime FROM time_grupo);";
+					+ "  where ct.codigoCampeonato = '"+codigoCampeonato+"' AND t.ativo = true AND ct.codigoTime not in(SELECT codigoTime FROM time_grupo);";
 			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Time.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
 		}catch(Exception e){
 			e.printStackTrace();

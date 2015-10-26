@@ -222,8 +222,9 @@ public class DialogPcPartida {
 									ParametroCrud.getModoCrudDeletar(), meio);
 					confirmado = MenssageConfirmacao.isConfirmado();
 					if (confirmado) {
+						PcPartida pcPartida = PcDao.getPcPartida(pcSelecionado.getCodigoPC(), partidaSelecionado.getCodigoPartida());
 						EntityManagerLocal.begin();
-						EntityManagerLocal.delete(pcSelecionado);
+						EntityManagerLocal.delete(pcPartida);
 						EntityManagerLocal.commit();
 						EntityManagerLocal.clear();
 					}

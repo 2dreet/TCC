@@ -75,7 +75,7 @@ public class DialogGrupoSelectTime {
 	
 	
 	public DialogGrupoSelectTime(){
-		//getGrupoSelectTime(null, null, null, 1, 5);
+	
 	}
 	
 	public void getGrupoSelectTime(Grupo grupoSelecionado, Campeonato campeonatoSelecionado, JFrame painelPai, int grupo, int totalGrupo){
@@ -85,7 +85,7 @@ public class DialogGrupoSelectTime {
 		JDialog dialog = new JDialog(Parametros.getPai(), true);
 		dialog.setUndecorated(true);
 		dialog.getContentPane().setLayout(null);
-		dialog.setSize(655, 342);
+		dialog.setSize(675, 352);
 		dialog.getContentPane().setBackground(new Color(232, 234, 239));
 		dialog.setLocationRelativeTo(painelPai);
 		
@@ -99,10 +99,9 @@ public class DialogGrupoSelectTime {
 		panel.requestFocusInWindow();
 		
 		JPanel header = new JPanel();
-		header.setSize(651, 30);
+		header.setSize(671, 30);
 		header.setLayout(null);
 		header.setLocation(2, 2);
-		//header.setBackground(UtilitarioTela.getColorCrud(modoCrud));
 		header.setBorder(null);
 		panel.add(header);
 		
@@ -110,18 +109,17 @@ public class DialogGrupoSelectTime {
 		
 		JLabel lbHeader = new JLabel(textoHeader);
 		lbHeader.setHorizontalAlignment(SwingConstants.CENTER);
-		lbHeader.setBounds(0, 0, 651, 30);
+		lbHeader.setBounds(0, 0, 671, 30);
 		lbHeader.setFont(UtilitarioTela.getFont(14));
 		lbHeader.setForeground(UtilitarioTela.getFontColorCrud());
 		lbHeader.setBorder(new BordaSombreada(false, true, false, false));
 		header.add(lbHeader);
 		
 		meio = new JPanel();
-		meio.setSize(651, 310);
+		meio.setSize(671, 320);
 		meio.setLayout(null);
 		meio.setLocation(2, 30);
 		meio.setBackground(new Color(232, 234, 239));
-//		meio.setBackground(Color.red);
 		panel.add(meio);
 		
 		tabela = new JTable();
@@ -151,39 +149,43 @@ public class DialogGrupoSelectTime {
 		tabela.setFont(UtilitarioTela.getFont(14));
 		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scroll = new JScrollPane(tabela);
-		scroll.setBounds(5, 10, 640, 200);
-		scroll.setBackground(Color.red);
+		scroll.setBounds(5, 10, 660, 200);
 		meio.add(scroll);
 		
+		atualizarTabela();
 		
 		JButton btSeedA = new JButton("Selecionar Seed A");
-		btSeedA.setBounds(100, 215, 180, 30);
-		btSeedA.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudNovo()));
+		btSeedA.setBounds(5, 215, 310, 50);
+		btSeedA.setBackground(UtilitarioTela.getBtnFundo(false));
 		btSeedA.setFocusPainted(false);
+		btSeedA.setForeground(UtilitarioTela.getBtnFundo(true));
 		btSeedA.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(selecionar(1)){
 					btSeedA.setIcon(UtilitarioImagem.converterImage(seedA.getLogo()));
+					btSeedA.setText("Seed A "+seedA.getDescricao());
 				}
 			}
 		});
 		meio.add(btSeedA);
 		
 		JButton btSeedB = new JButton("Selecionar Seed B");
-		btSeedB.setBounds(380, 215, 180, 30);
-		btSeedB.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudNovo()));
+		btSeedB.setBounds(355, 215, 310, 50);
 		btSeedB.setFocusPainted(false);
+		btSeedB.setBackground(UtilitarioTela.getBtnFundo(true));
+		btSeedB.setForeground(UtilitarioTela.getBtnFundo(false));
 		btSeedB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(selecionar(2)){
 					btSeedB.setIcon(UtilitarioImagem.converterImage(seedB.getLogo()));
+					btSeedB.setText("Seed B "+seedB.getDescricao());
 				}
 			}
 		});
 		meio.add(btSeedB);
 		
 		JButton finalizar = new JButton("Finalizar");
-		finalizar.setBounds(240, 270, 180, 30);
+		finalizar.setBounds(240, 280, 180, 30);
 		finalizar.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudNovo()));
 		finalizar.setFocusPainted(false);
 		finalizar.setVisible(true);
@@ -205,13 +207,13 @@ public class DialogGrupoSelectTime {
 		});
 		meio.add(finalizar);
 		
-		dialog.getContentPane().add(panel);
-		dialog.setVisible(true);
-		
 		Menssage.setMenssage("Selecione os Seeds",
 				"Selecionar os Seeds A e B para o Grupo "+grupo
 				+"\nDe "+totalGrupo+" grupo(os) restante(es)",
 				ParametroCrud.getModoCrudDeletar(), meio);
+		
+		dialog.getContentPane().add(panel);
+		dialog.setVisible(true);
 	}
 	
 	public boolean selecionar(int seed) {
@@ -221,10 +223,10 @@ public class DialogGrupoSelectTime {
 						.getTime(Integer.parseInt(String.valueOf(tabela
 								.getValueAt(tabela.getSelectedRow(), 1))));
 				if (timeSelecionado != null) {
-					if(seed == 1){
+					if(seed == 1 && seedB != timeSelecionado){
 						seedA = timeSelecionado;
 						return true;
-					} else {
+					} else if(seed == 2 && seedA != timeSelecionado) {
 						seedB = timeSelecionado;
 						return true;
 					}

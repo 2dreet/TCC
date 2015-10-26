@@ -285,7 +285,7 @@ public class CrudTime extends JPanel {
 				} else {
 					Menssage.setMenssage(
 							"Imagem Inválida",
-							"Arquivo selecionado deve ser uma \nImagem do tipo '.PNG, .GIF, .JPG ou .JPEG'",
+							"Arquivo selecionado deve ser uma \nImagem do tipo '.PNG'",
 							ParametroCrud.getModoCrudDeletar(), meio);
 					logo = null;
 					limparLogo();

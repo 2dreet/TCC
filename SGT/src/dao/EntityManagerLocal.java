@@ -74,6 +74,11 @@ public class EntityManagerLocal {
 	public static boolean begin() {
 		getEntityManager().getTransaction().begin();
 		return true;
+	} 
+	
+	public static boolean roolBack(){
+		getEntityManager().getTransaction().rollback();
+		return true;
 	}
 
 	public static Query createNativeQuery(String sql, Class classe) {

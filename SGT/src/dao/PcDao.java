@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -36,6 +37,18 @@ public class PcDao {
 
 	}
 	
+	public static PcPartida getPcPartida(int codigoPc, int codigoPartida){
+		try {
+			String sql = "SELECT * FROM pc_partida where codigoPc = '"+codigoPc+"' AND codigoPartida = '"+codigoPartida+"'";
+			return (PcPartida) EntityManagerLocal.getEntityManager().createNativeQuery(sql, PcPartida.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.setMaxResults(1).getSingleResult();
+		} catch (NoResultException ex) {
+			return null;
+		}
+
+	}
+	
 	public static List<Pc> getListaPesquisa(String metodoPesquisa, String valorPesquisa){
 		try {
 			String condicao = "";
@@ -59,7 +72,7 @@ public class PcDao {
 			String sql = "SELECT * FROM pc_partida where codigoPartida = '"+codigoPartida+"'";
 			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, PcPartida.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
 		} catch (NoResultException ex) {
-			return null;
+			return new ArrayList<PcPartida>();
 		}
 	}
 	
