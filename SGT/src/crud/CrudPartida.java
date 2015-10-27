@@ -199,13 +199,13 @@ public class CrudPartida extends JPanel {
 		meio2.removeAll();
 		if(campeonatoSelecionado.getChave()
 				.getCodigoChave() == 3){
-			meio2.add(new TelaGrupos(campeonatoSelecionado, meio2));
+			meio2.add(new TelaMataMata(campeonatoSelecionado, meio2));
 		}else if(campeonatoSelecionado.getChave()
 				.getCodigoChave() == 2){
-			
+			meio2.add(new TelaMataMata(campeonatoSelecionado, meio2));
 		} else if(campeonatoSelecionado.getChave()
 				.getCodigoChave() == 1){
-			
+			meio2.add(new TelaMataMata(campeonatoSelecionado, meio2));
 		}
 		meio2.repaint();
 	}

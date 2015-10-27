@@ -135,7 +135,7 @@ public class PartidaDao {
 					+ " AND p.indice = '"
 					+ indice
 					+ "'" + " AND tp.timePerdedor is not null AND c.codigoChave = "+campeonato.getChave().getCodigoChave()+" AND p.winerLower = '"
-						+ winerLower + "';";
+						+ winerLower + "'ORDER BY p.indice, p.codigoPartidaFilho, p.codigoPartida;";
 			
 			return EntityManagerLocal.getEntityManager()
 					.createNativeQuery(sql, TimePartida.class)
