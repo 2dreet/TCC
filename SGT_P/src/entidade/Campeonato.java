@@ -8,6 +8,7 @@ package entidade;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -38,7 +39,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Campeonato.findByCodigoCampeonato", query = "SELECT c FROM Campeonato c WHERE c.codigoCampeonato = :codigoCampeonato"),
     @NamedQuery(name = "Campeonato.findByDescricao", query = "SELECT c FROM Campeonato c WHERE c.descricao = :descricao"),
     @NamedQuery(name = "Campeonato.findByDataCadastro", query = "SELECT c FROM Campeonato c WHERE c.dataCadastro = :dataCadastro"),
-    @NamedQuery(name = "Campeonato.findByDataIncio", query = "SELECT c FROM Campeonato c WHERE c.dataIncio = :dataIncio"),
+    @NamedQuery(name = "Campeonato.findByDataIncio", query = "SELECT c FROM Campeonato c WHERE c.dataInicio = :dataIncio"),
     @NamedQuery(name = "Campeonato.findByDataFim", query = "SELECT c FROM Campeonato c WHERE c.dataFim = :dataFim"),
     @NamedQuery(name = "Campeonato.findByAtivo", query = "SELECT c FROM Campeonato c WHERE c.ativo = :ativo")})
 public class Campeonato implements Serializable {
@@ -48,14 +49,17 @@ public class Campeonato implements Serializable {
     @Basic(optional = false)
     @Column(name = "codigoCampeonato")
     private Integer codigoCampeonato;
+    @JoinColumn(name = "codigoFuncionario", referencedColumnName = "codigoFuncionario")
+    @ManyToOne(optional = false)
+    private Funcionario funcionario;
     @Column(name = "descricao")
     private String descricao;
     @Column(name = "dataCadastro")
     @Temporal(TemporalType.DATE)
     private Date dataCadastro;
-    @Column(name = "dataIncio")
+    @Column(name = "dataInicio")
     @Temporal(TemporalType.DATE)
-    private Date dataIncio;
+    private Date dataInicio;
     @Column(name = "dataFim")
     @Temporal(TemporalType.DATE)
     private Date dataFim;
@@ -68,8 +72,6 @@ public class Campeonato implements Serializable {
     private Collection<Classificacao> classificacaoCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "campeonato")
     private Collection<CampeonatoTime> campeonatoTimeCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "campeonato")
-    private Collection<FuncionarioCampeonato> funcionarioCampeonatoCollection;
     @JoinColumn(name = "codigoChave", referencedColumnName = "codigoChave")
     @ManyToOne(optional = false)
     private Chave chave;
@@ -115,12 +117,12 @@ public class Campeonato implements Serializable {
         this.dataCadastro = dataCadastro;
     }
 
-    public Date getDataIncio() {
-        return dataIncio;
+    public Date getDataInicio() {
+        return dataInicio;
     }
 
-    public void setDataIncio(Date dataIncio) {
-        this.dataIncio = dataIncio;
+    public void setDataInicio(Date dataInicio) {
+        this.dataInicio = dataInicio;
     }
 
     public Date getDataFim() {
@@ -166,15 +168,6 @@ public class Campeonato implements Serializable {
         this.campeonatoTimeCollection = campeonatoTimeCollection;
     }
 
-    @XmlTransient
-    public Collection<FuncionarioCampeonato> getFuncionarioCampeonatoCollection() {
-        return funcionarioCampeonatoCollection;
-    }
-
-    public void setFuncionarioCampeonatoCollection(Collection<FuncionarioCampeonato> funcionarioCampeonatoCollection) {
-        this.funcionarioCampeonatoCollection = funcionarioCampeonatoCollection;
-    }
-    
     public Chave getChave() {
 		return chave;
 	}
@@ -200,7 +193,15 @@ public class Campeonato implements Serializable {
         this.partidaCollection = partidaCollection;
     }
 
-    @Override
+    public Funcionario getFuncionario() {
+		return funcionario;
+	}
+
+	public void setFuncionario(Funcionario funcionario) {
+		this.funcionario = funcionario;
+	}
+
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (codigoCampeonato != null ? codigoCampeonato.hashCode() : 0);

@@ -6,7 +6,6 @@
 package entidade;
 
 import java.io.Serializable;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,7 +28,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "TimePartida.findAll", query = "SELECT t FROM TimePartida t"),
-    @NamedQuery(name = "TimePartida.findByCodigoTimePartida", query = "SELECT t FROM TimePartida t WHERE t.codigoTimePartida = :codigoTimePartida")})
+    @NamedQuery(name = "TimePartida.findByCodigoTimePartida", query = "SELECT t FROM TimePartida t WHERE t.codigoTimePartida = :codigoTimePartida"),
+    @NamedQuery(name = "TimePartida.findByPlacarTimeVencedor", query = "SELECT t FROM TimePartida t WHERE t.placarTimeVencedor = :placarTimeVencedor"),
+    @NamedQuery(name = "TimePartida.findByPlacarTimePerdedor", query = "SELECT t FROM TimePartida t WHERE t.placarTimePerdedor = :placarTimePerdedor")})
 public class TimePartida implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -37,25 +38,25 @@ public class TimePartida implements Serializable {
     @Basic(optional = false)
     @Column(name = "codigoTimePartida")
     private Integer codigoTimePartida;
-    @JoinColumn(name = "codigoTime1", referencedColumnName = "codigoTime")
-    @ManyToOne(optional = false)
-    private Time time1;
-    @JoinColumn(name = "codigoTime2", referencedColumnName = "codigoTime")
-    @ManyToOne(optional = false)
-    private Time time2;
-    @JoinColumn(name = "codigoPartida", referencedColumnName = "codigoPartida")
-    @ManyToOne(optional = false)
-    private Partida partida;
-    @JoinColumn(name = "timeVencedor", referencedColumnName = "codigoTime")
-    @ManyToOne(optional = false)
-    private Time timeVencedor;
-    @JoinColumn(name = "timePerdedor", referencedColumnName = "codigoTime")
-    @ManyToOne(optional = false)
-    private Time timePerdedor;
     @Column(name = "placarTimeVencedor")
     private Integer placarTimeVencedor;
     @Column(name = "placarTimePerdedor")
     private Integer placarTimePerdedor;
+    @JoinColumn(name = "timePerdedor", referencedColumnName = "codigoTime")
+    @ManyToOne
+    private Time timePerdedor;
+    @JoinColumn(name = "timeVencedor", referencedColumnName = "codigoTime")
+    @ManyToOne
+    private Time timeVencedor;
+    @JoinColumn(name = "codigoTime2", referencedColumnName = "codigoTime")
+    @ManyToOne
+    private Time time2;
+    @JoinColumn(name = "codigoTime1", referencedColumnName = "codigoTime")
+    @ManyToOne
+    private Time time1;
+    @JoinColumn(name = "codigoPartida", referencedColumnName = "codigoPartida")
+    @ManyToOne(optional = false)
+    private Partida partida;
 
     public TimePartida() {
     }
@@ -72,14 +73,46 @@ public class TimePartida implements Serializable {
         this.codigoTimePartida = codigoTimePartida;
     }
 
-    public Partida getPartida() {
-		return partida;
+    public Integer getPlacarTimeVencedor() {
+        return placarTimeVencedor;
+    }
+
+    public void setPlacarTimeVencedor(Integer placarTimeVencedor) {
+        this.placarTimeVencedor = placarTimeVencedor;
+    }
+
+    public Integer getPlacarTimePerdedor() {
+        return placarTimePerdedor;
+    }
+
+    public void setPlacarTimePerdedor(Integer placarTimePerdedor) {
+        this.placarTimePerdedor = placarTimePerdedor;
+    }
+
+    public Time getTimePerdedor() {
+        return timePerdedor;
+    }
+
+    public void setTimePerdedor(Time timePerdedor) {
+        this.timePerdedor = timePerdedor;
+    }
+
+    public Time getTimeVencedor() {
+        return timeVencedor;
+    }
+
+    public void setTimeVencedor(Time timeVencedor) {
+        this.timeVencedor = timeVencedor;
+    }
+
+    public Time getTime2() {
+		return time2;
 	}
 
-	public void setPartida(Partida partida) {
-		this.partida = partida;
+	public void setTime2(Time time2) {
+		this.time2 = time2;
 	}
-	
+
 	public Time getTime1() {
 		return time1;
 	}
@@ -88,44 +121,12 @@ public class TimePartida implements Serializable {
 		this.time1 = time1;
 	}
 
-	public Time getTime2() {
-		return time2;
+	public Partida getPartida() {
+		return partida;
 	}
 
-	public void setTime2(Time time2) {
-		this.time2 = time2;
-	}
-
-	public Time getTimeVencedor() {
-		return timeVencedor;
-	}
-
-	public void setTimeVencedor(Time timeVencedor) {
-		this.timeVencedor = timeVencedor;
-	}
-
-	public Time getTimePerdedor() {
-		return timePerdedor;
-	}
-
-	public void setTimePerdedor(Time timePerdedor) {
-		this.timePerdedor = timePerdedor;
-	}
-
-	public Integer getPlacarTimeVencedor() {
-		return placarTimeVencedor;
-	}
-
-	public void setPlacarTimeVencedor(Integer placarTimeVencedor) {
-		this.placarTimeVencedor = placarTimeVencedor;
-	}
-
-	public Integer getPlacarTimePerdedor() {
-		return placarTimePerdedor;
-	}
-
-	public void setPlacarTimePerdedor(Integer placarTimePerdedor) {
-		this.placarTimePerdedor = placarTimePerdedor;
+	public void setPartida(Partida partida) {
+		this.partida = partida;
 	}
 
 	@Override

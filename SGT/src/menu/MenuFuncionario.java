@@ -243,6 +243,11 @@ public class MenuFuncionario extends JPanel {
 		btLocalizar.setFont(UtilitarioTela.getFont(14));
 		
 		limpar();
+		
+		zeraSelecao();
+		getIcon(btLocalizar, true);
+		limpar();
+		localizarFuncionario();
 	}
 
 	public void home(){

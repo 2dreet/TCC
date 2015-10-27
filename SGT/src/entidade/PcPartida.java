@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class PcPartida implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "codigopc_partida")
     private Integer codigopcPartida;
@@ -57,7 +57,8 @@ public class PcPartida implements Serializable {
     public void setCodigopcPartida(Integer codigopcPartida) {
         this.codigopcPartida = codigopcPartida;
     }
-    
+
+
     public Pc getPc() {
 		return pc;
 	}

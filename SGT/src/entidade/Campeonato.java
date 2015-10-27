@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Campeonato.findByCodigoCampeonato", query = "SELECT c FROM Campeonato c WHERE c.codigoCampeonato = :codigoCampeonato"),
     @NamedQuery(name = "Campeonato.findByDescricao", query = "SELECT c FROM Campeonato c WHERE c.descricao = :descricao"),
     @NamedQuery(name = "Campeonato.findByDataCadastro", query = "SELECT c FROM Campeonato c WHERE c.dataCadastro = :dataCadastro"),
-    @NamedQuery(name = "Campeonato.findByDataIncio", query = "SELECT c FROM Campeonato c WHERE c.dataInicio = :dataIncio"),
+    @NamedQuery(name = "Campeonato.findByDataInicio", query = "SELECT c FROM Campeonato c WHERE c.dataInicio = :dataInicio"),
     @NamedQuery(name = "Campeonato.findByDataFim", query = "SELECT c FROM Campeonato c WHERE c.dataFim = :dataFim"),
     @NamedQuery(name = "Campeonato.findByAtivo", query = "SELECT c FROM Campeonato c WHERE c.ativo = :ativo")})
 public class Campeonato implements Serializable {
@@ -68,11 +68,12 @@ public class Campeonato implements Serializable {
     private Collection<Classificacao> classificacaoCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "campeonato")
     private Collection<CampeonatoTime> campeonatoTimeCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "campeonato")
-    private Collection<FuncionarioCampeonato> funcionarioCampeonatoCollection;
-    @JoinColumn(name = "codigoChave", referencedColumnName = "codigoChave")
+    @JoinColumn(name = "codigoChave", referencedColumnName = "chave")
     @ManyToOne(optional = false)
     private Chave chave;
+    @JoinColumn(name = "codigoFuncionario", referencedColumnName = "codigoFuncionario")
+    @ManyToOne(optional = false)
+    private Funcionario codigoFuncionario;
     @JoinColumn(name = "codigoModalidade", referencedColumnName = "codigoModalidade")
     @ManyToOne(optional = false)
     private Modalidade modalidade;
@@ -166,14 +167,15 @@ public class Campeonato implements Serializable {
         this.campeonatoTimeCollection = campeonatoTimeCollection;
     }
 
-    @XmlTransient
-    public Collection<FuncionarioCampeonato> getFuncionarioCampeonatoCollection() {
-        return funcionarioCampeonatoCollection;
+    public Funcionario getCodigoFuncionario() {
+        return codigoFuncionario;
     }
 
-    public void setFuncionarioCampeonatoCollection(Collection<FuncionarioCampeonato> funcionarioCampeonatoCollection) {
-        this.funcionarioCampeonatoCollection = funcionarioCampeonatoCollection;
+    public void setCodigoFuncionario(Funcionario codigoFuncionario) {
+        this.codigoFuncionario = codigoFuncionario;
     }
+
+   
     
     public Chave getChave() {
 		return chave;

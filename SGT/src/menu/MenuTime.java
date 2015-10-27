@@ -244,6 +244,11 @@ public class MenuTime extends JPanel {
 		btLocalizar.setFont(UtilitarioTela.getFont(14));
 		
 		limpar();
+		
+		zeraSelecao();
+		getIcon(btLocalizar, true);
+		limpar();
+		localizarTime();
 	}
 
 	public void home(){

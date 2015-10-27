@@ -67,7 +67,6 @@ public class CrudFuncionario extends JPanel {
 	private JPanel header;
 	private JLabel lblHeader;
 	private JPanel meio;
-
 	/**
 	 * Create the panel.
 	 */
@@ -76,7 +75,7 @@ public class CrudFuncionario extends JPanel {
 		setSize(UtilitarioTela.getTamanhoMeio());
 		setLayout(null);
 		setBackground(null);
-
+		
 		funcionarioSelecionado = funcionario;
 
 		header = new JPanel();

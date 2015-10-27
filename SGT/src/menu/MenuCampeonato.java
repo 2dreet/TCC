@@ -14,10 +14,13 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import crud.CrudCampeonato;
+import crud.CrudClassificacao;
 import crud.CrudComputador;
 import crud.CrudJogador;
 import crud.CrudPartida;
+import dao.ClassificacaoDao;
 import entidade.Campeonato;
+import entidade.Classificacao;
 import entidade.Jogador;
 import entidade.Pc;
 import entidade.Usuario;
@@ -46,6 +49,7 @@ public class MenuCampeonato extends JPanel {
 	private JButton btDeletar;
 	private JButton btVisualizar;
 	public JButton btPartida;
+	public JButton btClassificacao;
 	private Campeonato campSelecionado;
 
 	public MenuCampeonato() {
@@ -225,7 +229,6 @@ public class MenuCampeonato extends JPanel {
 		btPartida.setHorizontalAlignment(SwingConstants.LEFT);
 		btPartida.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
 				abreMenuPartida(campSelecionado);
 			}
 		});
@@ -239,12 +242,28 @@ public class MenuCampeonato extends JPanel {
 		jp7.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp7);
 
+		btClassificacao = new JButton("Classificação");
+		btClassificacao.setBounds(5, 5, 230, 30);
+		btClassificacao.setBorderPainted(false);
+		btClassificacao.setBackground(null);
+		btClassificacao.setLayout(null);
+		btClassificacao.setName("classificacao");
+		btClassificacao.setHorizontalAlignment(SwingConstants.LEFT);
+		btClassificacao.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				abreMenuClassificacao();
+			}
+		});
+
+		jp7.add(btClassificacao);
+		
 		getIcon(btNovo, false);
 		getIcon(btAlterar, false);
 		getIcon(btDeletar, false);
 		getIcon(btVisualizar, false);
 		getIcon(btLocalizar, false);
 		getIcon(btPartida, false);
+		getIcon(btClassificacao, false);
 
 		btDeletar.setForeground(UtilitarioTela.getFontColorSelecao(false));
 		btAlterar.setForeground(UtilitarioTela.getFontColorSelecao(false));
@@ -252,6 +271,7 @@ public class MenuCampeonato extends JPanel {
 		btVisualizar.setForeground(UtilitarioTela.getFontColorSelecao(false));
 		btLocalizar.setForeground(UtilitarioTela.getFontColorSelecao(false));
 		btPartida.setForeground(UtilitarioTela.getFontColorSelecao(false));
+		btClassificacao.setForeground(UtilitarioTela.getFontColorSelecao(false));
 
 		btNovo.setFont(UtilitarioTela.getFont(14));
 		btAlterar.setFont(UtilitarioTela.getFont(14));
@@ -259,8 +279,14 @@ public class MenuCampeonato extends JPanel {
 		btVisualizar.setFont(UtilitarioTela.getFont(14));
 		btLocalizar.setFont(UtilitarioTela.getFont(14));
 		btPartida.setFont(UtilitarioTela.getFont(14));
+		btClassificacao.setFont(UtilitarioTela.getFont(14));
+		
 		
 		limpar();
+		zeraSelecao();
+		getIcon(btLocalizar, true);
+		limpar();
+		localizarCampeonato();
 	}
 
 	public void home() {
@@ -275,6 +301,7 @@ public class MenuCampeonato extends JPanel {
 		btDeletar.setEnabled(false);
 		btVisualizar.setEnabled(false);
 		btPartida.setEnabled(false);
+		btClassificacao.setEnabled(false);
 	}
 
 	public void exibirCampeonato(Campeonato camp) {
@@ -285,6 +312,16 @@ public class MenuCampeonato extends JPanel {
 		alterarMenu(campSelecionado, ParametroCrud.getModoVisualizar());
 	}
 
+	public void abreMenuClassificacao(){
+		zeraSelecao();
+		getIcon(btClassificacao, true);
+		menuMeio.removeAll();
+		CrudClassificacao c = new CrudClassificacao(campSelecionado, this);
+		menuMeio.add(c);
+		menuMeio.revalidate();
+		menuMeio.repaint();
+	}
+	
 	public void localizarCampeonato() {
 		menuMeio.removeAll();
 		LocalizarCampeonato localizar = new LocalizarCampeonato(this);
@@ -302,8 +339,23 @@ public class MenuCampeonato extends JPanel {
 		} else{	
 			btPartida.setEnabled(false);
 		}
+		
+		if(campeonatoFinalizado()){
+			btClassificacao.setEnabled(true);
+		} else{	
+			btClassificacao.setEnabled(false);
+		}
 	}
 
+	public boolean campeonatoFinalizado(){
+		Classificacao classificacao = ClassificacaoDao
+				.getClassificacaoPorCampeonato(campSelecionado);
+		if (classificacao != null) {
+			return true;
+		}
+		return false;
+	}
+	
 	public void abreMenuPartida(Campeonato camp){
 		zeraSelecao();
 		getIcon(btPartida, true);
@@ -352,6 +404,9 @@ public class MenuCampeonato extends JPanel {
 		
 		btPartida.setBackground(UtilitarioTela.getBtnFundo(false));
 		btPartida.setForeground(UtilitarioTela.getFontColorSelecao(false));
+		
+		btClassificacao.setBackground(UtilitarioTela.getBtnFundo(false));
+		btClassificacao.setForeground(UtilitarioTela.getFontColorSelecao(false));
 	}
 
 	public void getIcon(JButton botao, boolean selecionado) {

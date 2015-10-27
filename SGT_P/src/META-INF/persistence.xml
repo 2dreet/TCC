@@ -4,28 +4,27 @@
 	<persistence-unit name="Jogador" transaction-type="RESOURCE_LOCAL">
 		<class>entidade.Banimento</class>
 		<class>entidade.Campeonato</class>
-		<class>entidade.Chave</class>
 		<class>entidade.CampeonatoTime</class>
 		<class>entidade.Classificacao</class>
-		<class>entidade.Funcionario</class>
+		<class>entidade.Chave</class>
 		<class>entidade.Driver</class>
-		<class>entidade.FuncionarioCampeonato</class>
+		<class>entidade.Grupo</class>
 		<class>entidade.Jogador</class>
-		<class>entidade.JogadorDriver</class>
 		<class>entidade.JogadorBanimento</class>
 		<class>entidade.JogadorPartida</class>
+		<class>entidade.JogadorDriver</class>
 		<class>entidade.Marca</class>
-		<class>entidade.Usuario</class>
-		<class>entidade.Time</class>
-		<class>entidade.TimePartida</class>
-		<class>entidade.PcPartida</class>
-		<class>entidade.Pc</class>
-		<class>entidade.Periferico</class>
-		<class>entidade.Permissao</class>
+		<class>entidade.Funcionario</class>
 		<class>entidade.Modalidade</class>
-		<class>entidade.Grupo</class>
-		<class>entidade.Partida</class>
+		<class>entidade.PcPartida</class>
 		<class>entidade.TimeGrupo</class>
+		<class>entidade.TimePartida</class>
+		<class>entidade.Periferico</class>
+		<class>entidade.Usuario</class>
+		<class>entidade.Permissao</class>
+		<class>entidade.Pc</class>
+		<class>entidade.Partida</class>
+		<class>entidade.Time</class>
 		
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		

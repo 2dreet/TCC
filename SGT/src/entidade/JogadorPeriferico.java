@@ -24,12 +24,12 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jose
  */
 @Entity
-@Table(name = "jogador_driver")
+@Table(name = "jogador_periferico")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "JogadorDriver.findAll", query = "SELECT j FROM JogadorDriver j"),
-    @NamedQuery(name = "JogadorDriver.findByCodigoJD", query = "SELECT j FROM JogadorDriver j WHERE j.codigoJD = :codigoJD")})
-public class JogadorDriver implements Serializable {
+    @NamedQuery(name = "JogadorPeriferico.findAll", query = "SELECT j FROM JogadorPeriferico j"),
+    @NamedQuery(name = "JogadorPeriferico.findByCodigoJD", query = "SELECT j FROM JogadorPeriferico j WHERE j.codigoJD = :codigoJD")})
+public class JogadorPeriferico implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,14 +39,18 @@ public class JogadorDriver implements Serializable {
     @JoinColumn(name = "codigoJogador", referencedColumnName = "codigoJogador")
     @ManyToOne(optional = false)
     private Jogador jogador;
-    @JoinColumn(name = "codigoDriver", referencedColumnName = "codigoDriver")
+    @JoinColumn(name = "codigoPeriferico", referencedColumnName = "codigoPeriferico")
     @ManyToOne(optional = false)
-    private Driver driver;
+    private Periferico periferico;
+    @JoinColumn(name = "codigoMarca", referencedColumnName = "codigoMarca")
+    @ManyToOne(optional = false)
+    private Marca marca;
+    
 
-    public JogadorDriver() {
+    public JogadorPeriferico() {
     }
 
-    public JogadorDriver(Integer codigoJD) {
+    public JogadorPeriferico(Integer codigoJD) {
         this.codigoJD = codigoJD;
     }
 
@@ -57,7 +61,7 @@ public class JogadorDriver implements Serializable {
     public void setCodigoJD(Integer codigoJD) {
         this.codigoJD = codigoJD;
     }
-    
+
     public Jogador getJogador() {
 		return jogador;
 	}
@@ -66,12 +70,20 @@ public class JogadorDriver implements Serializable {
 		this.jogador = jogador;
 	}
 
-	public Driver getDriver() {
-		return driver;
+	public Marca getMarca() {
+		return marca;
 	}
 
-	public void setDriver(Driver driver) {
-		this.driver = driver;
+	public void setMarca(Marca marca) {
+		this.marca = marca;
+	}
+
+	public Periferico getPeriferico() {
+		return periferico;
+	}
+
+	public void setPeriferico(Periferico periferico) {
+		this.periferico = periferico;
 	}
 
 	@Override
@@ -84,10 +96,10 @@ public class JogadorDriver implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof JogadorDriver)) {
+        if (!(object instanceof JogadorPeriferico)) {
             return false;
         }
-        JogadorDriver other = (JogadorDriver) object;
+        JogadorPeriferico other = (JogadorPeriferico) object;
         if ((this.codigoJD == null && other.codigoJD != null) || (this.codigoJD != null && !this.codigoJD.equals(other.codigoJD))) {
             return false;
         }
@@ -96,7 +108,7 @@ public class JogadorDriver implements Serializable {
 
     @Override
     public String toString() {
-        return "entidade.JogadorDriver[ codigoJD=" + codigoJD + " ]";
+        return "entidade.JogadorPeriferico[ codigoJD=" + codigoJD + " ]";
     }
     
 }

@@ -79,8 +79,7 @@ public class GerenciadorPartida {
 					Partida partida = new Partida();
 					partida.setAtivo(true);
 					partida.setCampeonato(camp);
-					partida.setCancelada(false);
-					partida.setWinerLower(false);
+					partida.setWinerLower(true);
 					partida.setIndice(indice);
 					EntityManagerLocal.persist(partida);
 
@@ -133,7 +132,7 @@ public class GerenciadorPartida {
 				Partida partida = new Partida();
 				partida.setAtivo(true);
 				partida.setCampeonato(camp);
-				partida.setCancelada(false);
+				
 				partida.setWinerLower(true);
 				partida.setIndice(indices[i]);
 				EntityManagerLocal.persist(partida);
@@ -156,7 +155,7 @@ public class GerenciadorPartida {
 				Partida partida = new Partida();
 				partida.setAtivo(true);
 				partida.setCampeonato(camp);
-				partida.setCancelada(false);
+				
 				partida.setWinerLower(true);
 				partida.setIndice(indices[i]);
 				EntityManagerLocal.persist(partida);
@@ -190,7 +189,7 @@ public class GerenciadorPartida {
 					Partida partida = new Partida();
 					partida.setAtivo(true);
 					partida.setCampeonato(camp);
-					partida.setCancelada(false);
+					
 					partida.setWinerLower(false);
 					partida.setIndice(partidaFinalLower.getIndice() + 1);
 					EntityManagerLocal.persist(partida);
@@ -237,7 +236,7 @@ public class GerenciadorPartida {
 			Partida partida = new Partida();
 			partida.setAtivo(true);
 			partida.setCampeonato(camp);
-			partida.setCancelada(false);
+			
 			partida.setWinerLower(false);
 			partida.setIndice(indice);
 			EntityManagerLocal.persist(partida);
@@ -261,7 +260,7 @@ public class GerenciadorPartida {
 			Partida partida = new Partida();
 			partida.setAtivo(true);
 			partida.setCampeonato(camp);
-			partida.setCancelada(false);
+			
 			partida.setWinerLower(false);
 			partida.setIndice(indice);
 			EntityManagerLocal.persist(partida);
@@ -299,7 +298,7 @@ public class GerenciadorPartida {
 					Partida partida = new Partida();
 					partida.setAtivo(true);
 					partida.setCampeonato(camp);
-					partida.setCancelada(false);
+					
 					partida.setIndice(indice);
 					EntityManagerLocal.persist(partida);
 
@@ -327,7 +326,7 @@ public class GerenciadorPartida {
 					partida.setAtivo(true);
 					partida.setCampeonato(camp);
 					partida.setIndice(indice);
-					partida.setCancelada(false);
+					
 					EntityManagerLocal.persist(partida);
 
 					TimePartida tp = new TimePartida();
@@ -374,7 +373,7 @@ public class GerenciadorPartida {
 					Partida partida = new Partida();
 					partida.setAtivo(true);
 					partida.setCampeonato(camp);
-					partida.setCancelada(false);
+					
 					partida.setIndice(indice);
 					partida.setWinerLower(true);
 					EntityManagerLocal.persist(partida);
@@ -409,7 +408,7 @@ public class GerenciadorPartida {
 					Partida partida = new Partida();
 					partida.setAtivo(true);
 					partida.setCampeonato(camp);
-					partida.setCancelada(false);
+					
 					partida.setIndice(indice);
 					partida.setWinerLower(true);
 					EntityManagerLocal.persist(partida);

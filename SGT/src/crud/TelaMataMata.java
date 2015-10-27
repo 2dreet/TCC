@@ -9,6 +9,7 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -20,6 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import dao.CampeonatoDao;
 import dao.PartidaDao;
 import utilitario.BordaSombreada;
 import utilitario.ParametroCrud;
@@ -27,6 +29,8 @@ import utilitario.Parametros;
 import utilitario.UtilitarioImagem;
 import utilitario.UtilitarioTela;
 import entidade.Campeonato;
+import entidade.Partida;
+import entidade.PojoMataMata;
 import entidade.Time;
 import entidade.TimePartida;
 
@@ -57,69 +61,70 @@ public class TelaMataMata extends JPanel {
 		lblHeader.setForeground(UtilitarioTela.getFontColorCrud());
 		header.add(lblHeader);
 
-		Integer[] indices = PartidaDao
-				.getIndicesPartidaParaGerarLowers(campeonato
-						.getCodigoCampeonato());
-		
-		int x = 0;
-		for (int i : indices) {
-			int y = 35 * i;
-			List<TimePartida>listaTimePartida = PartidaDao.getPartidasPorIndice(campeonato, i, false);
-			for(TimePartida tp : listaTimePartida){
-				JPanel partida = new JPanel();
-				partida.setSize(100, 50);
-				partida.setLocation(x , y);
-				partida.setLayout(null);
-				partida.setBackground(null);
+		pai.add(new DrawCanvas(campeonatoSelecionado));
 
-				JLabel lbNome = new JLabel(tp.getTime1().getDescricao());
-				lbNome.setBounds(0, 10, 100, 10);
-				lbNome.setFont(UtilitarioTela.getFont(10));
-				lbNome.setForeground(getColorTime(tp, tp.getTime1()));
-				partida.add(lbNome);
-				
-				JLabel lbNome2 = new JLabel(tp.getTime2().getDescricao());
-				lbNome2.setBounds(0, 30, 100, 10);
-				lbNome2.setFont(UtilitarioTela.getFont(10));
-				lbNome2.setForeground(getColorTime(tp, tp.getTime2()));
-				partida.add(lbNome2);
-				pai.add(partida);
-				
-				y = y + (55) * i;
-			}
-			x = x + 110;
-		}
-		
 	}
 
-	
-	
-	public Color getColorTime(TimePartida tp, Time t){
-		if(tp.getTimePerdedor() == t){
+	public Color getColorTime(TimePartida tp, Time t) {
+		if (tp.getTimePerdedor() == t) {
 			return Color.red;
 		}
 		return Color.BLUE;
 	}
 	
+	public static void main(String [] args){
+		Campeonato campeonato = CampeonatoDao.getCampeonato(1);
+		Integer[] indices = PartidaDao
+				.getIndicesPartidaParaGerarLowers(campeonato
+						.getCodigoCampeonato());
+		List<PojoMataMata> pojo = new ArrayList<PojoMataMata>();
+		List<TimePartida> listaTimePartida = PartidaDao
+				.getPartidasPorIndice(campeonato, 1, false);
+		boolean continua = true;
+		int tamanhoPai = listaTimePartida.size();
+		Partida partidaPai1;
+		Partida partidaPai2;
+		List<PojoMataMata> partidaFilhos = new ArrayList<PojoMataMata>();
+		PojoMataMata pm;
+		for (int n = 0; n < tamanhoPai; n++) {
+			pm = new PojoMataMata();
+			if (tamanhoPai > n + 1) {
+				partidaPai1 = listaTimePartida.get(n).getPartida();
+				partidaPai2 = listaTimePartida.get(n + 1).getPartida();
+				if (partidaPai1.getPartidaFilho() != null && partidaPai1.getPartidaFilho() == partidaPai2.getPartidaFilho()) {
+					//Pai 1 tem o mesmo filho que Pai 2
+					pm.setPartidaPai1(partidaPai1);
+					pm.setPartidaPai2(partidaPai2);
+					pm.setFilho(partidaPai1.getPartidaFilho());
+					partidaFilhos.add(pm);
+					System.out.println("Pai 1 : " + pm.getPartidaPai1().getCodigoPartida());
+					System.out.println("Pai 2 : " + pm.getPartidaPai2().getCodigoPartida());
+					System.out.println("Filho : " + pm.getFilho().getCodigoPartida());
+					System.out.println("--------------------------------------------------");
+					n++;
+				} else {
+					
+				}
+			}
+		}
+	}
+
 	private class DrawCanvas extends JPanel {
 
-		private int x = 0;
-		private int y = 0;
-		private int wx = 0;
-		private int hy = 0;
+		private Campeonato campeonato;
 
-		public DrawCanvas(int x, int y, int wx, int hy) {
-			this.x = x;
-			this.y = y;
-			this.wx = wx;
-			this.hy = hy;
+		public DrawCanvas(Campeonato campeonato) {
+			this.campeonato = campeonato;
+			
 		}
 
 		@Override
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			g.setColor(Color.BLACK);
-			g.drawLine(x, y, wx, hy);
+			// g.drawLine(partida.getX(), partida.getY()+25, partida.getWidth()
+			// + 50, hy);
 		}
 	}
+	
 }

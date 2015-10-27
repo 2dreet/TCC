@@ -57,7 +57,9 @@ public class JogadorPartida implements Serializable {
     public void setCodigoJP(Integer codigoJP) {
         this.codigoJP = codigoJP;
     }
+
     
+
     public Jogador getJogador() {
 		return jogador;
 	}

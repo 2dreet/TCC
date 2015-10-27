@@ -192,7 +192,9 @@ public class Usuario implements Serializable {
     public void setSexo(int sexo) {
         this.sexo = sexo;
     }
-    
+
+
+
     public Permissao getPermissao() {
 		return permissao;
 	}

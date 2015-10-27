@@ -8,10 +8,7 @@
 		<class>entidade.CampeonatoTime</class>
 		<class>entidade.Classificacao</class>
 		<class>entidade.Funcionario</class>
-		<class>entidade.Driver</class>
-		<class>entidade.FuncionarioCampeonato</class>
 		<class>entidade.Jogador</class>
-		<class>entidade.JogadorDriver</class>
 		<class>entidade.JogadorBanimento</class>
 		<class>entidade.JogadorPartida</class>
 		<class>entidade.Marca</class>
@@ -26,6 +23,7 @@
 		<class>entidade.Grupo</class>
 		<class>entidade.Partida</class>
 		<class>entidade.TimeGrupo</class>
+		<class>entidade.JogadorPeriferico</class>
 		
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		

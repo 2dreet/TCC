@@ -57,14 +57,14 @@ public class CrudMarca extends JPanel{
 	private static Object[][] colunas = new Object[][] { new String[] { "Código" },
 		new String[] { "Descrição" }};
 	private static String[] linhaBusca = new String[] { "Código", "Descrição"};
-	
+	private boolean inicio;
 	public CrudMarca(MenuConfiguracoes menuPai){
 		this.menuPai = menuPai;
 		setSize(UtilitarioTela.getTamanhoMeio());
 		setLayout(null);
 		setBackground(null);
 		marcaSelecionado = null;
-		
+		inicio = true;
 		header = new JPanel();
 		header.setSize(500, 30);
 		header.setLocation((getWidth() / 2) - 250, 10);
@@ -120,6 +120,7 @@ public class CrudMarca extends JPanel{
 		meio.add(btLocalizar);
 		btLocalizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				inicio = false;
 				localizar();
 			}
 		});
@@ -237,7 +238,7 @@ public class CrudMarca extends JPanel{
 				modelo.addRow(new Object[] {
 						String.valueOf(m.getCodigoMarca()), m.getDescricao() });
 			}
-		} else {
+		} else if(!inicio) {
 			listaMarca = new ArrayList<Marca>();
 			Menssage.setMenssage("Marca não Encontrado",
 					"Nenhuma Marca foi encontrada!",

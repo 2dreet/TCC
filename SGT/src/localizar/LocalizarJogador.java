@@ -68,6 +68,7 @@ public class LocalizarJogador extends JPanel {
 	private Jogador jogadorSelecionado;
 	private MenuJogador menuPai;
 	private JPanel meio;
+	private boolean inicio;
 	
 	/**
 	 * Create the panel.
@@ -82,7 +83,7 @@ public class LocalizarJogador extends JPanel {
 		jogadorSelecionado = null;
 
 		listaJogador = new ArrayList<Jogador>();
-
+		inicio = true;
 		setSize(UtilitarioTela.getTamanhoMeio());
 		setLayout(null);
 		setBackground(null);
@@ -148,6 +149,7 @@ public class LocalizarJogador extends JPanel {
 		meio.add(btLocalizar);
 		btLocalizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				inicio = false;
 				localizar();
 			}
 		});
@@ -279,7 +281,7 @@ public class LocalizarJogador extends JPanel {
 								.getTelefone()), j.getUsuario().getEmail() });
 
 			}
-		} else {
+		} else if(!inicio){
 			listaJogador = new ArrayList<Jogador>();
 			Menssage.setMenssage("Jogador não Encontrado",
 					"Nenhum Jogador foi encontrado!",

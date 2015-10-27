@@ -70,7 +70,7 @@ public class LocalizarFuncionario extends JPanel {
 	private Funcionario funcionarioSelecionado;
 	private MenuFuncionario menuPai;
 	private JPanel meio;
-
+	private boolean inicio;
 	/**
 	 * Create the panel.
 	 */
@@ -84,7 +84,7 @@ public class LocalizarFuncionario extends JPanel {
 		super();
 		funcionarioSelecionado = null;
 		listaFuncionario = new ArrayList<Funcionario>();
-
+		inicio = true;
 		setSize(UtilitarioTela.getTamanhoMeio());
 		setLayout(null);
 		setBackground(null);
@@ -150,6 +150,7 @@ public class LocalizarFuncionario extends JPanel {
 		meio.add(btLocalizar);
 		btLocalizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				inicio = false;
 				localizar();
 			}
 		});
@@ -287,7 +288,7 @@ public class LocalizarFuncionario extends JPanel {
 								.getTelefone()), f.getUsuario().getEmail() });
 
 			}
-		} else {
+		} else if(!inicio){
 			listaFuncionario = new ArrayList<Funcionario>();
 			Menssage.setMenssage("Funcionário não Encontrado",
 					"Nenhum Funcionário foi encontrado!",

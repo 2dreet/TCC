@@ -112,7 +112,7 @@ public class JogadorBanimento implements Serializable {
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
-    
+
     public Jogador getJogador() {
 		return jogador;
 	}

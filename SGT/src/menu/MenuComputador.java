@@ -250,6 +250,11 @@ public class MenuComputador extends JPanel {
 		btLocalizar.setFont(UtilitarioTela.getFont(14));
 		
 		limpar();
+		zeraSelecao();
+		getIcon(btLocalizar, true);
+		limpar();
+		stopThread();
+		localizarPc();
 	}
 
 	public void stopThread(){

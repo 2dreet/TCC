@@ -68,7 +68,7 @@ public class LocalizarPc extends JPanel {
 	private Pc pcSelecionado;
 	private MenuComputador menuPai;
 	private JPanel meio;
-
+	private boolean inicio;
 	/**
 	 * Create the panel.
 	 */
@@ -82,7 +82,7 @@ public class LocalizarPc extends JPanel {
 		super();
 		pcSelecionado = null;
 		listaPc = new ArrayList<Pc>();
-
+		inicio = true;
 		setSize(UtilitarioTela.getTamanhoMeio());
 		setLayout(null);
 		setBackground(null);
@@ -148,6 +148,7 @@ public class LocalizarPc extends JPanel {
 		meio.add(btLocalizar);
 		btLocalizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				inicio = false;
 				localizar();
 			}
 		});
@@ -254,7 +255,7 @@ public class LocalizarPc extends JPanel {
 						p.getDescricao(),
 								p.getIp()});
 			}
-		} else {
+		} else if(!inicio){
 			listaPc = new ArrayList<Pc>();
 			Menssage.setMenssage("Computador não Encontrado",
 					"Nenhum Computador foi encontrado!",

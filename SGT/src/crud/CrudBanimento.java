@@ -60,14 +60,14 @@ public class CrudBanimento extends JPanel{
 	private static Object[][] colunas = new Object[][] { new String[] { "Código" },
 		new String[] { "Descrição" }};
 	private static String[] linhaBusca = new String[] { "Código", "Descrição"};
-	
+	private boolean inicio;
 	public CrudBanimento(MenuConfiguracoes menuPai){
 		this.menuPai = menuPai;
 		setSize(UtilitarioTela.getTamanhoMeio());
 		setLayout(null);
 		setBackground(null);
 		banimentoSelecionado = null;
-		
+		inicio = true;
 		header = new JPanel();
 		header.setSize(500, 30);
 		header.setLocation((getWidth() / 2) - 250, 10);
@@ -123,6 +123,7 @@ public class CrudBanimento extends JPanel{
 		meio.add(btLocalizar);
 		btLocalizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				inicio = false;
 				localizar();
 			}
 		});
@@ -240,7 +241,7 @@ public class CrudBanimento extends JPanel{
 				modelo.addRow(new Object[] {
 						String.valueOf(b.getCodigoBanimento()), b.getDescricao() });
 			}
-		} else {
+		} else if(!inicio) {
 			listaBanimento = new ArrayList<Banimento>();
 			Menssage.setMenssage("Banimento não Encontrado",
 					"Nenhum Banimento foi encontrado!",

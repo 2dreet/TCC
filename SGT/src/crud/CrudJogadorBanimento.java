@@ -68,7 +68,7 @@ public class CrudJogadorBanimento extends JPanel{
 		new String[] { "Banimento" },
 		new String[] { "Data Banimento" }};
 	private static String[] linhaBusca = new String[] { "Código", "Descrição"};
-	
+	private boolean inicio;
 	public CrudJogadorBanimento(MenuJogador menuPai, Jogador jogadorSelecionado){
 		this.menuPai = menuPai;
 		this.jogadorSelecionado = jogadorSelecionado;
@@ -76,7 +76,7 @@ public class CrudJogadorBanimento extends JPanel{
 		setLayout(null);
 		setBackground(null);
 		JogadorBanimentoSelecionado = null;
-		
+		inicio = true;
 		header = new JPanel();
 		header.setSize(650, 30);
 		header.setLocation((getWidth() / 2) - 250, 10);
@@ -132,6 +132,7 @@ public class CrudJogadorBanimento extends JPanel{
 		meio.add(btLocalizar);
 		btLocalizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				inicio = false;
 				localizar();
 			}
 		});
@@ -261,7 +262,7 @@ public class CrudJogadorBanimento extends JPanel{
 				modelo.addRow(new Object[] {
 						String.valueOf(jb.getCodigoJogBan()), jb.getDescricao() , jb.getBanimento().getDescricao() , MascaraCrud.macaraDataBanco(jb.getDataBanimento()) });
 			}
-		} else {
+		} else if(!inicio){
 			listaJogadorBanimento = new ArrayList<JogadorBanimento>();
 			Menssage.setMenssage("Banimento não Encontrado",
 					"Nenhum Banimento foi encontrado!",

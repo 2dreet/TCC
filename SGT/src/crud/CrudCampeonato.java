@@ -288,7 +288,7 @@ public class CrudCampeonato extends JPanel {
 				return false;
 			}
 			
-			if(campeonatoSelecionado != null && campeonatoSelecionado.getDataInicio() != null){
+			if(campeonatoSelecionado != null && campeonatoSelecionado.getDataInicio() != null && campeonatoSelecionado.getDataFim() == null){
 				Menssage.setMenssage("Campeonato Iniciado",
 						"Campeonato Iniciado não pode ser Deletado",
 						ParametroCrud.getModoCrudDeletar(),
@@ -370,18 +370,6 @@ public class CrudCampeonato extends JPanel {
 							}
 						} 
 				}
-				});
-			} else {
-				JButton btCancelar = new JButton("Cancelar Campeonato");
-				btCancelar.setBounds(225, 110, 210, 35);
-				btCancelar.setFont(UtilitarioTela.getFont(14));
-				btCancelar.setFocusPainted(false);
-				btCancelar.setBackground(UtilitarioTela.getColorCrud(modoCrud));
-				meio.add(btCancelar);
-				btCancelar.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
-
-					}
 				});
 			}
 		}
@@ -581,6 +569,7 @@ public class CrudCampeonato extends JPanel {
 				campeonato.setChave(ChaveDao.getChaveNome(String
 						.valueOf(cbChave.getSelectedItem())));
 				campeonato.setAtivo(true);
+				
 				EntityManagerLocal.persist(campeonato);
 				campeonatoSelecionado = campeonato;
 

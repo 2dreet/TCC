@@ -63,6 +63,14 @@ public class Time implements Serializable {
     private Collection<Classificacao> classificacaoCollection1;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "timePrimeiro")
     private Collection<Classificacao> classificacaoCollection2;
+    @OneToMany(mappedBy = "timePerdedor")
+    private Collection<TimePartida> timePartidaCollection;
+    @OneToMany(mappedBy = "timeVencedor")
+    private Collection<TimePartida> timePartidaCollection1;
+    @OneToMany(mappedBy = "time2")
+    private Collection<TimePartida> timePartidaCollection2;
+    @OneToMany(mappedBy = "time1")
+    private Collection<TimePartida> timePartidaCollection3;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "time")
     private Collection<CampeonatoTime> campeonatoTimeCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "time")
@@ -148,6 +156,42 @@ public class Time implements Serializable {
 
     public void setClassificacaoCollection2(Collection<Classificacao> classificacaoCollection2) {
         this.classificacaoCollection2 = classificacaoCollection2;
+    }
+
+    @XmlTransient
+    public Collection<TimePartida> getTimePartidaCollection() {
+        return timePartidaCollection;
+    }
+
+    public void setTimePartidaCollection(Collection<TimePartida> timePartidaCollection) {
+        this.timePartidaCollection = timePartidaCollection;
+    }
+
+    @XmlTransient
+    public Collection<TimePartida> getTimePartidaCollection1() {
+        return timePartidaCollection1;
+    }
+
+    public void setTimePartidaCollection1(Collection<TimePartida> timePartidaCollection1) {
+        this.timePartidaCollection1 = timePartidaCollection1;
+    }
+
+    @XmlTransient
+    public Collection<TimePartida> getTimePartidaCollection2() {
+        return timePartidaCollection2;
+    }
+
+    public void setTimePartidaCollection2(Collection<TimePartida> timePartidaCollection2) {
+        this.timePartidaCollection2 = timePartidaCollection2;
+    }
+
+    @XmlTransient
+    public Collection<TimePartida> getTimePartidaCollection3() {
+        return timePartidaCollection3;
+    }
+
+    public void setTimePartidaCollection3(Collection<TimePartida> timePartidaCollection3) {
+        this.timePartidaCollection3 = timePartidaCollection3;
     }
 
     @XmlTransient

@@ -48,7 +48,6 @@ import utilitario.Parametros;
 import utilitario.UtilitarioLogo;
 import utilitario.UtilitarioTela;
 import entidade.Campeonato;
-import entidade.Driver;
 import entidade.Marca;
 import entidade.Partida;
 import entidade.Periferico;

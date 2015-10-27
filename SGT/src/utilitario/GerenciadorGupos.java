@@ -100,7 +100,6 @@ public class GerenciadorGupos {
 		Partida partida = new Partida();
 		partida.setAtivo(true);
 		partida.setCampeonato(grupo.getCampeonato());
-		partida.setCancelada(false);
 		partida.setIndice(indice);
 		partida.setGrupo(grupo);
 		EntityManagerLocal.persist(partida);
@@ -121,7 +120,6 @@ public class GerenciadorGupos {
 		timeGrupo.setTime(time);
 		timeGrupo.setGrupo(grupo);
 		timeGrupo.setClasse(3);
-		timeGrupo.setAtivo(true);
 		EntityManagerLocal.persist(timeGrupo);
 		EntityManagerLocal.commit();
 		EntityManagerLocal.clear();
@@ -151,14 +149,12 @@ public class GerenciadorGupos {
 			TimeGrupo timeGrupo = new TimeGrupo();
 			timeGrupo.setTime(dialogTime.getSeedA());
 			timeGrupo.setGrupo(grupo);
-			timeGrupo.setAtivo(true);
 			timeGrupo.setClasse(1);
 			EntityManagerLocal.persist(timeGrupo);
 
 			timeGrupo = new TimeGrupo();
 			timeGrupo.setTime(dialogTime.getSeedB());
 			timeGrupo.setGrupo(grupo);
-			timeGrupo.setAtivo(true);
 			timeGrupo.setClasse(2);
 			EntityManagerLocal.persist(timeGrupo);
 			EntityManagerLocal.commit();

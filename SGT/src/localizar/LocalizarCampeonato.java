@@ -69,7 +69,7 @@ public class LocalizarCampeonato extends JPanel {
 	private Campeonato campeonatoSelecionado;
 	private MenuCampeonato menuPai;
 	private JPanel meio;
-
+	private boolean inicio;
 	/**
 	 * Create the panel.
 	 */
@@ -83,7 +83,7 @@ public class LocalizarCampeonato extends JPanel {
 		super();
 		campeonatoSelecionado = null;
 		listaCampeonato = new ArrayList<Campeonato>();
-
+		inicio = true;
 		setSize(UtilitarioTela.getTamanhoMeio());
 		setLayout(null);
 		setBackground(null);
@@ -149,6 +149,7 @@ public class LocalizarCampeonato extends JPanel {
 		meio.add(btLocalizar);
 		btLocalizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				inicio = false;
 				localizar();
 			}
 		});
@@ -264,7 +265,7 @@ public class LocalizarCampeonato extends JPanel {
 						c.getModalidade().getDescricao()});
 
 			}
-		} else {
+		} else if(!inicio){
 			listaCampeonato = new ArrayList<Campeonato>();
 			Menssage.setMenssage("Campeonato não Encontrado",
 					"Nenhum Campeonato foi encontrado!",

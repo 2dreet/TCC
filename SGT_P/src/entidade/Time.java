@@ -64,8 +64,6 @@ public class Time implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "timePrimeiro")
     private Collection<Classificacao> classificacaoCollection2;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "time")
-    private Collection<TimePartida> timePartidaCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "time")
     private Collection<CampeonatoTime> campeonatoTimeCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "time")
     private Collection<TimeGrupo> timeGrupoCollection;
@@ -150,15 +148,6 @@ public class Time implements Serializable {
 
     public void setClassificacaoCollection2(Collection<Classificacao> classificacaoCollection2) {
         this.classificacaoCollection2 = classificacaoCollection2;
-    }
-
-    @XmlTransient
-    public Collection<TimePartida> getTimePartidaCollection() {
-        return timePartidaCollection;
-    }
-
-    public void setTimePartidaCollection(Collection<TimePartida> timePartidaCollection) {
-        this.timePartidaCollection = timePartidaCollection;
     }
 
     @XmlTransient

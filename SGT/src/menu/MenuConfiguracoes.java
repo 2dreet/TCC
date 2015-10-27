@@ -14,7 +14,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import crud.CrudBanimento;
-import crud.CrudDriver;
 import crud.CrudMarca;
 import crud.CrudModalidade;
 import crud.CrudPeriferico;
@@ -36,7 +35,6 @@ public class MenuConfiguracoes extends JPanel {
 	private JPanel menuMeio;
 	private JButton btMarca;
 	private JButton btPeriferico;
-	private JButton btDriver;
 	private JButton btModalidade;
 	private JButton btBanimento;
 	
@@ -142,33 +140,6 @@ public class MenuConfiguracoes extends JPanel {
 		jp3.setBorder(new BordaEscura());
 		menuLateralBaixo.add(jp3);
 		
-		btDriver = new JButton("Driver");
-		btDriver.setBounds(5, 5, 230, 30);
-		btDriver.setBorderPainted(false);
-		btDriver.setBackground(null);
-		btDriver.setLayout(null);
-		btDriver.setName("driver");
-		btDriver.setHorizontalAlignment(SwingConstants.LEFT);
-		btDriver.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				zeraSelecao();
-				getIcon(btDriver, true);
-				menuMeio.removeAll();
-				CrudDriver c = new CrudDriver(MenuConfiguracoes.this);
-				menuMeio.add(c);
-				menuMeio.revalidate();
-				menuMeio.repaint();
-			}
-		});
-		jp3.add(btDriver);
-
-		JPanel jp4 = new JPanel();
-		jp4.setBounds(0, 120, 240, 40);
-		jp4.setBackground(null);
-		jp4.setLayout(null);
-		jp4.setBorder(new BordaEscura());
-		menuLateralBaixo.add(jp4);
-		
 		btModalidade = new JButton("Modalidade");
 		btModalidade.setBounds(5, 5, 230, 30);
 		btModalidade.setBorderPainted(false);
@@ -187,14 +158,15 @@ public class MenuConfiguracoes extends JPanel {
 				menuMeio.repaint();
 			}
 		});
-		jp4.add(btModalidade);
+		jp3.add(btModalidade);
 		
-		JPanel jp5 = new JPanel();
-		jp5.setBounds(0, 160, 240, 40);
-		jp5.setBackground(null);
-		jp5.setLayout(null);
-		jp5.setBorder(new BordaEscura());
-		menuLateralBaixo.add(jp5);
+
+		JPanel jp4 = new JPanel();
+		jp4.setBounds(0, 120, 240, 40);
+		jp4.setBackground(null);
+		jp4.setLayout(null);
+		jp4.setBorder(new BordaEscura());
+		menuLateralBaixo.add(jp4);
 		
 		btBanimento = new JButton("Banimento");
 		btBanimento.setBounds(5, 5, 230, 30);
@@ -214,7 +186,14 @@ public class MenuConfiguracoes extends JPanel {
 				menuMeio.repaint();
 			}
 		});
-		jp5.add(btBanimento);
+		jp4.add(btBanimento);
+		
+		JPanel jp5 = new JPanel();
+		jp5.setBounds(0, 160, 240, 40);
+		jp5.setBackground(null);
+		jp5.setLayout(null);
+		jp5.setBorder(new BordaEscura());
+		menuLateralBaixo.add(jp5);
 		
 		JPanel jp6 = new JPanel();
 		jp6.setBounds(0, 200, 240, 40);
@@ -232,7 +211,6 @@ public class MenuConfiguracoes extends JPanel {
 
 		getIcon(btMarca, false);
 		getIcon(btPeriferico, false);
-		getIcon(btDriver, false);
 		getIcon(btBanimento, false);
 		getIcon(btModalidade, false);
 		
@@ -240,7 +218,6 @@ public class MenuConfiguracoes extends JPanel {
 				.getFontColorSelecao(false));
 		btPeriferico.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
-		btDriver.setForeground(UtilitarioTela.getFontColorSelecao(false));
 		btBanimento.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
 		btModalidade.setForeground(UtilitarioTela
@@ -248,10 +225,16 @@ public class MenuConfiguracoes extends JPanel {
 		
 		btMarca.setFont(UtilitarioTela.getFont(14));
 		btPeriferico.setFont(UtilitarioTela.getFont(14));
-		btDriver.setFont(UtilitarioTela.getFont(14));
 		btBanimento.setFont(UtilitarioTela.getFont(14));
 		btModalidade.setFont(UtilitarioTela.getFont(14));
 		
+		zeraSelecao();
+		getIcon(btMarca, true);
+		menuMeio.removeAll();
+		CrudMarca c = new CrudMarca(MenuConfiguracoes.this);
+		menuMeio.add(c);
+		menuMeio.revalidate();
+		menuMeio.repaint();
 		
 	}
 
@@ -273,12 +256,6 @@ public class MenuConfiguracoes extends JPanel {
 		btPeriferico.setBackground(UtilitarioTela.getBtnFundo(false));
 		btPeriferico.setForeground(UtilitarioTela.getFontColorSelecao(false));
 
-		btDriver.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/crud/driver.png")));
-		btDriver.setBackground(UtilitarioTela.getBtnFundo(false));
-		btDriver.setForeground(UtilitarioTela
-				.getFontColorSelecao(false));
-		
 		btModalidade.setIcon(new ImageIcon(HomeFuncionario.class
 				.getResource("/imagem/modalidade.png")));
 		btModalidade.setBackground(UtilitarioTela.getBtnFundo(false));

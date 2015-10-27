@@ -285,6 +285,11 @@ public class MenuJogador extends JPanel {
 		btHistoricoBanimento.setFont(UtilitarioTela.getFont(14));
 		
 		limpar();
+		
+		zeraSelecao();
+		getIcon(btLocalizar, true);
+		limpar();
+		localizarJogador();
 	}
 
 	public void home(){

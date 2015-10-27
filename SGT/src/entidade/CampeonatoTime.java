@@ -72,7 +72,7 @@ public class CampeonatoTime implements Serializable {
     public void setDataInscricao(Date dataInscricao) {
         this.dataInscricao = dataInscricao;
     }
-    
+
     public Time getTime() {
 		return time;
 	}

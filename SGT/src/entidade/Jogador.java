@@ -54,8 +54,6 @@ public class Jogador implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "jogador")
     private Collection<JogadorBanimento> jogadorBanimentoCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "jogador")
-    private Collection<JogadorDriver> jogadorDriverCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "jogador")
     private Collection<JogadorPartida> jogadorPartidaCollection;
     @JoinColumn(name = "codigoUsuario", referencedColumnName = "codigoUsuario")
     @ManyToOne(optional = false)
@@ -63,6 +61,8 @@ public class Jogador implements Serializable {
     @JoinColumn(name = "codigoTime", referencedColumnName = "codigoTime")
     @ManyToOne
     private Time time;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "jogador")
+    private Collection<JogadorPeriferico> jogadorPerifericoCollection;
 
     public Jogador() {
     }
@@ -110,15 +110,6 @@ public class Jogador implements Serializable {
     }
 
     @XmlTransient
-    public Collection<JogadorDriver> getJogadorDriverCollection() {
-        return jogadorDriverCollection;
-    }
-
-    public void setJogadorDriverCollection(Collection<JogadorDriver> jogadorDriverCollection) {
-        this.jogadorDriverCollection = jogadorDriverCollection;
-    }
-
-    @XmlTransient
     public Collection<JogadorPartida> getJogadorPartidaCollection() {
         return jogadorPartidaCollection;
     }
@@ -126,7 +117,7 @@ public class Jogador implements Serializable {
     public void setJogadorPartidaCollection(Collection<JogadorPartida> jogadorPartidaCollection) {
         this.jogadorPartidaCollection = jogadorPartidaCollection;
     }
-    
+
     public Usuario getUsuario() {
 		return usuario;
 	}
@@ -143,7 +134,17 @@ public class Jogador implements Serializable {
 		this.time = time;
 	}
 
-	@Override
+	
+    @XmlTransient
+    public Collection<JogadorPeriferico> getJogadorPerifericoCollection() {
+        return jogadorPerifericoCollection;
+    }
+
+    public void setJogadorPerifericoCollection(Collection<JogadorPeriferico> jogadorPerifericoCollection) {
+        this.jogadorPerifericoCollection = jogadorPerifericoCollection;
+    }
+
+    @Override
     public int hashCode() {
         int hash = 0;
         hash += (codigoJogador != null ? codigoJogador.hashCode() : 0);

@@ -69,6 +69,7 @@ public class LocalizarTime extends JPanel {
 	private Time timeSelecionado;
 	private MenuTime menuPai;
 	private JPanel meio;
+	private boolean inicio;
 	/**
 	 * Create the panel.
 	 */
@@ -82,7 +83,7 @@ public class LocalizarTime extends JPanel {
 		super();
 		timeSelecionado = null;
 		listaTime = new ArrayList<Time>();
-
+		inicio = true;
 		setSize(UtilitarioTela.getTamanhoMeio());
 		setLayout(null);
 		setBackground(null);
@@ -148,6 +149,7 @@ public class LocalizarTime extends JPanel {
 		meio.add(btLocalizar);
 		btLocalizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				inicio = false;
 				localizar();
 			}
 		});
@@ -259,7 +261,7 @@ public class LocalizarTime extends JPanel {
 						String.valueOf(t.getCodigoTime()), t.getDescricao() });
 
 			}
-		} else {
+		} else if(!inicio){
 			listaTime = new ArrayList<Time>();
 			Menssage.setMenssage("Time não Encontrado",
 					"Nenhum Time foi encontrado!",

@@ -73,6 +73,7 @@ public class EntityManagerLocal {
 
 	public static boolean begin() {
 		getEntityManager().getTransaction().begin();
+		EntityManagerLocal.flush();
 		return true;
 	} 
 	

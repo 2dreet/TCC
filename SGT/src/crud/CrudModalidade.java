@@ -60,14 +60,14 @@ public class CrudModalidade extends JPanel{
 	private static Object[][] colunas = new Object[][] { new String[] { "Código" },
 		new String[] { "Descrição" }};
 	private static String[] linhaBusca = new String[] { "Código", "Descrição"};
-	
+	private boolean inicio;
 	public CrudModalidade(MenuConfiguracoes menuPai){
 		this.menuPai = menuPai;
 		setSize(UtilitarioTela.getTamanhoMeio());
 		setLayout(null);
 		setBackground(null);
 		modalidadeSelecionada = null;
-		
+		inicio = true;
 		header = new JPanel();
 		header.setSize(500, 30);
 		header.setLocation((getWidth() / 2) - 250, 10);
@@ -123,6 +123,7 @@ public class CrudModalidade extends JPanel{
 		meio.add(btLocalizar);
 		btLocalizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				inicio = false;
 				localizar();
 			}
 		});
@@ -240,7 +241,7 @@ public class CrudModalidade extends JPanel{
 				modelo.addRow(new Object[] {
 						String.valueOf(m.getCodigoModalidade()), m.getDescricao() });
 			}
-		} else {
+		} else if(!inicio) {
 			listaModalidade = new ArrayList<Modalidade>();
 			Menssage.setMenssage("Modalidade não Encontrada",
 					"Nenhuma Modalidade foi encontrada!",
