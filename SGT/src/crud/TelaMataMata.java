@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -29,7 +30,9 @@ import javax.swing.SwingUtilities;
 
 import dao.CampeonatoDao;
 import dao.PartidaDao;
+import tela.HomeFuncionario;
 import utilitario.BordaSombreada;
+import utilitario.Computador;
 import utilitario.ParametroCrud;
 import utilitario.Parametros;
 import utilitario.UtilitarioImagem;
@@ -48,12 +51,22 @@ public class TelaMataMata extends JFrame {
 	private int yPai;
 	private int xFilho;
 	private int yFilho;
-	
+
 	private int maiorX;
 	private int maiorY;
-	
+
 	private JPanel panel;
-	public TelaMataMata(Campeonato campeonato, JPanel pai) {
+
+	public TelaMataMata(Campeonato campeonato) {
+		limparTabela(campeonato);
+		setVisible(true);
+	}
+
+	public void limparTabela(Campeonato campeonato) {
+		if (panel != null) {
+			panel.removeAll();
+		}
+
 		maiorX = 0;
 		maiorY = 0;
 		Integer[] indices = PartidaDao
@@ -63,23 +76,42 @@ public class TelaMataMata extends JFrame {
 		List<TimePartida> listaTimePartida = PartidaDao
 				.getPartidasParaTabelaMataMata(campeonato, 1, false);
 
-		getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
-		//frame.setBounds(10, 10, 600, 400);
-		//frame.setLayout((new BoxLayout(getContentPane(), BoxLayout.X_AXIS)));
-		// montarArvore(campeonato, listaTimePartida, pojo);
+		getContentPane().setLayout(
+				new javax.swing.BoxLayout(getContentPane(),
+						javax.swing.BoxLayout.LINE_AXIS));
+
 		panel = new JPanel();
-		panel.setPreferredSize(new java.awt.Dimension(2000, 2000));
 		panel.setLayout(null);
-		montarArvore2(campeonato, listaTimePartida, pojo);
+		montarArvore(campeonato, listaTimePartida, pojo);
+		panel.setPreferredSize(new java.awt.Dimension(maiorX, maiorY));
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportView(panel);
-        //scrollPane.setSize(UtilitarioTela.getTamanhoMunitor());
 		getContentPane().add(scrollPane);
-		setBounds(10, 10, 600, 400);
-//        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//        frame.setResizable(false);
-//        frame.setLocationRelativeTo(null);
-        setVisible(true);
+		setSize(UtilitarioTela.getTamanhoMunitor());
+		
+		JButton btFechar = new JButton("");
+		btFechar.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/cancelBlack.png")));
+		btFechar.setSize(30, 30);
+		btFechar.setLocation(getWidth() - 30, 0);
+		btFechar.setBackground(UtilitarioTela.getFontColorPadrao());
+		btFechar.setFocusPainted(false);
+		btFechar.setBorder(new BordaSombreada(false, true, false, false));
+		btFechar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				dispose();
+			}
+		});
+		panel.add(btFechar);
+		
+		
+		setResizable(false);
+		setLocationRelativeTo(null);
+		setUndecorated(true);
+
+		
+		repaint();
 	}
 
 	public Color getColorTime(TimePartida tp, Time t) {
@@ -100,9 +132,28 @@ public class TelaMataMata extends JFrame {
 		panel.setLayout(null);
 		panel.setBackground(UtilitarioTela.getFontColorCrud());
 
-		String time1 = "" + partida.getCodigoPartida();
+		JPanel panelVencedor = new JPanel();
+		panelVencedor.setSize(200, 34);
+		panelVencedor.setLayout(null);
+		panelVencedor.setBackground(UtilitarioTela.getColorCrud(ParametroCrud
+				.getModoCrudNovo()));
+
+		JPanel panelTimeBaia = new JPanel();
+		panelTimeBaia.setSize(200, 34);
+		panelTimeBaia.setLayout(null);
+		panelTimeBaia.setBackground(UtilitarioTela.getFontColorPadrao());
+
+		if (panel.getX() > maiorX) {
+			maiorX = panel.getX();
+		}
+
+		if (panel.getY() > maiorY) {
+			maiorY = panel.getY();
+		}
+
+		String time1 = "";
 		if (tp.getTime1() != null) {
-			// time1 = tp.getTime1().getDescricao();
+			time1 = tp.getTime1().getDescricao();
 		}
 
 		String time2 = "";
@@ -113,8 +164,7 @@ public class TelaMataMata extends JFrame {
 		JLabel lb1 = new JLabel(time1);
 		lb1.setSize(195, 34);
 		lb1.setLocation(5, 0);
-		lb1.setForeground(Color.blue);
-		panel.add(lb1);
+		lb1.setForeground(UtilitarioTela.getFundoCrud());
 
 		JPanel mei = new JPanel();
 		mei.setSize(200, 2);
@@ -127,10 +177,56 @@ public class TelaMataMata extends JFrame {
 		JLabel lb2 = new JLabel(time2);
 		lb2.setSize(195, 34);
 		lb2.setLocation(5, 36);
-		lb2.setForeground(Color.blue);
-		panel.add(lb2);
+		lb2.setForeground(UtilitarioTela.getFundoCrud());
+
+		boolean time1Add = false;
+		boolean time2Add = false;
+
+		if (tp.getTimeVencedor() != null
+				&& tp.getTimeVencedor() == tp.getTime1()) {
+			panelVencedor.setLocation(0, lb1.getY());
+			panelVencedor.add(lb1);
+			panel.add(panelVencedor);
+			time1Add = true;
+		} else if (tp.getTimeVencedor() != null
+				&& tp.getTimeVencedor() == tp.getTime2()) {
+			panelVencedor.setLocation(0, lb2.getY());
+			panelVencedor.add(lb2);
+			panel.add(panelVencedor);
+			time2Add = true;
+		}
+
+		if (tp.getTime1() != null && isTimeBaia(tp.getTime1())) {
+			lb1.setForeground(UtilitarioTela.getFontColorCrud());
+			panelTimeBaia.setLocation(0, lb1.getY());
+			panelTimeBaia.add(lb1);
+			panel.add(panelTimeBaia);
+			time1Add = true;
+		} else if (tp.getTime2() != null && isTimeBaia(tp.getTime2())) {
+			lb2.setForeground(UtilitarioTela.getFontColorCrud());
+			panelTimeBaia.setLocation(0, lb2.getY());
+			panelTimeBaia.add(lb2);
+			panel.add(panelTimeBaia);
+			time2Add = true;
+		}
+
+		if (!time1Add) {
+			panel.add(lb1);
+		}
+
+		if (!time2Add) {
+			panel.add(lb2);
+		}
 
 		return panel;
+	}
+
+	public boolean isTimeBaia(Time time) {
+		List<TimePartida> baia = PartidaDao.getTimeBaia(time.getCodigoTime());
+		if (baia != null && baia.size() > 0) {
+			return true;
+		}
+		return false;
 	}
 
 	public JPanel getJLinhaPanel(int x, int y) {
@@ -152,297 +248,6 @@ public class TelaMataMata extends JFrame {
 	}
 
 	public boolean montarArvore(Campeonato campeonato,
-			List<TimePartida> listaTimePartida, List<PojoMataMata> partidaFilhos) {
-		int tamanhoPai = listaTimePartida.size();
-		Partida partidaPai1;
-		Partida partidaPai2;
-		List<TimePartida> newLista = new ArrayList<TimePartida>();
-		PojoMataMata pm;
-		boolean continua = false;
-		int k = 10;
-		List<Partida> listaAuxPai = new ArrayList<Partida>();
-		for (int n = 0; n < tamanhoPai; n++) {
-			pm = new PojoMataMata();
-			if (tamanhoPai > n + 1) {
-				partidaPai1 = listaTimePartida.get(n).getPartida();
-				partidaPai2 = listaTimePartida.get(n + 1).getPartida();
-				if (partidaPai1.getPartidaFilho() != null
-						&& partidaPai1.getPartidaFilho() == partidaPai2
-								.getPartidaFilho()) {
-					JPanel jpanelPai1 = null;
-					JPanel jpanelPai2 = null;
-					boolean isFilho = false;
-					for (PojoMataMata pmAux : partidaFilhos) {
-						if (pmAux.getFilho() == partidaPai1) {
-							jpanelPai1 = pmAux.getPanelFilho();
-							isFilho = true;
-						}
-						if (pmAux.getFilho() == partidaPai2) {
-							jpanelPai2 = pmAux.getPanelFilho();
-							isFilho = true;
-						}
-					}
-					// Pai 1 tem o mesmo filho que Pai 2
-					pm.setFilho(partidaPai1.getPartidaFilho());
-					pm.setPartidaPai1(partidaPai1);
-					pm.setPartidaPai2(partidaPai2);
-
-					if (!isFilho) {
-						jpanelPai1 = getJPanel(10, k + (70 * n), partidaPai1);
-						k = k + 10;
-						jpanelPai2 = getJPanel(10, k + (70 * (n + 1)),
-								partidaPai2);
-						int x = jpanelPai1.getX() + jpanelPai1.getWidth() + 50;
-						int y = jpanelPai2.getLocation().y
-								- ((jpanelPai2.getLocation().y - jpanelPai1
-										.getLocation().y) / 2);
-						JPanel filho = getJPanel(x, y,
-								partidaPai1.getPartidaFilho());
-						pm.setPanelPai1(jpanelPai1);
-						pm.setPanelPai2(jpanelPai2);
-						pm.setPanelFilho(filho);
-						add(jpanelPai1);
-						add(jpanelPai2);
-						add(filho);
-						getLigacao(jpanelPai1.getX(), jpanelPai2.getX(),
-								jpanelPai1.getY(), jpanelPai2.getY(),
-								filho.getX(), filho.getY());
-
-					} else {
-						int x = jpanelPai1.getX() + jpanelPai1.getWidth() + 50;
-						if (jpanelPai2.getX() > jpanelPai1.getX()) {
-							x = jpanelPai2.getX() + jpanelPai2.getWidth() + 50;
-						}
-						int y = jpanelPai2.getLocation().y
-								- ((jpanelPai2.getLocation().y - jpanelPai1
-										.getLocation().y) / 2);
-
-						if (jpanelPai2.getX() > jpanelPai1.getX()) {
-
-						}
-
-						JPanel filho = getJPanel(x, y,
-								partidaPai1.getPartidaFilho());
-						pm.setPanelPai1(jpanelPai1);
-						pm.setPanelPai2(jpanelPai2);
-						pm.setPanelFilho(filho);
-						add(filho);
-						getLigacao(jpanelPai1.getX(), jpanelPai2.getX(),
-								jpanelPai1.getY(), jpanelPai2.getY(),
-								filho.getX(), filho.getY());
-					}
-
-					partidaFilhos.add(pm);
-					newLista.add(PartidaDao.getTimePartida(campeonato
-							.getCodigoCampeonato(), partidaPai1
-							.getPartidaFilho().getCodigoPartida()));
-					continua = true;
-
-					System.out.println("Pai 1 : "
-							+ pm.getPartidaPai1().getCodigoPartida() + " y "
-							+ pm.getPanelPai1().getY() + " h "
-							+ pm.getPanelPai1().getHeight() + " W "
-							+ pm.getPanelPai1().getWidth());
-					System.out.println("Pai 2 : "
-							+ pm.getPartidaPai2().getCodigoPartida() + " y "
-							+ pm.getPanelPai2().getY() + " h "
-							+ pm.getPanelPai2().getHeight());
-					System.out.println("Filho : "
-							+ pm.getFilho().getCodigoPartida() + " y "
-							+ pm.getPanelFilho().getY());
-					System.out
-							.println("--------------------------------------------------");
-
-					n++;
-				}
-			} else if (listaTimePartida.get(n).getPartida().getPartidaFilho() != null) {
-				listaAuxPai = PartidaDao.getPartidasPai(listaTimePartida.get(n)
-						.getPartida().getPartidaFilho().getCodigoPartida());
-				if (listaAuxPai.size() == 2) {
-					partidaPai1 = listaTimePartida.get(n).getPartida();
-					partidaPai2 = listaAuxPai.get(0);
-					JPanel jpanelPai2 = null;
-					JPanel jpanelPai1 = null;
-					for (PojoMataMata pmAux : partidaFilhos) {
-						if (pmAux.getFilho() == partidaPai1) {
-							jpanelPai1 = pmAux.getPanelFilho();
-						} else if (pmAux.getFilho() == partidaPai2) {
-							jpanelPai2 = pmAux.getPanelFilho();
-						}
-					}
-					if (jpanelPai1 != null && jpanelPai2 != null) {
-						pm.setFilho(partidaPai1.getPartidaFilho());
-						pm.setPartidaPai1(partidaPai1);
-						pm.setPartidaPai2(partidaPai2);
-
-						int x = jpanelPai1.getX() + jpanelPai1.getWidth() + 50;
-						if (jpanelPai2.getX() > jpanelPai1.getX()) {
-							x = jpanelPai2.getX() + jpanelPai2.getWidth() + 50;
-						}
-						int y = jpanelPai2.getLocation().y
-								- ((jpanelPai2.getLocation().y - jpanelPai1
-										.getLocation().y) / 2);
-
-						if (jpanelPai2.getX() > jpanelPai1.getX()) {
-
-						}
-
-						JPanel filho = getJPanel(x, y,
-								partidaPai1.getPartidaFilho());
-						pm.setPanelPai1(jpanelPai1);
-						pm.setPanelPai2(jpanelPai2);
-						pm.setPanelFilho(filho);
-						add(filho);
-						getLigacao(jpanelPai1.getX(), jpanelPai2.getX(),
-								jpanelPai1.getY(), jpanelPai2.getY(),
-								filho.getX(), filho.getY());
-
-						partidaFilhos.add(pm);
-						newLista.add(PartidaDao.getTimePartida(campeonato
-								.getCodigoCampeonato(), partidaPai1
-								.getPartidaFilho().getCodigoPartida()));
-						continua = true;
-						System.out.println("Pai 1 : "
-								+ pm.getPartidaPai1().getCodigoPartida());
-						System.out.println("Pai 2 : "
-								+ pm.getPartidaPai2().getCodigoPartida());
-						System.out.println("Filho : "
-								+ pm.getFilho().getCodigoPartida());
-						System.out
-								.println("--------------------------------------------------");
-
-						n++;
-
-					}
-				} else {
-					partidaPai1 = listaTimePartida.get(n).getPartida();
-					// Pai 1 tem o mesmo filho que Pai 2
-					pm.setPartidaPai1(partidaPai1);
-					pm.setFilho(partidaPai1.getPartidaFilho());
-					JPanel jpanelPai1 = null;
-					boolean isFilho = false;
-
-					for (PojoMataMata pmAux : partidaFilhos) {
-						if (pmAux.getFilho() == partidaPai1) {
-							jpanelPai1 = pmAux.getPanelFilho();
-							isFilho = true;
-						}
-					}
-
-					if (!isFilho) {
-						jpanelPai1 = getJPanel(10, k + (70 * n),
-								partidaPai1.getPartidaFilho());
-						int x = jpanelPai1.getX() + jpanelPai1.getWidth() + 50;
-						int y = (jpanelPai1.getY() + jpanelPai1.getHeight() / 2) - 15;
-						JPanel filho = getJPanel(x, y,
-								partidaPai1.getPartidaFilho());
-						pm.setPanelPai1(jpanelPai1);
-						pm.setPanelFilho(filho);
-						add(jpanelPai1);
-						add(filho);
-						getLigacaoSimples(jpanelPai1.getX(), jpanelPai1.getY(),
-								filho.getX(), filho.getY());
-					} else {
-						int x = jpanelPai1.getX() + jpanelPai1.getWidth() + 50;
-						int y = (jpanelPai1.getY() + jpanelPai1.getHeight() / 2) - 35;
-						JPanel filho = getJPanel(x, y,
-								partidaPai1.getPartidaFilho());
-						pm.setPanelPai1(jpanelPai1);
-						pm.setPanelFilho(filho);
-						add(filho);
-						getLigacaoSimples(jpanelPai1.getX(), jpanelPai1.getY(),
-								filho.getX(), filho.getY());
-					}
-
-					partidaFilhos.add(pm);
-
-					newLista.add(PartidaDao.getTimePartida(campeonato
-							.getCodigoCampeonato(), partidaPai1
-							.getPartidaFilho().getCodigoPartida()));
-					continua = true;
-
-					System.out.println("Pai 1 : "
-							+ pm.getPartidaPai1().getCodigoPartida());
-					System.out.println("Filho : "
-							+ pm.getFilho().getCodigoPartida());
-					System.out
-							.println("--------------------------------------------------");
-				}
-				n++;
-			} else if (tamanhoPai == n + 1 && listaTimePartida.size() > 1) {
-				// Ultima Partida
-				partidaPai1 = listaTimePartida.get(0).getPartida();
-				partidaPai2 = listaTimePartida.get(1).getPartida();
-				JPanel jpanelPai1 = null;
-				JPanel jpanelPai2 = null;
-				boolean isFilho = false;
-				for (PojoMataMata pmAux : partidaFilhos) {
-					if (pmAux.getFilho() == partidaPai1) {
-						jpanelPai1 = pmAux.getPanelFilho();
-						isFilho = true;
-					} else if (pmAux.getFilho() == partidaPai2) {
-						jpanelPai2 = pmAux.getPanelFilho();
-						isFilho = true;
-					}
-				}
-
-				pm.setFilho(partidaPai1.getPartidaFilho());
-				pm.setPartidaPai1(partidaPai1);
-				pm.setPartidaPai2(partidaPai2);
-
-				int x = jpanelPai1.getX() + jpanelPai1.getWidth() + 50;
-				if (jpanelPai2.getX() > jpanelPai1.getX()) {
-					x = jpanelPai2.getX() + jpanelPai2.getWidth() + 50;
-				}
-				int y = jpanelPai2.getLocation().y
-						- ((jpanelPai2.getLocation().y - jpanelPai1
-								.getLocation().y) / 2);
-
-				if (jpanelPai2.getX() > jpanelPai1.getX()) {
-
-				}
-
-				JPanel filho = getJPanel(x, y, partidaPai1.getPartidaFilho());
-				pm.setPanelPai1(jpanelPai1);
-				pm.setPanelPai2(jpanelPai2);
-				pm.setPanelFilho(filho);
-				add(filho);
-				getLigacao(jpanelPai1.getX(), jpanelPai2.getX(),
-						jpanelPai1.getY(), jpanelPai2.getY(), filho.getX(),
-						filho.getY());
-
-				partidaFilhos.add(pm);
-				newLista.add(PartidaDao.getTimePartida(campeonato
-						.getCodigoCampeonato(), partidaPai1.getPartidaFilho()
-						.getCodigoPartida()));
-				continua = true;
-
-				System.out.println("Pai 1 : "
-						+ pm.getPartidaPai1().getCodigoPartida() + " y "
-						+ pm.getPanelPai1().getY() + " h "
-						+ pm.getPanelPai1().getHeight() + " W "
-						+ pm.getPanelPai1().getWidth());
-				System.out.println("Pai 2 : "
-						+ pm.getPartidaPai2().getCodigoPartida() + " y "
-						+ pm.getPanelPai2().getY() + " h "
-						+ pm.getPanelPai2().getHeight());
-				System.out.println("Filho : "
-						+ pm.getFilho().getCodigoPartida() + " y "
-						+ pm.getPanelFilho().getY());
-				System.out
-						.println("--------------------------------------------------");
-
-				n++;
-			}
-			k = k + 10;
-		}
-		if (continua) {
-			return montarArvore(campeonato, newLista, partidaFilhos);
-		}
-		return true;
-	}
-
-	public boolean montarArvore2(Campeonato campeonato,
 			List<TimePartida> listaTimePartida, List<PojoMataMata> partidaFilhos) {
 		int tamanhoPai = listaTimePartida.size();
 		Partida partida;
@@ -516,18 +321,22 @@ public class TelaMataMata extends JFrame {
 						List<Partida> listaAuxPai2 = PartidaDao
 								.getPartidasPai(partidaPai2.getPartidaFilho()
 										.getCodigoPartida());
-						if (listaAuxPai2.size() > 0 && listaAuxPai2.get(0).getPartidaFilho().getPartidaFilho() == null) {
+						if (listaAuxPai2.size() > 0
+								&& listaAuxPai2.get(0).getPartidaFilho()
+										.getPartidaFilho() == null) {
 							naoPassouAinda = true;
 						}
-					} else if(jpanelPai1 == null){
+					} else if (jpanelPai1 == null) {
 						List<Partida> listaAuxPai2 = PartidaDao
 								.getPartidasPai(partidaPai1.getPartidaFilho()
 										.getCodigoPartida());
-						if (listaAuxPai2.size() > 0 && listaAuxPai2.get(0).getPartidaFilho().getPartidaFilho() == null) {
+						if (listaAuxPai2.size() > 0
+								&& listaAuxPai2.get(0).getPartidaFilho()
+										.getPartidaFilho() == null) {
 							naoPassouAinda = true;
 						}
 					}
-					
+
 					if (!naoPassouAinda) {
 						pm.setFilho(partidaPai1.getPartidaFilho());
 						pm.setPartidaPai1(partidaPai1);
@@ -607,12 +416,67 @@ public class TelaMataMata extends JFrame {
 					}
 					n++;
 
+				} else {
+					boolean naoPassouAinda = false;
+					partidaPai1 = listaAuxPai.get(0);
+					JPanel jpanelPai1 = null;
+					for (PojoMataMata pmAux : partidaFilhos) {
+						if (pmAux.getFilho() == partidaPai1) {
+							jpanelPai1 = pmAux.getPanelFilho();
+						}
+					}
+
+					if (jpanelPai1 == null) {
+						List<Partida> listaAuxPai2 = PartidaDao
+								.getPartidasPai(partidaPai1.getPartidaFilho()
+										.getCodigoPartida());
+						if (listaAuxPai2.size() > 0
+								&& listaAuxPai2.get(0).getPartidaFilho()
+										.getPartidaFilho() == null) {
+							naoPassouAinda = true;
+						}
+					}
+
+					if (!naoPassouAinda) {
+						pm.setFilho(partidaPai1.getPartidaFilho());
+						pm.setPartidaPai1(partidaPai1);
+
+						int x = jpanelPai1.getX() + jpanelPai1.getWidth() + 50;
+						int y = jpanelPai1.getY();
+						JPanel filho = getJPanel(x, y,
+								partidaPai1.getPartidaFilho());
+						pm.setPanelPai1(jpanelPai1);
+						pm.setPanelFilho(filho);
+						getLigacaoSimples(jpanelPai1.getX(), jpanelPai1.getY(),
+								filho.getX(), filho.getY());
+						panel.add(filho);
+
+						partidaFilhos.add(pm);
+						partidasAcima.add(pm);
+						newLista.add(PartidaDao.getTimePartida(campeonato
+								.getCodigoCampeonato(), partidaPai1
+								.getPartidaFilho().getCodigoPartida()));
+						continua = true;
+
+						System.out.println("Pai 1 : "
+								+ pm.getPartidaPai1().getCodigoPartida()
+								+ " y " + pm.getPanelPai1().getY() + " h "
+								+ pm.getPanelPai1().getHeight() + " W "
+								+ pm.getPanelPai1().getWidth());
+
+						System.out.println("Filho : "
+								+ pm.getFilho().getCodigoPartida() + " y "
+								+ pm.getPanelFilho().getY());
+						System.out
+								.println("--------------------------------------------------");
+					}
+					n++;
 				}
 			}
 			k = k + 10;
 		}
 		if (continua) {
-			return montarArvore2(campeonato, newLista, partidaFilhos);
+			return montarArvore(campeonato, newLista, partidaFilhos);
 		}
 		return true;
 	}
@@ -649,7 +513,7 @@ public class TelaMataMata extends JFrame {
 
 	public void getLigacaoSimples(int xP1, int yP1, int xF, int yF) {
 		JPanel p1 = new JPanel();
-		p1.setSize(50, 2);
+		p1.setSize(xF - xP1 - 200, 2);
 		p1.setLocation(xP1 + 200, yP1 + 35);
 		p1.setLayout(null);
 		p1.setBackground(UtilitarioTela.getFontColorPadrao());
@@ -658,6 +522,6 @@ public class TelaMataMata extends JFrame {
 
 	public static void main(String[] args) {
 		Campeonato campeonato = CampeonatoDao.getCampeonato(1);
-		TelaMataMata tm = new TelaMataMata(campeonato, null);
+		TelaMataMata tm = new TelaMataMata(campeonato);
 	}
 }

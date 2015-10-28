@@ -391,10 +391,23 @@ public class PartidaDao {
 
 	public static List<Partida> getPartidasPai(int codigoPatida) {
 		try {
-			String sql = "SELECT * FROM partida WHERE codigoPartidaFilho = "
+			String sql = "SELECT * FROM partida WHERE ((horaInicio is null and horaFim is null) OR  (horaInicio is not null and horaFim is null)) AND codigoPartidaFilho = "
 					+ codigoPatida;
 			return EntityManagerLocal.getEntityManager()
 					.createNativeQuery(sql, Partida.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
+	public static List<TimePartida> getTimeBaia(int codigoTime) {
+		try {
+			String sql = "SELECT * FROM time_partida tp INNER JOIN partida p ON p.codigoPartida = tp.codigoPartida"+
+						 " WHERE tp.codigoTime1 = "+codigoTime+" and p.horaInicio is null and p.horaFim is not null AND p.codigoGrupo is null;";
+			return EntityManagerLocal.getEntityManager()
+					.createNativeQuery(sql, TimePartida.class)
 					.setHint(QueryHints.REFRESH, HintValues.TRUE)
 					.getResultList();
 		} catch (NoResultException ex) {
