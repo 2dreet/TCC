@@ -141,6 +141,28 @@ public class PartidaDao {
 		}
 	}
 
+	public static List<TimePartida> getPartidasParaTabelaMataMata(Campeonato campeonato,
+			int indice, boolean winerLower) {
+		try {
+			String sql = " SELECT * FROM time_partida tp INNER JOIN partida p ON p.codigoPartida = tp.codigoPartida"
+					+ " INNER JOIN campeonato c on p.codigoCampeonato = c.codigoCampeonato"
+					+ " WHERE p.codigoCampeonato = '"
+					+ campeonato.getCodigoCampeonato()
+					+ "'"
+					+ " AND p.indice = '"
+					+ indice
+					+ "'" + " AND p.codigoGrupo is null AND p.winerLower = '"
+						+ winerLower + "'ORDER BY p.indice, p.codigoPartidaFilho, p.codigoPartida;";
+			
+			return EntityManagerLocal.getEntityManager()
+					.createNativeQuery(sql, TimePartida.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
 	public static List<TimePartida> getPartidasPorIndice(Campeonato campeonato,
 			int indice, boolean winerLower) {
 		try {

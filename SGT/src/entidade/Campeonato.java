@@ -68,12 +68,12 @@ public class Campeonato implements Serializable {
     private Collection<Classificacao> classificacaoCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "campeonato")
     private Collection<CampeonatoTime> campeonatoTimeCollection;
-    @JoinColumn(name = "codigoChave", referencedColumnName = "chave")
+    @JoinColumn(name = "codigoChave", referencedColumnName = "codigoChave")
     @ManyToOne(optional = false)
     private Chave chave;
     @JoinColumn(name = "codigoFuncionario", referencedColumnName = "codigoFuncionario")
     @ManyToOne(optional = false)
-    private Funcionario codigoFuncionario;
+    private Funcionario funcionario;
     @JoinColumn(name = "codigoModalidade", referencedColumnName = "codigoModalidade")
     @ManyToOne(optional = false)
     private Modalidade modalidade;
@@ -167,17 +167,17 @@ public class Campeonato implements Serializable {
         this.campeonatoTimeCollection = campeonatoTimeCollection;
     }
 
-    public Funcionario getCodigoFuncionario() {
-        return codigoFuncionario;
-    }
-
-    public void setCodigoFuncionario(Funcionario codigoFuncionario) {
-        this.codigoFuncionario = codigoFuncionario;
-    }
-
    
-    
-    public Chave getChave() {
+
+    public Funcionario getFuncionario() {
+		return funcionario;
+	}
+
+	public void setFuncionario(Funcionario funcionario) {
+		this.funcionario = funcionario;
+	}
+
+	public Chave getChave() {
 		return chave;
 	}
 

@@ -16,6 +16,7 @@ import utilitario.BordaSombreada;
 import utilitario.Computador;
 import utilitario.GerenciadorGupos;
 import utilitario.GerenciadorPartida;
+import utilitario.Login;
 import utilitario.MascaraCrud;
 import utilitario.ParametroCrud;
 import utilitario.Parametros;
@@ -494,7 +495,7 @@ public class CrudCampeonato extends JPanel {
 						if (tabela.getSelectedRow() > -1) {
 							CampeonatoTime campTime = CampeonatoTimeDao.getCampeonatoTime(Integer
 									.parseInt(String.valueOf(tabela.getValueAt(
-											tabela.getSelectedRow(), 0))));
+											tabela.getSelectedRow(), 1))));
 							boolean confirmado = true;
 							MenssageConfirmacao
 									.setMenssage("Remover Time do Campeonato",
@@ -569,7 +570,7 @@ public class CrudCampeonato extends JPanel {
 				campeonato.setChave(ChaveDao.getChaveNome(String
 						.valueOf(cbChave.getSelectedItem())));
 				campeonato.setAtivo(true);
-				
+				campeonato.setFuncionario(Login.usuario);
 				EntityManagerLocal.persist(campeonato);
 				campeonatoSelecionado = campeonato;
 

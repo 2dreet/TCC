@@ -50,7 +50,7 @@ public class Funcionario implements Serializable {
     @JoinColumn(name = "codigoUsuario", referencedColumnName = "codigoUsuario")
     @ManyToOne(optional = false)
     private Usuario usuario;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoFuncionario")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "funcionario")
     private Collection<Campeonato> campeonatoCollection;
 
     public Funcionario() {
