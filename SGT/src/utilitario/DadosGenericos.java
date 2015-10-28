@@ -25,7 +25,7 @@ public class DadosGenericos {
 	}
 	
 	public static void gerarTimes(){
-		for(int i = 0; i < 13; i++){
+		for(int i = 0; i < 30; i++){
 			Time time = new Time();
 			time.setAtivo(true);
 			time.setDataCadastro(new Date());

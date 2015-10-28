@@ -56,7 +56,7 @@ public class DialogLocalizarTime {
 	private static JDialog dialog;
 	private static JPanel meio;
 	private static Campeonato campeonatoSelecionado;
-	
+	private static boolean inicio;
 	public DialogLocalizarTime(){
 		super();
 		campeonatoSelecionado = null;
@@ -65,9 +65,11 @@ public class DialogLocalizarTime {
 	}
 	
 	public static void localizarTime(JPanel painelPai, Campeonato campeonato) {
+		
 		campeonatoSelecionado = campeonato;
 		timeSelecionado = null;
 		listaTime = new ArrayList<Time>();
+		inicio = true;
 		dialog = new JDialog(Parametros.getPai(), true);
 		dialog.setUndecorated(true);
 		dialog.setLayout(null);
@@ -137,6 +139,7 @@ public class DialogLocalizarTime {
 		meio.add(btLocalizar);
 		btLocalizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				inicio = false;
 				localizar();
 			}
 		});
@@ -202,6 +205,8 @@ public class DialogLocalizarTime {
 			}
 		});
 		
+		localizar();
+		
 		dialog.getContentPane().add(panel);
 		dialog.setVisible(true);
 	}
@@ -242,7 +247,7 @@ public class DialogLocalizarTime {
 						String.valueOf(t.getCodigoTime()), t.getDescricao() });
 
 			}
-		} else {
+		} else if(!inicio){
 			listaTime = new ArrayList<Time>();
 			Menssage.setMenssage("Time não Encontrado", "Nenhum Time foi encontrado!", ParametroCrud.getModoCrudDeletar(), dialog.getContentPane());
 		}

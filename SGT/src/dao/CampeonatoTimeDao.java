@@ -79,9 +79,9 @@ public class CampeonatoTimeDao {
 		}
 	}
 	
-	public static CampeonatoTime getCampeonatoTime(int codigoCampeonatoTime){
+	public static CampeonatoTime getCampeonatoTime(int codigoTime){
 		try{
-			String sql = "SELECT * FROM campeonato_time where codigoCampTime = '"+codigoCampeonatoTime+"'";
+			String sql = "SELECT * FROM campeonato_time where codigoTime = '"+codigoTime+"'";
 			return (CampeonatoTime) EntityManagerLocal.getEntityManager().createNativeQuery(sql, CampeonatoTime.class)
 					.setHint(QueryHints.REFRESH, HintValues.TRUE)
 					.setMaxResults(1).getSingleResult();
