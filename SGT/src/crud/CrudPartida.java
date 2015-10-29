@@ -100,15 +100,20 @@ public class CrudPartida extends JPanel {
 	private Partida partida;
 	private JPanel meioT1;
 	private JButton btProximaPartida;
-	
+	private JTable tabela;
+	private Object[][] colunas = new Object[][] { new String[] { "Time 1" },
+			new String[] { "Time 2" }, new String[] { "Placar Time 1" }, new String[] { "Placar Time 2" }, new String[] { "Chave" }};
 	private JButton btTabelaGrupo;
 	private JButton btTabelaMataMata;
 	private JButton btTabelaWinnerLower;
 
+	private TelaMataMata telaMataMata;
+	
 	/**
 	 * Create the panel.
 	 */
 	public CrudPartida(Campeonato campeonato, MenuCampeonato menuPai) {
+		
 		this.menuPai = menuPai;
 		setSize(UtilitarioTela.getTamanhoMeio());
 		setLayout(null);
@@ -123,6 +128,8 @@ public class CrudPartida extends JPanel {
 		header.setBorder(null);
 		add(header);
 
+		telaMataMata = new TelaMataMata(campeonato);
+		
 		String textoHeader = "Partidas";
 
 		lblHeader = new JLabel(textoHeader);
@@ -163,6 +170,55 @@ public class CrudPartida extends JPanel {
 		});
 		meio.add(btProximaPartida);
 
+		btTabelaGrupo = new JButton("Tabela de Grupo");
+		btTabelaGrupo.setSize(200, 30);
+		btTabelaGrupo.setLocation(10, 10);
+		btTabelaGrupo.setFocusPainted(false);
+		btTabelaGrupo.setBackground(UtilitarioTela.getFontColorCrud());
+		btTabelaGrupo.setForeground(UtilitarioTela.getFontColorPadrao());
+		btTabelaGrupo.setBorder(new BordaSombreada(false, true, false, false));
+		btTabelaGrupo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+			}
+		});
+		meio.add(btTabelaGrupo);
+
+		btTabelaMataMata = new JButton("Tabela de Mata-Mata");
+		btTabelaMataMata.setSize(200, 30);
+		btTabelaMataMata.setLocation(10, 50);
+		btTabelaMataMata.setBackground(UtilitarioTela.getFontColorCrud());
+		btTabelaMataMata.setForeground(UtilitarioTela.getFontColorPadrao());
+		btTabelaMataMata.setFocusPainted(false);
+		btTabelaMataMata
+				.setBorder(new BordaSombreada(false, true, false, false));
+		btTabelaMataMata.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(telaMataMata.isVisible()){
+					telaMataMata.atualizarTela(campeonatoSelecionado);
+				} else{
+					telaMataMata.setVisible(true);
+					telaMataMata.atualizarTela(campeonatoSelecionado);
+				}
+			}
+		});
+		meio.add(btTabelaMataMata);
+
+		btTabelaWinnerLower = new JButton("Tabela de Winner Lower");
+		btTabelaWinnerLower.setSize(200, 30);
+		btTabelaWinnerLower.setLocation(10, 90);
+		btTabelaWinnerLower.setBackground(UtilitarioTela.getFontColorCrud());
+		btTabelaWinnerLower.setForeground(UtilitarioTela.getFontColorPadrao());
+		btTabelaWinnerLower.setFocusPainted(false);
+		btTabelaWinnerLower.setBorder(new BordaSombreada(false, true, false,
+				false));
+		btTabelaWinnerLower.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+			}
+		});
+		meio.add(btTabelaWinnerLower);
+
 		meioT1 = new JPanel();
 		meioT1.setSize(500, 70);
 		meioT1.setLayout(null);
@@ -172,6 +228,36 @@ public class CrudPartida extends JPanel {
 				102, 102, 102)));
 		meio.add(meioT1);
 
+		tabela = new JTable();
+		tabela.setModel(UtilitarioTabela.getModelo(colunas));
+
+		TableColumnModel tcm = tabela.getColumnModel();
+		TextoIconeCell renderer = new TextoIconeCell();
+		tcm.getColumn(0).setCellRenderer(renderer);
+		tcm.getColumn(0).setPreferredWidth(50);
+		tcm.getColumn(0).setMinWidth(50);
+		tcm.getColumn(0).setResizable(false);
+		tcm.getColumn(1).setPreferredWidth(120);
+		tcm.getColumn(1).setMinWidth(120);
+		tcm.getColumn(1).setResizable(false);
+		tcm.getColumn(2).setPreferredWidth(450);
+		tcm.getColumn(2).setMinWidth(450);
+		tcm.getColumn(2).setResizable(false);
+
+		UtilitarioTabela.pintarColona(UtilitarioTabela.getFundoHeaderPadrao(),
+				UtilitarioTabela.getFontColotHeaderPadrao(), tcm, colunas);
+		UtilitarioTabela.pintarLinha(new Color(255, 153, 153), Color.black,
+				tabela);
+		tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		tabela.setPreferredScrollableViewportSize(tabela.getPreferredSize());
+		tabela.getTableHeader().setReorderingAllowed(false);
+		tabela.setRowHeight(50);
+		tabela.setFont(UtilitarioTela.getFont(14));
+		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		JScrollPane scroll = new JScrollPane(tabela);
+		scroll.setBounds(5, 30, meio2.getHeight()-50, meio2.getWidth()-10);
+		meio2.add(scroll);
+		
 		mostrarProximaPartida();
 
 	}
@@ -208,15 +294,25 @@ public class CrudPartida extends JPanel {
 	}
 
 	public void mostrarVisuPartida() {
-		meio2.removeAll();
-//		if (campeonatoSelecionado.getChave().getCodigoChave() == 3) {
-//			meio2.add(new TelaGrupos(campeonatoSelecionado, meio2));
-//		} else if (campeonatoSelecionado.getChave().getCodigoChave() == 2) {
-//			meio2.add(new TelaMataMata(campeonatoSelecionado, meio2));
-//		} else if (campeonatoSelecionado.getChave().getCodigoChave() == 1) {
-//			meio2.add(new TelaMataMata(campeonatoSelecionado, meio2));
-//		}
-		meio2.repaint();
+		btTabelaGrupo.setEnabled(false);
+		btTabelaMataMata.setEnabled(false);
+		btTabelaWinnerLower.setEnabled(false);
+		if (PartidaDao.isCampeonatoChaveGrupo(campeonatoSelecionado
+				.getCodigoCampeonato())) {
+			btTabelaGrupo.setEnabled(true);
+		}
+		
+		if (PartidaDao.isCampeonatoChaveMataMata(campeonatoSelecionado
+				.getCodigoCampeonato())) {
+			if(telaMataMata.isVisible()){
+				telaMataMata.atualizarTela(campeonatoSelecionado);
+			}
+			btTabelaMataMata.setEnabled(true);
+		}
+		if (PartidaDao.isCampeonatoChaveWinnerLower(campeonatoSelecionado
+				.getCodigoCampeonato())) {
+			btTabelaWinnerLower.setEnabled(true);
+		}
 	}
 
 	public boolean mostrarProximaPartida() {
@@ -368,6 +464,7 @@ public class CrudPartida extends JPanel {
 			meioT1.repaint();
 			return true;
 		}
+		
 		return true;
 	}
 

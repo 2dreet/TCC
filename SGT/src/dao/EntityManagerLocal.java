@@ -66,14 +66,13 @@ public class EntityManagerLocal {
 	}
 
 	public static boolean commit() {
-		// getEntityManager().flush();
+		getEntityManager().flush();
 		getEntityManager().getTransaction().commit();
 		return true;
 	}
 
 	public static boolean begin() {
 		getEntityManager().getTransaction().begin();
-		EntityManagerLocal.flush();
 		return true;
 	} 
 	

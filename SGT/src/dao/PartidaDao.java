@@ -372,6 +372,57 @@ public class PartidaDao {
 		}
 	}
 	
+	public static boolean isCampeonatoChaveGrupo(int codigo) {
+		try {
+			String sql = "SELECT * FROM partida where codigoCampeonato = "
+					+ codigo + " AND codigoGrupo is not null LIMIT 1";
+			Partida partida = (Partida) EntityManagerLocal.getEntityManager()
+					.createNativeQuery(sql, Partida.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.setMaxResults(1).getSingleResult();
+			if (partida != null) {
+				return true;
+			}
+		} catch (NoResultException ex) {
+
+		}
+		return false;
+	}
+	
+	public static boolean isCampeonatoChaveMataMata(int codigo) {
+		try {
+			String sql = "SELECT * FROM partida where codigoCampeonato = "
+					+ codigo + " AND codigoGrupo is null and winerLower = false LIMIT 1";
+			Partida partida = (Partida) EntityManagerLocal.getEntityManager()
+					.createNativeQuery(sql, Partida.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.setMaxResults(1).getSingleResult();
+			if (partida != null) {
+				return true;
+			}
+		} catch (NoResultException ex) {
+
+		}
+		return false;
+	}
+	
+	public static boolean isCampeonatoChaveWinnerLower(int codigo) {
+		try {
+			String sql = "SELECT * FROM partida where codigoCampeonato = "
+					+ codigo + " AND codigoGrupo is null and winerLower = true LIMIT 1";
+			Partida partida = (Partida) EntityManagerLocal.getEntityManager()
+					.createNativeQuery(sql, Partida.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.setMaxResults(1).getSingleResult();
+			if (partida != null) {
+				return true;
+			}
+		} catch (NoResultException ex) {
+
+		}
+		return false;
+	}
+	
 	public static boolean isPartidaFilho(int codigo) {
 		try {
 			String sql = "SELECT * FROM partida where codigoPartidaFilho = "
@@ -389,9 +440,25 @@ public class PartidaDao {
 		return false;
 	}
 
+	public static boolean isPartidaFinal(int codigo) {
+		try {
+			String sql = "SELECT * FROM sgtg.partida where codigoPartidaFilho is null and codigoPartida = "+codigo+" AND ativo = false;";
+			Partida partida = (Partida) EntityManagerLocal.getEntityManager()
+					.createNativeQuery(sql, Partida.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.setMaxResults(1).getSingleResult();
+			if (partida != null) {
+				return true;
+			}
+		} catch (NoResultException ex) {
+
+		}
+		return false;
+	}
+	
 	public static List<Partida> getPartidasPai(int codigoPatida) {
 		try {
-			String sql = "SELECT * FROM partida WHERE ((horaInicio is null and horaFim is null) OR  (horaInicio is not null and horaFim is null)) AND codigoPartidaFilho = "
+			String sql = "SELECT * FROM partida WHERE ((horaInicio is null and horaFim is null) OR  (horaInicio is not null and horaFim is null) OR  (horaInicio is not null and horaFim is not null)) AND codigoPartidaFilho = "
 					+ codigoPatida;
 			return EntityManagerLocal.getEntityManager()
 					.createNativeQuery(sql, Partida.class)

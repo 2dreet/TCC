@@ -720,7 +720,6 @@ public class DialogCrudPartida {
 
 		for (int i = 0; i < 10; i++) {
 			EntityManagerLocal.begin();
-
 			PcPartida pcP = new PcPartida();
 			pcP.setPc(listaPc.get(i));
 			pcP.setPartida(partidaSelecionado);

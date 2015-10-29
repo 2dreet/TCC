@@ -54,15 +54,10 @@ public class TelaMataMata extends JFrame {
 
 	private int maiorX;
 	private int maiorY;
-
+	private JScrollPane scrollPane;
 	private JPanel panel;
 
 	public TelaMataMata(Campeonato campeonato) {
-		limparTabela(campeonato);
-		setVisible(true);
-	}
-
-	public void limparTabela(Campeonato campeonato) {
 		if (panel != null) {
 			panel.removeAll();
 		}
@@ -82,35 +77,35 @@ public class TelaMataMata extends JFrame {
 
 		panel = new JPanel();
 		panel.setLayout(null);
-		montarArvore(campeonato, listaTimePartida, pojo);
-		panel.setPreferredSize(new java.awt.Dimension(maiorX, maiorY));
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new JScrollPane();
 		scrollPane.setViewportView(panel);
 		getContentPane().add(scrollPane);
 		setSize(UtilitarioTela.getTamanhoMunitor());
-		
-		JButton btFechar = new JButton("");
-		btFechar.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/cancelBlack.png")));
-		btFechar.setSize(30, 30);
-		btFechar.setLocation(getWidth() - 30, 0);
-		btFechar.setBackground(UtilitarioTela.getFontColorPadrao());
-		btFechar.setFocusPainted(false);
-		btFechar.setBorder(new BordaSombreada(false, true, false, false));
-		btFechar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
-				dispose();
-			}
-		});
-		panel.add(btFechar);
-		
-		
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setResizable(false);
 		setLocationRelativeTo(null);
-		setUndecorated(true);
+		repaint();
+	}
 
-		
+	public void atualizarTela(Campeonato campeonato) {
+		scrollPane.remove(panel);
+		maiorX = 0;
+		maiorY = 0;
+		Integer[] indices = PartidaDao
+				.getIndicesPartidaParaGerarLowers(campeonato
+						.getCodigoCampeonato());
+		List<PojoMataMata> pojo = new ArrayList<PojoMataMata>();
+		List<TimePartida> listaTimePartida = PartidaDao
+				.getPartidasParaTabelaMataMata(campeonato, 1, false);
+
+		getContentPane().setLayout(
+				new javax.swing.BoxLayout(getContentPane(),
+						javax.swing.BoxLayout.LINE_AXIS));
+		panel = new JPanel();
+		panel.setLayout(null);
+		montarArvore(campeonato, listaTimePartida, pojo);
+		panel.setPreferredSize(new java.awt.Dimension(maiorX, maiorY));
+		scrollPane.setViewportView(panel);
 		repaint();
 	}
 
@@ -131,7 +126,24 @@ public class TelaMataMata extends JFrame {
 		panel.setLocation(x, y);
 		panel.setLayout(null);
 		panel.setBackground(UtilitarioTela.getFontColorCrud());
+		
+		JPanel partidaFinal = new JPanel();
+		partidaFinal.setSize(100, 30);
+		partidaFinal.setLocation(x + 220, y + 20);
+		partidaFinal.setLayout(null);
+		partidaFinal.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudAlterar()));
 
+		JLabel lbFinal = new JLabel("Final");
+		lbFinal.setSize(100, 30);
+		lbFinal.setLocation(0, 0);
+		lbFinal.setHorizontalAlignment(SwingConstants.CENTER);
+		lbFinal.setForeground(UtilitarioTela.getFontColorCrud());
+		partidaFinal.add(lbFinal);
+		
+		if(PartidaDao.isPartidaFinal(partida.getCodigoPartida())){
+			this.panel.add(partidaFinal);
+		}
+		
 		JPanel panelVencedor = new JPanel();
 		panelVencedor.setSize(200, 34);
 		panelVencedor.setLayout(null);
@@ -144,11 +156,11 @@ public class TelaMataMata extends JFrame {
 		panelTimeBaia.setBackground(UtilitarioTela.getFontColorPadrao());
 
 		if (panel.getX() > maiorX) {
-			maiorX = panel.getX();
+			maiorX = panel.getX() + 220;
 		}
 
 		if (panel.getY() > maiorY) {
-			maiorY = panel.getY();
+			maiorY = panel.getY() + 350;
 		}
 
 		String time1 = "";
@@ -185,12 +197,15 @@ public class TelaMataMata extends JFrame {
 		if (tp.getTimeVencedor() != null
 				&& tp.getTimeVencedor() == tp.getTime1()) {
 			panelVencedor.setLocation(0, lb1.getY());
+			lb1.setForeground(UtilitarioTela.getFontColorCrud());
 			panelVencedor.add(lb1);
 			panel.add(panelVencedor);
 			time1Add = true;
 		} else if (tp.getTimeVencedor() != null
 				&& tp.getTimeVencedor() == tp.getTime2()) {
 			panelVencedor.setLocation(0, lb2.getY());
+			lb2.setForeground(UtilitarioTela.getFontColorCrud());
+			lb2.setLocation(5,0);
 			panelVencedor.add(lb2);
 			panel.add(panelVencedor);
 			time2Add = true;
@@ -205,6 +220,7 @@ public class TelaMataMata extends JFrame {
 		} else if (tp.getTime2() != null && isTimeBaia(tp.getTime2())) {
 			lb2.setForeground(UtilitarioTela.getFontColorCrud());
 			panelTimeBaia.setLocation(0, lb2.getY());
+			lb2.setLocation(5,0);
 			panelTimeBaia.add(lb2);
 			panel.add(panelTimeBaia);
 			time2Add = true;
@@ -399,20 +415,20 @@ public class TelaMataMata extends JFrame {
 								.getPartidaFilho().getCodigoPartida()));
 						continua = true;
 
-						System.out.println("Pai 1 : "
-								+ pm.getPartidaPai1().getCodigoPartida()
-								+ " y " + pm.getPanelPai1().getY() + " h "
-								+ pm.getPanelPai1().getHeight() + " W "
-								+ pm.getPanelPai1().getWidth());
-						System.out.println("Pai 2 : "
-								+ pm.getPartidaPai2().getCodigoPartida()
-								+ " y " + pm.getPanelPai2().getY() + " h "
-								+ pm.getPanelPai2().getHeight());
-						System.out.println("Filho : "
-								+ pm.getFilho().getCodigoPartida() + " y "
-								+ pm.getPanelFilho().getY());
-						System.out
-								.println("--------------------------------------------------");
+						// System.out.println("Pai 1 : "
+						// + pm.getPartidaPai1().getCodigoPartida()
+						// + " y " + pm.getPanelPai1().getY() + " h "
+						// + pm.getPanelPai1().getHeight() + " W "
+						// + pm.getPanelPai1().getWidth());
+						// System.out.println("Pai 2 : "
+						// + pm.getPartidaPai2().getCodigoPartida()
+						// + " y " + pm.getPanelPai2().getY() + " h "
+						// + pm.getPanelPai2().getHeight());
+						// System.out.println("Filho : "
+						// + pm.getFilho().getCodigoPartida() + " y "
+						// + pm.getPanelFilho().getY());
+						// System.out
+						// .println("--------------------------------------------------");
 					}
 					n++;
 
@@ -458,17 +474,17 @@ public class TelaMataMata extends JFrame {
 								.getPartidaFilho().getCodigoPartida()));
 						continua = true;
 
-						System.out.println("Pai 1 : "
-								+ pm.getPartidaPai1().getCodigoPartida()
-								+ " y " + pm.getPanelPai1().getY() + " h "
-								+ pm.getPanelPai1().getHeight() + " W "
-								+ pm.getPanelPai1().getWidth());
-
-						System.out.println("Filho : "
-								+ pm.getFilho().getCodigoPartida() + " y "
-								+ pm.getPanelFilho().getY());
-						System.out
-								.println("--------------------------------------------------");
+						// System.out.println("Pai 1 : "
+						// + pm.getPartidaPai1().getCodigoPartida()
+						// + " y " + pm.getPanelPai1().getY() + " h "
+						// + pm.getPanelPai1().getHeight() + " W "
+						// + pm.getPanelPai1().getWidth());
+						//
+						// System.out.println("Filho : "
+						// + pm.getFilho().getCodigoPartida() + " y "
+						// + pm.getPanelFilho().getY());
+						// System.out
+						// .println("--------------------------------------------------");
 					}
 					n++;
 				}
@@ -523,5 +539,7 @@ public class TelaMataMata extends JFrame {
 	public static void main(String[] args) {
 		Campeonato campeonato = CampeonatoDao.getCampeonato(1);
 		TelaMataMata tm = new TelaMataMata(campeonato);
+		tm.atualizarTela(campeonato);
+		tm.setVisible(true);
 	}
 }

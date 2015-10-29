@@ -30,7 +30,7 @@ public class UtilitarioTela {
 	
 	public static Dimension getTamanhoMunitor() {
 		Dimension dm = Toolkit.getDefaultToolkit().getScreenSize();
-		Double height = dm.getHeight() - (dm.getHeight() * 0.1);
+		Double height = dm.getHeight() - (dm.getHeight() * 0.05);
 		Double width = dm.getWidth();
 		dm.setSize(width, height);
 		return dm;

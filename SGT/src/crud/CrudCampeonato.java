@@ -412,6 +412,18 @@ public class CrudCampeonato extends JPanel {
 		lbModalidadeV.setFont(UtilitarioTela.getFont(14));
 		lbModalidadeV.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbModalidadeV);
+		
+		linha += 30;
+		JLabel lbChave = new JLabel("Chave :");
+		lbChave.setBounds(20, linha, 100, 20);
+		lbChave.setFont(UtilitarioTela.getFont(14));
+		lbChave.setForeground(UtilitarioTela.getFontColorCrud());
+		meio.add(lbChave);
+		JLabel lbChaveV = new JLabel(campeonatoSelecionado.getChave().getDescricao());
+		lbChaveV.setBounds(130, linha, 300, 20);
+		lbChaveV.setFont(UtilitarioTela.getFont(14));
+		lbChaveV.setForeground(UtilitarioTela.getFontColorCrud());
+		meio.add(lbChaveV);
 
 		linha += 70;
 		tabela = new JTable();
@@ -441,7 +453,7 @@ public class CrudCampeonato extends JPanel {
 		tabela.setFont(UtilitarioTela.getFont(14));
 		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scroll = new JScrollPane(tabela);
-		scroll.setBounds(5, linha, 640, 250);
+		scroll.setBounds(5, linha, 640, 400);
 		meio.add(scroll);
 
 		if (modoCrud == ParametroCrud.getModoVisualizar() && campeonatoSelecionado != null && campeonatoSelecionado.getDataInicio() == null) {
