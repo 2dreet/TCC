@@ -240,6 +240,22 @@ public class PartidaDao {
 			return null;
 		}
 	}
+	
+	public static List<Partida> getPartidasFinalizadas(
+			int codigoCampeonato) {
+		try {
+			String sql = " SELECT * FROM partida WHERE codigoCampeonato = '"
+					+ codigoCampeonato
+					+ "'"
+					+ " AND ativo = false;";
+			return EntityManagerLocal.getEntityManager()
+					.createNativeQuery(sql, Partida.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
 
 	public static List<Partida> getPartidasNaoFinalizadasIniciadasGrupo(
 			int codigoCampeonato) {

@@ -29,6 +29,7 @@ import utilitario.ValidadorCrud;
 
 import javax.swing.JButton;
 
+import dao.CampeonatoTimeDao;
 import dao.ClassificacaoDao;
 import dao.EntityManagerLocal;
 import dao.JogadorBanimentoDao;
@@ -101,12 +102,12 @@ public class CrudPartida extends JPanel {
 	private JPanel meioT1;
 	private JButton btProximaPartida;
 	private JTable tabela;
-	private Object[][] colunas = new Object[][] { new String[] { "Time 1" },
-			new String[] { "Time 2" }, new String[] { "Placar Time 1" }, new String[] { "Placar Time 2" }, new String[] { "Chave" }};
+	private Object[][] colunas = new Object[][] { new String[] { "Placar" } ,new String[] { "Time Vencedor" }
+			, new String[] { "Placar" } ,new String[] { "Time Perdedor" }, new String[] { "Chave" }};
 	private JButton btTabelaGrupo;
 	private JButton btTabelaMataMata;
 	private JButton btTabelaWinnerLower;
-
+	private List<Partida> listaPartida;
 	private TelaMataMata telaMataMata;
 	
 	/**
@@ -118,6 +119,7 @@ public class CrudPartida extends JPanel {
 		setSize(UtilitarioTela.getTamanhoMeio());
 		setLayout(null);
 		setBackground(null);
+		listaPartida = new ArrayList<Partida>();
 		campeonatoSelecionado = campeonato;
 		header = new JPanel();
 		header.setSize(getWidth(), 30);
@@ -237,12 +239,19 @@ public class CrudPartida extends JPanel {
 		tcm.getColumn(0).setPreferredWidth(50);
 		tcm.getColumn(0).setMinWidth(50);
 		tcm.getColumn(0).setResizable(false);
-		tcm.getColumn(1).setPreferredWidth(120);
-		tcm.getColumn(1).setMinWidth(120);
+		tcm.getColumn(1).setPreferredWidth(200);
+		tcm.getColumn(1).setMinWidth(200);
 		tcm.getColumn(1).setResizable(false);
-		tcm.getColumn(2).setPreferredWidth(450);
-		tcm.getColumn(2).setMinWidth(450);
+		tcm.getColumn(2).setPreferredWidth(50);
+		tcm.getColumn(2).setMinWidth(50);
 		tcm.getColumn(2).setResizable(false);
+		tcm.getColumn(3).setCellRenderer(renderer);
+		tcm.getColumn(3).setPreferredWidth(200);
+		tcm.getColumn(3).setMinWidth(200);
+		tcm.getColumn(3).setResizable(false);
+		tcm.getColumn(4).setPreferredWidth(80);
+		tcm.getColumn(4).setMinWidth(8);
+		tcm.getColumn(4).setResizable(false);
 
 		UtilitarioTabela.pintarColona(UtilitarioTabela.getFundoHeaderPadrao(),
 				UtilitarioTabela.getFontColotHeaderPadrao(), tcm, colunas);
@@ -255,11 +264,11 @@ public class CrudPartida extends JPanel {
 		tabela.setFont(UtilitarioTela.getFont(14));
 		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scroll = new JScrollPane(tabela);
-		scroll.setBounds(5, 30, meio2.getHeight()-50, meio2.getWidth()-10);
+		scroll.setBounds((meio2.getWidth()/2) -295, 30, 600, 450);
 		meio2.add(scroll);
 		
 		mostrarProximaPartida();
-
+		
 	}
 
 	public void abrirDialog() {
@@ -316,6 +325,7 @@ public class CrudPartida extends JPanel {
 	}
 
 	public boolean mostrarProximaPartida() {
+		atualizarTabela();
 		mostrarVisuPartida();
 		if (campeonatoSelecionado.getDataFim() == null) {
 			partida = PartidaDao
@@ -466,6 +476,28 @@ public class CrudPartida extends JPanel {
 		}
 		
 		return true;
+	}
+	
+	public void atualizarTabela() {
+		listaPartida = PartidaDao.getPartidasFinalizadas(campeonatoSelecionado.getCodigoCampeonato());
+		DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
+		modelo.setNumRows(0);
+		if (listaPartida != null) {
+			for (Partida partida : listaPartida) {
+				String chave = "";
+				if(partida.getGrupo()!=null){
+					chave = "Grupo";
+				} else if(partida.getWinerLower() != false){
+					chave = "Mata-Mata";
+				} else if(partida.getWinerLower() == true){
+					chave = "Winner Lower";
+				}
+				TimePartida tp = PartidaDao.getTimePartida(campeonatoSelecionado.getCodigoCampeonato(), partida.getCodigoPartida());
+				modelo.addRow(new Object[] {  tp.getPlacarTimeVencedor(),tp.getTimeVencedor().getDescricao(), tp.getPlacarTimePerdedor(), tp.getTimePerdedor().getDescricao(), chave});
+			}
+		} else {
+			listaPartida = new ArrayList<Partida>();
+		}
 	}
 
 }
