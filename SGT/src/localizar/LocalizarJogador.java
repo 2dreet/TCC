@@ -90,7 +90,7 @@ public class LocalizarJogador extends JPanel {
 
 		JPanel header = new JPanel();
 		header.setSize(650, 30);
-		header.setLocation((getWidth() / 2) - 400, 10);
+		header.setLocation((getWidth() / 2) - 325, 10);
 		header.setLayout(null);
 		header.setBackground(Color.white);
 		header.setBorder(null);
@@ -105,7 +105,7 @@ public class LocalizarJogador extends JPanel {
 
 		meio = new JPanel();
 		meio.setSize(650, getHeight() - 50);
-		meio.setLocation((getWidth() / 2) - 400, 40);
+		meio.setLocation((getWidth() / 2) - 325, 40);
 		meio.setLayout(null);
 		meio.setBackground(new Color(232, 234, 239));
 		meio.setBorder(new BordaSombreada());

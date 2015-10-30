@@ -58,6 +58,8 @@ public class TelaWinnerLower extends JFrame {
 	private JPanel panel;
 
 	private int posicaoInicialLower;
+	
+	public Partida partidaEmAndamento;
 
 	public TelaWinnerLower(Campeonato campeonato) {
 		if (panel != null) {
@@ -101,8 +103,10 @@ public class TelaWinnerLower extends JFrame {
 		panel.setLayout(null);
 		pojo = montarArvore(campeonato, listaTimePartida, pojo);
 		posicaoInicialLower = maiorX;
-		montarArvoreLower(campeonato, listaTimePartidaLower, pojo);
-		panel.setPreferredSize(new java.awt.Dimension(maiorX, maiorY));
+		if(campeonato.getChave().getCodigoChave() == 2){
+			montarArvoreLower(campeonato, listaTimePartidaLower, pojo);
+		}
+		panel.setPreferredSize(new java.awt.Dimension(maiorX + 300, maiorY + 300));
 		scrollPane.setViewportView(panel);
 		repaint();
 	}
@@ -120,14 +124,68 @@ public class TelaWinnerLower extends JFrame {
 				.getCodigoCampeonato(), partida.getCodigoPartida());
 
 		JPanel panel = new JPanel();
-		panel.setSize(200, 70);
+		panel.setSize(200, 90);
 		panel.setLocation(x, y);
 		panel.setLayout(null);
 		panel.setBackground(UtilitarioTela.getFontColorCrud());
 
+		JPanel descricao = new JPanel();
+		descricao.setSize(200, 20);
+		descricao.setLocation(0,0);
+		descricao.setLayout(null);
+		if(partidaEmAndamento == partida){
+			descricao.setBackground(UtilitarioTela.getColorCrud(ParametroCrud
+				.getModoCrudNovo()));
+		}else{
+			descricao.setBackground(UtilitarioTela.getColorCrud(ParametroCrud
+					.getModoCrudAlterar()));
+		}
+		panel.add(descricao);
+		
+		String descricaoTxt = "";
+		
+		if(!partida.getWinerLower() && !PartidaDao.isPartidaFilho(partida.getCodigoPartida())){
+			descricaoTxt = partida.getDescricao();
+		} else if(!partida.getWinerLower() && PartidaDao.isPartidaFilho(partida.getCodigoPartida())){
+			List<Partida> pais = PartidaDao.getPartidasPai(partida.getCodigoPartida());
+			if(pais.size() == 2){
+				descricaoTxt = partida.getDescricao() + " x ( "+pais.get(0).getDescricao()+" x "+pais.get(1).getDescricao()+" )";
+			} else if(pais.size() == 1){
+				descricaoTxt = partida.getDescricao() + " x ( "+pais.get(0).getDescricao() +")";
+			}
+		} else if(partida.getWinerLower() && !PartidaDao.isPartidaFilho(partida.getCodigoPartida())){
+			List<Partida> pais = PartidaDao.getPartidasWinner(partida.getCodigoPartida());
+			if(pais.size() == 2){
+				descricaoTxt = partida.getDescricao() + " x ( W: "+pais.get(0).getDescricao()+" x W: "+pais.get(1).getDescricao()+" )";
+			} else if(pais.size() == 1){
+				descricaoTxt = partida.getDescricao() + " x ( W: "+pais.get(0).getDescricao()+" )";
+			}
+		} else if(partida.getWinerLower() && PartidaDao.isPartidaFilho(partida.getCodigoPartida())){
+			List<Partida> pais = PartidaDao.getPartidasWinner(partida.getCodigoPartida());
+			List<Partida> paisNormal = PartidaDao.getPartidasPai(partida.getCodigoPartida());
+			if(pais.size() == 1 && paisNormal.size() == 2){
+				descricaoTxt = partida.getDescricao() + " x ( W: "+pais.get(0).getDescricao()+" x ("+paisNormal.get(0).getDescricao()+"x"+paisNormal.get(1).getDescricao()+") )";
+			} else if(pais.size() == 1 && paisNormal.size() == 1){
+				descricaoTxt = partida.getDescricao() + " x ( W: "+pais.get(0).getDescricao()+" x ("+paisNormal.get(0).getDescricao()+") )";
+			} else {
+				pais = PartidaDao.getPartidasPai(partida.getCodigoPartida());
+				if(pais.size() == 2){
+					descricaoTxt = partida.getDescricao() + " x ( "+pais.get(0).getDescricao()+" x "+pais.get(1).getDescricao()+" )";
+				}
+			}
+		}
+		
+		JLabel lblDescricao = new JLabel(descricaoTxt);
+		lblDescricao.setSize(200, 20);
+		lblDescricao.setLocation(0, 0);
+		lblDescricao.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDescricao.setForeground(UtilitarioTela.getFontColorCrud());
+		descricao.add(lblDescricao);
+
+		
 		JPanel partidaFinal = new JPanel();
 		partidaFinal.setSize(100, 30);
-		partidaFinal.setLocation(x + 220, y + 20);
+		partidaFinal.setLocation(x + 220, y + 40);
 		partidaFinal.setLayout(null);
 		partidaFinal.setBackground(UtilitarioTela.getColorCrud(ParametroCrud
 				.getModoCrudAlterar()));
@@ -155,11 +213,11 @@ public class TelaWinnerLower extends JFrame {
 		panelTimeBaia.setBackground(UtilitarioTela.getFontColorPadrao());
 
 		if (panel.getX() > maiorX) {
-			maiorX = panel.getX() + 220;
+			maiorX = panel.getX();
 		}
 
 		if (panel.getY() > maiorY) {
-			maiorY = panel.getY() + 350;
+			maiorY = panel.getY();
 		}
 
 		String time1 = "";
@@ -174,12 +232,12 @@ public class TelaWinnerLower extends JFrame {
 
 		JLabel lb1 = new JLabel(time1);
 		lb1.setSize(195, 34);
-		lb1.setLocation(5, 0);
+		lb1.setLocation(5, 20);
 		lb1.setForeground(UtilitarioTela.getFundoCrud());
 
 		JPanel mei = new JPanel();
 		mei.setSize(200, 2);
-		mei.setLocation(0, 34);
+		mei.setLocation(0, 55);
 		mei.setLayout(null);
 		mei.setBackground(UtilitarioTela.getColorCrud(ParametroCrud
 				.getModoCrudAlterar()));
@@ -187,7 +245,7 @@ public class TelaWinnerLower extends JFrame {
 
 		JLabel lb2 = new JLabel(time2);
 		lb2.setSize(195, 34);
-		lb2.setLocation(5, 36);
+		lb2.setLocation(5, 57);
 		lb2.setForeground(UtilitarioTela.getFundoCrud());
 
 		boolean time1Add = false;
@@ -204,7 +262,7 @@ public class TelaWinnerLower extends JFrame {
 				&& tp.getTimeVencedor() == tp.getTime2()) {
 			panelVencedor.setLocation(0, lb2.getY());
 			lb2.setForeground(UtilitarioTela.getFontColorCrud());
-			lb2.setLocation(5, 0);
+			lb2.setLocation(5, 20);
 			panelVencedor.add(lb2);
 			panel.add(panelVencedor);
 			time2Add = true;
@@ -214,6 +272,7 @@ public class TelaWinnerLower extends JFrame {
 			lb1.setForeground(UtilitarioTela.getFontColorCrud());
 			panelTimeBaia.setLocation(0, lb1.getY());
 			panelTimeBaia.add(lb1);
+			lb1.setLocation(5, 0);
 			panel.add(panelTimeBaia);
 			time1Add = true;
 		} else if (tp.getTime2() != null && isTimeBaia(tp.getTime2())) {
@@ -336,11 +395,6 @@ public class TelaWinnerLower extends JFrame {
 						List<Partida> listaAuxPai2 = PartidaDao
 								.getPartidasPai(partidaPai2.getPartidaFilho()
 										.getCodigoPartida());
-						if (listaAuxPai2.size() > 0
-								&& listaAuxPai2.get(0).getPartidaFilho()
-										.getPartidaFilho() == null) {
-							naoPassouAinda = true;
-						}
 						if(PartidaDao.isPartidaFilho(partidaPai2.getCodigoPartida())){
 							naoPassouAinda = true;
 						}
@@ -363,21 +417,20 @@ public class TelaWinnerLower extends JFrame {
 									partidaPai1);
 							pm.setPanelPai1(jpanelPai1);
 							panel.add(jpanelPai1);
-							k = k + 10;
+							k = k + 50;
 							jpanelPai2 = getJPanel(10, k + (70 * (n + 1)),
 									partidaPai2);
 							pm.setPanelPai2(jpanelPai2);
 							panel.add(jpanelPai2);
 						} else if (jpanelPai2 == null) {
 							if (partidasAcima.size() > 1) {
-								k = k + 10;
+								k = k + 50;
 								jpanelPai2 = getJPanel(jpanelPai1.getX(),
 										jpanelPai1.getY() + (90), partidaPai2);
 								pm.setPanelPai2(jpanelPai2);
 								panel.add(jpanelPai2);
 							} else {
-								k = k + 10;
-								k = k + 10;
+								k = k + 50;
 								jpanelPai2 = getJPanel(10, k + (70 * (n + 1)),
 										partidaPai2);
 								pm.setPanelPai2(jpanelPai2);
@@ -385,7 +438,7 @@ public class TelaWinnerLower extends JFrame {
 							}
 						} else if (jpanelPai1 == null) {
 							if (partidasAcima.size() > 1) {
-								k = k + 10;
+								k = k + 50;
 								jpanelPai1 = getJPanel(jpanelPai2.getX(),
 										jpanelPai2.getY() + +(90), partidaPai1);
 								pm.setPanelPai1(jpanelPai1);
@@ -440,7 +493,7 @@ public class TelaWinnerLower extends JFrame {
 					}
 					
 
-				} else {
+				} else if(listaAuxPai.size() > 0){
 					boolean naoPassouAinda = false;
 					partidaPai1 = listaAuxPai.get(0);
 					JPanel jpanelPai1 = null;
@@ -502,9 +555,9 @@ public class TelaWinnerLower extends JFrame {
 						// System.out
 						// .println("--------------------------------------------------");
 					}
-				}
+				}  
 			}
-			k = k + 10;
+			k = k + 50;
 		}
 		if (continua) {
 			return montarArvoreLower(campeonato, newLista, partidaFilhos);
@@ -612,14 +665,14 @@ public class TelaWinnerLower extends JFrame {
 									partidaPai1);
 							pm.setPanelPai1(jpanelPai1);
 							panel.add(jpanelPai1);
-							k = k + 10;
+							k = k + 50;
 							jpanelPai2 = getJPanel(10, k + (70 * (n + 1)),
 									partidaPai2);
 							pm.setPanelPai2(jpanelPai2);
 							panel.add(jpanelPai2);
 						} else if (jpanelPai2 == null) {
 							if (partidasAcima.size() > 1) {
-								k = k + 10;
+								k = k + 50;
 								jpanelPai2 = getJPanel(jpanelPai1.getX(),
 										jpanelPai1.getY() + (90), partidaPai2);
 								pm.setPanelPai2(jpanelPai2);
@@ -627,7 +680,7 @@ public class TelaWinnerLower extends JFrame {
 							}
 						} else if (jpanelPai1 == null) {
 							if (partidasAcima.size() > 1) {
-								k = k + 10;
+								k = k + 50;
 								jpanelPai1 = getJPanel(jpanelPai2.getX(),
 										jpanelPai2.getY() + +(90), partidaPai1);
 								pm.setPanelPai1(jpanelPai1);
@@ -706,6 +759,13 @@ public class TelaWinnerLower extends JFrame {
 						pm.setFilho(partidaPai1.getPartidaFilho());
 						pm.setPartidaPai1(partidaPai1);
 						
+						if (jpanelPai1 == null) {
+							jpanelPai1 = getJPanel(10, k + (70 * n),
+									partidaPai1);
+							pm.setPanelPai1(jpanelPai1);
+							panel.add(jpanelPai1);
+						}
+						
 						int x = jpanelPai1.getX() + jpanelPai1.getWidth() + 50;
 						int y = jpanelPai1.getY();
 						JPanel filho = getJPanel(x, y,
@@ -738,7 +798,7 @@ public class TelaWinnerLower extends JFrame {
 					n++;
 				}
 			}
-			k = k + 10;
+			k = k + 50;
 		}
 		if (continua) {
 			return montarArvore(campeonato, newLista, partidaFilhos);
@@ -749,28 +809,28 @@ public class TelaWinnerLower extends JFrame {
 	public void getLigacao(int xP1, int xP2, int yP1, int yP2, int xF, int yF) {
 		JPanel p1 = new JPanel();
 		p1.setSize(xF - xP1 - 230, 2);
-		p1.setLocation(xP1 + 200, yP1 + 35);
+		p1.setLocation(xP1 + 200, yP1 + 55);
 		p1.setLayout(null);
 		p1.setBackground(UtilitarioTela.getFontColorPadrao());
 		panel.add(p1);
 
 		JPanel p2 = new JPanel();
 		p2.setSize(xF - xP2 - 230, 2);
-		p2.setLocation(xP2 + 200, yP2 + 35);
+		p2.setLocation(xP2 + 200, yP2 + 55);
 		p2.setLayout(null);
 		p2.setBackground(UtilitarioTela.getFontColorPadrao());
 		panel.add(p2);
 
 		JPanel l = new JPanel();
 		l.setSize(2, p2.getY() - p1.getY() + 2);
-		l.setLocation(p2.getX() + p2.getWidth(), yP1 + 35);
+		l.setLocation(p2.getX() + p2.getWidth(), yP1 + 55);
 		l.setLayout(null);
 		l.setBackground(UtilitarioTela.getFontColorPadrao());
 		panel.add(l);
 
 		JPanel p3 = new JPanel();
 		p3.setSize(30, 2);
-		p3.setLocation(l.getX(), yF + 35);
+		p3.setLocation(l.getX(), yF + 55);
 		p3.setLayout(null);
 		p3.setBackground(UtilitarioTela.getFontColorPadrao());
 		panel.add(p3);
@@ -779,7 +839,7 @@ public class TelaWinnerLower extends JFrame {
 	public void getLigacaoSimples(int xP1, int yP1, int xF, int yF) {
 		JPanel p1 = new JPanel();
 		p1.setSize(xF - xP1 - 200, 2);
-		p1.setLocation(xP1 + 200, yP1 + 35);
+		p1.setLocation(xP1 + 200, yP1 + 55);
 		p1.setLayout(null);
 		p1.setBackground(UtilitarioTela.getFontColorPadrao());
 		panel.add(p1);

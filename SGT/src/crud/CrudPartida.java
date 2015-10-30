@@ -231,6 +231,7 @@ public class CrudPartida extends JPanel {
 				if(telaWinnerLower.isVisible()){
 					telaWinnerLower.atualizarTela(campeonatoSelecionado);
 				} else{
+					telaWinnerLower.partidaEmAndamento = partida;
 					telaWinnerLower.setVisible(true);
 					telaWinnerLower.atualizarTela(campeonatoSelecionado);
 				}

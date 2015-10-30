@@ -25,7 +25,7 @@ import entidade.TimePartida;
 public class GerenciadorPartida {
 
 	private static Campeonato camp;
-
+	private static int indicieFilho = 0;
 	public static boolean adicionarPatidas(Campeonato campeonato) {
 		camp = campeonato;
 		try {
@@ -37,7 +37,7 @@ public class GerenciadorPartida {
 				if (listaTime != null && listaTime.size() > 0) {
 					// Mata - Mata
 					gerarPartidasMataMata(listaTime);
-					if(campeonato.getChave().getCodigoChave() == 2){
+					if (campeonato.getChave().getCodigoChave() == 2) {
 						gerarLowers(campeonato);
 					}
 				}
@@ -84,9 +84,9 @@ public class GerenciadorPartida {
 					Partida partida = new Partida();
 					partida.setAtivo(true);
 					partida.setCampeonato(camp);
-					if(campeonato.getChave().getCodigoChave() == 1){
+					if (campeonato.getChave().getCodigoChave() == 1) {
 						partida.setWinerLower(false);
-					}else if(campeonato.getChave().getCodigoChave() == 2){
+					} else if (campeonato.getChave().getCodigoChave() == 2) {
 						partida.setWinerLower(true);
 					}
 					partida.setIndice(indice);
@@ -108,7 +108,7 @@ public class GerenciadorPartida {
 				if (listaPartida.size() > 0) {
 					criarPartidasMataMataFilho(listaPartida, indice);
 				}
-				
+
 			}
 			return true;
 		} catch (Exception e) {
@@ -123,6 +123,7 @@ public class GerenciadorPartida {
 	public static boolean gerarLowers(Campeonato campeonato) {
 		try {
 			camp = campeonato;
+			Partida partidaSobrando = null;
 			List<Partida> listaPartida = new ArrayList<Partida>();
 			Integer[] indices = PartidaDao
 					.getIndicesPartidaParaGerarLowers(campeonato
@@ -138,53 +139,52 @@ public class GerenciadorPartida {
 				timeSobrando = listaTime.get(tamanhoTimes);
 			}
 			EntityManagerLocal.begin();
+			int iax = 0;
 			for (int x = 0; x < tamanhoTimes; x++) {
-				
+
 				Partida partida1 = listaTime.get(0).getPartida();
 				listaTime.remove(0);
 				tamanhoTimes--;
 				Partida partida2 = listaTime.get(0).getPartida();
 				listaTime.remove(0);
+
 				
 				Partida partida = new Partida();
 				partida.setAtivo(true);
 				partida.setCampeonato(camp);
 				partida.setWinerLower(true);
 				partida.setIndice(indices[i]);
-				
+				partida.setDescricao(getLetraPartida(indices[i])+iax);
+				EntityManagerLocal.persist(partida);
+
 				TimePartida tp = new TimePartida();
 				tp.setPartida(partida);
-				
+
 				partida1.setPartidaLower(partida);
 				partida2.setPartidaLower(partida);
-				
-				String descricao = "L: ("+partida1.getDescricao()+")";
-				descricao += " x P: ("+partida2.getDescricao()+")";
-				
-				partida.setDescricao(descricao);
-				EntityManagerLocal.persist(partida);
+
 				EntityManagerLocal.persist(tp);
 				EntityManagerLocal.merge(partida1);
 				EntityManagerLocal.merge(partida2);
 				listaPartida.add(partida);
+				iax++;
 			}
 			if (timeSobrando != null) {
-				
+
 				Partida partida1 = timeSobrando.getPartida();
-				
+
 				Partida partida = new Partida();
 				partida.setAtivo(true);
 				partida.setCampeonato(camp);
 				partida.setWinerLower(true);
 				partida.setIndice(indices[i]);
-				
-				String descricao = "P: "+partida1.getDescricao();
-				
 				TimePartida tp = new TimePartida();
 				tp.setPartida(partida);
-				
-				partida.setDescricao(descricao);
+
+				partida1.setPartidaLower(partida);
+				partida.setDescricao(getLetraPartida(indices[i])+iax);
 				EntityManagerLocal.persist(partida);
+				EntityManagerLocal.merge(partida1);
 				EntityManagerLocal.persist(tp);
 
 				listaPartida.add(partida);
@@ -192,26 +192,26 @@ public class GerenciadorPartida {
 			EntityManagerLocal.commit();
 			EntityManagerLocal.clear();
 			i++;
+			iax = 0;
 			if (listaPartida.size() > 0) {
 				listaPartida = criarPartidasMataMataFilhoLower(listaPartida,
 						indices[i], campeonato, i, indices);
 				if (listaPartida.size() == 1) {
 					List<TimePartida> listaTimeWinner = PartidaDao
-							.getPartidasPorIndice(campeonato,
+							.getPartidasPorIndiceLower(campeonato,
 									indices[indices.length - 1], false);
 
 					String descricao = "";
-					
+
 					Time timeVencedor = listaTimeWinner.get(0)
 							.getTimeVencedor();
 					Partida partidaFinalWinner = listaTimeWinner.get(0)
 							.getPartida();
-					descricao = "GW: ("+partidaFinalWinner.getDescricao()+")";
-					
+					descricao = " Winner";
+
 					Partida partidaFinalLower = listaPartida.get(0);
-					descricao = " x GL: ("+partidaFinalLower.getDescricao()+")";
-					
-					
+					descricao += " x Lower";
+
 					EntityManagerLocal.begin();
 					Partida partida = new Partida();
 					partida.setAtivo(true);
@@ -265,7 +265,7 @@ public class GerenciadorPartida {
 			Partida partida = new Partida();
 			partida.setAtivo(true);
 			partida.setCampeonato(camp);
-			partida.setDescricao("P"+i);
+			partida.setDescricao(getLetraPartida(indice)+ i);
 			partida.setWinerLower(false);
 			partida.setIndice(indice);
 			EntityManagerLocal.persist(partida);
@@ -290,7 +290,7 @@ public class GerenciadorPartida {
 			Partida partida = new Partida();
 			partida.setAtivo(true);
 			partida.setCampeonato(camp);
-			partida.setDescricao("P"+x);
+			partida.setDescricao(getLetraPartida(indice) + x);
 			partida.setWinerLower(false);
 			partida.setIndice(indice);
 			EntityManagerLocal.persist(partida);
@@ -306,6 +306,7 @@ public class GerenciadorPartida {
 		EntityManagerLocal.clear();
 		indice++;
 		if (listaPartida.size() > 0) {
+			
 			criarPartidasMataMataFilho(listaPartida, indice);
 		}
 		List<Partida> p = PartidaDao.getPartidasApenas1Time(camp
@@ -313,14 +314,13 @@ public class GerenciadorPartida {
 		for (Partida partida : p) {
 			EntityManagerLocal.begin();
 			TimePartida tp = PartidaDao.getTimePartidaTime2Null(
-					camp.getCodigoCampeonato(),
-					partida.getCodigoPartida());
+					camp.getCodigoCampeonato(), partida.getCodigoPartida());
 			partida.setHoraFim(new Date());
 			partida.setAtivo(false);
-			if(partida.getPartidaFilho() != null){
-				TimePartida tpNew = PartidaDao.getTimePartidaTime2Null(
-						camp.getCodigoCampeonato(),
-						partida.getPartidaFilho().getCodigoPartida());
+			if (partida.getPartidaFilho() != null) {
+				TimePartida tpNew = PartidaDao.getTimePartidaTime2Null(camp
+						.getCodigoCampeonato(), partida.getPartidaFilho()
+						.getCodigoPartida());
 				tpNew.setTime1(tp.getTime1());
 				EntityManagerLocal.merge(tpNew);
 			}
@@ -340,36 +340,31 @@ public class GerenciadorPartida {
 	public static List<Partida> criarPartidasMataMataFilho(List<Partida> lista,
 			int indice) {
 		List<Partida> novaLista = new ArrayList<Partida>();
+		int iax = 1;
 		if (lista.size() > 1) {
 			if (lista.size() % 2 == 0) {
 				for (int i = 0; i < lista.size(); i++) {
-					
 					String descricao = "";
 					Partida partida = new Partida();
 					partida.setAtivo(true);
 					partida.setCampeonato(camp);
 					partida.setIndice(indice);
-					
-					if(camp.getChave().getCodigoChave() == 1){
+					if (camp.getChave().getCodigoChave() != 3) {
 						partida.setWinerLower(false);
-					}else if(camp.getChave().getCodigoChave() == 2){
-						partida.setWinerLower(true);
 					}
-					
+
 					TimePartida tp = new TimePartida();
 					tp.setPartida(partida);
-					
-					Partida partida1 = lista.get(i); 
+
+					Partida partida1 = lista.get(i);
 					partida1.setPartidaFilho(partida);
-					descricao = "W: ("+lista.get(i).getDescricao()+")";
 					i++;
-					
-					Partida partida2 = lista.get(i); 
+
+					Partida partida2 = lista.get(i);
 					partida2.setPartidaFilho(partida);
-					descricao += " x W: ("+lista.get(i).getDescricao()+")";
-					
-					partida.setDescricao(descricao);
-					
+				
+					partida.setDescricao(getLetraPartida(indice)+iax);
+
 					EntityManagerLocal.begin();
 					EntityManagerLocal.persist(partida);
 					EntityManagerLocal.persist(tp);
@@ -378,6 +373,7 @@ public class GerenciadorPartida {
 					EntityManagerLocal.commit();
 					EntityManagerLocal.clear();
 					novaLista.add(partida);
+					iax++;
 				}
 				indice++;
 				return criarPartidasMataMataFilho(novaLista, indice);
@@ -388,26 +384,23 @@ public class GerenciadorPartida {
 					partida.setAtivo(true);
 					partida.setCampeonato(camp);
 					partida.setIndice(indice);
-					if(camp.getChave().getCodigoChave() == 1){
+					if (camp.getChave().getCodigoChave() != 3) {
 						partida.setWinerLower(false);
-					}else if(camp.getChave().getCodigoChave() == 2){
-						partida.setWinerLower(true);
 					}
-					
+
 					TimePartida tp = new TimePartida();
 					tp.setPartida(partida);
-					
-					Partida partida1 = lista.get(i); 
-					partida1.setPartidaFilho(partida);
-					descricao = "W: ("+lista.get(i).getDescricao()+")";
-					i++;
-					
-					Partida partida2 = lista.get(i); 
-					partida2.setPartidaFilho(partida);
-					descricao += " x W: ("+lista.get(i).getDescricao()+")";
 
-					partida.setDescricao(descricao);
+					Partida partida1 = lista.get(i);
+					partida1.setPartidaFilho(partida);
+					i++;
+
+					Partida partida2 = lista.get(i);
+					partida2.setPartidaFilho(partida);
 					
+
+					partida.setDescricao(getLetraPartida(indice)+iax);
+
 					EntityManagerLocal.begin();
 					EntityManagerLocal.persist(partida);
 					EntityManagerLocal.persist(tp);
@@ -416,6 +409,7 @@ public class GerenciadorPartida {
 					EntityManagerLocal.commit();
 					EntityManagerLocal.clear();
 					novaLista.add(partida);
+					iax++;
 				}
 				Partida partida = lista.get(lista.size() - 1);
 				partida.setIndice(indice);
@@ -431,6 +425,7 @@ public class GerenciadorPartida {
 			List<Partida> lista, int indice, Campeonato campeonato,
 			int indiceWinner, Integer[] indicesWinner) {
 		List<Partida> novaLista = new ArrayList<Partida>();
+		int iax =0;
 		if (indiceWinner < indicesWinner.length) {
 			List<TimePartida> listaTime = PartidaDao
 					.getPartidasPorIndiceParaGerarLowers(
@@ -441,8 +436,6 @@ public class GerenciadorPartida {
 			if (lista.size() > 1) {
 				if (listaTime.size() < lista.size()) {
 					// Gera partidas Intermediarias
-					int contagemPartida = lista.size() - 1;
-					String descricao = "";
 					
 					EntityManagerLocal.begin();
 					Partida partida = new Partida();
@@ -451,43 +444,34 @@ public class GerenciadorPartida {
 
 					partida.setIndice(indice);
 					partida.setWinerLower(true);
-					
+
 					TimePartida tp = new TimePartida();
 					tp.setPartida(partida);
-					
-					Partida partida1 = lista.get(contagemPartida);
-					partida1.setPartidaFilho(partida);
-					descricao = "W: ("+partida1.getDescricao()+")";
-					lista.remove(lista.get(contagemPartida));
-					
-					contagemPartida--;
-					
-					Partida partida2 = lista.get(contagemPartida);
-					partida2.setPartidaFilho(partida);
-					descricao += " x W: ("+partida2.getDescricao()+")";
-					lista.remove(lista.get(contagemPartida));
 
+					Partida partida1 = lista.get(0);
+					partida1.setPartidaFilho(partida);
+					lista.remove(lista.get(0));
+
+					Partida partida2 = lista.get(0);
+					partida2.setPartidaFilho(partida);
+					lista.remove(lista.get(0));
+
+					partida.setDescricao(getLetraPartida(indice) + iax);
 					EntityManagerLocal.persist(partida);
 					EntityManagerLocal.persist(tp);
 					EntityManagerLocal.merge(partida1);
 					EntityManagerLocal.merge(partida2);
-					
+
 					EntityManagerLocal.commit();
 					EntityManagerLocal.clear();
 					lista.add(partida);
 					indice++;
-				} else if (listaTime.size() > lista.size()) {
-					// Arruma time que Sobrou
-					int contagemTime = listaTime.size() - 1;
-					timeSobrando = listaTime.get(contagemTime)
-							.getTimePerdedor();
-					partidaTimeSobrando = listaTime.get(contagemTime).getPartida();
-					listaTime.remove(contagemTime);
-				}
+					iax++;
+				} 
 
+				EntityManagerLocal.begin();
 				for (int i = 0; i < lista.size(); i++) {
-					String descricao = "";
-					EntityManagerLocal.begin();
+					
 					Partida partida = new Partida();
 					partida.setAtivo(true);
 					partida.setCampeonato(camp);
@@ -496,7 +480,6 @@ public class GerenciadorPartida {
 
 					Partida partidaWinner = listaTime.get(i).getPartida();
 					partidaWinner.setPartidaLower(partida);
-					descricao = "L: ("+partidaWinner.getDescricao()+")";
 					
 					TimePartida tp = new TimePartida();
 					tp.setPartida(partida);
@@ -505,22 +488,33 @@ public class GerenciadorPartida {
 						tp.setTime2(timeSobrando);
 						partidaTimeSobrando.setPartidaLower(partida);
 						EntityManagerLocal.merge(partidaTimeSobrando);
-						
+
 					}
-					
+
 					Partida partidaPai = lista.get(i);
 					partidaPai.setPartidaFilho(partida);
-					descricao +=" x W: ("+partidaPai.getDescricao()+")";
 					
-					partida.setDescricao(descricao);
+					partida.setDescricao(getLetraPartida(indice) + iax);
 					EntityManagerLocal.persist(partida);
 					EntityManagerLocal.persist(tp);
+					
+					if(partidaPai.getHoraFim() != null){
+						try{
+							Partida winnerPai = PartidaDao.getPartidasWinner(partidaPai.getCodigoPartida()).get(0);
+							winnerPai.setPartidaLower(partida);
+							EntityManagerLocal.merge(winnerPai);
+						}catch(Exception e){
+							e.printStackTrace();
+						}
+					}
 					EntityManagerLocal.merge(partidaPai);
 					EntityManagerLocal.merge(partidaWinner);
-					EntityManagerLocal.commit();
-					EntityManagerLocal.clear();
+					
 					novaLista.add(partida);
+					iax++;
 				}
+				EntityManagerLocal.commit();
+				EntityManagerLocal.clear();
 				indiceWinner++;
 				indice++;
 				return criarPartidasMataMataFilhoLower(novaLista, indice,
@@ -528,6 +522,49 @@ public class GerenciadorPartida {
 			}
 		}
 		return lista;
+	}
+
+	public static String getLetraPartida(int valor) {
+		switch (valor) {
+		case 1:
+			return "A";
+		case 2:
+			return "B";
+		case 3:
+			return "C";
+		case 4:
+			return "D";
+		case 5:
+			return "E";
+		case 6:
+			return "F";
+		case 7:
+			return "G";
+		case 8:
+			return "H";
+		case 9:
+			return "I";
+		case 11:
+			return "J";
+		case 12:
+			return "K";
+		case 13:
+			return "L";
+		case 14:
+			return "M";
+		case 15:
+			return "N";
+		case 16:
+			return "O";
+		case 17:
+			return "P";
+		case 18:
+			return "Q";
+		case 19:
+			return "R";
+		default:
+			return "S";
+		}
 	}
 
 }
