@@ -622,6 +622,7 @@ public class DialogCrudPartida {
 						}
 
 						EntityManagerLocal.begin();
+						EntityManagerLocal.flush();
 						EntityManagerLocal.merge(time);
 						EntityManagerLocal.commit();
 						EntityManagerLocal.clear();
@@ -634,7 +635,6 @@ public class DialogCrudPartida {
 									.getCodigoCampeonato());
 				}
 				EntityManagerLocal.begin();
-
 				if (timeGrupo != null) {
 					if (timeGrupo.getPontuacao() == null) {
 						timeGrupo.setPontuacao(0);
@@ -642,7 +642,6 @@ public class DialogCrudPartida {
 					timeGrupo.setPontuacao(timeGrupo.getPontuacao() + 1);
 					EntityManagerLocal.merge(timeGrupo);
 				}
-
 				EntityManagerLocal.merge(partidaSelecionado);
 				EntityManagerLocal.merge(timePartida);
 				EntityManagerLocal.commit();
@@ -651,19 +650,19 @@ public class DialogCrudPartida {
 			}
 		} else {
 			if (jogadores.size() == 10) {
+				EntityManagerLocal.begin();
 				for (Jogador jogador : jogadores) {
 					JogadorPartida jp = new JogadorPartida();
 					jp.setJogador(jogador);
 					jp.setPartida(partidaSelecionado);
-
+					EntityManagerLocal.flush();
 					partidaSelecionado.setHoraInicio(new Date());
-					EntityManagerLocal.begin();
 					EntityManagerLocal.persist(jp);
 					EntityManagerLocal.merge(partidaSelecionado);
-					EntityManagerLocal.commit();
-					EntityManagerLocal.clear();
-					atualizarTela();
 				}
+				EntityManagerLocal.commit();
+				EntityManagerLocal.clear();
+				atualizarTela();
 			} else {
 				Menssage.setMenssage(
 						"Não Poder Iniciar",
@@ -677,8 +676,8 @@ public class DialogCrudPartida {
 	}
 
 	public void atualizarTela() {
-		atualiarPlacar();
 		partidaIniciada = true;
+		atualiarPlacar();
 		header.removeAll();
 		JLabel lbHeader = new JLabel("Partida Iniciada");
 		lbHeader.setHorizontalAlignment(SwingConstants.CENTER);
@@ -717,16 +716,19 @@ public class DialogCrudPartida {
 	public void adcionarOs10PrimeirosPC() {
 		List<Pc> listaPc = PcDao.getListaPcNaoPartida("Código", "",
 				partidaSelecionado.getCodigoPartida());
-
-		for (int i = 0; i < 10; i++) {
+		if(listaPc.size() >= 10){
 			EntityManagerLocal.begin();
-			PcPartida pcP = new PcPartida();
-			pcP.setPc(listaPc.get(i));
-			pcP.setPartida(partidaSelecionado);
-			EntityManagerLocal.persist(pcP);
+			for (int i = 0; i < 10; i++) {
+				PcPartida pcP = new PcPartida();
+				pcP.setPc(listaPc.get(i));
+				EntityManagerLocal.flush();
+				pcP.setPartida(partidaSelecionado);
+				EntityManagerLocal.persist(pcP);
+				
+			}
 			EntityManagerLocal.commit();
+			EntityManagerLocal.clear();
 		}
-
 	}
 
 	public boolean valorEmpatado(int valor1, int valor2) {

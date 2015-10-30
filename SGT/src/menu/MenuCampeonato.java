@@ -331,8 +331,12 @@ public class MenuCampeonato extends JPanel {
 	}
 
 	public void liberarCrud() {
-		btAlterar.setEnabled(true);
-		btDeletar.setEnabled(true);
+		if(campSelecionado.getDataInicio() == null){
+			btAlterar.setEnabled(true);
+			btDeletar.setEnabled(true);
+		} else if(campSelecionado.getDataInicio()!= null && campSelecionado.getDataFim()!=null){
+			btDeletar.setEnabled(true);
+		}
 		btVisualizar.setEnabled(true);
 		if(campSelecionado.getDataInicio() != null){
 			btPartida.setEnabled(true);

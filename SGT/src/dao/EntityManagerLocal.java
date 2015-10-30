@@ -37,6 +37,7 @@ public class EntityManagerLocal {
 	}
 
 	public static boolean persist(Object obj) {
+		getEntityManager().flush();
 		getEntityManager().persist(obj);
 		return true;
 	}
@@ -52,6 +53,7 @@ public class EntityManagerLocal {
 	}
 
 	public static Object merge(Object obj) {
+		getEntityManager().flush();
 		return getEntityManager().merge(obj);
 	}
 
@@ -66,7 +68,6 @@ public class EntityManagerLocal {
 	}
 
 	public static boolean commit() {
-		getEntityManager().flush();
 		getEntityManager().getTransaction().commit();
 		return true;
 	}

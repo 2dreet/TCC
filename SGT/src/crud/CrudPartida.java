@@ -109,6 +109,7 @@ public class CrudPartida extends JPanel {
 	private JButton btTabelaWinnerLower;
 	private List<Partida> listaPartida;
 	private TelaMataMata telaMataMata;
+	private TelaWinnerLower telaWinnerLower;
 	
 	/**
 	 * Create the panel.
@@ -131,7 +132,7 @@ public class CrudPartida extends JPanel {
 		add(header);
 
 		telaMataMata = new TelaMataMata(campeonato);
-		
+		telaWinnerLower =new TelaWinnerLower(campeonato);
 		String textoHeader = "Partidas";
 
 		lblHeader = new JLabel(textoHeader);
@@ -216,7 +217,12 @@ public class CrudPartida extends JPanel {
 				false));
 		btTabelaWinnerLower.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
+				if(telaWinnerLower.isVisible()){
+					telaWinnerLower.atualizarTela(campeonatoSelecionado);
+				} else{
+					telaWinnerLower.setVisible(true);
+					telaWinnerLower.atualizarTela(campeonatoSelecionado);
+				}
 			}
 		});
 		meio.add(btTabelaWinnerLower);
@@ -230,6 +236,22 @@ public class CrudPartida extends JPanel {
 				102, 102, 102)));
 		meio.add(meioT1);
 
+		JPanel headerPartida = new JPanel();
+		headerPartida.setSize(600, 30);
+		headerPartida.setLocation((meio2.getWidth()/2) -295, 2);
+		headerPartida.setLayout(null);
+		headerPartida.setBackground(UtilitarioTela.getColorCrud(ParametroCrud
+				.getModoVisualizar()));
+		headerPartida.setBorder(null);
+		meio2.add(headerPartida);
+
+		JLabel	lblHeaderPartida = new JLabel("Partidas Realizadas");
+		lblHeaderPartida.setHorizontalAlignment(SwingConstants.CENTER);
+		lblHeaderPartida.setBounds(0, 0, 600, 30);
+		lblHeaderPartida.setFont(UtilitarioTela.getFont(14));
+		lblHeaderPartida.setForeground(UtilitarioTela.getFontColorCrud());
+		headerPartida.add(lblHeaderPartida);
+		
 		tabela = new JTable();
 		tabela.setModel(UtilitarioTabela.getModelo(colunas));
 
@@ -264,7 +286,7 @@ public class CrudPartida extends JPanel {
 		tabela.setFont(UtilitarioTela.getFont(14));
 		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scroll = new JScrollPane(tabela);
-		scroll.setBounds((meio2.getWidth()/2) -295, 30, 600, 450);
+		scroll.setBounds((meio2.getWidth()/2) -295, 32, 600, 350);
 		meio2.add(scroll);
 		
 		mostrarProximaPartida();
@@ -310,18 +332,17 @@ public class CrudPartida extends JPanel {
 				.getCodigoCampeonato())) {
 			btTabelaGrupo.setEnabled(true);
 		}
-		
-		if (PartidaDao.isCampeonatoChaveMataMata(campeonatoSelecionado
+		if (PartidaDao.isCampeonatoChaveWinnerLower(campeonatoSelecionado
+				.getCodigoCampeonato())) {
+			btTabelaWinnerLower.setEnabled(true);
+		}else if (PartidaDao.isCampeonatoChaveMataMata(campeonatoSelecionado
 				.getCodigoCampeonato())) {
 			if(telaMataMata.isVisible()){
 				telaMataMata.atualizarTela(campeonatoSelecionado);
 			}
 			btTabelaMataMata.setEnabled(true);
 		}
-		if (PartidaDao.isCampeonatoChaveWinnerLower(campeonatoSelecionado
-				.getCodigoCampeonato())) {
-			btTabelaWinnerLower.setEnabled(true);
-		}
+		
 	}
 
 	public boolean mostrarProximaPartida() {

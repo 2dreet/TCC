@@ -323,7 +323,7 @@ public class CrudCampeonato extends JPanel {
 		} else {
 			if (campeonatoSelecionado != null && campeonatoSelecionado.getDataInicio() == null) {
 				JButton btIniciar = new JButton("Iniciar Campeonato");
-				btIniciar.setBounds(225, 110, 210, 35);
+				btIniciar.setBounds(meio.getWidth() - 215, 5, 210, 35);
 				btIniciar.setFont(UtilitarioTela.getFont(14));
 				btIniciar.setFocusPainted(false);
 				btIniciar.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudAlterar()));
@@ -425,7 +425,7 @@ public class CrudCampeonato extends JPanel {
 		lbChaveV.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbChaveV);
 
-		linha += 70;
+		linha += 30;
 		tabela = new JTable();
 		tabela.setModel(UtilitarioTabela.getModelo(colunas));
 
@@ -453,7 +453,7 @@ public class CrudCampeonato extends JPanel {
 		tabela.setFont(UtilitarioTela.getFont(14));
 		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scroll = new JScrollPane(tabela);
-		scroll.setBounds(5, linha, 640, 400);
+		scroll.setBounds(5, linha, 640, 300);
 		meio.add(scroll);
 
 		if (modoCrud == ParametroCrud.getModoVisualizar() && campeonatoSelecionado != null && campeonatoSelecionado.getDataInicio() == null) {
@@ -622,6 +622,7 @@ public class CrudCampeonato extends JPanel {
 		campeonatoSelecionado.setDataInicio(new Date());
 		EntityManagerLocal.merge(campeonatoSelecionado);
 		EntityManagerLocal.commit();
+		menuPai.liberarCrud();
 		menuPai.abreMenuPartida(campeonatoSelecionado);
 	}
 	

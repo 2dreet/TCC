@@ -151,8 +151,8 @@ public class PartidaDao {
 					+ "'"
 					+ " AND p.indice = '"
 					+ indice
-					+ "'" + " AND p.codigoGrupo is null AND p.winerLower = '"
-						+ winerLower + "'ORDER BY p.indice, p.codigoPartidaFilho, p.codigoPartida;";
+					+ "'" + " AND p.codigoGrupo is null AND p.winerLower = "
+						+ winerLower + " ORDER BY p.indice, p.codigoPartidaFilho, p.codigoPartida;";
 			
 			return EntityManagerLocal.getEntityManager()
 					.createNativeQuery(sql, TimePartida.class)
@@ -247,7 +247,7 @@ public class PartidaDao {
 			String sql = " SELECT * FROM partida WHERE codigoCampeonato = '"
 					+ codigoCampeonato
 					+ "'"
-					+ " AND ativo = false;";
+					+ " AND ativo = false AND horaInicio is not null ";
 			return EntityManagerLocal.getEntityManager()
 					.createNativeQuery(sql, Partida.class)
 					.setHint(QueryHints.REFRESH, HintValues.TRUE)
