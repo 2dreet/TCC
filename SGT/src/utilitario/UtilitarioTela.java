@@ -39,7 +39,7 @@ public class UtilitarioTela {
 	public static Dimension getTamanhoMunitorJpanel() {
 		Dimension dm = Toolkit.getDefaultToolkit().getScreenSize();
 		Double height = dm.getHeight() - (dm.getHeight() * 0.1) - (10);
-		Double width = dm.getWidth() - (10);
+		Double width = dm.getWidth() - 10;
 
 		dm.setSize(width, height);
 		return dm;
@@ -153,6 +153,46 @@ public class UtilitarioTela {
 	
 	public static Color getColorErro(){
 		return new Color(252, 79, 63);
+	}
+	
+	public static Dimension getTamanhoPorPorcional(double e, double f){
+		int tamanhoIdealLargura = 1600;
+		int tamanhoIdealAltura = 900;
+		Dimension d = getTamanhoMunitor();
+		
+		double porcentagemLargura = ((e * 100)/tamanhoIdealLargura);
+		double porcentagemAltura = ((f * 100)/tamanhoIdealAltura);
+		
+		d.setSize(d.getWidth()*(porcentagemLargura/100), d.getHeight()*(porcentagemAltura/100));
+		return d;
+	}
+	
+	public static double getLargura(int w){
+		int tamanhoIdealLargura = 1600;
+		Dimension d = getTamanhoMunitor();
+		double porcentagemLargura = ((w * 100)/tamanhoIdealLargura);
+		return  (d.getWidth()*(porcentagemLargura/100));
+	}
+	
+	public static double getAltura(int h){
+		int tamanhoIdealAltura = 900;
+		Dimension d = getTamanhoMunitor();
+		double porcentagemAltura = ((h * 100)/tamanhoIdealAltura);
+		return  (d.getHeight()*(porcentagemAltura/100));
+	}
+	
+	public static int getX(int x){
+		int tamanhoIdealLargura = 1600;
+		Dimension d = getTamanhoMunitor();
+		double porcentagemAltura = ((x * 100)/tamanhoIdealLargura);
+		return  (int)(d.getWidth()*(porcentagemAltura/100));
+	}
+	
+	public static int getY(int y){
+		int tamanhoIdealAltura = 900;
+		Dimension d = getTamanhoMunitor();
+		double porcentagemAltura = ((y * 100)/tamanhoIdealAltura);
+		return (int) (d.getHeight()*(porcentagemAltura/100));
 	}
 	
 	public static Color getFundoLocalizar(){

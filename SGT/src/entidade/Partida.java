@@ -79,6 +79,9 @@ public class Partida implements Serializable {
     @JoinColumn(name = "codigoPartidaFilho", referencedColumnName = "codigoPartida")
     @ManyToOne
     private Partida partidaFilho;
+    @JoinColumn(name = "codigoPartidaLower", referencedColumnName = "codigoPartida")
+    @ManyToOne
+    private Partida partidaLower;
     @JoinColumn(name = "codigoCampeonato", referencedColumnName = "codigoCampeonato")
     @ManyToOne(optional = false)
     private Campeonato campeonato;
@@ -152,7 +155,15 @@ public class Partida implements Serializable {
         this.ativo = ativo;
     }
 
-    @XmlTransient
+    public Partida getPartidaLower() {
+		return partidaLower;
+	}
+
+	public void setPartidaLower(Partida partidaLower) {
+		this.partidaLower = partidaLower;
+	}
+
+	@XmlTransient
     public Collection<PcPartida> getPcPartidaCollection() {
         return pcPartidaCollection;
     }

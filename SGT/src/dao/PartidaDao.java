@@ -107,14 +107,14 @@ public class PartidaDao {
 		try {
 			String sql = " SELECT * FROM time_partida tp INNER JOIN partida p ON p.codigoPartida = tp.codigoPartida"
 					+ " INNER JOIN campeonato c on p.codigoCampeonato = c.codigoCampeonato"
-					+ " WHERE p.ativo = false AND p.codigoCampeonato = '"
+					+ " WHERE p.codigoCampeonato = '"
 					+ codigoCampeonato
 					+ "'"
 					+ " AND p.indice = '"
 					+ indice
 					+ "'"
 					+ " AND tp.timePerdedor is not null"
-					+ " AND c.codigoChave = 2" + " AND p.winerLower = false;";
+					+ " AND c.codigoChave = 2 " + " AND p.winerLower = false ORDER BY p.indice, p.codigoPartidaFilho, p.codigoPartida";
 			return EntityManagerLocal.getEntityManager()
 					.createNativeQuery(sql, TimePartida.class)
 					.setHint(QueryHints.REFRESH, HintValues.TRUE)
@@ -168,7 +168,7 @@ public class PartidaDao {
 		try {
 			String sql = " SELECT * FROM time_partida tp INNER JOIN partida p ON p.codigoPartida = tp.codigoPartida"
 					+ " INNER JOIN campeonato c on p.codigoCampeonato = c.codigoCampeonato"
-					+ " WHERE p.ativo = false AND p.codigoCampeonato = '"
+					+ " WHERE p.codigoCampeonato = '"
 					+ campeonato.getCodigoCampeonato()
 					+ "'"
 					+ " AND p.indice = '"
@@ -509,6 +509,25 @@ public class PartidaDao {
 					+ " AND c.codigoChave = '"
 					+ campeonato.getChave().getCodigoChave()
 					+ "'"
+					+ "  ORDER BY p.indice, p.codigoPartidaFilho, p.codigoPartida";
+			return (Partida) EntityManagerLocal.getEntityManager()
+					.createNativeQuery(sql, Partida.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.setMaxResults(1).getSingleResult();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
+	public static Partida getProximaPartidaPartidaLower(Campeonato campeonato) {
+		try {
+			String sql = " SELECT * FROM time_partida tp INNER JOIN partida p ON p.codigoPartida = tp.codigoPartida"
+					+ " INNER JOIN campeonato c on p.codigoCampeonato = c.codigoCampeonato"
+					+ " WHERE p.ativo = true AND p.codigoCampeonato = '"
+					+ campeonato.getCodigoCampeonato()
+					+ "'"
+					+ " AND p.horaFim is null"
+					+ " AND c.codigoChave = '2'"
 					+ "  ORDER BY p.indice, p.codigoPartidaFilho, p.codigoPartida";
 			return (Partida) EntityManagerLocal.getEntityManager()
 					.createNativeQuery(sql, Partida.class)
