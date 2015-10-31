@@ -25,6 +25,11 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
+import jxl.BooleanCell;
+import jxl.CellFeatures;
+import jxl.CellType;
+import jxl.format.CellFormat;
+import jxl.write.Boolean;
 import localizar.LocalizarJogador;
 import utilitario.BordaSombreada;
 import utilitario.MascaraCrud;
@@ -54,23 +59,24 @@ public class DialogLocalizarPc {
 	private static JTextField txBusca;
 	private static ComboBox metodoBusca;
 	private static Object[][] colunas = new Object[][] { new String[] { "Código" },
-			new String[] { "Descrição" }, new String[] { "IP" }};
+			new String[] { "Descrição" }, new String[] { "IP" }, new Boolean[]{}};
 	private static String[] linhaBusca = new String[] { "Código", "Descrição", "IP"};
-	private static Pc pcSelecionado;
+	private static List<Pc> pcsSelecionados;
 	private static JDialog dialog;
 	private static JPanel meio;
 	private static Partida partidaSelecionado;
-	
+	private static boolean inicio;
 	public DialogLocalizarPc(){
 		super();
 		partidaSelecionado = null;
-		pcSelecionado = null;
+		pcsSelecionados = new ArrayList<Pc>();
 		listaPc = new ArrayList<Pc>();
 	}
 	
 	public static void localizarPc(JPanel painelPai, Partida partida) {
 		partidaSelecionado = partida;
-		pcSelecionado = null;
+		pcsSelecionados = new ArrayList<Pc>();
+		inicio = true;
 		listaPc = new ArrayList<Pc>();
 		dialog = new JDialog(Parametros.getPai(), true);
 		dialog.setUndecorated(true);
@@ -141,6 +147,7 @@ public class DialogLocalizarPc {
 		meio.add(btLocalizar);
 		btLocalizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				inicio = false;
 				localizar();
 			}
 		});
@@ -170,7 +177,7 @@ public class DialogLocalizarPc {
 		tabela.getTableHeader().setReorderingAllowed(false);
 		tabela.setRowHeight(50);
 		tabela.setFont(UtilitarioTela.getFont(14));
-		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tabela.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		JScrollPane scroll = new JScrollPane(tabela);
 		scroll.setBounds(2, 45, 640, meio.getHeight() - 85);
 		scroll.setBackground(Color.red);
@@ -205,22 +212,33 @@ public class DialogLocalizarPc {
 				cancelar();
 			}
 		});
-		
+		localizar();
 		dialog.getContentPane().add(panel);
 		dialog.setVisible(true);
+		
 	}
 
-	public static Pc getPcSelecionado(){
-		return pcSelecionado;
+	public static List<Pc> getPcSelecionado(){
+		return pcsSelecionados;
 	}
 	
 	private static void selecionar() {
 		if (tabela.getRowCount() > 0) {
 			if (tabela.getSelectedRow() > -1) {
-				pcSelecionado = PcDao.getPc(Integer
-						.parseInt(String.valueOf(tabela.getValueAt(
-								tabela.getSelectedRow(), 0))));
-				if (pcSelecionado != null) {
+				List<PcPartida> listaPc = PcDao
+						.getListaPcPartida(partidaSelecionado.getCodigoPartida());
+				int[] selecao = tabela.getSelectedRows();  
+				pcsSelecionados  = new ArrayList<Pc>();
+				for (int i = 0; i < selecao.length; i++) {  
+					pcsSelecionados.add(PcDao.getPc(Integer
+							.parseInt(String.valueOf(tabela.getValueAt(
+									selecao[i], 0)))));  
+				} 
+				if(listaPc.size()+pcsSelecionados.size() >10 ){
+					Menssage.setMenssage("Computador Selecionados",
+							"Deve selecionar Apenas 10 Computadores!\nJá Foram Adicionados "+listaPc.size(),
+							ParametroCrud.getModoCrudDeletar(), meio);
+				} else if (pcsSelecionados != null && pcsSelecionados.size() > 0) {
 					dialog.dispose();
 				} else {
 					Menssage.setMenssage("Computador não Selecionado",
@@ -241,7 +259,7 @@ public class DialogLocalizarPc {
 
 	public static void cancelar() {
 		tabela.clearSelection();
-		pcSelecionado = null;
+		pcsSelecionados = new ArrayList<Pc>();
 		listaPc = null;
 		dialog.setVisible(false);
 	}
@@ -253,12 +271,12 @@ public class DialogLocalizarPc {
 		modelo.setNumRows(0);
 		if (listaPc != null && listaPc.size() > 0) {
 			for (Pc p : listaPc) {
-				modelo.addRow(new String[] {
+				modelo.addRow(new Object[] {
 						String.valueOf(String.valueOf(p.getCodigoPC())),
 						p.getDescricao(),
-								p.getIp()});
+								p.getIp(), false});
 			}
-		} else {
+		} else if(!inicio){
 			listaPc = new ArrayList<Pc>();
 			Menssage.setMenssage("Computador não Encontrado",
 					"Nenhum Computador foi encontrado!",

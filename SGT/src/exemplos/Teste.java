@@ -12,6 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JScrollPane;
 import javax.swing.BoxLayout;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class Teste extends JFrame {
 	public Teste() {
@@ -20,12 +22,32 @@ public class Teste extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 0, 2000, 2000);
 		JScrollPane scrollPane = new JScrollPane(panel);
+		panel.setLayout(null);
+		
+		table = new JTable();
+		table.setBounds(29, 140, 299, -135);
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"New column", "New column", "New column"
+			}
+		) {
+			Class[] columnTypes = new Class[] {
+				Boolean.class, Object.class, Object.class
+			};
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+		});
+		panel.add(table);
 		getContentPane().add(scrollPane);
 		
 		
 	}
 
 	private JPanel contentPane;
+	private JTable table;
 
 	/**
 	 * Launch the application.

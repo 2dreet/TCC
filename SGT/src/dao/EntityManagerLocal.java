@@ -30,7 +30,7 @@ public class EntityManagerLocal {
 	}
 
 	public static EntityManager getEntityManager() {
-		if (emf == null) {
+		if (emf == null || em == null) {
 			openEntityManager();
 		}
 		return em;

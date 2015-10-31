@@ -54,28 +54,31 @@ import entidade.PcPartida;
 import entidade.Time;
 
 public class DialogPcPartida {
-	
+
 	private static List<PcPartida> listaPc;
 	private static JTable tabela;
 	private static JTextField txBusca;
 	private static ComboBox metodoBusca;
-	private static Object[][] colunas = new Object[][] { new String[] { "Código" },
-			new String[] { "Descrição" }, new String[] { "IP" }};
+	private static Object[][] colunas = new Object[][] {
+			new String[] { "Código" }, new String[] { "Descrição" },
+			new String[] { "IP" } };
 	private static Pc pcSelecionado;
 	private static JDialog dialog;
 	private static JPanel meio;
 	private static Campeonato campeonatoSelecionado;
 	private static Partida partidaSelecionado;
-	
-	public DialogPcPartida(){
+	private static boolean inicio;
+
+	public DialogPcPartida() {
 		super();
 		campeonatoSelecionado = null;
 		listaPc = new ArrayList<PcPartida>();
 	}
-	
+
 	public static void localizarPc(Container painelPai, Partida partida) {
 		partidaSelecionado = partida;
 		campeonatoSelecionado = partida.getCampeonato();
+		inicio = true;
 		listaPc = new ArrayList<PcPartida>();
 		dialog = new JDialog(Parametros.getPai(), true);
 		dialog.setUndecorated(true);
@@ -83,16 +86,17 @@ public class DialogPcPartida {
 		dialog.setSize(664, 392);
 		dialog.getContentPane().setBackground(new Color(51, 153, 255));
 		dialog.setLocationRelativeTo(painelPai);
-		
+
 		JPanel panel = new JPanel();
-		panel.setBorder(new BordaSombreada(new Color(46, 49, 56), new Color(0, 128, 255)));
+		panel.setBorder(new BordaSombreada(new Color(46, 49, 56), new Color(0,
+				128, 255)));
 		panel.setLayout(null);
 		panel.setSize(dialog.getSize());
 		panel.setBackground(null);
 		panel.setLocation(0, 0);
 		panel.setFocusable(true);
 		panel.requestFocusInWindow();
-		
+
 		JLabel lbHeader = new JLabel("PC partida");
 		lbHeader.setHorizontalAlignment(SwingConstants.CENTER);
 		lbHeader.setBounds(2, 10, 660, 30);
@@ -100,7 +104,7 @@ public class DialogPcPartida {
 		lbHeader.setForeground(UtilitarioTela.getFontColorCrud());
 		lbHeader.setBorder(new BordaSombreada(false, true, false, false));
 		panel.add(lbHeader);
-		
+
 		JPanel meio = new JPanel();
 		meio.setSize(660, 350);
 		meio.setLayout(null);
@@ -141,29 +145,24 @@ public class DialogPcPartida {
 		btSelecionar.setForeground(new Color(46, 49, 56));
 		btSelecionar.setFont(UtilitarioTela.getFont(14));
 		btSelecionar.setFocusPainted(false);
-		btSelecionar.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudNovo()));
+		btSelecionar.setBackground(UtilitarioTela.getColorCrud(ParametroCrud
+				.getModoCrudNovo()));
 		meio.add(btSelecionar);
 		btSelecionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(PcDao.getListaPcPartida(partidaSelecionado.getCodigoPartida()).size() < 10){
-					DialogLocalizarPc.localizarPc(meio,
-							partidaSelecionado);
+				if (PcDao.getListaPcPartida(
+						partidaSelecionado.getCodigoPartida()).size() < 10) {
+					DialogLocalizarPc.localizarPc(meio, partidaSelecionado);
 					if (DialogLocalizarPc.getPcSelecionado() != null) {
-						Pc pc = DialogLocalizarPc.getPcSelecionado();
-						boolean confirmado = true;
-						MenssageConfirmacao.setMenssage(
-								"Adicionar Pc na Partida",
-								"Deseja Adicionar Esse Pc na Partida?\nIP: "
-										+ pc.getIp(), ParametroCrud.getModoCrudNovo(), meio);
-						confirmado = MenssageConfirmacao.isConfirmado();
-						if (confirmado) {
-							EntityManagerLocal.begin();
+						List<Pc> listPc = DialogLocalizarPc.getPcSelecionado();
+						EntityManagerLocal.begin();
+						for (Pc pc : listPc) {
 							PcPartida pcP = new PcPartida();
 							pcP.setPc(pc);
 							pcP.setPartida(partidaSelecionado);
 							EntityManagerLocal.merge(pcP);
-							EntityManagerLocal.commit();
 						}
+						EntityManagerLocal.commit();
 						localizar();
 					}
 				} else {
@@ -173,7 +172,7 @@ public class DialogPcPartida {
 				}
 			}
 		});
-		
+
 		JButton btRemover = new JButton("Remover");
 		btRemover.setBounds(250, meio.getHeight() - 35, 150, 25);
 		btRemover.setForeground(UtilitarioTela.getColorErro());
@@ -200,9 +199,9 @@ public class DialogPcPartida {
 				dialog.dispose();
 			}
 		});
-		
+
 		localizar();
-		
+
 		dialog.getContentPane().add(panel);
 		dialog.setVisible(true);
 	}
@@ -210,19 +209,20 @@ public class DialogPcPartida {
 	public static void selecionar() {
 		if (tabela.getRowCount() > 0) {
 			if (tabela.getSelectedRow() > -1) {
-				pcSelecionado = PcDao.getPc(Integer
-						.parseInt(String.valueOf(tabela.getValueAt(
-								tabela.getSelectedRow(), 0))));
+				pcSelecionado = PcDao
+						.getPc(Integer.parseInt(String.valueOf(tabela
+								.getValueAt(tabela.getSelectedRow(), 0))));
 				if (pcSelecionado != null) {
 					boolean confirmado = true;
-					MenssageConfirmacao
-							.setMenssage("Remover Pc da Partida",
-									"Deseja Remover Esse Pc da Partida?\nPc: "
-											+ pcSelecionado.getIp(),
-									ParametroCrud.getModoCrudDeletar(), meio);
+					MenssageConfirmacao.setMenssage("Remover Pc da Partida",
+							"Deseja Remover Esse Pc da Partida?\nPc: "
+									+ pcSelecionado.getIp(),
+							ParametroCrud.getModoCrudDeletar(), meio);
 					confirmado = MenssageConfirmacao.isConfirmado();
 					if (confirmado) {
-						PcPartida pcPartida = PcDao.getPcPartida(pcSelecionado.getCodigoPC(), partidaSelecionado.getCodigoPartida());
+						PcPartida pcPartida = PcDao.getPcPartida(
+								pcSelecionado.getCodigoPC(),
+								partidaSelecionado.getCodigoPartida());
 						EntityManagerLocal.begin();
 						EntityManagerLocal.delete(pcPartida);
 						EntityManagerLocal.commit();
@@ -247,19 +247,19 @@ public class DialogPcPartida {
 	}
 
 	public static void localizar() {
-		listaPc = PcDao.getListaPcPartida(partidaSelecionado.getCodigoPartida());
+		listaPc = PcDao
+				.getListaPcPartida(partidaSelecionado.getCodigoPartida());
 		DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
 		modelo.setNumRows(0);
 		if (listaPc != null && listaPc.size() > 0) {
 			for (PcPartida p : listaPc) {
 				modelo.addRow(new String[] {
 						String.valueOf(String.valueOf(p.getPc().getCodigoPC())),
-						p.getPc().getDescricao(),
-								p.getPc().getIp()});
+						p.getPc().getDescricao(), p.getPc().getIp() });
 			}
 		} else {
 			listaPc = new ArrayList<PcPartida>();
 		}
 	}
-	
+
 }

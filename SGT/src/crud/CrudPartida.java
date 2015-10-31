@@ -29,6 +29,7 @@ import utilitario.ValidadorCrud;
 
 import javax.swing.JButton;
 
+import dao.CampeonatoDao;
 import dao.CampeonatoTimeDao;
 import dao.ClassificacaoDao;
 import dao.EntityManagerLocal;
@@ -90,14 +91,12 @@ import menu.MenuTime;
 
 public class CrudPartida extends JPanel {
 	private JLabel lblMsg;
-	private Partida partidaSelecionada;
 	private MenuCampeonato menuPai;
 	private Campeonato campeonatoSelecionado;
 	private JPanel header;
 	private JLabel lblHeader;
 	private JPanel meio;
 	private JPanel meio2;
-	private JPanel proximaPartida;
 	private Partida partida;
 	private JPanel meioT1;
 	private JButton btProximaPartida;
@@ -108,7 +107,6 @@ public class CrudPartida extends JPanel {
 	private JButton btTabelaMataMata;
 	private JButton btTabelaWinnerLower;
 	private List<Partida> listaPartida;
-	private TelaMataMata telaMataMata;
 	private TelaWinnerLower telaWinnerLower;
 	private JPanel headerChave;
 	/**
@@ -131,7 +129,6 @@ public class CrudPartida extends JPanel {
 		header.setBorder(null);
 		add(header);
 
-		telaMataMata = new TelaMataMata(campeonato);
 		telaWinnerLower =new TelaWinnerLower(campeonato);
 		String textoHeader = "Partidas";
 
@@ -158,7 +155,6 @@ public class CrudPartida extends JPanel {
 		meio2.setBorder(new BordaSombreada(true, false, false, false));
 		meio.add(meio2);
 
-		partida = PartidaDao.getProximaPartidaPartida(campeonatoSelecionado);
 		btProximaPartida = new JButton("Iniciar Proxima Partida");
 		btProximaPartida.setSize(500, 30);
 		btProximaPartida.setLocation((meio.getWidth() / 2) - 250, 20);
@@ -208,11 +204,11 @@ public class CrudPartida extends JPanel {
 				.setBorder(new BordaSombreada(false, true, false, false));
 		btTabelaMataMata.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(telaMataMata.isVisible()){
-					telaMataMata.atualizarTela(campeonatoSelecionado);
+				if(telaWinnerLower.isVisible()){
+					telaWinnerLower.atualizarTela(campeonatoSelecionado);
 				} else{
-					telaMataMata.setVisible(true);
-					telaMataMata.atualizarTela(campeonatoSelecionado);
+					telaWinnerLower.setVisible(true);
+					telaWinnerLower.atualizarTela(campeonatoSelecionado);
 				}
 			}
 		});
@@ -307,7 +303,6 @@ public class CrudPartida extends JPanel {
 
 	public void abrirDialog() {
 		Computador.stopPCconectado();
-		partida = PartidaDao.getProximaPartidaPartida(campeonatoSelecionado);
 		DialogCrudPartida dcp = new DialogCrudPartida(partida, this);
 		mostrarProximaPartida();
 	}
@@ -390,11 +385,14 @@ public class CrudPartida extends JPanel {
 		}
 		if (PartidaDao.isCampeonatoChaveWinnerLower(campeonatoSelecionado
 				.getCodigoCampeonato())) {
+			if(telaWinnerLower.isVisible()){
+				telaWinnerLower.atualizarTela(campeonatoSelecionado);
+			}
 			btTabelaWinnerLower.setEnabled(true);
 		}else if (PartidaDao.isCampeonatoChaveMataMata(campeonatoSelecionado
 				.getCodigoCampeonato())) {
-			if(telaMataMata.isVisible()){
-				telaMataMata.atualizarTela(campeonatoSelecionado);
+			if(telaWinnerLower.isVisible()){
+				telaWinnerLower.atualizarTela(campeonatoSelecionado);
 			}
 			btTabelaMataMata.setEnabled(true);
 		}
@@ -428,30 +426,34 @@ public class CrudPartida extends JPanel {
 						TimePartida timeCampeao = PartidaDao
 								.getTimeCampeao(campeonatoSelecionado
 										.getCodigoCampeonato());
-						Partida penultimaPartida = PartidaDao
-								.getPartidaPai(timeCampeao.getPartida()
-										.getCodigoPartida());
-						TimePartida time3Colocado = PartidaDao.getTimePartida(
-								campeonatoSelecionado.getCodigoCampeonato(),
-								penultimaPartida.getCodigoPartida());
+						List<Partida> terceiro = PartidaDao.getPartidasPaiLower(timeCampeao.getPartida().getCodigoPartida());
+						
 						classificacao.setCampeonato(campeonatoSelecionado);
 						Time timePrimeiro = timeCampeao.getTimeVencedor();
 						Time timeSegundo = timeCampeao.getTimePerdedor();
 						Time timeTerceiro = null;
-						if (time3Colocado.getTime1() != timeSegundo) {
-							timeTerceiro = time3Colocado.getTime1();
-						} else {
-							timeTerceiro = time3Colocado.getTime2();
+						for(Partida p : terceiro){
+							TimePartida tp = PartidaDao.getTimePartida(p.getCampeonato().getCodigoCampeonato(), p.getCodigoPartida());
+							if (tp.getTime1() != timeSegundo &&  tp.getTime1() != timePrimeiro) {
+								timeTerceiro = tp.getTime1();
+							} else if (tp.getTime2() != timeSegundo &&  tp.getTime2() != timePrimeiro) {
+								timeTerceiro = tp.getTime2();
+							}	
 						}
 	
 						campeonatoSelecionado.setDataFim(new Date());
 						classificacao.setTimePrimeiro(timePrimeiro);
 						classificacao.setTimeSegundo(timeSegundo);
-						classificacao.setTimeTerceiro(timeTerceiro);
+						if(timeTerceiro != null){
+							classificacao.setTimeTerceiro(timeTerceiro);
+						}
 						EntityManagerLocal.begin();
 						EntityManagerLocal.persist(classificacao);
 						EntityManagerLocal.merge(campeonatoSelecionado);
 						EntityManagerLocal.commit();
+						EntityManagerLocal.clear();
+						campeonatoSelecionado = CampeonatoDao.getCampeonato(campeonatoSelecionado.getCodigoCampeonato());
+						menuPai.abreMenuClassificacao();
 					}
 				}
 
@@ -495,7 +497,9 @@ public class CrudPartida extends JPanel {
 				EntityManagerLocal.merge(partida);
 				EntityManagerLocal.merge(timePartida);
 				EntityManagerLocal.commit();
-
+				partida = PartidaDao.getPartida(partida.getCodigoPartida());
+				EntityManagerLocal.clear();
+				
 				return mostrarProximaPartida();
 			}
 
@@ -556,12 +560,12 @@ public class CrudPartida extends JPanel {
 		if (listaPartida != null) {
 			for (Partida partida : listaPartida) {
 				String chave = "";
-				if(partida.getGrupo()!=null){
+				if(partida.getGrupo() != null){
 					chave = "Grupo";
-				} else if(partida.getWinerLower() != false){
+				} else if(!partida.getWinerLower()){
 					chave = "Mata-Mata";
-				} else if(partida.getWinerLower() == true){
-					chave = "Winner Lower";
+				} else if(partida.getWinerLower()){
+					chave = "WinLower";
 				}
 				TimePartida tp = PartidaDao.getTimePartida(campeonatoSelecionado.getCodigoCampeonato(), partida.getCodigoPartida());
 				modelo.addRow(new Object[] {  tp.getPlacarTimeVencedor(),tp.getTimeVencedor().getDescricao(), tp.getPlacarTimePerdedor(), tp.getTimePerdedor().getDescricao(), chave});

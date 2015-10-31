@@ -174,9 +174,10 @@ public class GerenciadorPartida {
 				Partida partida1 = timeSobrando.getPartida();
 
 				Partida partida = new Partida();
-				partida.setAtivo(true);
+				partida.setAtivo(false);
 				partida.setCampeonato(camp);
 				partida.setWinerLower(true);
+				partida.setHoraFim(new Date());
 				partida.setIndice(indices[i]);
 				TimePartida tp = new TimePartida();
 				tp.setPartida(partida);

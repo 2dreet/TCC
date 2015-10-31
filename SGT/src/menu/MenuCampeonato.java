@@ -314,6 +314,7 @@ public class MenuCampeonato extends JPanel {
 
 	public void abreMenuClassificacao(){
 		zeraSelecao();
+		liberarCrud();
 		getIcon(btClassificacao, true);
 		menuMeio.removeAll();
 		CrudClassificacao c = new CrudClassificacao(campSelecionado, this);

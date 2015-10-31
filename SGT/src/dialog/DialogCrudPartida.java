@@ -329,8 +329,6 @@ public class DialogCrudPartida {
 			btPcPartida.setFocusPainted(false);
 			btPcPartida.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					listaPc = PcDao.getListaPcPartida(partidaSelecionado
-							.getCodigoPartida());
 					if (partidaIniciada) {
 
 					} else {
@@ -347,10 +345,7 @@ public class DialogCrudPartida {
 
 		jf.getContentPane().add(panel);
 		jf.setVisible(true);
-		if (PcDao.getListaPcPartida(partidaSelecionado.getCodigoPartida())
-				.size() == 0) {
-			adcionarOs10PrimeirosPC();
-		} else if (PcDao.getListaPcPartida(
+		if (PcDao.getListaPcPartida(
 				partidaSelecionado.getCodigoPartida()).size() < 10) {
 			Menssage.setMenssage("Numero Pc's",
 					"Deve Adicionar Mais PC's Para Iniciar Partida!",
@@ -474,23 +469,19 @@ public class DialogCrudPartida {
 		this.confirmado = false;
 	}
 
-	public List<PcPartida> listaPc;
-
 	public static boolean iniciarPartida;
 
 	public void atualizarPc() {
 		limparPc();
-		listaPc = PcDao
-				.getListaPcPartida(partidaSelecionado.getCodigoPartida());
+		
 		Computador.t2 = new Thread() {
 			@Override
 			public void run() {
 				try {
 					while (true) {
-						EntityManagerLocal.clear();
-						sleep(2000);
 						meio.repaint();
-
+						List<PcPartida> listaPc = PcDao
+								.getListaPcPartida(partidaSelecionado.getCodigoPartida());
 						for (int i = 0; i < listaPc.size(); i++) {
 							Jogador jogador = Computador
 									.verificaJogadorLogado(listaPc.get(i)
@@ -550,7 +541,7 @@ public class DialogCrudPartida {
 							parent.add(lbcIp);
 						}
 						meio.repaint();
-
+						sleep(2000);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -593,12 +584,11 @@ public class DialogCrudPartida {
 			confirmado = MenssageConfirmacao.isConfirmado();
 
 			if (confirmado) {
+				Computador.stopPCconectado();
 				TimeGrupo timeGrupo = null;
-
+				EntityManagerLocal.begin();
 				getTimeVencedor(Integer.parseInt(txtPlacar.getText()),
 						Integer.parseInt(txtPlacar2.getText()));
-				partidaSelecionado.setAtivo(false);
-				partidaSelecionado.setHoraFim(new Date());
 				if (partidaSelecionado.getCampeonato().getChave()
 						.getCodigoChave() == 1
 						|| partidaSelecionado.getCampeonato().getChave()
@@ -620,12 +610,29 @@ public class DialogCrudPartida {
 						} else {
 							time.setTime1(timePartida.getTimeVencedor());
 						}
-
-						EntityManagerLocal.begin();
-						EntityManagerLocal.flush();
+						
 						EntityManagerLocal.merge(time);
-						EntityManagerLocal.commit();
-						EntityManagerLocal.clear();
+						
+						if(partidaSelecionado.getPartidaLower()!=null){
+							TimePartida timeLower = PartidaDao.getTimePartidaTime1Null(
+									partidaSelecionado.getCampeonato()
+											.getCodigoCampeonato(),
+									partidaSelecionado.getPartidaLower()
+											.getCodigoPartida());
+
+							if (timeLower == null) {
+								timeLower = PartidaDao.getTimePartidaTime2Null(
+										partidaSelecionado.getCampeonato()
+												.getCodigoCampeonato(),
+										partidaSelecionado.getPartidaLower()
+												.getCodigoPartida());
+								timeLower.setTime2(timePartida.getTimePerdedor());
+							} else {
+								timeLower.setTime1(timePartida.getTimePerdedor());
+							}
+							
+							EntityManagerLocal.merge(timeLower);
+						}
 					}
 				} else if (partidaSelecionado.getCampeonato().getChave()
 						.getCodigoChave() == 3) {
@@ -634,7 +641,7 @@ public class DialogCrudPartida {
 							partidaSelecionado.getCampeonato()
 									.getCodigoCampeonato());
 				}
-				EntityManagerLocal.begin();
+				
 				if (timeGrupo != null) {
 					if (timeGrupo.getPontuacao() == null) {
 						timeGrupo.setPontuacao(0);
@@ -642,25 +649,31 @@ public class DialogCrudPartida {
 					timeGrupo.setPontuacao(timeGrupo.getPontuacao() + 1);
 					EntityManagerLocal.merge(timeGrupo);
 				}
+				partidaSelecionado.setAtivo(false);
+				partidaSelecionado.setHoraFim(new Date());
 				EntityManagerLocal.merge(partidaSelecionado);
 				EntityManagerLocal.merge(timePartida);
 				EntityManagerLocal.commit();
+				partidaSelecionado = PartidaDao.getPartida(partidaSelecionado.getCodigoPartida());
 				EntityManagerLocal.clear();
 
 			}
 		} else {
 			if (jogadores.size() == 10) {
+				Computador.stopPCconectado();
 				EntityManagerLocal.begin();
 				for (Jogador jogador : jogadores) {
 					JogadorPartida jp = new JogadorPartida();
 					jp.setJogador(jogador);
 					jp.setPartida(partidaSelecionado);
-					EntityManagerLocal.flush();
-					partidaSelecionado.setHoraInicio(new Date());
+					jp.setTime(jogador.getTime());
 					EntityManagerLocal.persist(jp);
-					EntityManagerLocal.merge(partidaSelecionado);
+					EntityManagerLocal.flush();
 				}
+				partidaSelecionado.setHoraInicio(new Date());
+				EntityManagerLocal.merge(partidaSelecionado);
 				EntityManagerLocal.commit();
+				partidaSelecionado = PartidaDao.getPartida(partidaSelecionado.getCodigoPartida());
 				EntityManagerLocal.clear();
 				atualizarTela();
 			} else {
@@ -712,25 +725,7 @@ public class DialogCrudPartida {
 	public boolean getConfirmado() {
 		return this.confirmado;
 	}
-
-	public void adcionarOs10PrimeirosPC() {
-		List<Pc> listaPc = PcDao.getListaPcNaoPartida("Código", "",
-				partidaSelecionado.getCodigoPartida());
-		if(listaPc.size() >= 10){
-			EntityManagerLocal.begin();
-			for (int i = 0; i < 10; i++) {
-				PcPartida pcP = new PcPartida();
-				pcP.setPc(listaPc.get(i));
-				EntityManagerLocal.flush();
-				pcP.setPartida(partidaSelecionado);
-				EntityManagerLocal.persist(pcP);
-				
-			}
-			EntityManagerLocal.commit();
-			EntityManagerLocal.clear();
-		}
-	}
-
+	
 	public boolean valorEmpatado(int valor1, int valor2) {
 		if (valor1 == valor2) {
 			return true;
