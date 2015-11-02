@@ -121,7 +121,7 @@ public class TelaWinnerLower extends JFrame {
 		panel = new JPanel();
 		panel.setLayout(null);
 		pojo = montarArvore(campeonato, listaTimePartida, pojo);
-		posicaoInicialLower = maiorX;
+		posicaoInicialLower = maiorX + (int)(maiorX * 0.5);
 		if(campeonato.getChave().getCodigoChave() == 2){
 			montarArvoreLower(campeonato, listaTimePartidaLower, pojo);
 		}

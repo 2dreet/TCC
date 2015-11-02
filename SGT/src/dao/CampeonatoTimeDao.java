@@ -23,6 +23,21 @@ public class CampeonatoTimeDao {
 		}
 	}
 	
+	public static boolean timeDesqualificado(int codigoTime, int codigoCampeonato){
+		try{
+			String sql = "SELECT * FROM campeonato_time where codigoTime = '"+codigoTime+"' AND codigoCampeonato = '"+codigoCampeonato+"' AND desqualificado = true";
+			CampeonatoTime ct = (CampeonatoTime) EntityManagerLocal.getEntityManager().createNativeQuery(sql, CampeonatoTime.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.setMaxResults(1).getSingleResult();
+			if(ct != null){
+				return true;
+			}
+		}catch(Exception e){
+			return false;
+		}
+		return false;
+	}
+	
 	public static List<Time> getListaCampeonatoListaTime(int codigoCampeonato){
 		try{
 			String sql = "SELECT t.* FROM campeonato_time ct INNER JOIN time t"
@@ -73,18 +88,6 @@ public class CampeonatoTimeDao {
 		try{
 			String sql = "SELECT * FROM campeonato_time where codigoCampeonato = '"+codigoCampeonato+"' AND codigoTime not in(SELECT codigoTime FROM time_grupo);";
 			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, CampeonatoTime.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
-		}catch(Exception e){
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	public static CampeonatoTime getCampeonatoTime(int codigoTime){
-		try{
-			String sql = "SELECT * FROM campeonato_time where codigoTime = '"+codigoTime+"'";
-			return (CampeonatoTime) EntityManagerLocal.getEntityManager().createNativeQuery(sql, CampeonatoTime.class)
-					.setHint(QueryHints.REFRESH, HintValues.TRUE)
-					.setMaxResults(1).getSingleResult();
 		}catch(Exception e){
 			e.printStackTrace();
 			return null;

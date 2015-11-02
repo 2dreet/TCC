@@ -101,19 +101,21 @@ public class CrudPartida extends JPanel {
 	private JPanel meioT1;
 	private JButton btProximaPartida;
 	private JTable tabela;
-	private Object[][] colunas = new Object[][] { new String[] { "Placar" } ,new String[] { "Time Vencedor" }
-			, new String[] { "Placar" } ,new String[] { "Time Perdedor" }, new String[] { "Chave" }};
+	private Object[][] colunas = new Object[][] { new String[] { "Placar" },
+			new String[] { "Time Vencedor" }, new String[] { "Placar" },
+			new String[] { "Time Perdedor" }, new String[] { "Chave" } };
 	private JButton btTabelaGrupo;
 	private JButton btTabelaMataMata;
 	private JButton btTabelaWinnerLower;
 	private List<Partida> listaPartida;
 	private TelaWinnerLower telaWinnerLower;
 	private JPanel headerChave;
+
 	/**
 	 * Create the panel.
 	 */
 	public CrudPartida(Campeonato campeonato, MenuCampeonato menuPai) {
-		
+
 		this.menuPai = menuPai;
 		setSize(UtilitarioTela.getTamanhoMeio());
 		setLayout(null);
@@ -129,7 +131,7 @@ public class CrudPartida extends JPanel {
 		header.setBorder(null);
 		add(header);
 
-		telaWinnerLower =new TelaWinnerLower(campeonato);
+		telaWinnerLower = new TelaWinnerLower(campeonato);
 		String textoHeader = "Partidas";
 
 		lblHeader = new JLabel(textoHeader);
@@ -168,18 +170,16 @@ public class CrudPartida extends JPanel {
 			}
 		});
 		meio.add(btProximaPartida);
-		
 
 		headerChave = new JPanel();
 		headerChave.setSize(600, 30);
-		headerChave.setLocation((meio2.getWidth()/2) -295, 2);
+		headerChave.setLocation((meio2.getWidth() / 2) - 295, 2);
 		headerChave.setLayout(null);
 		headerChave.setBackground(UtilitarioTela.getColorCrud(ParametroCrud
 				.getModoVisualizar()));
 		headerChave.setBorder(null);
 		meio.add(headerChave);
 
-		
 		btTabelaGrupo = new JButton("Tabela de Grupo");
 		btTabelaGrupo.setSize(200, 30);
 		btTabelaGrupo.setLocation(10, 10);
@@ -204,9 +204,9 @@ public class CrudPartida extends JPanel {
 				.setBorder(new BordaSombreada(false, true, false, false));
 		btTabelaMataMata.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(telaWinnerLower.isVisible()){
+				if (telaWinnerLower.isVisible()) {
 					telaWinnerLower.atualizarTela(campeonatoSelecionado);
-				} else{
+				} else {
 					telaWinnerLower.setVisible(true);
 					telaWinnerLower.atualizarTela(campeonatoSelecionado);
 				}
@@ -224,9 +224,9 @@ public class CrudPartida extends JPanel {
 				false));
 		btTabelaWinnerLower.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(telaWinnerLower.isVisible()){
+				if (telaWinnerLower.isVisible()) {
 					telaWinnerLower.atualizarTela(campeonatoSelecionado);
-				} else{
+				} else {
 					telaWinnerLower.partidaEmAndamento = partida;
 					telaWinnerLower.setVisible(true);
 					telaWinnerLower.atualizarTela(campeonatoSelecionado);
@@ -246,20 +246,20 @@ public class CrudPartida extends JPanel {
 
 		JPanel headerPartida = new JPanel();
 		headerPartida.setSize(600, 30);
-		headerPartida.setLocation((meio2.getWidth()/2) -295, 2);
+		headerPartida.setLocation((meio2.getWidth() / 2) - 295, 2);
 		headerPartida.setLayout(null);
 		headerPartida.setBackground(UtilitarioTela.getColorCrud(ParametroCrud
 				.getModoVisualizar()));
 		headerPartida.setBorder(null);
 		meio2.add(headerPartida);
 
-		JLabel	lblHeaderPartida = new JLabel("Partidas Realizadas");
+		JLabel lblHeaderPartida = new JLabel("Partidas Realizadas");
 		lblHeaderPartida.setHorizontalAlignment(SwingConstants.CENTER);
 		lblHeaderPartida.setBounds(0, 0, 600, 30);
 		lblHeaderPartida.setFont(UtilitarioTela.getFont(14));
 		lblHeaderPartida.setForeground(UtilitarioTela.getFontColorCrud());
 		headerPartida.add(lblHeaderPartida);
-		
+
 		tabela = new JTable();
 		tabela.setModel(UtilitarioTabela.getModelo(colunas));
 
@@ -294,70 +294,68 @@ public class CrudPartida extends JPanel {
 		tabela.setFont(UtilitarioTela.getFont(14));
 		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scroll = new JScrollPane(tabela);
-		scroll.setBounds((meio2.getWidth()/2) -295, 32, 600, 350);
+		scroll.setBounds((meio2.getWidth() / 2) - 295, 32, 600, 350);
 		meio2.add(scroll);
-		
+
 		mostrarProximaPartida();
-		
+
 	}
 
 	public void abrirDialog() {
 		Computador.stopPCconectado();
-		DialogCrudPartida dcp = new DialogCrudPartida(partida, this);
+		DialogCrudPartida dcp = new DialogCrudPartida(partida, this, meio);
 		mostrarProximaPartida();
 	}
-	
-	public void mudarChaveHeader(){
+
+	public void mudarChaveHeader() {
 		headerChave.removeAll();
-		
+
 		String textoAux = "";
-		if(campeonatoSelecionado.getDataFim() != null){
+		if (campeonatoSelecionado.getDataFim() != null) {
 			textoAux = "Campeonato Finalizado! Clique em Classificação.";
 			meioT1.removeAll();
 			Classificacao classificacao = ClassificacaoDao
 					.getClassificacaoPorCampeonato(campeonatoSelecionado);
-			JLabel lbLgMedalha = new JLabel(new ImageIcon(CrudPartida.class
-					.getResource("/imagem/medalha.png")));
+			JLabel lbLgMedalha = new JLabel(new ImageIcon(
+					CrudPartida.class.getResource("/imagem/medalha.png")));
 			lbLgMedalha.setBounds(10, 10, 50, 50);
 			meioT1.add(lbLgMedalha);
-			
+
 			JLabel lbLg = new JLabel(
-					UtilitarioImagem.converterImage(classificacao.getTimePrimeiro()
-							.getLogo()));
+					UtilitarioImagem.converterImage(classificacao
+							.getTimePrimeiro().getLogo()));
 			lbLg.setBounds(70, 10, 50, 50);
 			lbLg.setFont(UtilitarioTela.getFont(14));
 			lbLg.setForeground(UtilitarioTela.getFontColorPadrao());
 			meioT1.add(lbLg);
 
-			JLabel lbNome = new JLabel(classificacao.getTimePrimeiro().getDescricao());
+			JLabel lbNome = new JLabel(classificacao.getTimePrimeiro()
+					.getDescricao());
 			lbNome.setBounds(130, 10, 150, 50);
 			lbNome.setFont(UtilitarioTela.getFont(14));
 			lbNome.setForeground(UtilitarioTela.getFontColorPadrao());
+
+			JLabel lblheaderChave = new JLabel(textoAux);
+			lblheaderChave.setHorizontalAlignment(SwingConstants.CENTER);
+			lblheaderChave.setBounds(0, 0, 600, 30);
+			lblheaderChave.setFont(UtilitarioTela.getFont(14));
+			lblheaderChave.setForeground(UtilitarioTela.getFontColorCrud());
+			headerChave.add(lblheaderChave);
 			meioT1.add(lbNome);
 			meioT1.repaint();
 			btProximaPartida.setVisible(false);
 			meio.repaint();
-		} else if(partida.getGrupo() != null){
-			textoAux = "Partida de Grupo";
-		} else if(!partida.getWinerLower()){
-			textoAux = "Partida Mata Mata";
-		} else if(partida.getWinerLower()){
-			textoAux = "Partida Winner Lower";
 		}
 		
-		JLabel	lblheaderChave = new JLabel(textoAux);
-		lblheaderChave.setHorizontalAlignment(SwingConstants.CENTER);
-		lblheaderChave.setBounds(0, 0, 600, 30);
-		lblheaderChave.setFont(UtilitarioTela.getFont(14));
-		lblheaderChave.setForeground(UtilitarioTela.getFontColorCrud());
-		headerChave.add(lblheaderChave);
+
 		headerChave.repaint();
 	}
 
 	public boolean proximaLower() {
-		if(campeonatoSelecionado.getChave().getCodigoChave() == 2){
-			Partida partidaAux = PartidaDao.getProximaPartidaPartidaLower(campeonatoSelecionado);
-			if(partidaAux != null){
+		if (campeonatoSelecionado.getChave().getCodigoChave() == 2) {
+			Partida partidaAux = PartidaDao
+					.getProximaPartidaPartidaLower(campeonatoSelecionado);
+			if (partidaAux != null) {
 				partida = partidaAux;
 				return true;
 			}
@@ -385,26 +383,27 @@ public class CrudPartida extends JPanel {
 		}
 		if (PartidaDao.isCampeonatoChaveWinnerLower(campeonatoSelecionado
 				.getCodigoCampeonato())) {
-			if(telaWinnerLower.isVisible()){
+			if (telaWinnerLower.isVisible()) {
 				telaWinnerLower.atualizarTela(campeonatoSelecionado);
 			}
 			btTabelaWinnerLower.setEnabled(true);
-		}else if (PartidaDao.isCampeonatoChaveMataMata(campeonatoSelecionado
+		} else if (PartidaDao.isCampeonatoChaveMataMata(campeonatoSelecionado
 				.getCodigoCampeonato())) {
-			if(telaWinnerLower.isVisible()){
+			if (telaWinnerLower.isVisible()) {
 				telaWinnerLower.atualizarTela(campeonatoSelecionado);
 			}
 			btTabelaMataMata.setEnabled(true);
 		}
-		
+
 	}
 
 	public boolean mostrarProximaPartida() {
 		atualizarTabela();
 		mostrarVisuPartida();
 		if (campeonatoSelecionado.getDataFim() == null) {
-			if(!proximaLower()){
-				partida = PartidaDao.getProximaPartidaPartida(campeonatoSelecionado);
+			if (!proximaLower()) {
+				partida = PartidaDao
+						.getProximaPartidaPartida(campeonatoSelecionado);
 			}
 			if (partida == null) {
 				btProximaPartida.setVisible(false);
@@ -426,25 +425,31 @@ public class CrudPartida extends JPanel {
 						TimePartida timeCampeao = PartidaDao
 								.getTimeCampeao(campeonatoSelecionado
 										.getCodigoCampeonato());
-						List<Partida> terceiro = PartidaDao.getPartidasPaiLower(timeCampeao.getPartida().getCodigoPartida());
-						
+						List<Partida> terceiro = PartidaDao
+								.getPartidasPaiLower(timeCampeao.getPartida()
+										.getCodigoPartida());
+
 						classificacao.setCampeonato(campeonatoSelecionado);
 						Time timePrimeiro = timeCampeao.getTimeVencedor();
 						Time timeSegundo = timeCampeao.getTimePerdedor();
 						Time timeTerceiro = null;
-						for(Partida p : terceiro){
-							TimePartida tp = PartidaDao.getTimePartida(p.getCampeonato().getCodigoCampeonato(), p.getCodigoPartida());
-							if (tp.getTime1() != timeSegundo &&  tp.getTime1() != timePrimeiro) {
+						for (Partida p : terceiro) {
+							TimePartida tp = PartidaDao.getTimePartida(p
+									.getCampeonato().getCodigoCampeonato(), p
+									.getCodigoPartida());
+							if (tp.getTime1() != timeSegundo
+									&& tp.getTime1() != timePrimeiro) {
 								timeTerceiro = tp.getTime1();
-							} else if (tp.getTime2() != timeSegundo &&  tp.getTime2() != timePrimeiro) {
+							} else if (tp.getTime2() != timeSegundo
+									&& tp.getTime2() != timePrimeiro) {
 								timeTerceiro = tp.getTime2();
-							}	
+							}
 						}
-	
+
 						campeonatoSelecionado.setDataFim(new Date());
 						classificacao.setTimePrimeiro(timePrimeiro);
 						classificacao.setTimeSegundo(timeSegundo);
-						if(timeTerceiro != null){
+						if (timeTerceiro != null) {
 							classificacao.setTimeTerceiro(timeTerceiro);
 						}
 						EntityManagerLocal.begin();
@@ -452,7 +457,10 @@ public class CrudPartida extends JPanel {
 						EntityManagerLocal.merge(campeonatoSelecionado);
 						EntityManagerLocal.commit();
 						EntityManagerLocal.clear();
-						campeonatoSelecionado = CampeonatoDao.getCampeonato(campeonatoSelecionado.getCodigoCampeonato());
+
+						campeonatoSelecionado = CampeonatoDao
+								.getCampeonato(campeonatoSelecionado
+										.getCodigoCampeonato());
 						menuPai.abreMenuClassificacao();
 					}
 				}
@@ -464,8 +472,89 @@ public class CrudPartida extends JPanel {
 					campeonatoSelecionado.getCodigoCampeonato(),
 					partida.getCodigoPartida());
 
-			if (timePartida.getTime1() == null
-					|| timePartida.getTime2() == null) {
+			boolean banido = false;
+			Time timeDesqualificado = null;
+			Time vencedor = null;
+			if (CampeonatoTimeDao.timeDesqualificado(timePartida.getTime1()
+					.getCodigoTime(), campeonatoSelecionado
+					.getCodigoCampeonato())) {
+				banido = true;
+				timeDesqualificado = timePartida.getTime1();
+				vencedor = timePartida.getTime2();
+			} else if (CampeonatoTimeDao.timeDesqualificado(timePartida
+					.getTime2().getCodigoTime(), campeonatoSelecionado
+					.getCodigoCampeonato())) {
+				banido = true;
+				timeDesqualificado = timePartida.getTime2();
+				vencedor = timePartida.getTime1();
+			}
+
+			if (banido) {
+				timePartida.setTimeVencedor(vencedor);
+				timePartida.setTimePerdedor(timeDesqualificado);
+				timePartida.setPlacarTimeVencedor(1);
+				timePartida.setPlacarTimePerdedor(0);
+				partida.setAtivo(false);
+				partida.setHoraInicio(new Date());
+				partida.setHoraFim(new Date());
+				if (partida.getCampeonato().getChave().getCodigoChave() == 1
+						|| partida.getCampeonato().getChave().getCodigoChave() == 2) {
+					if (partida.getPartidaFilho() != null) {
+						TimePartida time = PartidaDao.getTimePartidaTime1Null(
+								partida.getCampeonato().getCodigoCampeonato(),
+								partida.getPartidaFilho().getCodigoPartida());
+
+						if (time == null) {
+							time = PartidaDao.getTimePartidaTime2Null(partida
+									.getCampeonato().getCodigoCampeonato(),
+									partida.getPartidaFilho()
+											.getCodigoPartida());
+							time.setTime2(timePartida.getTimeVencedor());
+						} else {
+							time.setTime1(timePartida.getTimeVencedor());
+						}
+
+						EntityManagerLocal.begin();
+						EntityManagerLocal.merge(time);
+						if (partida.getPartidaLower() != null) {
+							TimePartida timeLower = PartidaDao
+									.getTimePartidaTime1Null(partida
+											.getCampeonato()
+											.getCodigoCampeonato(), partida
+											.getPartidaLower()
+											.getCodigoPartida());
+
+							if (timeLower == null) {
+								timeLower = PartidaDao.getTimePartidaTime2Null(
+										partida.getCampeonato()
+												.getCodigoCampeonato(), partida
+												.getPartidaLower()
+												.getCodigoPartida());
+								timeLower.setTime2(timePartida
+										.getTimePerdedor());
+							} else {
+								timeLower.setTime1(timePartida
+										.getTimePerdedor());
+							}
+							EntityManagerLocal.flush();
+							EntityManagerLocal.merge(timeLower);
+						}
+
+						EntityManagerLocal.commit();
+						EntityManagerLocal.clear();
+					}
+				}
+
+				EntityManagerLocal.begin();
+				EntityManagerLocal.merge(partida);
+				EntityManagerLocal.merge(timePartida);
+				EntityManagerLocal.commit();
+				EntityManagerLocal.clear();
+
+				partida = PartidaDao.getPartida(partida.getCodigoPartida());
+
+				return mostrarProximaPartida();
+			} else if (timePartida.getTime2() == null) {
 				timePartida.setTimeVencedor(timePartida.getTime1());
 				partida.setAtivo(false);
 				partida.setHoraFim(new Date());
@@ -499,7 +588,7 @@ public class CrudPartida extends JPanel {
 				EntityManagerLocal.commit();
 				partida = PartidaDao.getPartida(partida.getCodigoPartida());
 				EntityManagerLocal.clear();
-				
+
 				return mostrarProximaPartida();
 			}
 
@@ -546,29 +635,50 @@ public class CrudPartida extends JPanel {
 			lbNome2.setFont(UtilitarioTela.getFont(14));
 			lbNome2.setForeground(UtilitarioTela.getFontColorPadrao());
 			meioT1.add(lbNome2);
+			
+			if (partida != null) {
+				String textoAux = "Iniciar Proxima Partida";
+				if (partida.getGrupo() != null) {
+					textoAux = "Iniciar Proxima Partida (Grupo)";
+				} else if (!partida.getWinerLower()) {
+					textoAux = "Iniciar Proxima Partida (Mata Mata)";
+				} else if (partida.getWinerLower()) {
+					textoAux = "Iniciar Proxima Partida (Winner Lower)";
+				}
+				
+				btProximaPartida.setText(textoAux);
+				btProximaPartida.repaint();
+			}
+			
 			meioT1.repaint();
 			return true;
 		}
 		mudarChaveHeader();
 		return true;
 	}
-	
+
 	public void atualizarTabela() {
-		listaPartida = PartidaDao.getPartidasFinalizadas(campeonatoSelecionado.getCodigoCampeonato());
+		listaPartida = PartidaDao.getPartidasFinalizadas(campeonatoSelecionado
+				.getCodigoCampeonato());
 		DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
 		modelo.setNumRows(0);
 		if (listaPartida != null) {
 			for (Partida partida : listaPartida) {
 				String chave = "";
-				if(partida.getGrupo() != null){
+				if (partida.getGrupo() != null) {
 					chave = "Grupo";
-				} else if(!partida.getWinerLower()){
+				} else if (!partida.getWinerLower()) {
 					chave = "Mata-Mata";
-				} else if(partida.getWinerLower()){
+				} else if (partida.getWinerLower()) {
 					chave = "WinLower";
 				}
-				TimePartida tp = PartidaDao.getTimePartida(campeonatoSelecionado.getCodigoCampeonato(), partida.getCodigoPartida());
-				modelo.addRow(new Object[] {  tp.getPlacarTimeVencedor(),tp.getTimeVencedor().getDescricao(), tp.getPlacarTimePerdedor(), tp.getTimePerdedor().getDescricao(), chave});
+				TimePartida tp = PartidaDao.getTimePartida(
+						campeonatoSelecionado.getCodigoCampeonato(),
+						partida.getCodigoPartida());
+				modelo.addRow(new Object[] { tp.getPlacarTimeVencedor(),
+						tp.getTimeVencedor().getDescricao(),
+						tp.getPlacarTimePerdedor(),
+						tp.getTimePerdedor().getDescricao(), chave });
 			}
 		} else {
 			listaPartida = new ArrayList<Partida>();

@@ -54,33 +54,32 @@ import entidade.Pc;
 import entidade.PcPartida;
 import entidade.Time;
 
-public class DialogPcPartida {
+public class DialogJogadorPartida {
 
-	private static List<PcPartida> listaPc;
 	private static JTable tabela;
-	private static JTextField txBusca;
-	private static ComboBox metodoBusca;
-	private static Object[][] colunas = new Object[][] {
-			new String[] { "Código" }, new String[] { "Descrição" },
-			new String[] { "IP" } };
-	private static Pc pcSelecionado;
+	private static List<JogadorPartida> listaJogador;
+	private static Object[][] colunas = new Object[][] { new String[] { "Código" },
+			new String[] { "Nome" }, new String[] { "Usuário" }};
 	public static JDialog dialog;
 	private static JPanel meio;
 	private static Campeonato campeonatoSelecionado;
 	private static Partida partidaSelecionado;
 	private static boolean inicio;
+	private static JogadorPartida jogadorSelecionado;
+	private static Time time;
 
-	public DialogPcPartida() {
+	public DialogJogadorPartida() {
 		super();
 		campeonatoSelecionado = null;
-		listaPc = new ArrayList<PcPartida>();
 	}
 
-	public static void localizarPc(Container painelPai, Partida partida) {
+	public static void localizarJogador(Container painelPai, Partida partida, Time timeSelecionado) {
 		partidaSelecionado = partida;
+		time = timeSelecionado;
 		campeonatoSelecionado = partida.getCampeonato();
+		listaJogador = new ArrayList<JogadorPartida>();
 		inicio = true;
-		listaPc = new ArrayList<PcPartida>();
+		
 		dialog = new JDialog(Parametros.getPai(), true);
 		dialog.setUndecorated(true);
 		dialog.setLayout(null);
@@ -98,7 +97,7 @@ public class DialogPcPartida {
 		panel.setFocusable(true);
 		panel.requestFocusInWindow();
 
-		JLabel lbHeader = new JLabel("PC partida");
+		JLabel lbHeader = new JLabel("Jogadores Partida");
 		lbHeader.setHorizontalAlignment(SwingConstants.CENTER);
 		lbHeader.setBounds(2, 10, 660, 30);
 		lbHeader.setFont(UtilitarioTela.getFont(14));
@@ -119,8 +118,8 @@ public class DialogPcPartida {
 		tcm.getColumn(0).setPreferredWidth(80);
 		tcm.getColumn(0).setMinWidth(80);
 		tcm.getColumn(0).setResizable(false);
-		tcm.getColumn(1).setPreferredWidth(462);
-		tcm.getColumn(1).setMinWidth(462);
+		tcm.getColumn(1).setPreferredWidth(458);
+		tcm.getColumn(1).setMinWidth(458);
 		tcm.getColumn(1).setResizable(false);
 		tcm.getColumn(2).setPreferredWidth(100);
 		tcm.getColumn(2).setMinWidth(100);
@@ -135,10 +134,9 @@ public class DialogPcPartida {
 		tabela.getTableHeader().setReorderingAllowed(false);
 		tabela.setRowHeight(50);
 		tabela.setFont(UtilitarioTela.getFont(14));
-		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tabela.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		JScrollPane scroll = new JScrollPane(tabela);
 		scroll.setBounds(2, 45, 640, meio.getHeight() - 85);
-		scroll.setBackground(Color.red);
 		meio.add(scroll);
 
 		JButton btSelecionar = new JButton("Adicionar");
@@ -151,25 +149,26 @@ public class DialogPcPartida {
 		meio.add(btSelecionar);
 		btSelecionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (PcDao.getListaPcPartida(
-						partidaSelecionado.getCodigoPartida()).size() < 10) {
-					DialogLocalizarPc.localizarPc(meio, partidaSelecionado);
-					if (DialogLocalizarPc.getPcSelecionado() != null) {
-						List<Pc> listPc = DialogLocalizarPc.getPcSelecionado();
+				if (JogadorDao.getListaJogadorPartidaTime(partidaSelecionado.getCodigoPartida(), time.getCodigoTime()).
+						size() < 5) {
+					DialogLocalizarJogadorPartidaTime.localizarJogador(meio, partidaSelecionado, time);
+					if (DialogLocalizarJogadorPartidaTime.getJogadorSelecionado() != null) {
+						List<Jogador> listJP = DialogLocalizarJogadorPartidaTime.getJogadorSelecionado();
 						EntityManagerLocal.begin();
-						for (Pc pc : listPc) {
-							PcPartida pcP = new PcPartida();
-							pcP.setPc(pc);
-							pcP.setPartida(partidaSelecionado);
-							EntityManagerLocal.persist(pcP);
+						for (Jogador jp : listJP) {
+							JogadorPartida jpT = new JogadorPartida();
+							jpT.setTime(time);
+							jpT.setJogador(jp);
+							jpT.setPartida(partidaSelecionado);
+							EntityManagerLocal.persist(jpT);
 							EntityManagerLocal.flush();
 						}
 						EntityManagerLocal.commit();
-						localizar(); 
+						localizar();
 					}
 				} else {
-					Menssage.setMenssage("Numero de Computadores",
-							"A Partida não pode adicionar mais Computadores!",
+					Menssage.setMenssage("Numero de Jogadores",
+							"A Partida não pode adicionar mais Jogadore!\nMaximo são 5",
 							ParametroCrud.getModoCrudDeletar(), meio);
 				}
 			}
@@ -208,34 +207,34 @@ public class DialogPcPartida {
 		dialog.setVisible(true);
 	}
 
+	
+	
 	public static void selecionar() {
 		if (tabela.getRowCount() > 0) {
 			if (tabela.getSelectedRow() > -1) {
 				int[] selecao = tabela.getSelectedRows(); 
-				List<PcPartida> pc = new ArrayList<PcPartida>();
+				List<JogadorPartida> jogadorPartidaSelecionado = new ArrayList<JogadorPartida>();
 				for (int i = 0; i < selecao.length; i++) {  
-					pc.add(PcDao.getPcPartida(Integer
+					jogadorPartidaSelecionado.add(JogadorDao.getJogadorPartidaTime(partidaSelecionado.getCodigoPartida(), time.getCodigoTime(),Integer
 							.parseInt(String.valueOf(tabela.getValueAt(
-									selecao[i], 0))), partidaSelecionado.getCodigoPartida()));
+									selecao[i], 0)))));
 				}
 				
-				pcSelecionado = PcDao
-						.getPc(Integer.parseInt(String.valueOf(tabela
-								.getValueAt(tabela.getSelectedRow(), 0))));
-				if (pc != null && pc.size() > 0) {
+				if (jogadorPartidaSelecionado != null && jogadorPartidaSelecionado.size() > 0) {
 					boolean confirmado = true;
-					MenssageConfirmacao.setMenssage("Remover Pc da Partida",
-							"Deseja Remover o(os) Pc da Partida?",
+					MenssageConfirmacao.setMenssage("Remover Jogador da Partida",
+							"Deseja Remover Jogador da Partida?",
 							ParametroCrud.getModoCrudDeletar(), meio);
 					confirmado = MenssageConfirmacao.isConfirmado();
 					if (confirmado) {
 						EntityManagerLocal.begin();
-						for(PcPartida pcp : pc){
-							EntityManagerLocal.delete(pcp);
+						for(JogadorPartida jp : jogadorPartidaSelecionado){
+							EntityManagerLocal.delete(jp);
 							EntityManagerLocal.flush();
 						}
 						EntityManagerLocal.commit();
 						EntityManagerLocal.clear();
+						jogadorSelecionado = null;
 					}
 				} else {
 					Menssage.setMenssage("Computador não Selecionado",
@@ -256,18 +255,18 @@ public class DialogPcPartida {
 	}
 
 	public static void localizar() {
-		listaPc = PcDao
-				.getListaPcPartida(partidaSelecionado.getCodigoPartida());
+		listaJogador = JogadorDao.getListaJogadorPartidaTime(partidaSelecionado.getCodigoPartida(), time.getCodigoTime());
 		DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
 		modelo.setNumRows(0);
-		if (listaPc != null && listaPc.size() > 0) {
-			for (PcPartida p : listaPc) {
+		if (listaJogador != null && listaJogador.size() > 0) {
+			for (JogadorPartida p : listaJogador) {
 				modelo.addRow(new String[] {
-						String.valueOf(String.valueOf(p.getPc().getCodigoPC())),
-						p.getPc().getDescricao(), p.getPc().getIp() });
+						String.valueOf(String.valueOf(p.getJogador().getCodigoJogador())),
+						String.valueOf(String.valueOf(p.getJogador().getUsuario().getNome())),
+						String.valueOf(String.valueOf(p.getJogador().getUsuario().getUsuario()))});
 			}
 		} else {
-			listaPc = new ArrayList<PcPartida>();
+			listaJogador = new ArrayList<JogadorPartida>();
 		}
 	}
 

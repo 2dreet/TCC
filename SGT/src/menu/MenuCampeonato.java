@@ -51,7 +51,7 @@ public class MenuCampeonato extends JPanel {
 	public JButton btPartida;
 	public JButton btClassificacao;
 	private Campeonato campSelecionado;
-
+	private JPanel menuLateralBaixo;
 	public MenuCampeonato() {
 		campSelecionado = null;
 
@@ -89,7 +89,7 @@ public class MenuCampeonato extends JPanel {
 		menuMeio.setBackground(new Color(46, 49, 56));
 		add(menuMeio);
 
-		JPanel menuLateralBaixo = new JPanel();
+		menuLateralBaixo = new JPanel();
 		menuLateralBaixo.setBounds(0, 30, 240, getHeight() - 30);
 		menuLateralBaixo.setBackground(new Color(46, 49, 56));
 		menuLateralBaixo.setLayout(null);
@@ -350,6 +350,8 @@ public class MenuCampeonato extends JPanel {
 		} else{	
 			btClassificacao.setEnabled(false);
 		}
+		
+		menuLateralBaixo.repaint();
 	}
 
 	public boolean campeonatoFinalizado(){

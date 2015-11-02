@@ -7,6 +7,7 @@ package entidade;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,7 +50,11 @@ public class CampeonatoTime implements Serializable {
     @JoinColumn(name = "codigoCampeonato", referencedColumnName = "codigoCampeonato")
     @ManyToOne(optional = false)
     private Campeonato campeonato;
-
+    @Basic(optional = false)
+    @Column(name = "desqualificado")
+    private boolean desqualificado;
+    @Column(name = "motivo")
+    private String motivo;
     public CampeonatoTime() {
     }
 
@@ -87,6 +92,24 @@ public class CampeonatoTime implements Serializable {
 
 	public void setCampeonato(Campeonato campeonato) {
 		this.campeonato = campeonato;
+	}
+
+	
+	
+	public boolean isDesqualificado() {
+		return desqualificado;
+	}
+
+	public void setDesqualificado(boolean desqualificado) {
+		this.desqualificado = desqualificado;
+	}
+
+	public String getMotivo() {
+		return motivo;
+	}
+
+	public void setMotivo(String motivo) {
+		this.motivo = motivo;
 	}
 
 	@Override

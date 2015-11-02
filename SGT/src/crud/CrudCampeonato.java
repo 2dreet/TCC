@@ -38,8 +38,10 @@ import dao.JogadorDao;
 import dao.ModalidadeDao;
 import dao.PermissaoDao;
 import dao.TimeDao;
+import dialog.DialogDesqualificarTime;
 import dialog.DialogLocalizarJogador;
 import dialog.DialogLocalizarTime;
+import dialog.DialogTimesDesqualificados;
 import entidade.Campeonato;
 import entidade.CampeonatoTime;
 import entidade.Grupo;
@@ -96,8 +98,9 @@ public class CrudCampeonato extends JPanel {
 	private ComboBox cbModalidade;
 	private ComboBox cbChave;
 	private List<CampeonatoTime> listaTime;
-	private Time timeSelecionado;
+	private List<Time> timeSelecionado;
 	private JTable tabela;
+	private JPanel lbQtdTimes;
 	private Object[][] colunas = new Object[][] { new String[] { "Logo" },
 			new String[] { "Código" }, new String[] { "Nome" } };
 
@@ -279,21 +282,22 @@ public class CrudCampeonato extends JPanel {
 			}
 
 			String modalidade = String.valueOf(cbModalidade.getSelectedItem());
-			
-			
+
 			if (String.valueOf(cbModalidade.getSelectedItem()) == null
-					|| String.valueOf(cbModalidade.getSelectedItem()).equals("null") 
+					|| String.valueOf(cbModalidade.getSelectedItem()).equals(
+							"null")
 					|| String.valueOf(cbModalidade.getSelectedItem()).trim()
 							.isEmpty()) {
 				msgErro("Casdatrar Modalidade em Casdatro de modalidade");
 				return false;
 			}
-			
-			if(campeonatoSelecionado != null && campeonatoSelecionado.getDataInicio() != null && campeonatoSelecionado.getDataFim() == null){
+
+			if (campeonatoSelecionado != null
+					&& campeonatoSelecionado.getDataInicio() != null
+					&& campeonatoSelecionado.getDataFim() == null) {
 				Menssage.setMenssage("Campeonato Iniciado",
 						"Campeonato Iniciado não pode ser Deletado",
-						ParametroCrud.getModoCrudDeletar(),
-						meio);
+						ParametroCrud.getModoCrudDeletar(), meio);
 				return false;
 			}
 			return true;
@@ -321,20 +325,24 @@ public class CrudCampeonato extends JPanel {
 				}
 			});
 		} else {
-			if (campeonatoSelecionado != null && campeonatoSelecionado.getDataInicio() == null) {
+			if (campeonatoSelecionado != null
+					&& campeonatoSelecionado.getDataInicio() == null) {
 				JButton btIniciar = new JButton("Iniciar Campeonato");
 				btIniciar.setBounds(meio.getWidth() - 215, 5, 210, 35);
 				btIniciar.setFont(UtilitarioTela.getFont(14));
 				btIniciar.setFocusPainted(false);
-				btIniciar.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudAlterar()));
+				btIniciar.setBackground(UtilitarioTela
+						.getColorCrud(ParametroCrud.getModoCrudAlterar()));
 				meio.add(btIniciar);
 				btIniciar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						if (campeonatoSelecionado.getChave().getCodigoChave() == 3) {
 							// Grupo
 							if (listaTime.size() >= 12) {
-								if (GerenciadorGupos.gerarGrupos(campeonatoSelecionado)) {
-									Menssage.setMenssage("Partidas Geradas",
+								if (GerenciadorGupos
+										.gerarGrupos(campeonatoSelecionado)) {
+									Menssage.setMenssage(
+											"Partidas Geradas",
 											"Partidas Geradas\nClicar em partidas para ver as partidas!",
 											ParametroCrud.getModoCrudDeletar(),
 											meio);
@@ -342,35 +350,105 @@ public class CrudCampeonato extends JPanel {
 									iniciarCampeonato();
 								}
 							} else {
-								Menssage.setMenssage("Times insuficientes",
+								Menssage.setMenssage(
+										"Times insuficientes",
 										"Deve adicionar no Minimo 12 Times para iniciar o campeonato!",
 										ParametroCrud.getModoCrudDeletar(),
 										meio);
 							}
-						} else if (campeonatoSelecionado.getChave().getCodigoChave() == 2 || campeonatoSelecionado.getChave().getCodigoChave() == 1) {
+						} else if (campeonatoSelecionado.getChave()
+								.getCodigoChave() == 2
+								|| campeonatoSelecionado.getChave()
+										.getCodigoChave() == 1) {
 							// Winner Lower MATA MATA
 							if (listaTime.size() >= 2) {
-								if (GerenciadorPartida.adicionarPatidas(campeonatoSelecionado)) {
-									Menssage.setMenssage("Partidas Geradas",
+								if (GerenciadorPartida
+										.adicionarPatidas(campeonatoSelecionado)) {
+									Menssage.setMenssage(
+											"Partidas Geradas",
 											"Partidas Geradas\nClicar em partidas para ver as partidas!",
 											ParametroCrud.getModoCrudDeletar(),
 											meio);
 									menuPai.btPartida.setEnabled(true);
 									iniciarCampeonato();
-								}else{
+								} else {
 									Menssage.setMenssage("Erro",
 											"Erro ao gerrar partidas!",
 											ParametroCrud.getModoCrudDeletar(),
 											meio);
 								}
 							} else {
-								Menssage.setMenssage("Times insuficientes",
+								Menssage.setMenssage(
+										"Times insuficientes",
 										"Deve adicionar no Minimo 2 Times para iniciar o campeonato!",
 										ParametroCrud.getModoCrudDeletar(),
 										meio);
 							}
-						} 
-				}
+						}
+					}
+				});
+			} else if (campeonatoSelecionado != null
+					&& campeonatoSelecionado.getDataInicio() != null
+					&& campeonatoSelecionado.getDataFim() == null) {
+				JButton btDesqualificar = new JButton("Desqualificar Time");
+				btDesqualificar.setBounds(meio.getWidth() - 215, 5, 210, 35);
+				btDesqualificar.setFont(UtilitarioTela.getFont(14));
+				btDesqualificar.setFocusPainted(false);
+				btDesqualificar.setBackground(UtilitarioTela
+						.getColorCrud(ParametroCrud.getModoCrudAlterar()));
+				meio.add(btDesqualificar);
+				btDesqualificar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						if (tabela.getSelectedRowCount() == 1) {
+							String codigoTime = (String) tabela.getValueAt(
+									tabela.getSelectedRow(), 1);
+							Time timeSelecionado = TimeDao.getTime(Integer
+									.parseInt(codigoTime));
+							CampeonatoTime ct = CampeonatoTimeDao
+									.getCampeonatoTime(timeSelecionado
+											.getCodigoTime(),
+											campeonatoSelecionado
+													.getCodigoCampeonato());
+
+							if (ct.isDesqualificado()) {
+								Menssage.setMenssage("Time",
+										"O Time já Está desqualificado!",
+										ParametroCrud.getModoCrudDeletar(),
+										meio);
+							} else {
+
+								DialogDesqualificarTime dd = new DialogDesqualificarTime();
+
+								dd.desqualificar(timeSelecionado,
+										campeonatoSelecionado,
+										CrudCampeonato.this);
+								if (dd.getConfirmado()) {
+									Menssage.setMenssage("Time",
+											"O Time Foi Desqualificado!",
+											ParametroCrud.getModoCrudAlterar(),
+											meio);
+								}
+							}
+						} else {
+							Menssage.setMenssage("Time",
+									"Deve Selecionar apenas 1 Time por vez!",
+									ParametroCrud.getModoCrudDeletar(), meio);
+						}
+					}
+				});
+				
+				JButton btTimesDesqualificados = new JButton("Times Desqualificados");
+				btTimesDesqualificados.setBounds(meio.getWidth() - 215, 55, 210, 35);
+				btTimesDesqualificados.setFont(UtilitarioTela.getFont(14));
+				btTimesDesqualificados.setFocusPainted(false);
+				btTimesDesqualificados.setBackground(UtilitarioTela
+						.getColorCrud(ParametroCrud.getModoCrudDeletar()));
+				meio.add(btTimesDesqualificados);
+				btTimesDesqualificados.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						DialogTimesDesqualificados dt = new DialogTimesDesqualificados();
+						dt.localizarTime(meio, campeonatoSelecionado);
+						}
 				});
 			}
 		}
@@ -412,18 +490,25 @@ public class CrudCampeonato extends JPanel {
 		lbModalidadeV.setFont(UtilitarioTela.getFont(14));
 		lbModalidadeV.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbModalidadeV);
-		
+
 		linha += 30;
 		JLabel lbChave = new JLabel("Chave :");
 		lbChave.setBounds(20, linha, 100, 20);
 		lbChave.setFont(UtilitarioTela.getFont(14));
 		lbChave.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbChave);
-		JLabel lbChaveV = new JLabel(campeonatoSelecionado.getChave().getDescricao());
-		lbChaveV.setBounds(130, linha, 300, 20);
+		JLabel lbChaveV = new JLabel(campeonatoSelecionado.getChave()
+				.getDescricao());
+		lbChaveV.setBounds(130, linha, 100, 20);
 		lbChaveV.setFont(UtilitarioTela.getFont(14));
 		lbChaveV.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbChaveV);
+
+		lbQtdTimes = new JPanel();
+		lbQtdTimes.setBounds(330, linha, 100, 20);
+		lbQtdTimes.setLayout(null);
+		lbQtdTimes.setBackground(null);
+		meio.add(lbQtdTimes);
 
 		linha += 30;
 		tabela = new JTable();
@@ -451,12 +536,14 @@ public class CrudCampeonato extends JPanel {
 		tabela.getTableHeader().setReorderingAllowed(false);
 		tabela.setRowHeight(50);
 		tabela.setFont(UtilitarioTela.getFont(14));
-		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tabela.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		JScrollPane scroll = new JScrollPane(tabela);
 		scroll.setBounds(5, linha, 640, 300);
 		meio.add(scroll);
 
-		if (modoCrud == ParametroCrud.getModoVisualizar() && campeonatoSelecionado != null && campeonatoSelecionado.getDataInicio() == null) {
+		if (modoCrud == ParametroCrud.getModoVisualizar()
+				&& campeonatoSelecionado != null
+				&& campeonatoSelecionado.getDataInicio() == null) {
 			JButton btAddTime = new JButton("Adicionar Time");
 			btAddTime.setBounds(80, meio.getHeight() - 70, 220, 35);
 			btAddTime.setFont(UtilitarioTela.getFont(14));
@@ -471,23 +558,28 @@ public class CrudCampeonato extends JPanel {
 					DialogLocalizarTime.localizarTime(meio,
 							campeonatoSelecionado);
 					if (DialogLocalizarTime.getTimeSelecionado() != null) {
-						Time time = DialogLocalizarTime.getTimeSelecionado();
+						List<Time> time = DialogLocalizarTime
+								.getTimeSelecionado();
 						boolean confirmado = true;
+
 						MenssageConfirmacao.setMenssage(
 								"Adicionar Time no Campeonato",
-								"Deseja Adicionar Esse Time no Campeonato?\nTime: "
-										+ time.getDescricao(), modoCrud, meio);
+								"Deseja Adicionar o(os) Time no Campeonato? ",
+								modoCrud, meio);
 						confirmado = MenssageConfirmacao.isConfirmado();
 						if (confirmado) {
 							EntityManagerLocal.begin();
-							CampeonatoTime campTime = new CampeonatoTime();
-							campTime.setTime(time);
-							campTime.setCampeonato(campeonatoSelecionado);
-							campTime.setDataInscricao(new Date());
-							EntityManagerLocal.merge(campTime);
+							for (Time t : time) {
+								CampeonatoTime campTime = new CampeonatoTime();
+								campTime.setTime(t);
+								campTime.setCampeonato(campeonatoSelecionado);
+								campTime.setDataInscricao(new Date());
+								EntityManagerLocal.merge(campTime);
+							}
 							EntityManagerLocal.commit();
 						}
 						atualizarTabela();
+						atualizarQtdTimes();
 					}
 				}
 			});
@@ -505,20 +597,25 @@ public class CrudCampeonato extends JPanel {
 				public void actionPerformed(ActionEvent arg0) {
 					if (tabela.getRowCount() > 0) {
 						if (tabela.getSelectedRow() > -1) {
-							CampeonatoTime campTime = CampeonatoTimeDao.getCampeonatoTime(Integer
-									.parseInt(String.valueOf(tabela.getValueAt(
-											tabela.getSelectedRow(), 1))));
+							int[] selecao = tabela.getSelectedRows();
+
 							boolean confirmado = true;
-							MenssageConfirmacao
-									.setMenssage("Remover Time do Campeonato",
-											"Deseja Remover Esse Time do Campeonato?\nTime: "
-													+ campTime.getTime()
-															.getDescricao(),
-											modoCrud, meio);
+							MenssageConfirmacao.setMenssage(
+									"Remover Time do Campeonato",
+									"Deseja Remover o(os) Time do Campeonato?",
+									modoCrud, meio);
 							confirmado = MenssageConfirmacao.isConfirmado();
 							if (confirmado) {
 								EntityManagerLocal.begin();
-								EntityManagerLocal.delete(campTime);
+								for (int i = 0; i < selecao.length; i++) {
+									CampeonatoTime campTime = CampeonatoTimeDao.getCampeonatoTime(
+											Integer.parseInt(String
+													.valueOf(tabela.getValueAt(
+															selecao[i], 1))),
+											campeonatoSelecionado
+													.getCodigoCampeonato());
+									EntityManagerLocal.delete(campTime);
+								}
 								EntityManagerLocal.commit();
 							}
 						} else {
@@ -532,10 +629,22 @@ public class CrudCampeonato extends JPanel {
 								ParametroCrud.getModoCrudDeletar(), meio);
 					}
 					atualizarTabela();
+					atualizarQtdTimes();
 				}
 			});
 		}
 		atualizarTabela();
+		atualizarQtdTimes();
+	}
+
+	public void atualizarQtdTimes() {
+		lbQtdTimes.removeAll();
+		JLabel lblqtdTimes = new JLabel("Times : " + listaTime.size());
+		lblqtdTimes.setBounds(0, 0, 100, 20);
+		lblqtdTimes.setFont(UtilitarioTela.getFont(14));
+		lblqtdTimes.setForeground(UtilitarioTela.getFontColorCrud());
+		lbQtdTimes.add(lblqtdTimes);
+		lbQtdTimes.repaint();
 	}
 
 	public void atualizarTabela() {
@@ -616,8 +725,8 @@ public class CrudCampeonato extends JPanel {
 	public JTextField getTxDescricao() {
 		return txDescricao;
 	}
-	
-	public void iniciarCampeonato(){
+
+	public void iniciarCampeonato() {
 		EntityManagerLocal.begin();
 		campeonatoSelecionado.setDataInicio(new Date());
 		EntityManagerLocal.merge(campeonatoSelecionado);
@@ -625,28 +734,39 @@ public class CrudCampeonato extends JPanel {
 		menuPai.liberarCrud();
 		menuPai.abreMenuPartida(campeonatoSelecionado);
 	}
-	
-	public boolean validarCampeonato(){
-		if(listaTime == null || listaTime.size() < 12){
-			Menssage.setMenssage("valor de times invalido", "Adicionar No minimo 12 times no campeonato", ParametroCrud.getModoCrudDeletar(), meio);
+
+	public boolean validarCampeonato() {
+		if (listaTime == null || listaTime.size() < 12) {
+			Menssage.setMenssage("valor de times invalido",
+					"Adicionar No minimo 12 times no campeonato",
+					ParametroCrud.getModoCrudDeletar(), meio);
 			return false;
 		}
-		
-		for(CampeonatoTime ct : listaTime){
-			List<Jogador> listaJogador = JogadorDao.getListaJogadorTitularTime(ct.getTime().getCodigoTime());
-			if(listaJogador == null || listaJogador.size() < 5){
-				Menssage.setMenssage("valor de Jogadores invalido", "Adicionar 5 Jogadores Titulares para o Time\n"+ct.getTime().getDescricao(), ParametroCrud.getModoCrudDeletar(), meio);
+
+		for (CampeonatoTime ct : listaTime) {
+			List<Jogador> listaJogador = JogadorDao
+					.getListaJogadorTitularTime(ct.getTime().getCodigoTime());
+			if (listaJogador == null || listaJogador.size() < 5) {
+				Menssage.setMenssage("valor de Jogadores invalido",
+						"Adicionar 5 Jogadores Titulares para o Time\n"
+								+ ct.getTime().getDescricao(),
+						ParametroCrud.getModoCrudDeletar(), meio);
 				return false;
 			}
-			for(Jogador jogador : listaJogador){
-				if(JogadorBanimentoDao.jogadorBanido(jogador.getCodigoJogador())){
-					Menssage.setMenssage("Jogador Banido ", "Jogador "+ jogador.getUsuario().getNome()+" do Time "+ct.getTime().getDescricao()+"\nEstá Banido deve ser subistituido!", ParametroCrud.getModoCrudDeletar(), meio);
+			for (Jogador jogador : listaJogador) {
+				if (JogadorBanimentoDao.jogadorBanido(jogador
+						.getCodigoJogador())) {
+					Menssage.setMenssage("Jogador Banido ", "Jogador "
+							+ jogador.getUsuario().getNome() + " do Time "
+							+ ct.getTime().getDescricao()
+							+ "\nEstá Banido deve ser subistituido!",
+							ParametroCrud.getModoCrudDeletar(), meio);
 					return false;
 				}
 			}
-			
+
 		}
-		
+
 		return true;
 	}
 

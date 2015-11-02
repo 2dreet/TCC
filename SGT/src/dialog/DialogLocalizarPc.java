@@ -242,17 +242,17 @@ public class DialogLocalizarPc {
 					dialog.dispose();
 				} else {
 					Menssage.setMenssage("Computador não Selecionado",
-							"Deve selecionar um Computador!",
+							"Deve selecionar um ou mais Computador!",
 							ParametroCrud.getModoCrudDeletar(), meio);
 				}
 			} else {
 				Menssage.setMenssage("Computador não Selecionado",
-						"Deve selecionar um Computador!",
+						"Deve selecionar um ou mais Computador!",
 						ParametroCrud.getModoCrudDeletar(), meio);
 			}
 		} else {
 			Menssage.setMenssage("Computador não Selecionado",
-					"Deve selecionar um Computador!",
+					"Deve selecionar um ou mais Computador!",
 					ParametroCrud.getModoCrudDeletar(), meio);
 		}
 	}

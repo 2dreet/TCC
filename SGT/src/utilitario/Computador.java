@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 
 import dao.JogadorDao;
 import dao.PcDao;
+import dialog.DialogCrudPartida;
 import entidade.Jogador;
 import entidade.Partida;
 import entidade.Pc;
@@ -22,13 +23,11 @@ import entidade.Time;
 public class Computador {
 
 	private static Thread t;
-	
 	public static Thread t2;
 
 	public static void stopPCconectado() {
 		try {
-			t.stop();
-			t2.stop();
+			t2.interrupt();
 		} catch (Exception e) {
 
 		}

@@ -20,7 +20,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -76,13 +75,11 @@ public class DialogCrudPartida {
 	private JPanel msg;
 	private JPanel meio;
 	private JPanel meioTime;
-	private JFrame pai;
+	private JDialog pai;
 
 	private TimePartida timePartida;
 	private List<Container> pcs;
-
-	private List<Jogador> jogadores;
-
+	
 	private JPanel jpPc0;
 	private JPanel jpPc1;
 	private JPanel jpPc2;
@@ -94,47 +91,44 @@ public class DialogCrudPartida {
 	private JPanel jpPc8;
 	private JPanel jpPc9;
 	private JPanel header;
-
 	private JButton confirmar;
 	private JButton btPcPartida;
 	private CrudPartida cPai;
 
-	public DialogCrudPartida(Partida partida, CrudPartida cPai) {
+	public DialogCrudPartida(Partida partida, CrudPartida cPai, JPanel jpai) {
 		this.cPai = cPai;
-		JFrame jf = new JFrame();
-		jf.setSize(455, 555);
-		Parametros.setPai(jf);
-		crudPartida(partida, jf);
+		crudPartida(partida, jpai);
 
 	}
 
-	public void crudPartida(Partida partidaSelecionado, JFrame jf) {
+	public void crudPartida(Partida partidaSelecionado, JPanel jpai) {
 		this.partidaSelecionado = partidaSelecionado;
 		pcs = new ArrayList<Container>();
-		jogadores = new ArrayList<Jogador>();
-		pai = jf;
+		pai = new JDialog(Parametros.getPai(), true);
+		pai.setUndecorated(true);
+		pai.setLayout(null);
+		pai.setSize(450, 550);
+		pai.getContentPane().setBackground(new Color(232, 234, 239));
+		pai.setLocationRelativeTo(jpai);
+		pai.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		
+		
 		timePartida = PartidaDao.getTimePartida(partidaSelecionado
 				.getCampeonato().getCodigoCampeonato(), partidaSelecionado
 				.getCodigoPartida());
-
-		jf.setUndecorated(true);
-		jf.getContentPane().setLayout(null);
-		jf.setSize(Parametros.getPai().getSize());
-		jf.getContentPane().setBackground(new Color(232, 234, 239));
-		jf.setLocationRelativeTo(Parametros.getPai());
 
 		JPanel panel = new JPanel();
 		panel.setBorder(new BordaSombreada(new Color(46, 49, 56), new Color(
 				102, 102, 102)));
 		panel.setLayout(null);
-		panel.setSize(jf.getSize());
+		panel.setSize(pai.getSize());
 		panel.setBackground(null);
 		panel.setLocation(0, 0);
 		panel.setFocusable(true);
 		panel.requestFocusInWindow();
 
 		header = new JPanel();
-		header.setSize(jf.getWidth() - 4, 30);
+		header.setSize(pai.getWidth() - 4, 30);
 		header.setLayout(null);
 		header.setLocation(2, 2);
 		header.setBackground(UtilitarioTela.getColorCrud(ParametroCrud
@@ -173,8 +167,9 @@ public class DialogCrudPartida {
 		btFechar.setBorder(new BordaSombreada(false, true, false, false));
 		btFechar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Computador.stopPCconectado();
-				jf.dispose();
+				pararThread();
+				pai.setVisible(false);
+				return;
 			}
 		});
 		header.add(btFechar);
@@ -212,10 +207,28 @@ public class DialogCrudPartida {
 		meioT1.add(lbLg);
 
 		JLabel lbNome = new JLabel(timePartida.getTime1().getDescricao());
-		lbNome.setBounds(130, 10, 250, 50);
+		lbNome.setBounds(130, 10, 220, 50);
 		lbNome.setFont(UtilitarioTela.getFont(14));
 		lbNome.setForeground(UtilitarioTela.getFontColorPadrao());
 		meioT1.add(lbNome);
+		
+		JButton btJogadorTime1 = new JButton("");
+		btJogadorTime1.setIcon( new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/crud/addJog.png")));
+		btJogadorTime1.setSize(40, 40);
+		btJogadorTime1.setLocation(370, 20);
+		btJogadorTime1.setBackground(null);
+		btJogadorTime1.setFocusPainted(false);
+		btJogadorTime1.setBorder(null);
+		btJogadorTime1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				pararThread();
+				DialogJogadorPartida lp = new DialogJogadorPartida();
+				lp.localizarJogador(meio, partidaSelecionado, timePartida.getTime1());
+				atualizarPc();
+			}
+		});
+		meioT1.add(btJogadorTime1);
 
 		txtPlacar = new JTextField();
 		txtPlacar.setColumns(100);
@@ -290,6 +303,24 @@ public class DialogCrudPartida {
 		txtPlacar2.setLayout(null);
 		txtPlacar2.setBorder(UtilitarioTela.jTextFieldNormal());
 		meioT2.add(txtPlacar2);
+		
+		JButton btJogadorTime2 = new JButton("");
+		btJogadorTime2.setIcon( new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/crud/addJog.png")));
+		btJogadorTime2.setSize(40, 40);
+		btJogadorTime2.setLocation(370, 20);
+		btJogadorTime2.setBackground(null);
+		btJogadorTime2.setFocusPainted(false);
+		btJogadorTime2.setBorder(null);
+		btJogadorTime2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				pararThread();
+				DialogJogadorPartida lp = new DialogJogadorPartida();
+				lp.localizarJogador(meio, partidaSelecionado, timePartida.getTime2());
+								atualizarPc();
+			}
+		});
+		meioT2.add(btJogadorTime2);
 
 		msg = new JPanel();
 		msg.setSize(396, 35);
@@ -314,14 +345,14 @@ public class DialogCrudPartida {
 		confirmar.setFocusPainted(false);
 		confirmar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				pararThread();
 				if (confirmar()) {
-					Computador.stopPCconectado();
-					jf.setVisible(false);
+					pai.setVisible(false);
 					cPai.mostrarProximaPartida();
 				}
 			}
 		});
-		if (!partidaIniciada) {
+		
 			btPcPartida = new JButton("PC Partida");
 			btPcPartida.setSize(150, 30);
 			btPcPartida.setLocation(290, 10);
@@ -329,35 +360,21 @@ public class DialogCrudPartida {
 			btPcPartida.setFocusPainted(false);
 			btPcPartida.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					if (partidaIniciada) {
-
-					} else {
-						DialogPcPartida lp = new DialogPcPartida();
-						lp.localizarPc(jf.getContentPane(), partidaSelecionado);
-					}
+					pararThread();
+					DialogPcPartida lp = new DialogPcPartida();
+					lp.localizarPc(pai.getContentPane(), partidaSelecionado);
+					atualizarPc();
 				}
 			});
 			meio.add(btPcPartida);
-		}else{
-			confirmar.setLocation((meio.getWidth()/2) - 75, 10);
-		}
+		
 		meio.add(confirmar);
 
-		jf.getContentPane().add(panel);
-		jf.setVisible(true);
-		if (PcDao.getListaPcPartida(
-				partidaSelecionado.getCodigoPartida()).size() < 10) {
-			Menssage.setMenssage("Numero Pc's",
-					"Deve Adicionar Mais PC's Para Iniciar Partida!",
-					ParametroCrud.getModoCrudDeletar(), meio);
-			DialogPcPartida lp = new DialogPcPartida();
-			lp.localizarPc(jf.getContentPane(), partidaSelecionado);
-		}
-
 		atualiarPlacar();
-
 		atualizarPc();
-
+		
+		pai.getContentPane().add(panel);
+		pai.setVisible(true);
 	}
 
 	public void atualiarPlacar() {
@@ -371,8 +388,6 @@ public class DialogCrudPartida {
 	}
 
 	public void limparPc() {
-		pcs = new ArrayList<Container>();
-
 		jpPc0 = new JPanel();
 		jpPc0.setSize(200, 50);
 		jpPc0.setLayout(null);
@@ -470,28 +485,48 @@ public class DialogCrudPartida {
 	}
 
 	public static boolean iniciarPartida;
-
+	
+	public void pararThread(){
+		try{
+			Computador.stopPCconectado();
+			//t2.interrupt();
+		}catch(Exception e){
+			
+		}
+	}
+	
 	public void atualizarPc() {
+		iniciarPartida = false;
 		limparPc();
-		
 		Computador.t2 = new Thread() {
 			@Override
 			public void run() {
 				try {
-					while (true) {
-						meio.repaint();
+					while (!interrupted()) {
+						sleep(2000);
+						for(Container parent : pcs){
+							parent.removeAll();
+							meioTime.repaint();
+						}
+						meioTime.repaint();
+						System.out.println("passando");
 						List<PcPartida> listaPc = PcDao
 								.getListaPcPartida(partidaSelecionado.getCodigoPartida());
+						if(interrupted()) return;
 						for (int i = 0; i < listaPc.size(); i++) {
+							if(interrupted()) return;
 							Jogador jogador = Computador
 									.verificaJogadorLogado(listaPc.get(i)
 											.getPc());
+							if(interrupted()) return;
 							Container parent = pcs.get(i);
 							parent.removeAll();
 							JLabel lbPc = null;
 							JLabel lbcJogador;
 							JLabel lbcIp;
+							if(interrupted()) return;
 							if (jogador == null) {
+								iniciarPartida = false;
 								lbPc = new JLabel(
 										new ImageIcon(
 												Computador.class
@@ -508,11 +543,10 @@ public class DialogCrudPartida {
 								lbcIp.setForeground(UtilitarioTela
 										.getFontColorPadrao());
 								lbcIp.setBounds(40, 16, 160, 15);
-								jogadores = new ArrayList<Jogador>();
+								if(interrupted()) return;
 							} else {
-								if (jogadores.size() < 10) {
-									jogadores.add(jogador);
-								}
+								if(interrupted()) return;
+								iniciarPartida = true;
 								lbPc = new JLabel(
 										new ImageIcon(
 												Computador.class
@@ -533,18 +567,22 @@ public class DialogCrudPartida {
 								lbcIp.setForeground(UtilitarioTela
 										.getFontColorPadrao());
 								lbcIp.setBounds(40, 16, 160, 15);
+								if(interrupted()) return;
 
 							}
+							if(interrupted()) return;
 							lbPc.setBounds(0, 0, 35, 35);
 							parent.add(lbPc);
 							parent.add(lbcJogador);
 							parent.add(lbcIp);
+							if(interrupted()) return;
 						}
-						meio.repaint();
-						sleep(2000);
+						if(interrupted()) return;
+						
+						meioTime.repaint();
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
+					
 				}
 			}
 		};
@@ -584,7 +622,7 @@ public class DialogCrudPartida {
 			confirmado = MenssageConfirmacao.isConfirmado();
 
 			if (confirmado) {
-				Computador.stopPCconectado();
+				
 				TimeGrupo timeGrupo = null;
 				EntityManagerLocal.begin();
 				getTimeVencedor(Integer.parseInt(txtPlacar.getText()),
@@ -610,7 +648,7 @@ public class DialogCrudPartida {
 						} else {
 							time.setTime1(timePartida.getTimeVencedor());
 						}
-						
+						EntityManagerLocal.flush();
 						EntityManagerLocal.merge(time);
 						
 						if(partidaSelecionado.getPartidaLower()!=null){
@@ -630,7 +668,7 @@ public class DialogCrudPartida {
 							} else {
 								timeLower.setTime1(timePartida.getTimePerdedor());
 							}
-							
+							EntityManagerLocal.flush();
 							EntityManagerLocal.merge(timeLower);
 						}
 					}
@@ -647,11 +685,14 @@ public class DialogCrudPartida {
 						timeGrupo.setPontuacao(0);
 					}
 					timeGrupo.setPontuacao(timeGrupo.getPontuacao() + 1);
+					EntityManagerLocal.flush();
 					EntityManagerLocal.merge(timeGrupo);
 				}
 				partidaSelecionado.setAtivo(false);
 				partidaSelecionado.setHoraFim(new Date());
+				EntityManagerLocal.flush();
 				EntityManagerLocal.merge(partidaSelecionado);
+				EntityManagerLocal.flush();
 				EntityManagerLocal.merge(timePartida);
 				EntityManagerLocal.commit();
 				partidaSelecionado = PartidaDao.getPartida(partidaSelecionado.getCodigoPartida());
@@ -659,32 +700,43 @@ public class DialogCrudPartida {
 
 			}
 		} else {
-			if (jogadores.size() == 10) {
-				Computador.stopPCconectado();
+			if(JogadorDao.getListaJogadorPartidaTime(partidaSelecionado.getCodigoPartida(), timePartida.getTime1().getCodigoTime()).size() < 5){
+				Menssage.setMenssage(
+						"Não Poder Iniciar",
+						"Não pode Inicar Partida Pois\nPois falta Jogadores Cadastrados Na partida!\nNo Time "+timePartida.getTime1().getDescricao()
+								,
+						ParametroCrud.getModoCrudDeletar(), meio);
+			} else if(JogadorDao.getListaJogadorPartidaTime(partidaSelecionado.getCodigoPartida(), timePartida.getTime2().getCodigoTime()).size() < 5){
+				Menssage.setMenssage(
+						"Não Poder Iniciar",
+						"Não pode Inicar Partida Pois\nPois falta Jogadores Cadastrados Na partida!\nNo Time "+timePartida.getTime2().getDescricao()
+								,
+						ParametroCrud.getModoCrudDeletar(), meio);
+			} else if(PcDao.getListaPcPartida(partidaSelecionado.getCodigoPartida()).size() < 10){
+				Menssage.setMenssage(
+						"Não Poder Iniciar",
+						"Não pode Inicar Partida Pois\nPois falta Pc Cadastrados Na partida!"
+								,
+						ParametroCrud.getModoCrudDeletar(), meio);
+			} else if(!iniciarPartida){
+				Menssage.setMenssage(
+						"Não Poder Iniciar",
+						"Não pode Inicar Partida Pois\nPois falta Jogadores Logado!"
+								,
+						ParametroCrud.getModoCrudDeletar(), meio);
+			} else {
 				EntityManagerLocal.begin();
-				for (Jogador jogador : jogadores) {
-					JogadorPartida jp = new JogadorPartida();
-					jp.setJogador(jogador);
-					jp.setPartida(partidaSelecionado);
-					jp.setTime(jogador.getTime());
-					EntityManagerLocal.persist(jp);
-					EntityManagerLocal.flush();
-				}
 				partidaSelecionado.setHoraInicio(new Date());
+				EntityManagerLocal.flush();
 				EntityManagerLocal.merge(partidaSelecionado);
 				EntityManagerLocal.commit();
 				partidaSelecionado = PartidaDao.getPartida(partidaSelecionado.getCodigoPartida());
 				EntityManagerLocal.clear();
 				atualizarTela();
-			} else {
-				Menssage.setMenssage(
-						"Não Poder Iniciar",
-						"Não pode Inicar Partida Pois\nPois falta Jogadores logado!\nJogadores Logados "
-								+ jogadores.size(),
-						ParametroCrud.getModoCrudDeletar(), meio);
 			}
-
+			atualizarPc();
 		}
+		
 		return confirmado;
 	}
 
@@ -710,8 +762,8 @@ public class DialogCrudPartida {
 		btFechar.setBorder(new BordaSombreada(false, true, false, false));
 		btFechar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				Computador.stopPCconectado();
 				pai.dispose();
-
 			}
 		});
 		header.add(btFechar);

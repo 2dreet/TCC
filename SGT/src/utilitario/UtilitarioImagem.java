@@ -39,4 +39,10 @@ public class UtilitarioImagem {
 			return null;
 		}
 	}
+	
+	public static ImageIcon mudarTamanhoImageIcom(int w, int h, ImageIcon icon){
+		Image image = icon.getImage();  
+		Image newimg = image.getScaledInstance(w, h, java.awt.Image.SCALE_SMOOTH);  
+		return(new ImageIcon(newimg));
+	}
 }

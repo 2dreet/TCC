@@ -71,6 +71,9 @@ public class EntityManagerLocal {
 	}
 
 	public static boolean begin() {
+		if(getEntityManager().getTransaction().isActive()){
+			return true;
+		}
 		getEntityManager().getTransaction().begin();
 		return true;
 	} 

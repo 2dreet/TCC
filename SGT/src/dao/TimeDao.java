@@ -7,6 +7,7 @@ import javax.persistence.NoResultException;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 
+import entidade.CampeonatoTime;
 import entidade.Time;
 import entidade.TimeGrupo;
 
@@ -27,6 +28,17 @@ public class TimeDao {
 					+ " where "+condicao+" AND ativo = true";
 			
 			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Time.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
+	public static List<CampeonatoTime> getListaTimeBanidos(){
+		try {
+			String sql = "SELECT * FROM campeonato_time "
+					+ " WHERE desqualificado = true";
+			
+			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, CampeonatoTime.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
 		} catch (NoResultException ex) {
 			return null;
 		}

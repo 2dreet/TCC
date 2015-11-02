@@ -41,37 +41,35 @@ import dao.JogadorDao;
 import dao.PcDao;
 import dao.TimeDao;
 import entidade.Campeonato;
+import entidade.CampeonatoTime;
 import entidade.Jogador;
 import entidade.Pc;
 import entidade.PcPartida;
 import entidade.Time;
 
-public class DialogLocalizarTime {
+public class DialogTimesDesqualificados {
 	
-	private static List<Time> listaTime;
+	private static List<CampeonatoTime> listaTime;
 	private static JTable tabela;
-	private static JTextField txBusca;
-	private static ComboBox metodoBusca;
 	private static Object[][] colunas = new Object[][] { new String[] { "Logo" },
-			new String[] { "Código" }, new String[] { "Nome" } };
-	private static String[] linhaBusca = new String[] { "Código", "Nome" };
-	private static List<Time> timeSelecionado;
+			new String[] { "Código" }, new String[] { "Nome" } , new String[] { "Motivo" }};
+	private static Time timeSelecionado;
 	private static JDialog dialog;
 	private static JPanel meio;
 	private static Campeonato campeonatoSelecionado;
 	private static boolean inicio;
-	public DialogLocalizarTime(){
+	public DialogTimesDesqualificados(){
 		super();
 		campeonatoSelecionado = null;
-		timeSelecionado = new ArrayList<Time>();
-		listaTime = new ArrayList<Time>();
+		timeSelecionado = null;
+		listaTime = new ArrayList<CampeonatoTime>();
 	}
 	
 	public static void localizarTime(JPanel painelPai, Campeonato campeonato) {
 		
 		campeonatoSelecionado = campeonato;
-		timeSelecionado = new ArrayList<Time>();
-		listaTime = new ArrayList<Time>();
+		timeSelecionado = null;
+		listaTime = new ArrayList<CampeonatoTime>();
 		inicio = true;
 		dialog = new JDialog(Parametros.getPai(), true);
 		dialog.setUndecorated(true);
@@ -89,7 +87,7 @@ public class DialogLocalizarTime {
 		panel.setFocusable(true);
 		panel.requestFocusInWindow();
 		
-		JLabel lbHeader = new JLabel("Localizar Time");
+		JLabel lbHeader = new JLabel("Times Desqualificados");
 		lbHeader.setHorizontalAlignment(SwingConstants.CENTER);
 		lbHeader.setBounds(2, 10, 660, 30);
 		lbHeader.setFont(UtilitarioTela.getFont(14));
@@ -104,49 +102,6 @@ public class DialogLocalizarTime {
 		meio.setBackground(new Color(224, 224, 224));
 		panel.add(meio);
 		
-		JLabel lbNome = new JLabel("Busca :");
-		lbNome.setBounds(10, 10, 55, 20);
-		lbNome.setFont(UtilitarioTela.getFont(14));
-		lbNome.setForeground(UtilitarioTela.getFontColorCrud());
-		meio.add(lbNome);
-
-		metodoBusca = new ComboBox(new Dimension(150, 25));
-		metodoBusca.setModel(new DefaultComboBoxModel(linhaBusca));
-		metodoBusca.setLocation(70, 10);
-		meio.add(metodoBusca);
-
-		txBusca = new JTextField();
-		txBusca.setColumns(100);
-		txBusca.setBounds(222, 10, 280, 25);
-		txBusca.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent arg0) {
-				txBusca.setBorder(UtilitarioTela.jTextFieldComFocus());
-			}
-
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				txBusca.setBorder(UtilitarioTela.jTextFieldNormal());
-			}
-		});
-		txBusca.setLayout(null);
-		txBusca.setBorder(UtilitarioTela.jTextFieldNormal());
-		meio.add(txBusca);
-
-		JButton btLocalizar = new JButton("Localizar");
-		btLocalizar.setBounds(meio.getWidth() - 140, 10, 130, 25);
-		btLocalizar.setFont(UtilitarioTela.getFont(14));
-		btLocalizar.setFocusPainted(false);
-		btLocalizar.setBackground(UtilitarioTela.getFundoLocalizar());
-		btLocalizar.setIcon(UtilitarioTela.getIconeLocalizar());
-		meio.add(btLocalizar);
-		btLocalizar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				inicio = false;
-				localizar();
-			}
-		});
-
 		tabela = new JTable();
 		tabela.setModel(UtilitarioTabela.getModelo(colunas));
 
@@ -159,9 +114,12 @@ public class DialogLocalizarTime {
 		tcm.getColumn(1).setPreferredWidth(120);
 		tcm.getColumn(1).setMinWidth(120);
 		tcm.getColumn(1).setResizable(false);
-		tcm.getColumn(2).setPreferredWidth(465);
-		tcm.getColumn(2).setMinWidth(465);
+		tcm.getColumn(2).setPreferredWidth(220);
+		tcm.getColumn(2).setMinWidth(220);
 		tcm.getColumn(2).setResizable(false);
+		tcm.getColumn(3).setPreferredWidth(240);
+		tcm.getColumn(3).setMinWidth(240);
+		tcm.getColumn(3).setResizable(false);
 
 		UtilitarioTabela.pintarColona(UtilitarioTabela.getFundoHeaderPadrao(),
 				UtilitarioTabela.getFontColotHeaderPadrao(), tcm, colunas);
@@ -172,29 +130,14 @@ public class DialogLocalizarTime {
 		tabela.getTableHeader().setReorderingAllowed(false);
 		tabela.setRowHeight(50);
 		tabela.setFont(UtilitarioTela.getFont(14));
-		tabela.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scroll = new JScrollPane(tabela);
 		scroll.setBounds(2, 45, 640, meio.getHeight() - 85);
 		scroll.setBackground(Color.red);
 		meio.add(scroll);
 
-		JButton btSelecionar = new JButton("Selecionar");
-		btSelecionar.setBounds(120, meio.getHeight() - 35, 180, 25);
-		btSelecionar.setForeground(UtilitarioTela.getColorErro());
-		btSelecionar.setFont(UtilitarioTela.getFont(14));
-		btSelecionar.setFocusPainted(false);
-		btSelecionar.setBackground(new Color(46, 49, 56));
-		btSelecionar.setIcon(new ImageIcon(LocalizarJogador.class
-				.getResource("/imagem/done.png")));
-		meio.add(btSelecionar);
-		btSelecionar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				selecionar();
-			}
-		});
-
-		JButton btLimparSelecao = new JButton("Cancelar");
-		btLimparSelecao.setBounds(350, meio.getHeight() - 35, 180, 25);
+		JButton btLimparSelecao = new JButton("Sair");
+		btLimparSelecao.setBounds(250, meio.getHeight() - 35, 180, 25);
 		btLimparSelecao.setFont(UtilitarioTela.getFont(14));
 		btLimparSelecao.setFocusPainted(false);
 		btLimparSelecao.setForeground(new Color(46, 49, 56));
@@ -209,23 +152,14 @@ public class DialogLocalizarTime {
 		});
 		
 		localizar();
-		
 		dialog.getContentPane().add(panel);
 		dialog.setVisible(true);
-	}
-
-	public static List<Time> getTimeSelecionado(){
-		return timeSelecionado;
 	}
 	
 	private static void selecionar() {
 		if(tabela.getRowCount() > 0 ){
 			if(tabela.getSelectedRow() > -1){
-				int[] selecao = tabela.getSelectedRows();  
-				for (int i = 0; i < selecao.length; i++) {  
-					timeSelecionado.add(TimeDao.getTime(Integer.parseInt(String.valueOf(tabela.getValueAt(selecao[i], 1)))));  
-				} 
-				dialog.setVisible(false);
+				Time time = TimeDao.getTime(Integer.parseInt(String.valueOf(tabela.getValueAt(tabela.getSelectedRow(), 1))));
 			} else{
 				Menssage.setMenssage("Time não Selecionado", "Deve selecionar um Time!", ParametroCrud.getModoCrudDeletar(), dialog.getContentPane());
 			}
@@ -242,19 +176,18 @@ public class DialogLocalizarTime {
 	}
 
 	public static void localizar() {
-		listaTime = TimeDao.getListaPesquisaTime(metodoBusca
-				.getSelectedItem().toString(), txBusca.getText(),campeonatoSelecionado.getCodigoCampeonato());
+		listaTime = TimeDao.getListaTimeBanidos();
 		DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
 		modelo.setNumRows(0);
 		if (listaTime != null && listaTime.size() > 0 ) {
-			for (Time t : listaTime) {
+			for (CampeonatoTime t : listaTime) {
 				modelo.addRow(new Object[] {
-						new DadoComIcone("", UtilitarioImagem.converterImage(t.getLogo())),
-						String.valueOf(t.getCodigoTime()), t.getDescricao() });
+						new DadoComIcone("", UtilitarioImagem.converterImage(t.getTime().getLogo())),
+						String.valueOf(t.getTime().getCodigoTime()), t.getTime().getDescricao(), t.getMotivo() });
 
 			}
 		} else if(!inicio){
-			listaTime = new ArrayList<Time>();
+			listaTime = new ArrayList<CampeonatoTime>();
 			Menssage.setMenssage("Time não Encontrado", "Nenhum Time foi encontrado!", ParametroCrud.getModoCrudDeletar(), dialog.getContentPane());
 		}
 	}

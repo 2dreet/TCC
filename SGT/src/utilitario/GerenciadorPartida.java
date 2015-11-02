@@ -432,44 +432,116 @@ public class GerenciadorPartida {
 					.getPartidasPorIndiceParaGerarLowers(
 							campeonato.getCodigoCampeonato(),
 							indicesWinner[indiceWinner]);
-			Time timeSobrando = null;
+			Partida partidaSobrando = null;
 			Partida partidaTimeSobrando = null;
 			if (lista.size() > 1) {
+				
 				if (listaTime.size() < lista.size()) {
-					// Gera partidas Intermediarias
-					
+					int a = 0;
+					int diferenca = lista.size() - listaTime.size();
+					if(diferenca % 2 == 0){
+						while (listaTime.size() < lista.size()) {
+							// Gera partidas Intermediarias
+							
+							EntityManagerLocal.begin();
+							Partida partida = new Partida();
+							partida.setAtivo(true);
+							partida.setCampeonato(camp);
+							partida.setIndice(indice);
+							partida.setWinerLower(true);
+		
+							TimePartida tp = new TimePartida();
+							tp.setPartida(partida);
+		
+							Partida partida1 = lista.get(0);
+							partida1.setPartidaFilho(partida);
+							lista.remove(lista.get(0));
+		
+							Partida partida2 = lista.get(0);
+								partida2.setPartidaFilho(partida);
+								lista.remove(lista.get(0));
+							
+							
+							partida.setDescricao(getLetraPartida(indice) + a);
+							EntityManagerLocal.persist(partida);
+							EntityManagerLocal.persist(tp);
+							EntityManagerLocal.merge(partida1);
+							EntityManagerLocal.merge(partida2);
+							EntityManagerLocal.commit();
+							EntityManagerLocal.clear();
+							lista.add(partida);
+							a++;
+						}
+					}else{
+						while (listaTime.size() < lista.size()-1) {
+							// Gera partidas Intermediarias
+							
+							EntityManagerLocal.begin();
+							Partida partida = new Partida();
+							partida.setAtivo(true);
+							partida.setCampeonato(camp);
+							partida.setIndice(indice);
+							partida.setWinerLower(true);
+		
+							TimePartida tp = new TimePartida();
+							tp.setPartida(partida);
+		
+							Partida partida1 = lista.get(0);
+							partida1.setPartidaFilho(partida);
+							lista.remove(lista.get(0));
+		
+							Partida partida2 = lista.get(0);
+								partida2.setPartidaFilho(partida);
+								lista.remove(lista.get(0));
+							
+							partida.setDescricao(getLetraPartida(indice) + a);
+							EntityManagerLocal.persist(partida);
+							EntityManagerLocal.persist(tp);
+							EntityManagerLocal.merge(partida1);
+							EntityManagerLocal.merge(partida2);
+							EntityManagerLocal.commit();
+							EntityManagerLocal.clear();
+							lista.add(partida);
+							a++;
+						}
+						partidaSobrando = lista.get(0);
+						lista.remove(lista.get(0));
+					}
+					indice++;
+					iax++;
+				}
+				
+				if(partidaSobrando != null){
 					EntityManagerLocal.begin();
 					Partida partida = new Partida();
 					partida.setAtivo(true);
 					partida.setCampeonato(camp);
-
 					partida.setIndice(indice);
 					partida.setWinerLower(true);
 
 					TimePartida tp = new TimePartida();
 					tp.setPartida(partida);
 
-					Partida partida1 = lista.get(0);
+					Partida partida1 = lista.get(lista.size()-1);
 					partida1.setPartidaFilho(partida);
-					lista.remove(lista.get(0));
+					lista.remove(lista.get(lista.size()-1));
 
-					Partida partida2 = lista.get(0);
+					Partida partida2 = partidaSobrando;
 					partida2.setPartidaFilho(partida);
-					lista.remove(lista.get(0));
-
+					
 					partida.setDescricao(getLetraPartida(indice) + iax);
 					EntityManagerLocal.persist(partida);
 					EntityManagerLocal.persist(tp);
 					EntityManagerLocal.merge(partida1);
 					EntityManagerLocal.merge(partida2);
-
 					EntityManagerLocal.commit();
 					EntityManagerLocal.clear();
 					lista.add(partida);
-					indice++;
-					iax++;
-				} 
-
+				}
+				
+				indice++;
+				iax++;
+				
 				EntityManagerLocal.begin();
 				for (int i = 0; i < lista.size(); i++) {
 					
@@ -485,13 +557,7 @@ public class GerenciadorPartida {
 					TimePartida tp = new TimePartida();
 					tp.setPartida(partida);
 					tp.setTime1(listaTime.get(i).getTimePerdedor());
-					if (timeSobrando != null && i == lista.size() - 1) {
-						tp.setTime2(timeSobrando);
-						partidaTimeSobrando.setPartidaLower(partida);
-						EntityManagerLocal.merge(partidaTimeSobrando);
-
-					}
-
+					
 					Partida partidaPai = lista.get(i);
 					partidaPai.setPartidaFilho(partida);
 					

@@ -30,49 +30,45 @@ import utilitario.BordaSombreada;
 import utilitario.MascaraCrud;
 import utilitario.ParametroCrud;
 import utilitario.Parametros;
-import utilitario.UtilitarioImagem;
 import utilitario.UtilitarioTabela;
 import utilitario.UtilitarioTela;
 import componente.ComboBox;
-import componente.DadoComIcone;
 import componente.Menssage;
-import componente.TextoIconeCell;
 import dao.JogadorDao;
 import dao.PcDao;
-import dao.TimeDao;
-import entidade.Campeonato;
 import entidade.Jogador;
+import entidade.JogadorPartida;
+import entidade.Partida;
 import entidade.Pc;
-import entidade.PcPartida;
 import entidade.Time;
 
-public class DialogLocalizarTime {
+public class DialogLocalizarJogadorPartidaTime {
 	
-	private static List<Time> listaTime;
+	private static List<Jogador> listaJogador;
 	private static JTable tabela;
 	private static JTextField txBusca;
 	private static ComboBox metodoBusca;
-	private static Object[][] colunas = new Object[][] { new String[] { "Logo" },
-			new String[] { "Código" }, new String[] { "Nome" } };
-	private static String[] linhaBusca = new String[] { "Código", "Nome" };
-	private static List<Time> timeSelecionado;
+	private static Object[][] colunas = new Object[][] { new String[] { "Código" },
+			new String[] { "Nome" }, new String[] { "Usuário" }};
+	private static String[] linhaBusca = new String[] { "Código", "Nome", "Usuário",
+			"Cpf", "Telefone", "Email" };
+	private static List<Jogador> jogadorSelecionado;
 	private static JDialog dialog;
 	private static JPanel meio;
-	private static Campeonato campeonatoSelecionado;
-	private static boolean inicio;
-	public DialogLocalizarTime(){
+	private static Partida partidaSeleciondo;
+	private static Time time;
+	
+	public DialogLocalizarJogadorPartidaTime(){
 		super();
-		campeonatoSelecionado = null;
-		timeSelecionado = new ArrayList<Time>();
-		listaTime = new ArrayList<Time>();
+		jogadorSelecionado = new ArrayList<Jogador>();
+		listaJogador = new ArrayList<Jogador>();
 	}
 	
-	public static void localizarTime(JPanel painelPai, Campeonato campeonato) {
-		
-		campeonatoSelecionado = campeonato;
-		timeSelecionado = new ArrayList<Time>();
-		listaTime = new ArrayList<Time>();
-		inicio = true;
+	public static void localizarJogador(JPanel painelPai, Partida partida, Time timeSelecionado) {
+		partidaSeleciondo = partida;
+		time = timeSelecionado;
+		jogadorSelecionado = new ArrayList<Jogador>();
+		listaJogador = new ArrayList<Jogador>();
 		dialog = new JDialog(Parametros.getPai(), true);
 		dialog.setUndecorated(true);
 		dialog.setLayout(null);
@@ -89,7 +85,7 @@ public class DialogLocalizarTime {
 		panel.setFocusable(true);
 		panel.requestFocusInWindow();
 		
-		JLabel lbHeader = new JLabel("Localizar Time");
+		JLabel lbHeader = new JLabel("Localizar Jogador");
 		lbHeader.setHorizontalAlignment(SwingConstants.CENTER);
 		lbHeader.setBounds(2, 10, 660, 30);
 		lbHeader.setFont(UtilitarioTela.getFont(14));
@@ -142,40 +138,32 @@ public class DialogLocalizarTime {
 		meio.add(btLocalizar);
 		btLocalizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				inicio = false;
 				localizar();
 			}
 		});
 
 		tabela = new JTable();
 		tabela.setModel(UtilitarioTabela.getModelo(colunas));
-
 		TableColumnModel tcm = tabela.getColumnModel();
-		TextoIconeCell renderer = new TextoIconeCell();
-		tcm.getColumn(0).setCellRenderer(renderer);
-		tcm.getColumn(0).setPreferredWidth(50);
-		tcm.getColumn(0).setMinWidth(50);
+		tcm.getColumn(0).setPreferredWidth(80);
+		tcm.getColumn(0).setMinWidth(80);
 		tcm.getColumn(0).setResizable(false);
-		tcm.getColumn(1).setPreferredWidth(120);
-		tcm.getColumn(1).setMinWidth(120);
+		tcm.getColumn(1).setPreferredWidth(458);
+		tcm.getColumn(1).setMinWidth(458);
 		tcm.getColumn(1).setResizable(false);
-		tcm.getColumn(2).setPreferredWidth(465);
-		tcm.getColumn(2).setMinWidth(465);
+		tcm.getColumn(2).setPreferredWidth(100);
+		tcm.getColumn(2).setMinWidth(100);
 		tcm.getColumn(2).setResizable(false);
-
+		
 		UtilitarioTabela.pintarColona(UtilitarioTabela.getFundoHeaderPadrao(),
 				UtilitarioTabela.getFontColotHeaderPadrao(), tcm, colunas);
-		UtilitarioTabela.pintarLinha(new Color(255, 153, 153), Color.black,
-				tabela);
+		UtilitarioTabela.pintarLinha(new Color(255, 153, 153), Color.black, tabela);
 		tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		tabela.setPreferredScrollableViewportSize(tabela.getPreferredSize());
 		tabela.getTableHeader().setReorderingAllowed(false);
-		tabela.setRowHeight(50);
-		tabela.setFont(UtilitarioTela.getFont(14));
 		tabela.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		JScrollPane scroll = new JScrollPane(tabela);
-		scroll.setBounds(2, 45, 640, meio.getHeight() - 85);
-		scroll.setBackground(Color.red);
+		scroll.setBounds(2, 45, 656, meio.getHeight() - 85);
 		meio.add(scroll);
 
 		JButton btSelecionar = new JButton("Selecionar");
@@ -208,54 +196,69 @@ public class DialogLocalizarTime {
 			}
 		});
 		
-		localizar();
-		
 		dialog.getContentPane().add(panel);
 		dialog.setVisible(true);
 	}
 
-	public static List<Time> getTimeSelecionado(){
-		return timeSelecionado;
+	public static List<Jogador> getJogadorSelecionado(){
+		return jogadorSelecionado;
 	}
 	
 	private static void selecionar() {
 		if(tabela.getRowCount() > 0 ){
 			if(tabela.getSelectedRow() > -1){
-				int[] selecao = tabela.getSelectedRows();  
+				List<JogadorPartida> listaAux = JogadorDao.getListaJogadorPartidaTime(partidaSeleciondo.getCodigoPartida(), time.getCodigoTime());
+				int[] selecao = tabela.getSelectedRows(); 
+				jogadorSelecionado = new ArrayList<Jogador>();
 				for (int i = 0; i < selecao.length; i++) {  
-					timeSelecionado.add(TimeDao.getTime(Integer.parseInt(String.valueOf(tabela.getValueAt(selecao[i], 1)))));  
-				} 
-				dialog.setVisible(false);
+					jogadorSelecionado.add(JogadorDao.getJogador(Integer.parseInt((String) tabela.getValueAt(selecao[i], 0))));  
+				}  
+				if(listaAux.size()+jogadorSelecionado.size() >5 ){
+					Menssage.setMenssage("Jogadores Selecionados",
+							"Deve selecionar Apenas 5 Jogadores!\nJá Foram Adicionados "+listaAux.size(),
+							ParametroCrud.getModoCrudDeletar(), meio);
+				} else if (jogadorSelecionado != null && jogadorSelecionado.size() > 0) {
+					dialog.dispose();
+				} else {
+					Menssage.setMenssage("Jogador não Selecionado",
+							"Deve selecionar um ou mais Jogadores!",
+							ParametroCrud.getModoCrudDeletar(), meio);
+				}
 			} else{
-				Menssage.setMenssage("Time não Selecionado", "Deve selecionar um Time!", ParametroCrud.getModoCrudDeletar(), dialog.getContentPane());
+				Menssage.setMenssage("Jogador não Selecionado", "Deve selecionar um Jogador!", ParametroCrud.getModoCrudDeletar(), dialog.getContentPane());
 			}
 		} else{
-			Menssage.setMenssage("Time não Selecionado", "Deve selecionar um Time!", ParametroCrud.getModoCrudDeletar(), dialog.getContentPane());
+			Menssage.setMenssage("Jogador não Selecionado", "Deve selecionar um Jogador!", ParametroCrud.getModoCrudDeletar(), dialog.getContentPane());
 		}
 	}
 
 	public static void cancelar() {
 		tabela.clearSelection();
-		timeSelecionado = null;
-		listaTime = null;
+		jogadorSelecionado = null;
+		listaJogador = null;
 		dialog.setVisible(false);
 	}
 
 	public static void localizar() {
-		listaTime = TimeDao.getListaPesquisaTime(metodoBusca
-				.getSelectedItem().toString(), txBusca.getText(),campeonatoSelecionado.getCodigoCampeonato());
+		listaJogador = JogadorDao.getListaJogadorDoTime(metodoBusca
+				.getSelectedItem().toString(), txBusca.getText(), time.getCodigoTime());
 		DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
 		modelo.setNumRows(0);
-		if (listaTime != null && listaTime.size() > 0 ) {
-			for (Time t : listaTime) {
-				modelo.addRow(new Object[] {
-						new DadoComIcone("", UtilitarioImagem.converterImage(t.getLogo())),
-						String.valueOf(t.getCodigoTime()), t.getDescricao() });
+		if (listaJogador != null && listaJogador.size() > 0 ) {
+			for (Jogador j : listaJogador) {
+				modelo.addRow(new String[] {
+						String.valueOf(j.getCodigoJogador()),
+						j.getUsuario().getNome() + " "
+								+ j.getUsuario().getSobreNome(),
+						j.getUsuario().getUsuario(),
+						j.getUsuario().getCpf(),
+						MascaraCrud.mascaraTelefoneResult(j.getUsuario()
+								.getTelefone()), j.getUsuario().getEmail() });
 
 			}
-		} else if(!inicio){
-			listaTime = new ArrayList<Time>();
-			Menssage.setMenssage("Time não Encontrado", "Nenhum Time foi encontrado!", ParametroCrud.getModoCrudDeletar(), dialog.getContentPane());
+		} else {
+			listaJogador = new ArrayList<Jogador>();
+			Menssage.setMenssage("Jogador não Encontrado", "Nenhum Jogador foi encontrado!", ParametroCrud.getModoCrudDeletar(), dialog.getContentPane());
 		}
 	}
 	

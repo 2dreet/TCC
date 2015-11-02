@@ -345,6 +345,23 @@ public class PartidaDao {
 			return null;
 		}
 	}
+	
+	public static List<TimePartida> getTimePartidaList(int codigoCampeonato,
+			int codigoTime) {
+		try {
+			String sql = " SELECT * FROM time_partida tp INNER JOIN partida p ON p.codigoPartida = tp.codigoPartida"
+					+ " WHERE p.codigoCampeonato = '"
+					+ codigoCampeonato
+					+ "'"
+					+ " AND tp.codigoTime = '" + codigoTime + "' AND p.ativo = true";
+			return EntityManagerLocal.getEntityManager()
+					.createNativeQuery(sql, TimePartida.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
 
 	public static TimePartida getTimePartidaTime1Null(int codigoCampeonato,
 			int codigoPartida) {
