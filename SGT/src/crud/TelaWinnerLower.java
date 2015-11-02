@@ -62,6 +62,7 @@ public class TelaWinnerLower extends JFrame {
 	public Partida partidaEmAndamento;
 
 	public TelaWinnerLower(Campeonato campeonato) {
+		campeonatoSelecionado = campeonato;
 		if (panel != null) {
 			panel.removeAll();
 		}
@@ -86,6 +87,7 @@ public class TelaWinnerLower extends JFrame {
 	}
 
 	public void atualizarTela(Campeonato campeonato) {
+		campeonatoSelecionado = campeonato;
 		scrollPane.remove(panel);
 		maiorX = 0;
 		maiorY = 0;

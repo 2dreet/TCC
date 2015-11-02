@@ -678,16 +678,18 @@ public class DialogCrudPartida {
 							.getTimeVencedor().getCodigoTime(),
 							partidaSelecionado.getCampeonato()
 									.getCodigoCampeonato());
+					
+					if (timeGrupo != null) {
+						if (timeGrupo.getPontuacao() == null) {
+							timeGrupo.setPontuacao(0);
+						}
+						timeGrupo.setPontuacao(timeGrupo.getPontuacao() + 1);
+						EntityManagerLocal.flush();
+						EntityManagerLocal.merge(timeGrupo);
+					}
 				}
 				
-				if (timeGrupo != null) {
-					if (timeGrupo.getPontuacao() == null) {
-						timeGrupo.setPontuacao(0);
-					}
-					timeGrupo.setPontuacao(timeGrupo.getPontuacao() + 1);
-					EntityManagerLocal.flush();
-					EntityManagerLocal.merge(timeGrupo);
-				}
+				
 				partidaSelecionado.setAtivo(false);
 				partidaSelecionado.setHoraFim(new Date());
 				EntityManagerLocal.flush();

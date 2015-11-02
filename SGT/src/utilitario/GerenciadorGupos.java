@@ -29,13 +29,16 @@ public class GerenciadorGupos {
 				int resto = (listaTime.size() % 4);
 				int quantidadeGrupo = (listaTime.size() / 4);
 
+				int ax = 0;
+				
 				List<Grupo> listaGrupo = new ArrayList<Grupo>();
 				for (int i = 0; i < quantidadeGrupo; i++) {
-					listaGrupo.add(obterGrupo(campeonato));
+					listaGrupo.add(obterGrupo(campeonato,i));
+					ax++;
 				}
-
+				ax++;
 				if (resto > 0) {
-					listaGrupo.add(obterGrupo(campeonato));
+					listaGrupo.add(obterGrupo(campeonato, ax));
 				}
 
 				obterSeeds(listaGrupo, campeonato);
@@ -125,9 +128,10 @@ public class GerenciadorGupos {
 		EntityManagerLocal.clear();
 	}
 
-	public static Grupo obterGrupo(Campeonato campeonato) {
+	public static Grupo obterGrupo(Campeonato campeonato , int i) {
 		EntityManagerLocal.begin();
 		Grupo grupo = new Grupo();
+		grupo.setDescricao("G"+i);
 		grupo.setCampeonato(campeonato);
 		grupo.setAtivo(true);
 		EntityManagerLocal.persist(grupo);
@@ -163,6 +167,50 @@ public class GerenciadorGupos {
 		}
 	}
 
+	public static String getLetraPartida(int valor) {
+		switch (valor) {
+		case 1:
+			return "A";
+		case 2:
+			return "B";
+		case 3:
+			return "C";
+		case 4:
+			return "D";
+		case 5:
+			return "E";
+		case 6:
+			return "F";
+		case 7:
+			return "G";
+		case 8:
+			return "H";
+		case 9:
+			return "I";
+		case 11:
+			return "J";
+		case 12:
+			return "K";
+		case 13:
+			return "L";
+		case 14:
+			return "M";
+		case 15:
+			return "N";
+		case 16:
+			return "O";
+		case 17:
+			return "P";
+		case 18:
+			return "Q";
+		case 19:
+			return "R";
+		default:
+			return "S";
+		}
+	}
+
+	
 	public static void main(String[] args) {
 		gerarGrupos(CampeonatoDao.getCampeonato(1));
 	}

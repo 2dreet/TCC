@@ -43,6 +43,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 
+import dao.PermissaoDao;
 import menu.MenuCampeonato;
 import menu.MenuComputador;
 import menu.MenuConfiguracoes;
@@ -244,7 +245,13 @@ public class HomeFuncionario extends JPanel {
 			}
 		});
 		menuIconesTopo.add(btFunc);
-
+		
+		
+		if(utilitario.Login.usuario.getUsuario().getPermissao().getCodigoPermissao() != 3){
+			btFunc.setEnabled(false);
+		} else {
+			btFunc.setEnabled(true);
+		}
 	}
 	
 	public void abreMenu(JPanel panel){
@@ -253,6 +260,14 @@ public class HomeFuncionario extends JPanel {
 		baixo.add(panel);
 		baixo.repaint();
 	}
+	 public void atualizarPermissao(){
+		 if(utilitario.Login.usuario.getUsuario().getPermissao().getCodigoPermissao() != 3){
+			btFunc.setEnabled(false);
+		} else {
+			btFunc.setEnabled(true);
+		}
+	 }
+	
 
 	public void zeraSelecao() {
 		btInicio.setIcon(new ImageIcon(HomeFuncionario.class

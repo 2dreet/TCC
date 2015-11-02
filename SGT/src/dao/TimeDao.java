@@ -101,7 +101,7 @@ public class TimeDao {
 	public static TimeGrupo getTimeGrupo(int codigoTime, int codigoCampeonato){
 		try {
 			String sql = "SELECT * FROM time_grupo tg INNER JOIN grupo g ON tg.codigoGrupo = g.codigoGrupo"
-					+ " where tg.codigoTime = '"+codigoTime+"' AND g.codigoCampeonato = '"+codigoCampeonato+"' AND tg.ativo = true";
+					+ " where tg.codigoTime = '"+codigoTime+"' AND g.codigoCampeonato = '"+codigoCampeonato+"'";
 			return (TimeGrupo) EntityManagerLocal.getEntityManager().createNativeQuery(sql, TimeGrupo.class)
 					.setHint(QueryHints.REFRESH, HintValues.TRUE)
 					.setMaxResults(1).getSingleResult();

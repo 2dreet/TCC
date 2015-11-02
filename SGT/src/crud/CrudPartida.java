@@ -109,8 +109,8 @@ public class CrudPartida extends JPanel {
 	private JButton btTabelaWinnerLower;
 	private List<Partida> listaPartida;
 	private TelaWinnerLower telaWinnerLower;
-	private JPanel headerChave;
-
+	private TelaGrupo telaGrupo;
+	
 	/**
 	 * Create the panel.
 	 */
@@ -132,6 +132,8 @@ public class CrudPartida extends JPanel {
 		add(header);
 
 		telaWinnerLower = new TelaWinnerLower(campeonato);
+		telaGrupo = new TelaGrupo(campeonato);
+		
 		String textoHeader = "Partidas";
 
 		lblHeader = new JLabel(textoHeader);
@@ -171,15 +173,6 @@ public class CrudPartida extends JPanel {
 		});
 		meio.add(btProximaPartida);
 
-		headerChave = new JPanel();
-		headerChave.setSize(600, 30);
-		headerChave.setLocation((meio2.getWidth() / 2) - 295, 2);
-		headerChave.setLayout(null);
-		headerChave.setBackground(UtilitarioTela.getColorCrud(ParametroCrud
-				.getModoVisualizar()));
-		headerChave.setBorder(null);
-		meio.add(headerChave);
-
 		btTabelaGrupo = new JButton("Tabela de Grupo");
 		btTabelaGrupo.setSize(200, 30);
 		btTabelaGrupo.setLocation(10, 10);
@@ -189,7 +182,12 @@ public class CrudPartida extends JPanel {
 		btTabelaGrupo.setBorder(new BordaSombreada(false, true, false, false));
 		btTabelaGrupo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
+				if (telaGrupo.isVisible()) {
+					telaGrupo.atualizarTela(campeonatoSelecionado);
+				} else {
+					telaGrupo.setVisible(true);
+					telaGrupo.atualizarTela(campeonatoSelecionado);
+				}
 			}
 		});
 		meio.add(btTabelaGrupo);
@@ -308,11 +306,7 @@ public class CrudPartida extends JPanel {
 	}
 
 	public void mudarChaveHeader() {
-		headerChave.removeAll();
-
-		String textoAux = "";
 		if (campeonatoSelecionado.getDataFim() != null) {
-			textoAux = "Campeonato Finalizado! Clique em Classificação.";
 			meioT1.removeAll();
 			Classificacao classificacao = ClassificacaoDao
 					.getClassificacaoPorCampeonato(campeonatoSelecionado);
@@ -334,21 +328,13 @@ public class CrudPartida extends JPanel {
 			lbNome.setBounds(130, 10, 150, 50);
 			lbNome.setFont(UtilitarioTela.getFont(14));
 			lbNome.setForeground(UtilitarioTela.getFontColorPadrao());
-
-			JLabel lblheaderChave = new JLabel(textoAux);
-			lblheaderChave.setHorizontalAlignment(SwingConstants.CENTER);
-			lblheaderChave.setBounds(0, 0, 600, 30);
-			lblheaderChave.setFont(UtilitarioTela.getFont(14));
-			lblheaderChave.setForeground(UtilitarioTela.getFontColorCrud());
-			headerChave.add(lblheaderChave);
+			
 			meioT1.add(lbNome);
 			meioT1.repaint();
 			btProximaPartida.setVisible(false);
 			meio.repaint();
 		}
 		
-
-		headerChave.repaint();
 	}
 
 	public boolean proximaLower() {
