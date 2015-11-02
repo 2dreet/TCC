@@ -48,7 +48,6 @@ import menu.MenuCampeonato;
 import menu.MenuComputador;
 import menu.MenuConfiguracoes;
 import menu.MenuFuncionario;
-import menu.MenuHome;
 import menu.MenuJogador;
 import menu.MenuRelatorio;
 import menu.MenuTime;
@@ -60,7 +59,6 @@ public class HomeFuncionario extends JPanel {
 	 * 
 	 */
 
-	private JButton btInicio;
 	private JButton btCampeonato;
 	private JButton btTime;
 	private JButton btJogador;
@@ -132,21 +130,6 @@ public class HomeFuncionario extends JPanel {
 			}
 		});
 		topo.add(btSair);
-
-		btInicio = new JButton("");
-		btInicio.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				zeraSelecao();
-				getIcon(btInicio, true);
-				abreMenu(new MenuHome());
-			}
-		});
-		btInicio.setBounds(20, 10, 42, 42);
-		btInicio.setName("inicio");
-		getIcon(btInicio, true);
-		btInicio.setBorderPainted(false);
-
-		menuIconesTopo.add(btInicio);
 
 		btCampeonato = new JButton("");
 		btCampeonato.setBounds(82, 10, 42, 42);
@@ -252,6 +235,10 @@ public class HomeFuncionario extends JPanel {
 		} else {
 			btFunc.setEnabled(true);
 		}
+		
+		zeraSelecao();
+		getIcon(btCampeonato, true);
+		abreMenu(new MenuCampeonato());
 	}
 	
 	public void abreMenu(JPanel panel){
@@ -270,10 +257,6 @@ public class HomeFuncionario extends JPanel {
 	
 
 	public void zeraSelecao() {
-		btInicio.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/home.png")));
-		btInicio.setBackground(getBtnFundo(false));
-
 		btCampeonato.setIcon(new ImageIcon(HomeFuncionario.class
 				.getResource("/imagem/camp.png")));
 		btCampeonato.setBackground(getBtnFundo(false));

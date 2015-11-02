@@ -206,21 +206,6 @@ public class MenuFuncionario extends JPanel {
 
 		jp5.add(btDeletar);
 
-		
-		JPanel jp6 = new JPanel();
-		jp6.setBounds(0, 200, 240, 40);
-		jp6.setBackground(null);
-		jp6.setLayout(null);
-		jp6.setBorder(new BordaEscura());
-		menuLateralBaixo.add(jp6);
-
-		JPanel jp7 = new JPanel();
-		jp7.setBounds(0, 240, 240, 40);
-		jp7.setBackground(null);
-		jp7.setLayout(null);
-		jp7.setBorder(new BordaEscura());
-		menuLateralBaixo.add(jp7);
-
 		getIcon(btNovo, false);
 		getIcon(btAlterar, false);
 		getIcon(btDeletar, false);

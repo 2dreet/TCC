@@ -176,7 +176,7 @@ public class DialogTimesDesqualificados {
 	}
 
 	public static void localizar() {
-		listaTime = TimeDao.getListaTimeBanidos();
+		listaTime = TimeDao.getListaTimeBanidos(campeonatoSelecionado.getCodigoCampeonato());
 		DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
 		modelo.setNumRows(0);
 		if (listaTime != null && listaTime.size() > 0 ) {

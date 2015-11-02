@@ -385,7 +385,7 @@ public class MenuCampeonato extends JPanel {
 	public void zeraSelecao() {
 
 		btLocalizar.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/crud/locPc.png")));
+				.getResource("/imagem/crud/campPesq.png")));
 		btLocalizar.setBackground(UtilitarioTela.getBtnFundo(false));
 		btLocalizar.setForeground(UtilitarioTela.getFontColorSelecao(false));
 
@@ -405,13 +405,17 @@ public class MenuCampeonato extends JPanel {
 		btDeletar.setForeground(UtilitarioTela.getFontColorSelecao(false));
 
 		btVisualizar.setIcon(new ImageIcon(HomeFuncionario.class
-				.getResource("/imagem/crud/visuPc.png")));
+				.getResource("/imagem/crud/campVisu.png")));
 		btVisualizar.setBackground(UtilitarioTela.getBtnFundo(false));
 		btVisualizar.setForeground(UtilitarioTela.getFontColorSelecao(false));
 		
+		btPartida.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/crud/campPart.png")));
 		btPartida.setBackground(UtilitarioTela.getBtnFundo(false));
 		btPartida.setForeground(UtilitarioTela.getFontColorSelecao(false));
 		
+		btClassificacao.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/crud/campClas.png")));
 		btClassificacao.setBackground(UtilitarioTela.getBtnFundo(false));
 		btClassificacao.setForeground(UtilitarioTela.getFontColorSelecao(false));
 	}
@@ -421,9 +425,9 @@ public class MenuCampeonato extends JPanel {
 		if (botao.getName() != null) {
 			if (botao.getName().equals("localizar")) {
 				if (selecionado) {
-					url = "/imagem/crud/locPcSelect.png";
+					url = "/imagem/crud/campPesSelct.png";
 				} else {
-					url = "/imagem/crud/locPc.png";
+					url = "/imagem/crud/campPesq.png";
 				}
 			}
 			if (botao.getName().equals("cadastrarCampeonato")) {
@@ -449,9 +453,23 @@ public class MenuCampeonato extends JPanel {
 			}
 			if (botao.getName().equals("visualizarCampeonato")) {
 				if (selecionado) {
-					url = "/imagem/crud/visuPcSelect.png";
+					url = "/imagem/crud/campVisuSelect.png";
 				} else {
-					url = "/imagem/crud/visuPc.png";
+					url = "/imagem/crud/campVisu.png";
+				}
+			}
+			if (botao.getName().equals("partida")) {
+				if (selecionado) {
+					url = "/imagem/crud/campParSelect.png";
+				} else {
+					url = "/imagem/crud/campPart.png";
+				}
+			}
+			if (botao.getName().equals("classificacao")) {
+				if (selecionado) {
+					url = "/imagem/crud/campClasSelect.png";
+				} else {
+					url = "/imagem/crud/campClas.png";
 				}
 			}
 		}

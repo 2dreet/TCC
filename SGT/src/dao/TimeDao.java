@@ -33,10 +33,10 @@ public class TimeDao {
 		}
 	}
 	
-	public static List<CampeonatoTime> getListaTimeBanidos(){
+	public static List<CampeonatoTime> getListaTimeBanidos(int codigoCampeonato){
 		try {
 			String sql = "SELECT * FROM campeonato_time "
-					+ " WHERE desqualificado = true";
+					+ " WHERE desqualificado = true AND codigoCampeonato = "+codigoCampeonato;
 			
 			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, CampeonatoTime.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
 		} catch (NoResultException ex) {

@@ -188,26 +188,6 @@ public class MenuConfiguracoes extends JPanel {
 		});
 		jp4.add(btBanimento);
 		
-		JPanel jp5 = new JPanel();
-		jp5.setBounds(0, 160, 240, 40);
-		jp5.setBackground(null);
-		jp5.setLayout(null);
-		jp5.setBorder(new BordaEscura());
-		menuLateralBaixo.add(jp5);
-		
-		JPanel jp6 = new JPanel();
-		jp6.setBounds(0, 200, 240, 40);
-		jp6.setBackground(null);
-		jp6.setLayout(null);
-		jp6.setBorder(new BordaEscura());
-		menuLateralBaixo.add(jp6);
-
-		JPanel jp7 = new JPanel();
-		jp7.setBounds(0, 240, 240, 40);
-		jp7.setBackground(null);
-		jp7.setLayout(null);
-		jp7.setBorder(new BordaEscura());
-		menuLateralBaixo.add(jp7);
 
 		getIcon(btMarca, false);
 		getIcon(btPeriferico, false);

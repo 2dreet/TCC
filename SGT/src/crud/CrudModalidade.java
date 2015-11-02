@@ -72,7 +72,7 @@ public class CrudModalidade extends JPanel{
 		header.setSize(500, 30);
 		header.setLocation((getWidth() / 2) - 250, 10);
 		header.setLayout(null);
-		header.setBackground(null);
+		header.setBackground(Color.white);
 		header.setBorder(null);
 		add(header);
 
@@ -188,7 +188,7 @@ public class CrudModalidade extends JPanel{
 		meio.add(btAlt);
 		
 		btDel = new JButton("Remover");
-		btDel.setBounds(330, 365, 100, 30);
+		btDel.setBounds(270, 365, 100, 30);
 		btDel.setFocusPainted(false);
 		btDel.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudDeletar()));
 		btDel.setLayout(null);

@@ -46,7 +46,7 @@ import utilitario.UtilitarioTela;
 import menu.MenuConfiguracoes;
 import menu.MenuJogador;
 
-public class CrudJogadorBanimento extends JPanel{
+public class CrudHistoricoBanimentoJogador extends JPanel{
 
 	private MenuJogador menuPai;
 	private JLabel lblMsg;
@@ -69,7 +69,8 @@ public class CrudJogadorBanimento extends JPanel{
 		new String[] { "Data Banimento" }};
 	private static String[] linhaBusca = new String[] { "Código", "Descrição"};
 	private boolean inicio;
-	public CrudJogadorBanimento(MenuJogador menuPai, Jogador jogadorSelecionado){
+	
+	public CrudHistoricoBanimentoJogador(Jogador jogadorSelecionado,MenuJogador menuPai){
 		this.menuPai = menuPai;
 		this.jogadorSelecionado = jogadorSelecionado;
 		setSize(UtilitarioTela.getTamanhoMeio());
@@ -85,7 +86,7 @@ public class CrudJogadorBanimento extends JPanel{
 		header.setBorder(null);
 		add(header);
 
-		lblHeader = new JLabel("Jogador Banimento");
+		lblHeader = new JLabel("Histórico Banimento");
 		lblHeader.setHorizontalAlignment(SwingConstants.CENTER);
 		lblHeader.setBounds(0, 0, header.getWidth(), header.getHeight());
 		lblHeader.setFont(UtilitarioTela.getFont(14));
@@ -99,43 +100,6 @@ public class CrudJogadorBanimento extends JPanel{
 		meio.setBackground(UtilitarioTela.getFundoCrud());
 		meio.setBorder(null);
 		add(meio);
-		
-		metodoBusca = new ComboBox(new Dimension(90, 25));
-		metodoBusca.setModel(new DefaultComboBoxModel(linhaBusca));
-		metodoBusca.setLocation(50, 20);
-		meio.add(metodoBusca);
-
-		txBusca = new JTextField();
-		txBusca.setColumns(100);
-		txBusca.setBounds(150, 20, 170, 25);
-		txBusca.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent arg0) {
-				txBusca.setBorder(UtilitarioTela.jTextFieldComFocus());
-			}
-
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				txBusca.setBorder(UtilitarioTela.jTextFieldNormal());
-			}
-		});
-		txBusca.setLayout(null);
-		txBusca.setBorder(UtilitarioTela.jTextFieldNormal());
-		meio.add(txBusca);
-		
-		JButton btLocalizar = new JButton("Localizar");
-		btLocalizar.setBounds(330, 20, 120, 25);
-		btLocalizar.setFont(UtilitarioTela.getFont(14));
-		btLocalizar.setFocusPainted(false);
-		btLocalizar.setBackground(UtilitarioTela.getFundoLocalizar());
-		btLocalizar.setIcon(UtilitarioTela.getIconeLocalizar());
-		meio.add(btLocalizar);
-		btLocalizar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				inicio = false;
-				localizar();
-			}
-		});
 		
 		tabela = new JTable();
 		tabela.setModel(UtilitarioTabela.getModelo(colunas));
@@ -161,67 +125,10 @@ public class CrudJogadorBanimento extends JPanel{
 		tabela.getTableHeader().setReorderingAllowed(false);
 		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scroll = new JScrollPane(tabela);
-		scroll.setBounds(5, 55, 640, 300);
+		scroll.setBounds(5, 10, 640, (int) (UtilitarioTela.getTamanhoMeio().getHeight() - 100));
 		meio.add(scroll);
 		
-		btAdd = new JButton("Adicionar");
-		btAdd.setBounds(10, 365, 100, 30);
-		btAdd.setFocusPainted(false);
-		btAdd.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudNovo()));
-		btAdd.setLayout(null);
-		btAdd.setHorizontalAlignment(SwingConstants.LEFT);
-		btAdd.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				DialogCrudJogadorBanimento c = new DialogCrudJogadorBanimento();
-				c.crudJogadorBanimento(null, ParametroCrud.getModoCrudNovo(), meio, jogadorSelecionado);
-				if(c.getConfirmado()){
-					menuPai.liberarCrud();
-					Menssage.setMenssage("Banimento de Jogador", "Jogador Banido com Sucesso!", ParametroCrud.getModoCrudNovo(), meio);
-					localizar();
-				}
-			}
-		});
-		meio.add(btAdd);
 		
-		btAlt = new JButton("Alterar");
-		btAlt.setBounds(120, 365, 100, 30);
-		btAlt.setFocusPainted(false);
-		btAlt.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudAlterar()));
-		btAlt.setLayout(null);
-		btAlt.setHorizontalAlignment(SwingConstants.LEFT);
-		btAlt.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if(selecionar()){
-					DialogCrudJogadorBanimento c = new DialogCrudJogadorBanimento();
-					c.crudJogadorBanimento(JogadorBanimentoSelecionado, ParametroCrud.getModoCrudAlterar(),meio, jogadorSelecionado);
-					if(c.getConfirmado()){
-						Menssage.setMenssage("Banimento de Jogador", "Banimento alterado com Sucesso!", ParametroCrud.getModoCrudAlterar(), meio);
-						localizar();
-					}
-				}
-			}
-		});
-		meio.add(btAlt);
-		
-		btDel = new JButton("Remover");
-		btDel.setBounds(230, 365, 100, 30);
-		btDel.setFocusPainted(false);
-		btDel.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudDeletar()));
-		btDel.setLayout(null);
-		btDel.setHorizontalAlignment(SwingConstants.LEFT);
-		btDel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if(selecionar()){
-					DialogCrudJogadorBanimento c = new DialogCrudJogadorBanimento();
-					c.crudJogadorBanimento(JogadorBanimentoSelecionado, ParametroCrud.getModoCrudDeletar(),meio, jogadorSelecionado);
-					if(c.getConfirmado()){
-						Menssage.setMenssage("Banimento de Jogador", "Banimento deletado com Sucesso!", ParametroCrud.getModoCrudDeletar(), meio);
-						localizar();
-					}
-				}
-			}
-		});
-		meio.add(btDel);
 		localizar();
 		
 		if(!BanimentoDao.banimentosAtivos()){
@@ -253,8 +160,7 @@ public class CrudJogadorBanimento extends JPanel{
 	}
 	
 	public void localizar() {
-		listaJogadorBanimento = JogadorBanimentoDao.getListaPesquisa(metodoBusca.getSelectedItem()
-				.toString(), txBusca.getText(), jogadorSelecionado.getCodigoJogador());
+		listaJogadorBanimento = JogadorBanimentoDao.getHistorico(jogadorSelecionado.getCodigoJogador());
 		DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
 		modelo.setNumRows(0);
 		if (listaJogadorBanimento != null && listaJogadorBanimento.size() > 0) {

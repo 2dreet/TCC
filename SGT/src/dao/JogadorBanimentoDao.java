@@ -71,5 +71,17 @@ public class JogadorBanimentoDao {
 			return null;
 		}
 	}
+	
+	public static List<JogadorBanimento> getHistorico(int codigoJogador){
+		try {
+			
+			String sql = "SELECT * FROM jogador_banimento where codigoJogador = '"+codigoJogador+"' ";
+			
+			
+			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, JogadorBanimento.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
 
 }

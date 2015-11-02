@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import crud.CrudHistoricoBanimentoJogador;
 import crud.CrudJogador;
 import crud.CrudJogadorBanimento;
 import dao.JogadorBanimentoDao;
@@ -249,8 +250,7 @@ public class MenuJogador extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				zeraSelecao();
 				getIcon(btHistoricoBanimento, true);
-				alterarMenu(jogadorSelecionado,
-						ParametroCrud.getModoCrudDeletar());
+				alterarMenuHistorico(jogadorSelecionado);
 			}
 		});
 		jp7.add(btHistoricoBanimento);
@@ -346,6 +346,14 @@ public class MenuJogador extends JPanel {
 		CrudJogador c = new CrudJogador(jogador, modoCrud, this);
 		menuMeio.add(c);
 		c.getTxNome().requestFocus();
+		menuMeio.revalidate();
+		menuMeio.repaint();
+	}
+	
+	public void alterarMenuHistorico(Jogador jogador) {
+		menuMeio.removeAll();
+		CrudHistoricoBanimentoJogador c = new CrudHistoricoBanimentoJogador(jogador, this);
+		menuMeio.add(c);
 		menuMeio.revalidate();
 		menuMeio.repaint();
 	}
