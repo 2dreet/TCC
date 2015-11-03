@@ -6,8 +6,10 @@ import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 
 import entidade.CampeonatoTime;
+import entidade.Grupo;
 import entidade.JogadorBanimento;
 import entidade.Time;
+import entidade.TimeGrupo;
 
 public class CampeonatoTimeDao {
 
@@ -93,5 +95,20 @@ public class CampeonatoTimeDao {
 			return null;
 		}
 	}
+	
+	public static List<TimeGrupo> getListaTimeGrupo(TimeGrupo time, Grupo grupo){
+		try{
+			String sql = "SELECT * FROM time_grupo where codigoGrupo = '"+grupo.getCodigoGrupo()+"' AND pontuacao > 0";
+			if(time != null){
+				sql += " AND codigoTime <> "+time.getTime().getCodigoTime();
+			}
+			sql +=" ORDER BY pontuacao";
+			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, CampeonatoTime.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	
 }

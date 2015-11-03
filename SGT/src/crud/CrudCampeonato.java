@@ -44,8 +44,10 @@ import dialog.DialogLocalizarTime;
 import dialog.DialogTimesDesqualificados;
 import entidade.Campeonato;
 import entidade.CampeonatoTime;
+import entidade.Chave;
 import entidade.Grupo;
 import entidade.Jogador;
+import entidade.Modalidade;
 import entidade.Pc;
 import entidade.Time;
 import entidade.Usuario;
@@ -62,6 +64,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -184,8 +187,13 @@ public class CrudCampeonato extends JPanel {
 		meio.add(lbModalidade);
 
 		cbModalidade = new ComboBox(new Dimension(150, 25));
-		cbModalidade.setModel(new DefaultComboBoxModel(ModalidadeDao
-				.getVetorModalidade()));
+		DefaultComboBoxModel comboModel = (DefaultComboBoxModel) cbModalidade.getModel();
+		comboModel.removeAllElements();
+		List<Modalidade>list = ModalidadeDao.getListaModalidade();
+		for (Modalidade m : list){
+			comboModel.addElement(m);
+		}
+
 		cbModalidade.setLocation(130, 60);
 		meio.add(cbModalidade);
 
@@ -196,7 +204,13 @@ public class CrudCampeonato extends JPanel {
 		meio.add(lbChave);
 
 		cbChave = new ComboBox(new Dimension(150, 25));
-		cbChave.setModel(new DefaultComboBoxModel(ChaveDao.getVetorChave()));
+		DefaultComboBoxModel comboChave = (DefaultComboBoxModel) cbChave.getModel();
+		List<Chave>listChave = ChaveDao.getListaChave();
+		comboChave.removeAllElements();
+		for (Chave c : listChave){
+			comboChave.addElement(c);
+		}
+		
 		cbChave.setLocation(130, 100);
 		meio.add(cbChave);
 
@@ -246,7 +260,8 @@ public class CrudCampeonato extends JPanel {
 
 	public void setarCampos() {
 		txDescricao.setText(campeonatoSelecionado.getDescricao());
-		cbChave.setSelectedItem(campeonatoSelecionado.getChave().getDescricao());
+		cbChave.setSelectedItem(campeonatoSelecionado.getChave());
+		cbModalidade.setSelectedItem(campeonatoSelecionado.getModalidade());
 	}
 
 	public void msgErro(String erro) {
@@ -436,9 +451,11 @@ public class CrudCampeonato extends JPanel {
 						}
 					}
 				});
-				
-				JButton btTimesDesqualificados = new JButton("Times Desqualificados");
-				btTimesDesqualificados.setBounds(meio.getWidth() - 215, 55, 210, 35);
+
+				JButton btTimesDesqualificados = new JButton(
+						"Times Desqualificados");
+				btTimesDesqualificados.setBounds(meio.getWidth() - 215, 55,
+						210, 35);
 				btTimesDesqualificados.setFont(UtilitarioTela.getFont(14));
 				btTimesDesqualificados.setFocusPainted(false);
 				btTimesDesqualificados.setBackground(UtilitarioTela
@@ -448,7 +465,7 @@ public class CrudCampeonato extends JPanel {
 					public void actionPerformed(ActionEvent arg0) {
 						DialogTimesDesqualificados dt = new DialogTimesDesqualificados();
 						dt.localizarTime(meio, campeonatoSelecionado);
-						}
+					}
 				});
 			}
 		}
@@ -499,7 +516,7 @@ public class CrudCampeonato extends JPanel {
 		meio.add(lbChave);
 		JLabel lbChaveV = new JLabel(campeonatoSelecionado.getChave()
 				.getDescricao());
-		lbChaveV.setBounds(130, linha, 100, 20);
+		lbChaveV.setBounds(130, linha, 160, 20);
 		lbChaveV.setFont(UtilitarioTela.getFont(14));
 		lbChaveV.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbChaveV);
@@ -686,10 +703,8 @@ public class CrudCampeonato extends JPanel {
 				Campeonato campeonato = new Campeonato();
 				campeonato.setDescricao(txDescricao.getText());
 				campeonato.setDataCadastro(new Date());
-				campeonato.setModalidade(ModalidadeDao.getModalidadeNome(String
-						.valueOf(cbModalidade.getSelectedItem())));
-				campeonato.setChave(ChaveDao.getChaveNome(String
-						.valueOf(cbChave.getSelectedItem())));
+				campeonato.setModalidade((Modalidade) cbModalidade.getSelectedItem());
+				campeonato.setChave((Chave)cbChave.getSelectedItem());
 				campeonato.setAtivo(true);
 				campeonato.setFuncionario(Login.usuario);
 				EntityManagerLocal.persist(campeonato);
@@ -699,11 +714,8 @@ public class CrudCampeonato extends JPanel {
 				modo = "Alteração de Campeonato";
 				menssage = "Campeonato Alterado com Sucesso!";
 				campeonatoSelecionado.setDescricao(txDescricao.getText());
-				campeonatoSelecionado.setModalidade(ModalidadeDao
-						.getModalidadeNome(String.valueOf(cbModalidade
-								.getSelectedItem())));
-				campeonatoSelecionado.setChave(ChaveDao.getChaveNome(String
-						.valueOf(cbChave.getSelectedItem())));
+				campeonatoSelecionado.setModalidade((Modalidade) cbModalidade.getSelectedItem());
+				campeonatoSelecionado.setChave((Chave) cbChave.getSelectedItem());
 				EntityManagerLocal.merge(campeonatoSelecionado);
 			} else if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
 				modo = "Deleção de Campeonato";

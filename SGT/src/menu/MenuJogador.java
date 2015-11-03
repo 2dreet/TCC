@@ -16,6 +16,7 @@ import javax.swing.SwingConstants;
 import crud.CrudHistoricoBanimentoJogador;
 import crud.CrudJogador;
 import crud.CrudJogadorBanimento;
+import crud.CrudJogadorPeriferico;
 import dao.JogadorBanimentoDao;
 import entidade.Jogador;
 import entidade.Usuario;
@@ -42,6 +43,7 @@ public class MenuJogador extends JPanel {
 	private JButton btVisualizar;
 	private JButton btBanirJogador;
 	private JButton btHistoricoBanimento;
+	private JButton btPerifericos;
 	private Jogador jogadorSelecionado;
 
 	public MenuJogador() {
@@ -254,6 +256,30 @@ public class MenuJogador extends JPanel {
 			}
 		});
 		jp7.add(btHistoricoBanimento);
+		
+		
+		JPanel jp8 = new JPanel();
+		jp8.setBounds(0, 280, 240, 40);
+		jp8.setBackground(null);
+		jp8.setLayout(null);
+		jp8.setBorder(new BordaEscura());
+		menuLateralBaixo.add(jp8);
+		
+		btPerifericos = new JButton("Periféricos");
+		btPerifericos.setBounds(5, 5, 230, 30);
+		btPerifericos.setBorderPainted(false);
+		btPerifericos.setBackground(null);
+		btPerifericos.setLayout(null);
+		btPerifericos.setName("periferico");
+		btPerifericos.setHorizontalAlignment(SwingConstants.LEFT);
+		btPerifericos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				zeraSelecao();
+				getIcon(btPerifericos, true);
+				alterarMenuPeriferico(jogadorSelecionado);
+			}
+		});
+		jp8.add(btPerifericos);
 
 		getIcon(btNovo, false);
 		getIcon(btAlterar, false);
@@ -262,6 +288,7 @@ public class MenuJogador extends JPanel {
 		getIcon(btLocalizar, false);
 		getIcon(btBanirJogador, false);
 		getIcon(btHistoricoBanimento, false);
+		getIcon(btPerifericos, false);
 		
 		btDeletar.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
@@ -275,6 +302,8 @@ public class MenuJogador extends JPanel {
 				.getFontColorSelecao(false));
 		btHistoricoBanimento.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
+		btPerifericos.setForeground(UtilitarioTela
+				.getFontColorSelecao(false));
 		
 		btNovo.setFont(UtilitarioTela.getFont(14));
 		btAlterar.setFont(UtilitarioTela.getFont(14));
@@ -283,6 +312,7 @@ public class MenuJogador extends JPanel {
 		btLocalizar.setFont(UtilitarioTela.getFont(14));
 		btBanirJogador.setFont(UtilitarioTela.getFont(14));
 		btHistoricoBanimento.setFont(UtilitarioTela.getFont(14));
+		btPerifericos.setFont(UtilitarioTela.getFont(14));
 		
 		limpar();
 		
@@ -305,6 +335,7 @@ public class MenuJogador extends JPanel {
 		btVisualizar.setEnabled(false);
 		btBanirJogador.setEnabled(false);
 		btHistoricoBanimento.setEnabled(false);
+		btPerifericos.setEnabled(false);
 	}
 	
 	public void exibirJogador(Jogador jogador){
@@ -336,6 +367,7 @@ public class MenuJogador extends JPanel {
 		btDeletar.setEnabled(true);
 		btVisualizar.setEnabled(true);
 		btBanirJogador.setEnabled(true);
+		btPerifericos.setEnabled(true);
 		if(jogadorSelecionado != null && JogadorBanimentoDao.jogadorJaBanido(jogadorSelecionado.getCodigoJogador())){
 			btHistoricoBanimento.setEnabled(true);
 		}
@@ -357,6 +389,15 @@ public class MenuJogador extends JPanel {
 		menuMeio.revalidate();
 		menuMeio.repaint();
 	}
+	
+	public void alterarMenuPeriferico(Jogador jogador) {
+		menuMeio.removeAll();
+		CrudJogadorPeriferico c = new CrudJogadorPeriferico(this, jogador);
+		menuMeio.add(c);
+		menuMeio.revalidate();
+		menuMeio.repaint();
+	}
+
 
 	public void zeraSelecao() {
 		
@@ -398,6 +439,12 @@ public class MenuJogador extends JPanel {
 				.getResource("/imagem/crud/visuJog.png")));
 		btHistoricoBanimento.setBackground(UtilitarioTela.getBtnFundo(false));
 		btHistoricoBanimento.setForeground(UtilitarioTela
+				.getFontColorSelecao(false));
+		
+		btPerifericos.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/crud/jogPeri.png")));
+		btPerifericos.setBackground(UtilitarioTela.getBtnFundo(false));
+		btPerifericos.setForeground(UtilitarioTela
 				.getFontColorSelecao(false));
 		
 
@@ -453,6 +500,13 @@ public class MenuJogador extends JPanel {
 					url = "/imagem/crud/visuJogSelect.png";
 				} else {
 					url = "/imagem/crud/visuJog.png";
+				}
+			}
+			if (botao.getName().equals("periferico")) {
+				if (selecionado) {
+					url = "/imagem/crud/jogPeriSelect.png";
+				} else {
+					url = "/imagem/crud/jogPeri.png";
 				}
 			}
 			botao.setFocusPainted(false);

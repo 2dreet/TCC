@@ -100,7 +100,7 @@ public class Marca implements Serializable {
 
     @Override
     public String toString() {
-        return "entidade.Marca[ codigoMarca=" + codigoMarca + " ]";
+        return descricao;
     }
     
 }

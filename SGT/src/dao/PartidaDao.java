@@ -3,6 +3,7 @@ package dao;
 import java.util.List;
 
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
@@ -530,7 +531,7 @@ public class PartidaDao {
 
 	public static boolean isPartidaFinal(int codigo) {
 		try {
-			String sql = "SELECT * FROM sgtg.partida where codigoPartidaFilho is null and codigoPartida = "
+			String sql = "SELECT * FROM partida where codigoPartidaFilho is null and codigoPartida = "
 					+ codigo + " AND ativo = false;";
 			Partida partida = (Partida) EntityManagerLocal.getEntityManager()
 					.createNativeQuery(sql, Partida.class)
@@ -543,6 +544,18 @@ public class PartidaDao {
 
 		}
 		return false;
+	}
+	
+	public static int getPlacar(int codigoTime, int codigoCampeonato, int codigoGrupo) {
+		try {
+			String sql = "SELECT (SELECT sum(placarTimeVencedor) FROM time_partida tp INNER JOIN partida p ON tp.codigoPartida = p.codigoPartida where timeVencedor = "+codigoTime+" AND codigoCampeonato = "+codigoCampeonato+" AND codigoGrupo = "+codigoGrupo+") + "+
+					           " (SELECT sum(placarTimePerdedor) FROM time_partida tp INNER JOIN partida p ON tp.codigoPartida = p.codigoPartida where timePerdedor = "+codigoTime+" AND codigoCampeonato = "+codigoCampeonato+" AND codigoGrupo = "+codigoGrupo+") as placar";
+			Query query = EntityManagerLocal.getEntityManager()
+					.createNativeQuery(sql);
+			return  (Integer) query.getSingleResult();
+		} catch (NoResultException ex) {
+			return 0 ;
+		}
 	}
 
 	public static List<Partida> getPartidasPai(int codigoPatida) {
@@ -601,6 +614,27 @@ public class PartidaDao {
 		}
 	}
 
+	public static List<Partida> getProximasPartidaPartida(Campeonato campeonato) {
+		try {
+			String sql = " SELECT * FROM time_partida tp INNER JOIN partida p ON p.codigoPartida = tp.codigoPartida"
+					+ " INNER JOIN campeonato c on p.codigoCampeonato = c.codigoCampeonato"
+					+ " WHERE p.ativo = true AND p.codigoCampeonato = '"
+					+ campeonato.getCodigoCampeonato()
+					+ "'"
+					+ " AND p.horaFim is null"
+					+ " AND c.codigoChave = '"
+					+ campeonato.getChave().getCodigoChave()
+					+ "'"
+					+ "  ORDER BY p.indice, p.codigoPartidaFilho, p.codigoPartida";
+			return EntityManagerLocal.getEntityManager()
+					.createNativeQuery(sql, Partida.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
 	public static Partida getProximaPartidaPartida(Campeonato campeonato) {
 		try {
 			String sql = " SELECT * FROM time_partida tp INNER JOIN partida p ON p.codigoPartida = tp.codigoPartida"

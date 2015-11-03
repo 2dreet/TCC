@@ -82,7 +82,8 @@ public class Modalidade implements Serializable {
     public Integer getQuantidadeJogadores() {
         return quantidadeJogadores;
     }
-
+    
+   
     public void setQuantidadeJogadores(Integer quantidadeJogadores) {
         this.quantidadeJogadores = quantidadeJogadores;
     }
@@ -126,7 +127,7 @@ public class Modalidade implements Serializable {
 
     @Override
     public String toString() {
-        return "entidade.Modalidade[ codigoModalidade=" + codigoModalidade + " ]";
+        return descricao;
     }
     
 }

@@ -115,7 +115,7 @@ public class Periferico implements Serializable {
 
     @Override
     public String toString() {
-        return "entidade.Periferico[ codigoPeriferico=" + codigoPeriferico + " ]";
+        return descricao;
     }
     
 }

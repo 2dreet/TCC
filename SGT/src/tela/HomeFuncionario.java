@@ -13,6 +13,8 @@ import javax.swing.border.EmptyBorder;
 
 import utilitario.BordaEscura;
 import utilitario.Computador;
+import utilitario.Login;
+import utilitario.Parametros;
 import utilitario.UtilitarioTela;
 
 import javax.swing.border.LineBorder;
@@ -43,6 +45,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 
+import dao.ParametroDao;
 import dao.PermissaoDao;
 import menu.MenuCampeonato;
 import menu.MenuComputador;
@@ -130,9 +133,35 @@ public class HomeFuncionario extends JPanel {
 			}
 		});
 		topo.add(btSair);
+		
+		JButton btDeslogar = new JButton("");
+		btDeslogar.setIcon(new ImageIcon(HomeFuncionario.class
+				.getResource("/imagem/sair.png")));
+		btDeslogar.setName("inicio");
+		btDeslogar.setBounds(getWidth() - 95, 3, 42, 42);
+		btDeslogar.setBorderPainted(false);
+		btDeslogar.setBackground(new Color(46, 49, 56));
+		btDeslogar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Login.usuario = null;
+				Parametros.getPai().dispose();
+				try {
+					TelaLogin tl = new TelaLogin();
+					tl.setVisible(true);
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.exit(0);
+				} catch (Throwable e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		topo.add(btDeslogar);
 
 		btCampeonato = new JButton("");
-		btCampeonato.setBounds(82, 10, 42, 42);
+		btCampeonato.setBounds(20, 10, 42, 42);
 		btCampeonato.setName("campeonato");
 		btCampeonato.setBorderPainted(false);
 		getIcon(btCampeonato, false);
@@ -146,7 +175,7 @@ public class HomeFuncionario extends JPanel {
 		menuIconesTopo.add(btCampeonato);
 
 		btTime = new JButton("");
-		btTime.setBounds(144, 10, 42, 42);
+		btTime.setBounds(82, 10, 42, 42);
 		btTime.setName("time");
 		btTime.setBorderPainted(false);
 		getIcon(btTime, false);
@@ -160,7 +189,7 @@ public class HomeFuncionario extends JPanel {
 		menuIconesTopo.add(btTime);
 
 		btJogador = new JButton("");
-		btJogador.setBounds(206, 10, 42, 42);
+		btJogador.setBounds(144, 10, 42, 42);
 		btJogador.setName("jogador");
 		btJogador.setBorderPainted(false);
 		getIcon(btJogador, false);
@@ -174,7 +203,7 @@ public class HomeFuncionario extends JPanel {
 		menuIconesTopo.add(btJogador);
 
 		btConfiguracao = new JButton("");
-		btConfiguracao.setBounds(268, 10, 42, 42);
+		btConfiguracao.setBounds(206, 10, 42, 42);
 		btConfiguracao.setName("configuracao");
 		btConfiguracao.setBorderPainted(false);
 		getIcon(btConfiguracao, false);
@@ -188,7 +217,7 @@ public class HomeFuncionario extends JPanel {
 		menuIconesTopo.add(btConfiguracao);
 
 		btRelatorio = new JButton("");
-		btRelatorio.setBounds(330, 10, 42, 42);
+		btRelatorio.setBounds(268, 10, 42, 42);
 		btRelatorio.setName("relatorio");
 		btRelatorio.setBorderPainted(false);
 		getIcon(btRelatorio, false);
@@ -202,7 +231,7 @@ public class HomeFuncionario extends JPanel {
 		menuIconesTopo.add(btRelatorio);
 
 		btPc = new JButton("");
-		btPc.setBounds(392, 10, 42, 42);
+		btPc.setBounds(330, 10, 42, 42);
 		btPc.setName("pc");
 		btPc.setBorderPainted(false);
 		getIcon(btPc, false);
@@ -216,7 +245,7 @@ public class HomeFuncionario extends JPanel {
 		menuIconesTopo.add(btPc);
 		
 		btFunc = new JButton("");
-		btFunc.setBounds(454, 10, 42, 42);
+		btFunc.setBounds(396, 10, 42, 42);
 		btFunc.setName("funcionario");
 		btFunc.setBorderPainted(false);
 		getIcon(btFunc, false);

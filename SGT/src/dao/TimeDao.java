@@ -1,5 +1,6 @@
 package dao;
 
+import java.sql.ResultSet;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -109,6 +110,13 @@ public class TimeDao {
 			return null;
 		}
 	}
+	
+	public static ResultSet getTimesCampeonato(int codigoCampeonato){
+		return EntityManagerLocal.getResultSet("SELECT t.codigoTime, t.descricao FROM campeonato_time ct INNER JOIN time t on "+
+				"ct.codigoTime = t.codigoTime "+
+				"where codigoCampeonato = "+codigoCampeonato );
+	}
+	
 	
 	public static boolean timeCadastrado(String nome){
 		Time time = getTime(nome);

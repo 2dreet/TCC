@@ -22,6 +22,7 @@ import javax.swing.JButton;
 
 import dao.EntityManagerLocal;
 import dao.PermissaoDao;
+import dialog.DialogRedefinirSenha;
 import entidade.Funcionario;
 import entidade.Jogador;
 import entidade.Usuario;
@@ -62,6 +63,7 @@ public class CrudFuncionario extends JPanel {
 	private JLabel lblMsg;
 	private JPanel msg;
 	private ComboBox comboSexo;
+	private ComboBox comboPermissao;
 	private Funcionario funcionarioSelecionado;
 	private MenuFuncionario menuPai;
 	private JPanel header;
@@ -334,6 +336,18 @@ public class CrudFuncionario extends JPanel {
 		txUsuario.setLayout(null);
 		txUsuario.setBorder(UtilitarioTela.jTextFieldNormal());
 		meio.add(txUsuario);
+		
+		JLabel lbPermissao = new JLabel("Permissão :");
+		lbPermissao.setBounds(20, 300, 100, 20);
+		lbPermissao.setFont(UtilitarioTela.getFont(14));
+		lbPermissao.setForeground(UtilitarioTela.getFontColorCrud());
+		meio.add(lbPermissao);
+
+		comboPermissao = new ComboBox(new Dimension(150, 25));
+		comboPermissao.setModel(new DefaultComboBoxModel(new String[] { "Funcionário",
+				"Administrador" }));
+		comboPermissao.setLocation(155, 300);
+		meio.add(comboPermissao);
 
 		String texto = "";
 		if (modoCrud == ParametroCrud.getModoCrudAlterar()) {
@@ -363,7 +377,7 @@ public class CrudFuncionario extends JPanel {
 
 		msg = new JPanel();
 		msg.setSize(490, 35);
-		msg.setLocation(5, 300);
+		msg.setLocation(5, 350);
 		msg.setLayout(null);
 		msg.setBackground(null);
 		meio.add(msg);
@@ -394,6 +408,13 @@ public class CrudFuncionario extends JPanel {
 				.getSexoFeminino()) {
 			comboSexo.setSelectedIndex(1);
 		}
+		
+		if (funcionarioSelecionado.getUsuario().getPermissao().getCodigoPermissao() == Parametros
+				.getPermissaoFuncionario()) {
+			comboPermissao.setSelectedIndex(0);
+		}else{
+			comboPermissao.setSelectedIndex(1);
+		}
 	}
 
 	public void msgErro(String erro) {
@@ -420,7 +441,10 @@ public class CrudFuncionario extends JPanel {
 
 	private boolean validarCrud() {
 		try {
-
+			if(funcionarioSelecionado != null && funcionarioSelecionado.getCodigoFuncionario() == 1){
+				msgErro("Usuário Admin não pode ser alterado!");
+				return false;
+			}
 			if (txNome.getText() == null || txNome.getText().trim().isEmpty()) {
 				txNome.requestFocus();
 				msgErro("Campo Nome é Obrigatório!");
@@ -525,6 +549,20 @@ public class CrudFuncionario extends JPanel {
 					if (validarCrud()) {
 						save(modoCrud);
 					}
+				}
+			});
+		} else if(modoCrud == ParametroCrud.getModoVisualizar()) {
+			JButton btRedefinir = new JButton("Redefinir Senha");
+			btRedefinir.setBounds(100, meio.getHeight() - 70, 300, 35);
+			btRedefinir.setFont(UtilitarioTela.getFont(14));
+			btRedefinir.setFocusPainted(false);
+			btRedefinir.setBackground(UtilitarioTela.getColorCrud(modoCrud));
+			btRedefinir.setIcon(UtilitarioCrud.getIconeCrud(modoCrud));
+			meio.add(btRedefinir);
+			btRedefinir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					DialogRedefinirSenha rds = new DialogRedefinirSenha();
+					rds.redefinir(funcionarioSelecionado.getUsuario(), meio);
 				}
 			});
 		}
@@ -645,6 +683,24 @@ public class CrudFuncionario extends JPanel {
 		lbUsuarioV.setFont(UtilitarioTela.getFont(14));
 		lbUsuarioV.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbUsuarioV);
+		
+		linha += 35;
+		JLabel lbPermissao = new JLabel("Permissão :");
+		lbPermissao.setBounds(20, linha, 100, 20);
+		lbPermissao.setFont(UtilitarioTela.getFont(14));
+		lbPermissao.setForeground(UtilitarioTela.getFontColorCrud());
+		meio.add(lbPermissao);
+		
+		String permissao = "Funcionário";
+		if(funcionarioSelecionado.getUsuario().getPermissao().getCodigoPermissao() == Parametros.getPermissaoAdministrador()){
+			permissao = "Administrador";
+		}
+		
+		JLabel lblPermissao = new JLabel(permissao);
+		lblPermissao.setBounds(155, linha, 300, 20);
+		lblPermissao.setFont(UtilitarioTela.getFont(14));
+		lblPermissao.setForeground(UtilitarioTela.getFontColorCrud());
+		meio.add(lblPermissao);
 	}
 
 	private void save(int modoCrud) {
@@ -674,8 +730,13 @@ public class CrudFuncionario extends JPanel {
 						.replace(")", "").replace("-", ""));
 				usuario.setUsuario(txUsuario.getText());
 				usuario.setEmail(txEmail.getText());
-				usuario.setPermissao(PermissaoDao.getPermissao(Parametros
+				if(comboPermissao.getSelectedItem().equals("Administrador")){
+					usuario.setPermissao(PermissaoDao.getPermissao(Parametros
+							.getPermissaoAdministrador()));
+				}else{
+					usuario.setPermissao(PermissaoDao.getPermissao(Parametros
 						.getPermissaoFuncionario()));
+				}
 				if (comboSexo.getSelectedIndex() == 0) {
 					usuario.setSexo(Parametros.getSexoMasculino());
 				} else {
@@ -704,6 +765,13 @@ public class CrudFuncionario extends JPanel {
 					usuario.setSexo(Parametros.getSexoMasculino());
 				} else {
 					usuario.setSexo(Parametros.getSexoFeminino());
+				}
+				if(comboPermissao.getSelectedItem().equals("Administrador")){
+					usuario.setPermissao(PermissaoDao.getPermissao(Parametros
+							.getPermissaoAdministrador()));
+				}else{
+					usuario.setPermissao(PermissaoDao.getPermissao(Parametros
+						.getPermissaoFuncionario()));
 				}
 				EntityManagerLocal.merge(usuario);
 				funcionarioSelecionado.setUsuario(usuario);

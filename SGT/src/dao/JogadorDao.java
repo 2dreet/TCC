@@ -10,6 +10,7 @@ import org.eclipse.persistence.config.QueryHints;
 
 import entidade.Jogador;
 import entidade.JogadorPartida;
+import entidade.JogadorPeriferico;
 import entidade.Usuario;
 
 public class JogadorDao {
@@ -134,6 +135,29 @@ public class JogadorDao {
 					+ " where codigoTime = ' " + codigoTime + " ' AND u.ativo = true AND j.titular = false";
 			
 			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Jogador.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
+	public static JogadorPeriferico getJogadorPeriferico(int codigo){
+		try {
+			String sql = "SELECT * FROM jogador_periferico "
+					+ " where codigoJD = '"+codigo+"' ";
+			return (JogadorPeriferico) EntityManagerLocal.getEntityManager().createNativeQuery(sql, JogadorPeriferico.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.setMaxResults(1).getSingleResult();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
+	public static List<JogadorPeriferico> getListaJogadorPeriferico(int codigoJogador){
+		try {
+			String sql = "SELECT * FROM jogador_periferico "
+					+ " where codigoJogador = ' " + codigoJogador + " '";
+			
+			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, JogadorPeriferico.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
 		} catch (NoResultException ex) {
 			return null;
 		}

@@ -29,6 +29,7 @@ import dao.BanimentoDao;
 import dao.EntityManagerLocal;
 import dao.MarcaDao;
 import dao.ModalidadeDao;
+import dao.PerifericoDao;
 import utilitario.BordaSombreada;
 import utilitario.ParametroCrud;
 import utilitario.Parametros;
@@ -36,22 +37,24 @@ import utilitario.UtilitarioTela;
 import entidade.Banimento;
 import entidade.Jogador;
 import entidade.JogadorBanimento;
+import entidade.JogadorPeriferico;
 import entidade.Marca;
 import entidade.Modalidade;
+import entidade.Periferico;
 
-public class DialogCrudJogadorBanimento {
+public class DialogCrudJogadorPeriferico {
 	
-	public JTextField txNome;
 	private boolean confirmado;
-	private JogadorBanimento JogadorBanimentoSelecionado;
+	private JogadorPeriferico jogadorPerifericoSelecionado;
 	private JLabel lblMsg;
 	private JPanel msg;
 	private JPanel meio;
 	private Jogador jogadorSelecionado;
-	private ComboBox cbBanimento;
+	private ComboBox cbMarca;
+	private ComboBox cbPeriferico;
 	
-	public void crudJogadorBanimento(JogadorBanimento JogadorBanimentoSelecionado, int modoCrud, JPanel painelPai, Jogador jogadorSelecionado){
-		this.JogadorBanimentoSelecionado = JogadorBanimentoSelecionado;
+	public void crudJogadorPeriferico(JogadorPeriferico jogadorPerifericoSelecionado, int modoCrud, JPanel painelPai, Jogador jogadorSelecionado){
+		this.jogadorPerifericoSelecionado = jogadorPerifericoSelecionado;
 		this.jogadorSelecionado = jogadorSelecionado;
 		
 		JDialog dialog = new JDialog(Parametros.getPai(), true);
@@ -80,11 +83,11 @@ public class DialogCrudJogadorBanimento {
 		
 		String textoHeader = "";
 		if (modoCrud == ParametroCrud.getModoCrudNovo()) {
-			textoHeader = "Banir Jogador";
+			textoHeader = "Adicionar Periférico";
 		} else if (modoCrud == ParametroCrud.getModoCrudAlterar()) {
-			textoHeader = "Alterar Banimento";
+			textoHeader = "Alterar Periférico";
 		} else if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
-			textoHeader = "Deletar Banimento";
+			textoHeader = "Deletar Periférico";
 		} 
 		
 		JLabel lbHeader = new JLabel(textoHeader);
@@ -102,49 +105,41 @@ public class DialogCrudJogadorBanimento {
 		meio.setBackground(new Color(232, 234, 239));
 		panel.add(meio);
 		
-		JLabel lbNome = new JLabel("Descrição :");
-		lbNome.setBounds(20, 30, 120, 20);
-		lbNome.setFont(UtilitarioTela.getFont(14));
-		lbNome.setForeground(UtilitarioTela.getFontColorCrud());
-		meio.add(lbNome);
+		JLabel lbMarca = new JLabel("Marca:");
+		lbMarca.setBounds(5, 5, 80, 30);
+		lbMarca.setFont(UtilitarioTela.getFont(14));
+		lbMarca.setForeground(UtilitarioTela.getFontColorCrud());
+		meio.add(lbMarca);
 		
-		txNome = new JTextField();
-		txNome.setColumns(100);
-		txNome.setBounds(150, 30, 180, 25);
-		txNome.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent arg0) {
-				txNome.setBorder(UtilitarioTela.jTextFieldComFocus());
-			}
-
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				txNome.setBorder(UtilitarioTela.jTextFieldNormal());
-			}
-		});
-		txNome.setLayout(null);
-		txNome.setBorder(UtilitarioTela.jTextFieldNormal());
-		meio.add(txNome);
-		
-		JLabel lbBanimento = new JLabel("Banimento :");
-		lbBanimento.setBounds(20, 80, 100, 20);
-		lbBanimento.setFont(UtilitarioTela.getFont(14));
-		lbBanimento.setForeground(UtilitarioTela.getFontColorCrud());
-		meio.add(lbBanimento);
-		
-		cbBanimento = new ComboBox(new Dimension(150, 25));
-		DefaultComboBoxModel comboModel = (DefaultComboBoxModel) cbBanimento.getModel();
+		cbMarca = new ComboBox(new Dimension(250, 30));
+		DefaultComboBoxModel comboModel = (DefaultComboBoxModel) cbMarca.getModel();
 		comboModel.removeAllElements();
-		List<Banimento>list = BanimentoDao.getListaBanimento();
-		for (Banimento m : list){
+		List<Marca>list = MarcaDao.getListaMarca();
+		for (Marca m : list){
 			comboModel.addElement(m);
 		}
-		cbBanimento.setLocation(150, 80);
-		meio.add(cbBanimento);
+		cbMarca.setLocation(90, 5);
+		meio.add(cbMarca);
+		
+		JLabel lbPeri = new JLabel("Periférico:");
+		lbPeri.setBounds(5, 40, 80, 30);
+		lbPeri.setFont(UtilitarioTela.getFont(14));
+		lbPeri.setForeground(UtilitarioTela.getFontColorCrud());
+		meio.add(lbPeri);
+		
+		cbPeriferico = new ComboBox(new Dimension(250, 30));
+		DefaultComboBoxModel comboModelPeri = (DefaultComboBoxModel) cbPeriferico.getModel();
+		comboModelPeri.removeAllElements();
+		List<Periferico>listP = PerifericoDao.getListaPeriferico();
+		for (Periferico m : listP){
+			comboModelPeri.addElement(m);
+		}
+		cbPeriferico.setLocation(90, 40);
+		meio.add(cbPeriferico);
 		
 		msg = new JPanel();
 		msg.setSize(396, 35);
-		msg.setLocation(0, 70);
+		msg.setLocation(0, 80);
 		msg.setLayout(null);
 		msg.setBackground(null);
 		meio.add(msg);
@@ -193,13 +188,13 @@ public class DialogCrudJogadorBanimento {
 		
 		
 		if(modoCrud == ParametroCrud.getModoCrudDeletar()){
-			txNome.setEditable(false);
-			cbBanimento.setEnabled(false);
+			cbMarca.setEnabled(false);
+			cbPeriferico.setEnabled(false);
 		}
 		
-		if(JogadorBanimentoSelecionado != null){
-			txNome.setText(this.JogadorBanimentoSelecionado.getDescricao());
-			cbBanimento.setSelectedItem(JogadorBanimentoSelecionado.getBanimento());
+		if(jogadorPerifericoSelecionado != null){
+			cbMarca.setSelectedItem(jogadorPerifericoSelecionado.getMarca());
+			cbPeriferico.setSelectedItem(jogadorPerifericoSelecionado.getPeriferico());
 		}
 		
 		dialog.getContentPane().add(panel);
@@ -225,37 +220,36 @@ public class DialogCrudJogadorBanimento {
 	public boolean confirmar(int modoCrud){
 		boolean confirmado = true;
 		if (modoCrud != ParametroCrud.getModoCrudDeletar()) {
-			if(txNome.getText() == null || txNome.getText().isEmpty()){
-				txNome.requestFocus();
-				msgErro("Campo Descrição é Obrigatório!");
+			if(cbMarca.getSelectedItem() == null || cbMarca.getSelectedItem().equals("")){
+				msgErro("Deve Cadastrar Marcas!");
+				return false;
+			} 
+			if(cbPeriferico.getSelectedItem() == null || cbPeriferico.getSelectedItem().equals("")){
+				msgErro("Deve Cadastrar Periféricos!");
 				return false;
 			} 
 		}
 		if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
-			MenssageConfirmacao.setMenssage("Deletar Banimento", "Confirma a delecao do Banimento?\nBanimento: "+this.JogadorBanimentoSelecionado.getDescricao(),ParametroCrud.getModoCrudDeletar(), meio);
+			MenssageConfirmacao.setMenssage("Deletar Periférico", "Confirma a delecao do Periférico do Jogador?",ParametroCrud.getModoCrudDeletar(), meio);
 			confirmado = MenssageConfirmacao.isConfirmado();
 		}
 		
 		this.confirmado = confirmado;
 		if(confirmado){
 			EntityManagerLocal.begin();
+			EntityManagerLocal.flush();
 			if (modoCrud == ParametroCrud.getModoCrudNovo()) {
-				JogadorBanimento jogadorBanimento= new JogadorBanimento();
-				jogadorBanimento.setDescricao(txNome.getText());
-				jogadorBanimento.setAtivo(true);
-				jogadorBanimento.setJogador(jogadorSelecionado);
-				Banimento banimento = BanimentoDao.getBanimentoNome(String.valueOf(cbBanimento.getSelectedItem()));
-				jogadorBanimento.setBanimento(banimento);
-				jogadorBanimento.setDataBanimento(new Date());
-				EntityManagerLocal.persist(jogadorBanimento);
+				JogadorPeriferico jogadorPeriferico= new JogadorPeriferico();
+				jogadorPeriferico.setJogador(jogadorSelecionado);
+				jogadorPeriferico.setMarca((Marca) cbMarca.getSelectedItem());
+				jogadorPeriferico.setPeriferico((Periferico) cbPeriferico.getSelectedItem());
+				EntityManagerLocal.persist(jogadorPeriferico);
 			} else if(modoCrud == ParametroCrud.getModoCrudAlterar()){
-				JogadorBanimentoSelecionado.setDescricao(txNome.getText());
-				Banimento banimento = BanimentoDao.getBanimentoNome(String.valueOf(cbBanimento.getSelectedItem()));
-				JogadorBanimentoSelecionado.setBanimento(banimento);
-				EntityManagerLocal.merge(JogadorBanimentoSelecionado);
+				jogadorPerifericoSelecionado.setMarca((Marca) cbMarca.getSelectedItem());
+				jogadorPerifericoSelecionado.setPeriferico((Periferico) cbPeriferico.getSelectedItem());
+				EntityManagerLocal.merge(jogadorPerifericoSelecionado);
 			} else if (modoCrud == ParametroCrud.getModoCrudDeletar()) {
-				JogadorBanimentoSelecionado.setAtivo(false);
-				EntityManagerLocal.merge(JogadorBanimentoSelecionado);
+				EntityManagerLocal.delete(jogadorPerifericoSelecionado);
 			}
 			EntityManagerLocal.commit();
 		}
@@ -265,11 +259,5 @@ public class DialogCrudJogadorBanimento {
 	public boolean getConfirmado(){
 		return this.confirmado;
 	}
-	
-	public JTextField getTxNome() {
-		return txNome;
-	}
-	
-	
 	
 }

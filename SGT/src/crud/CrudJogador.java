@@ -22,6 +22,7 @@ import javax.swing.JButton;
 
 import dao.EntityManagerLocal;
 import dao.PermissaoDao;
+import dialog.DialogRedefinirSenha;
 import entidade.Jogador;
 import entidade.Usuario;
 
@@ -525,6 +526,20 @@ public class CrudJogador extends JPanel {
 					if (validarCrud()) {
 						save(modoCrud);
 					}
+				}
+			});
+		} else if(modoCrud == ParametroCrud.getModoVisualizar()) {
+			JButton btRedefinir = new JButton("Redefinir Senha");
+			btRedefinir.setBounds(100, meio.getHeight() - 70, 300, 35);
+			btRedefinir.setFont(UtilitarioTela.getFont(14));
+			btRedefinir.setFocusPainted(false);
+			btRedefinir.setBackground(UtilitarioTela.getColorCrud(modoCrud));
+			btRedefinir.setIcon(UtilitarioCrud.getIconeCrud(modoCrud));
+			meio.add(btRedefinir);
+			btRedefinir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					DialogRedefinirSenha rds = new DialogRedefinirSenha();
+					rds.redefinir(jogadorSelecionado.getUsuario(), meio);
 				}
 			});
 		}

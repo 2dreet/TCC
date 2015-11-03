@@ -13,8 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.SoftBevelBorder;
-
-import net.miginfocom.layout.LayoutCallback;
 import tela.HomeFuncionario;
 
 public class UtilitarioTela {
