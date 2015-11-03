@@ -5,6 +5,8 @@
  */
 package utilitario;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -12,7 +14,10 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
 import jxl.CellView;
 import jxl.Workbook;
 import jxl.format.Alignment;
@@ -89,6 +94,7 @@ public class ExportarXls {
                 cellFormatDireita.setBorder(Border.ALL, BorderLineStyle.THIN, jxl.format.Colour.BLACK);
                 cellFormatDireita.setAlignment(Alignment.RIGHT);
 
+                
                 WritableWorkbook workbook = Workbook.createWorkbook(arquivo);
                 WritableSheet sheet = workbook.createSheet(nomeAba, 0);
 
