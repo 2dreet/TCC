@@ -8,8 +8,6 @@ package entidade;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
-
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -38,11 +36,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Partida.findAll", query = "SELECT p FROM Partida p"),
     @NamedQuery(name = "Partida.findByCodigoPartida", query = "SELECT p FROM Partida p WHERE p.codigoPartida = :codigoPartida"),
+    @NamedQuery(name = "Partida.findByIndice", query = "SELECT p FROM Partida p WHERE p.indice = :indice"),
     @NamedQuery(name = "Partida.findByDescricao", query = "SELECT p FROM Partida p WHERE p.descricao = :descricao"),
-    @NamedQuery(name = "Partida.findByCancelada", query = "SELECT p FROM Partida p WHERE p.cancelada = :cancelada"),
-    @NamedQuery(name = "Partida.findByMotivo", query = "SELECT p FROM Partida p WHERE p.motivo = :motivo"),
     @NamedQuery(name = "Partida.findByHoraInicio", query = "SELECT p FROM Partida p WHERE p.horaInicio = :horaInicio"),
     @NamedQuery(name = "Partida.findByHoraFim", query = "SELECT p FROM Partida p WHERE p.horaFim = :horaFim"),
+    @NamedQuery(name = "Partida.findByWinerLower", query = "SELECT p FROM Partida p WHERE p.winerLower = :winerLower"),
     @NamedQuery(name = "Partida.findByAtivo", query = "SELECT p FROM Partida p WHERE p.ativo = :ativo")})
 public class Partida implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -51,12 +49,10 @@ public class Partida implements Serializable {
     @Basic(optional = false)
     @Column(name = "codigoPartida")
     private Integer codigoPartida;
+    @Column(name = "indice")
+    private Integer indice;
     @Column(name = "descricao")
     private String descricao;
-    @Column(name = "cancelada")
-    private Boolean cancelada;
-    @Column(name = "motivo")
-    private String motivo;
     @Column(name = "horaInicio")
     @Temporal(TemporalType.DATE)
     private Date horaInicio;
@@ -66,23 +62,29 @@ public class Partida implements Serializable {
     @Basic(optional = false)
     @Column(name = "winerLower")
     private boolean winerLower;
-    @Column(name = "indice")
-    private Integer indice;
     @Basic(optional = false)
     @Column(name = "ativo")
     private boolean ativo;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "partida")
-    private List<TimePartida> timePartidaCollection;
+    private Collection<PcPartida> pcPartidaCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "partida")
+    private Collection<TimePartida> timePartidaCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "partida")
+    private Collection<JogadorPartida> jogadorPartidaCollection;
     @JoinColumn(name = "codigoGrupo", referencedColumnName = "codigoGrupo")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Grupo grupo;
+    @OneToMany(mappedBy = "partidaFilho")
+    private Collection<Partida> partidaCollection;
+    @JoinColumn(name = "codigoPartidaFilho", referencedColumnName = "codigoPartida")
+    @ManyToOne
+    private Partida partidaFilho;
+    @JoinColumn(name = "codigoPartidaLower", referencedColumnName = "codigoPartida")
+    @ManyToOne
+    private Partida partidaLower;
     @JoinColumn(name = "codigoCampeonato", referencedColumnName = "codigoCampeonato")
     @ManyToOne(optional = false)
     private Campeonato campeonato;
-    @JoinColumn(name = "codigoPartidaFilho", referencedColumnName = "codigoPartida")
-    @ManyToOne(optional = false)
-    private Partida partidaFilho;
-    
 
     public Partida() {
     }
@@ -91,8 +93,9 @@ public class Partida implements Serializable {
         this.codigoPartida = codigoPartida;
     }
 
-    public Partida(Integer codigoPartida, boolean ativo) {
+    public Partida(Integer codigoPartida, boolean winerLower, boolean ativo) {
         this.codigoPartida = codigoPartida;
+        this.winerLower = winerLower;
         this.ativo = ativo;
     }
 
@@ -104,28 +107,20 @@ public class Partida implements Serializable {
         this.codigoPartida = codigoPartida;
     }
 
+    public Integer getIndice() {
+        return indice;
+    }
+
+    public void setIndice(Integer indice) {
+        this.indice = indice;
+    }
+
     public String getDescricao() {
         return descricao;
     }
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
-    }
-
-    public Boolean getCancelada() {
-        return cancelada;
-    }
-
-    public void setCancelada(Boolean cancelada) {
-        this.cancelada = cancelada;
-    }
-
-    public String getMotivo() {
-        return motivo;
-    }
-
-    public void setMotivo(String motivo) {
-        this.motivo = motivo;
     }
 
     public Date getHoraInicio() {
@@ -144,6 +139,14 @@ public class Partida implements Serializable {
         this.horaFim = horaFim;
     }
 
+    public boolean getWinerLower() {
+        return winerLower;
+    }
+
+    public void setWinerLower(boolean winerLower) {
+        this.winerLower = winerLower;
+    }
+
     public boolean getAtivo() {
         return ativo;
     }
@@ -151,41 +154,62 @@ public class Partida implements Serializable {
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
-   
-	public Integer getIndice() {
-		return indice;
+
+    public Partida getPartidaLower() {
+		return partidaLower;
 	}
 
-	public void setIndice(Integer indice) {
-		this.indice = indice;
+	public void setPartidaLower(Partida partidaLower) {
+		this.partidaLower = partidaLower;
 	}
 
 	@XmlTransient
+    public Collection<PcPartida> getPcPartidaCollection() {
+        return pcPartidaCollection;
+    }
+
+    public void setPcPartidaCollection(Collection<PcPartida> pcPartidaCollection) {
+        this.pcPartidaCollection = pcPartidaCollection;
+    }
+
+    @XmlTransient
     public Collection<TimePartida> getTimePartidaCollection() {
         return timePartidaCollection;
     }
 
-    public void setTimePartidaCollection(List<TimePartida> timePartidaCollection) {
+    public void setTimePartidaCollection(Collection<TimePartida> timePartidaCollection) {
         this.timePartidaCollection = timePartidaCollection;
     }
 
-    public Grupo getGrupo() {
-        return grupo;
+    @XmlTransient
+    public Collection<JogadorPartida> getJogadorPartidaCollection() {
+        return jogadorPartidaCollection;
     }
 
-    public void setGrupo(Grupo grupo) {
-        this.grupo = grupo;
+    public void setJogadorPartidaCollection(Collection<JogadorPartida> jogadorPartidaCollection) {
+        this.jogadorPartidaCollection = jogadorPartidaCollection;
     }
 
-    public Campeonato getCampeonato() {
-        return campeonato;
-    }
-
-    public void setCampeonato(Campeonato campeonato) {
-        this.campeonato = campeonato;
-    }
     
-    public Partida getPartidaFilho() {
+    @XmlTransient
+    public Collection<Partida> getPartidaCollection() {
+        return partidaCollection;
+    }
+
+    public void setPartidaCollection(Collection<Partida> partidaCollection) {
+        this.partidaCollection = partidaCollection;
+    }
+
+    
+    public Grupo getGrupo() {
+		return grupo;
+	}
+
+	public void setGrupo(Grupo grupo) {
+		this.grupo = grupo;
+	}
+
+	public Partida getPartidaFilho() {
 		return partidaFilho;
 	}
 
@@ -193,12 +217,12 @@ public class Partida implements Serializable {
 		this.partidaFilho = partidaFilho;
 	}
 
-	public boolean isWinerLower() {
-		return winerLower;
+	public Campeonato getCampeonato() {
+		return campeonato;
 	}
 
-	public void setWinerLower(boolean winerLower) {
-		this.winerLower = winerLower;
+	public void setCampeonato(Campeonato campeonato) {
+		this.campeonato = campeonato;
 	}
 
 	@Override

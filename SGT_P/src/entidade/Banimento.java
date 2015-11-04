@@ -115,7 +115,7 @@ public class Banimento implements Serializable {
 
     @Override
     public String toString() {
-        return "entidade.Banimento[ codigoBanimento=" + codigoBanimento + " ]";
+        return descricao;
     }
     
 }

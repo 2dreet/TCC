@@ -44,7 +44,7 @@ public class TimeGrupo implements Serializable {
     @Column(name = "classe")
     private Integer classe;
     @Column(name = "ativo")
-    private boolean ativo;
+    private Integer ativo;
     @JoinColumn(name = "codigoTime", referencedColumnName = "codigoTime")
     @ManyToOne(optional = false)
     private Time time;
@@ -83,31 +83,31 @@ public class TimeGrupo implements Serializable {
         this.classe = classe;
     }
 
-    public boolean getAtivo() {
+    public Integer getAtivo() {
         return ativo;
     }
 
-    public void setAtivo(boolean ativo) {
+    public void setAtivo(Integer ativo) {
         this.ativo = ativo;
     }
 
     public Time getTime() {
-        return time;
-    }
+		return time;
+	}
 
-    public void setTime(Time time) {
-        this.time = time;
-    }
+	public void setTime(Time time) {
+		this.time = time;
+	}
 
-    public Grupo getGrupo() {
-        return grupo;
-    }
+	public Grupo getGrupo() {
+		return grupo;
+	}
 
-    public void setGrupo(Grupo grupo) {
-        this.grupo = grupo;
-    }
-    
-    @Override
+	public void setGrupo(Grupo grupo) {
+		this.grupo = grupo;
+	}
+
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (codigoTimeGrupo != null ? codigoTimeGrupo.hashCode() : 0);

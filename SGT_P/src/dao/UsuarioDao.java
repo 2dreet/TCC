@@ -34,4 +34,32 @@ public class UsuarioDao {
 		}
 	}
 	
+	public static boolean logar(String login, String senha, int codigoPermissao){
+		try {
+			String sql = "SELECT * FROM usuario "
+					+ " where usuario = '"+login+"' AND senha = '"+senha+"' AND ativo = true AND codigoPermissao = "+codigoPermissao;
+			Usuario u = (Usuario) EntityManagerLocal.getEntityManager().createNativeQuery(sql, Usuario.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.setMaxResults(1).getSingleResult();
+			if(u != null){
+				return true;
+			}
+		} catch (NoResultException ex) {
+			return false;
+		}
+		return false;
+	}
+	
+	public static Usuario usuarioLogin(String login, String senha, int codigoPermissao){
+		try {
+			String sql = "SELECT * FROM usuario "
+					+ " where usuario = '"+login+"' AND senha = '"+senha+"' AND ativo = true AND codigoPermissao = "+codigoPermissao;
+			return (Usuario) EntityManagerLocal.getEntityManager().createNativeQuery(sql, Usuario.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.setMaxResults(1).getSingleResult();
+			
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
 }

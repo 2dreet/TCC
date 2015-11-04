@@ -56,6 +56,19 @@ public class FuncionarioDao {
 		}
 	}
 	
+	public static Funcionario getFuncionarioUsurio(int codigo){
+		try {
+			String sql = "SELECT * FROM funcionario f INNER JOIN usuario u"
+					+ "	ON f.codigoUsuario = u.codigoUsuario"
+					+ " where f.codigoUsuario = '"+codigo+"' AND u.ativo = true";
+			return (Funcionario) EntityManagerLocal.getEntityManager().createNativeQuery(sql, Funcionario.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.setMaxResults(1).getSingleResult();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
 	public static Funcionario getAllFuncionario(int codigo){
 		try {
 			String sql = "SELECT * FROM funcionario f INNER JOIN usuario u"

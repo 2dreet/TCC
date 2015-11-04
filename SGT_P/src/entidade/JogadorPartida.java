@@ -6,6 +6,7 @@
 package entidade;
 
 import java.io.Serializable;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,6 +40,9 @@ public class JogadorPartida implements Serializable {
     @JoinColumn(name = "codigoJogador", referencedColumnName = "codigoJogador")
     @ManyToOne(optional = false)
     private Jogador jogador;
+    @JoinColumn(name = "codigoTime", referencedColumnName = "codigoTime")
+    @ManyToOne(optional = false)
+    private Time time;
     @JoinColumn(name = "codigoPartida", referencedColumnName = "codigoPartida")
     @ManyToOne(optional = false)
     private Partida partida;
@@ -57,7 +61,9 @@ public class JogadorPartida implements Serializable {
     public void setCodigoJP(Integer codigoJP) {
         this.codigoJP = codigoJP;
     }
+
     
+
     public Jogador getJogador() {
 		return jogador;
 	}
@@ -72,6 +78,14 @@ public class JogadorPartida implements Serializable {
 
 	public void setPartida(Partida partida) {
 		this.partida = partida;
+	}
+
+	public Time getTime() {
+		return time;
+	}
+
+	public void setTime(Time time) {
+		this.time = time;
 	}
 
 	@Override

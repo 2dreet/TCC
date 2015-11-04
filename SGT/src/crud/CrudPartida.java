@@ -118,6 +118,7 @@ public class CrudPartida extends JPanel {
 	private TelaGrupo telaGrupo;
 	private JScrollPane scroll;
 	private JScrollPane scroll2;
+	private JLabel lblHeaderPartida;
 	/**
 	 * Create the panel.
 	 */
@@ -258,7 +259,7 @@ public class CrudPartida extends JPanel {
 		headerPartida.setBorder(null);
 		meio2.add(headerPartida);
 
-		JLabel lblHeaderPartida = new JLabel("Partidas Realizadas");
+		lblHeaderPartida = new JLabel("Partidas Realizadas");
 		lblHeaderPartida.setHorizontalAlignment(SwingConstants.CENTER);
 		lblHeaderPartida.setBounds(0, 0, 600, 30);
 		lblHeaderPartida.setFont(UtilitarioTela.getFont(14));
@@ -358,6 +359,8 @@ public class CrudPartida extends JPanel {
 				btPartidasRealizadas.setForeground(UtilitarioTela.getFontColorCrud());
 				scroll2.setVisible(false);
 				scroll.setVisible(true);
+				lblHeaderPartida.removeAll();
+				lblHeaderPartida.setText("Partidas Realizadas");
 				meio2.repaint();
 			}
 		});
@@ -380,6 +383,8 @@ public class CrudPartida extends JPanel {
 				btProximasPartidas.setForeground(UtilitarioTela.getFontColorCrud());
 				scroll.setVisible(false);
 				scroll2.setVisible(true);
+				lblHeaderPartida.removeAll();
+				lblHeaderPartida.setText("Proximas Partidas");
 				meio2.repaint();
 			}
 		});

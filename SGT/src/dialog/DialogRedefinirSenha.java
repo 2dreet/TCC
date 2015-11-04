@@ -108,7 +108,7 @@ public class DialogRedefinirSenha {
 				if (confirmar()) {
 					Menssage.setMenssage(
 							"Senha Redefinida",
-							"Senha Redefinida!\nNo proximo Login ira pidir a nova senha!"
+							"Senha Redefinida!\nNo proximo Login irá pedir a nova senha!"
 									,
 							ParametroCrud.getModoCrudDeletar(), meio);
 					dialog.setVisible(false);

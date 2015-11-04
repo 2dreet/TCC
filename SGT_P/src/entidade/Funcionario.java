@@ -75,6 +75,7 @@ public class Funcionario implements Serializable {
     public void setDataCadastro(Date dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
+
     
     public Usuario getUsuario() {
 		return usuario;
