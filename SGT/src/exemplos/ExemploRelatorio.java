@@ -20,7 +20,7 @@ public class ExemploRelatorio {
 	        boolean exportado = false;
 	        String dataAtual = MascaraCrud.macaraDataBanco(new Date()).replace("/", "-");
 	        String nome = "relatorioTimes"+dataAtual;
-	        File arquivo = new File("c:/"+nome+".xls");
+	        File arquivo = new File("c:/relatorio/"+nome+".xls");
 	        FileOutputStream out = null;
 	        String linhaAtual = null;
 	        try {

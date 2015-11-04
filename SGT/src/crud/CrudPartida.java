@@ -782,10 +782,12 @@ public class CrudPartida extends JPanel {
 				TimePartida tp = PartidaDao.getTimePartida(
 						campeonatoSelecionado.getCodigoCampeonato(),
 						partida.getCodigoPartida());
+				if(tp.getTime1() != null && tp.getTime2() != null){
 				modelo.addRow(new Object[] { tp.getTime1().getCodigoTime(),
 						tp.getTime1().getDescricao(),
 						tp.getTime2().getCodigoTime(),
 						tp.getTime2().getDescricao(), chave });
+				}
 			}
 		} else {
 			listaPartida = new ArrayList<Partida>();
