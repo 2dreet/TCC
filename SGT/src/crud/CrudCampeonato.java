@@ -674,8 +674,6 @@ public class CrudCampeonato extends JPanel {
 				return false;
 			}
 		}
-		
-		
 		return true;
 	}
 	
