@@ -1,10 +1,10 @@
 package utilitario;
 
-import entidade.Funcionario;
+import entidade.Partida;
 import entidade.Usuario;
 
 public class Login {
 
-	public static Funcionario usuario;
-	
+	public static Usuario usuario;
+	public static Partida partida;
 }

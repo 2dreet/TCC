@@ -3,11 +3,15 @@ package utilitario;
 import java.awt.Container;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+
 import dao.JogadorDao;
 import entidade.Jogador;
+import entidade.Partida;
 import entidade.Pc;
 
 public class Computador {
@@ -41,12 +45,14 @@ public class Computador {
 		}
 	}
 
-	public static Jogador verificaJogadorLogado(Pc pc) {
+	public static Jogador verificaJogadorLogado(Pc pc, Partida partida) {
 		try {
 			if(pc.getIp() != null && !pc.getIp().trim().isEmpty()){
 				Socket s = new Socket(pc.getIp(), 3030);
-				BufferedReader input = new BufferedReader(new InputStreamReader(
-						s.getInputStream()));
+				PrintWriter out = new PrintWriter(s.getOutputStream(), true);
+				out.println(partida.getCodigoPartida());
+				
+				BufferedReader input = new BufferedReader(new InputStreamReader(s.getInputStream()));
 				String retorno = input.readLine();
 				if (retorno != null) {
 					return JogadorDao.getJogadorPorUsuario(Integer.parseInt(retorno));

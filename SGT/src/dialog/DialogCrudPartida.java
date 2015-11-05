@@ -509,7 +509,6 @@ public class DialogCrudPartida {
 							meioTime.repaint();
 						}
 						meioTime.repaint();
-						System.out.println("passando");
 						List<PcPartida> listaPc = PcDao
 								.getListaPcPartida(partidaSelecionado.getCodigoPartida());
 						if(interrupted()) return;
@@ -517,7 +516,7 @@ public class DialogCrudPartida {
 							if(interrupted()) return;
 							Jogador jogador = Computador
 									.verificaJogadorLogado(listaPc.get(i)
-											.getPc());
+											.getPc(),partidaSelecionado);
 							if(interrupted()) return;
 							Container parent = pcs.get(i);
 							parent.removeAll();
