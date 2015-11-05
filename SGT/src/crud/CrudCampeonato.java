@@ -351,53 +351,55 @@ public class CrudCampeonato extends JPanel {
 				meio.add(btIniciar);
 				btIniciar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						if (campeonatoSelecionado.getChave().getCodigoChave() == 3) {
-							// Grupo
-							if (listaTime.size() >= 12) {
-								if (GerenciadorGupos
-										.gerarGrupos(campeonatoSelecionado)) {
-									Menssage.setMenssage(
-											"Partidas Geradas",
-											"Partidas Geradas\nClicar em partidas para ver as partidas!",
-											ParametroCrud.getModoCrudDeletar(),
-											meio);
-									menuPai.btPartida.setEnabled(true);
-									iniciarCampeonato();
-								}
-							} else {
-								Menssage.setMenssage(
-										"Times insuficientes",
-										"Deve adicionar no Minimo 12 Times para iniciar o campeonato!",
-										ParametroCrud.getModoCrudDeletar(),
-										meio);
-							}
-						} else if (campeonatoSelecionado.getChave()
-								.getCodigoChave() == 2
-								|| campeonatoSelecionado.getChave()
-										.getCodigoChave() == 1) {
-							// Winner Lower MATA MATA
-							if (listaTime.size() >= 2) {
-								if (GerenciadorPartida
-										.adicionarPatidas(campeonatoSelecionado)) {
-									Menssage.setMenssage(
-											"Partidas Geradas",
-											"Partidas Geradas\nClicar em partidas para ver as partidas!",
-											ParametroCrud.getModoCrudDeletar(),
-											meio);
-									menuPai.btPartida.setEnabled(true);
-									iniciarCampeonato();
+						if(verificaJogadoresTime()){
+							if (campeonatoSelecionado.getChave().getCodigoChave() == 3) {
+								// Grupo
+								if (listaTime.size() >= 12) {
+									if (GerenciadorGupos
+											.gerarGrupos(campeonatoSelecionado)) {
+										Menssage.setMenssage(
+												"Partidas Geradas",
+												"Partidas Geradas\nClicar em partidas para ver as partidas!",
+												ParametroCrud.getModoCrudDeletar(),
+												meio);
+										menuPai.btPartida.setEnabled(true);
+										iniciarCampeonato();
+									}
 								} else {
-									Menssage.setMenssage("Erro",
-											"Erro ao gerrar partidas!",
+									Menssage.setMenssage(
+											"Times insuficientes",
+											"Deve adicionar no Minimo 12 Times para iniciar o campeonato!",
 											ParametroCrud.getModoCrudDeletar(),
 											meio);
 								}
-							} else {
-								Menssage.setMenssage(
-										"Times insuficientes",
-										"Deve adicionar no Minimo 2 Times para iniciar o campeonato!",
-										ParametroCrud.getModoCrudDeletar(),
-										meio);
+							} else if (campeonatoSelecionado.getChave()
+									.getCodigoChave() == 2
+									|| campeonatoSelecionado.getChave()
+											.getCodigoChave() == 1) {
+								// Winner Lower MATA MATA
+								if (listaTime.size() >= 2) {
+									if (GerenciadorPartida
+											.adicionarPatidas(campeonatoSelecionado)) {
+										Menssage.setMenssage(
+												"Partidas Geradas",
+												"Partidas Geradas\nClicar em partidas para ver as partidas!",
+												ParametroCrud.getModoCrudDeletar(),
+												meio);
+										menuPai.btPartida.setEnabled(true);
+										iniciarCampeonato();
+									} else {
+										Menssage.setMenssage("Erro",
+												"Erro ao gerrar partidas!",
+												ParametroCrud.getModoCrudDeletar(),
+												meio);
+									}
+								} else {
+									Menssage.setMenssage(
+											"Times insuficientes",
+											"Deve adicionar no Minimo 2 Times para iniciar o campeonato!",
+											ParametroCrud.getModoCrudDeletar(),
+											meio);
+								}
 							}
 						}
 					}
@@ -664,6 +666,19 @@ public class CrudCampeonato extends JPanel {
 		lbQtdTimes.repaint();
 	}
 
+	public boolean verificaJogadoresTime(){
+		for(CampeonatoTime t : listaTime){
+			List<Jogador> j = JogadorDao.getListaJogadorTimeNaoBanido(t.getTime().getCodigoTime());
+			if(j.size() < 5){
+				Menssage.setMenssage("Quantidade de Jogadores", "Jogadores Insuficientes para o \nTime: "+t.getTime().getDescricao()+"\nArrumar a quantidade de jogadores ou remover\no time do campeonato", ParametroCrud.getModoCrudDeletar(), meio);
+				return false;
+			}
+		}
+		
+		
+		return true;
+	}
+	
 	public void atualizarTabela() {
 		listaTime = CampeonatoTimeDao
 				.getListaCampeonatoTimeCamp(campeonatoSelecionado

@@ -140,6 +140,21 @@ public class JogadorDao {
 		}
 	}
 	
+	public static List<Jogador> getListaJogadorTimeNaoBanido(int codigoTime){
+		try {
+			String sql = "SELECT * FROM jogador j INNER JOIN usuario u"
+					+ "	ON j.codigoUsuario = u.codigoUsuario"
+					+ " where  u.ativo = true "
+							+ " AND j.codigoJogador not in (SELECT codigoJogador FROM jogador_banimento where ativo = true)"
+							+ " AND j.codigoTime ="+codigoTime;
+			
+			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Jogador.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
+	
 	public static JogadorPeriferico getJogadorPeriferico(int codigo){
 		try {
 			String sql = "SELECT * FROM jogador_periferico "
