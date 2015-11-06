@@ -35,6 +35,7 @@ import ar.com.fdvs.dj.domain.builders.ColumnBuilderException;
 import utilitario.ExportarXls;
 import utilitario.MascaraCrud;
 import dao.EntityManagerLocal;
+import dao.RelatorioDao;
 import dao.TimeDao;
 import entidade.Time;
 
@@ -50,7 +51,7 @@ public class ExemploRelatorio {
 
 	public JFrame getRelatorio() throws ColumnBuilderException, ClassNotFoundException {
 
-		rs = EntityManagerLocal.getResultSet("select * from time");
+		rs = RelatorioDao.getJogadoresMediaModalidade();
 		
 		Style headerAlignRight = new Style();
 		headerAlignRight.setFont(Font.ARIAL_MEDIUM_BOLD);
@@ -100,26 +101,28 @@ public class ExemploRelatorio {
 			drb.addAutoText("Emitido em " + MascaraCrud.macaraDataBanco(new Date()),
 					AutoText.POSITION_HEADER, AutoText.ALIGMENT_LEFT, 250);
 
-			drb.setTitle("Novo");
+			drb.setTitle("Média de Participante Por Modalidade");
 
 			drb.setPrintBackgroundOnOddRows(true);
 			drb.setUseFullPageWidth(true);
 			drb.setPageSizeAndOrientation(Page.Page_A4_Portrait());
 			drb.setColumnsPerPage(new Integer(1));
 			
-			drb.addColumn("Código", "codigoTime", String.class.getName(),
-					100, false);
-			drb.addColumn("Descricao", "descricao",
+			drb.addColumn("Modalidade", "descricao", String.class.getName(),
+					50, false);
+			drb.addColumn("Sexo", "sexo",
 					String.class.getName(), 50, true);
+			drb.addColumn("Idade", "idade",
+					String.class.getName(), 50, true);
+			drb.addColumn("Quantidade", "qtdSexo", String.class.getName(),
+					50, false);
 		
 			drb.getColumn(0).setHeaderStyle(headerAlignCenter);
 			drb.getColumn(1).setHeaderStyle(headerAlignCenter);
+			drb.getColumn(2).setHeaderStyle(headerAlignCenter);
+			drb.getColumn(3).setHeaderStyle(headerAlignCenter);
 			
-         	drb.addGlobalFooterVariable(drb.getColumn(1), DJCalculation.COUNT, headerAlignCenter);
-            drb.setGrandTotalLegend("Total Geral :  ");
-            drb.setGrandTotalLegendStyle(headerAlignCenter);			
-			
-			DynamicReport dr = drb.build();
+         	DynamicReport dr = drb.build();
 
 			JRResultSetDataSource jrRS = new JRResultSetDataSource(rs);
 			print = DynamicJasperHelper.generateJasperPrint(dr,
