@@ -122,6 +122,12 @@ public class ExemploRelatorio {
 			drb.getColumn(2).setHeaderStyle(headerAlignCenter);
 			drb.getColumn(3).setHeaderStyle(headerAlignCenter);
 			
+			drb.addGlobalFooterVariable(drb.getColumn(3), DJCalculation.SUM, headerAlignJustify);
+
+            drb.setGrandTotalLegend("Total Geral :  ");
+            drb.setGrandTotalLegendStyle(headerAlignJustify);
+
+			
          	DynamicReport dr = drb.build();
 
 			JRResultSetDataSource jrRS = new JRResultSetDataSource(rs);

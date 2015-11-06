@@ -274,7 +274,9 @@ public class HomeFuncionario extends JPanel {
 		Computador.stopPCconectado();
 		baixo.removeAll();
 		baixo.add(panel);
+		baixo.revalidate();
 		baixo.repaint();
+		
 	}
 	 public void atualizarPermissao(){
 		 if(utilitario.Login.usuario.getUsuario().getPermissao().getCodigoPermissao() != 3){

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -23,6 +24,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
+import relatorios.RelatorioMediaParticipanteModalidade;
 import componente.ComboBox;
 import componente.DadoComIcone;
 import componente.Menssage;
@@ -51,10 +53,8 @@ public class RelatoriosCampeonato extends JPanel{
 	
 	
 	public RelatoriosCampeonato(Dimension tamanho){
-		
 		abas = new JTabbedPane();
-		
-		setSize(tamanho);
+		setSize((int) tamanho.getWidth(),(int) tamanho.getHeight());
 		setLayout(null);
 		setBackground(null);
 		
@@ -74,7 +74,7 @@ public class RelatoriosCampeonato extends JPanel{
 		header.add(lblHeader);
 
 		meio = new JPanel();
-		meio.setSize(500, getHeight() - 50);
+		meio.setSize(500, getHeight());
 		meio.setLocation((getWidth() / 2) - 250, 40);
 		meio.setLayout(null);
 		meio.setBackground(UtilitarioTela.getFundoCrud());
@@ -82,7 +82,9 @@ public class RelatoriosCampeonato extends JPanel{
 		add(meio);
 		
 		abas.setSize(meio.getSize());
-		abas.setLocation(0, 0);
+		abas.setLocation(0, 10);
 		meio.add(abas);
+		abas.add("Página 1", new RelatorioMediaParticipanteModalidade(meio.getSize()));
+		
 	}
 }
