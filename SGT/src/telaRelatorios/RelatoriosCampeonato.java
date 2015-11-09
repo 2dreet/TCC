@@ -24,7 +24,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-import relatorios.RelatorioMediaParticipanteModalidade;
+import relatorios.RelatorioCampeonato;
 import componente.ComboBox;
 import componente.DadoComIcone;
 import componente.Menssage;
@@ -49,11 +49,8 @@ public class RelatoriosCampeonato extends JPanel{
 	private JPanel header;
 	private JLabel lblHeader;
 	private JPanel meio;
-	private JTabbedPane abas;
-	
 	
 	public RelatoriosCampeonato(Dimension tamanho){
-		abas = new JTabbedPane();
 		setSize((int) tamanho.getWidth(),(int) tamanho.getHeight());
 		setLayout(null);
 		setBackground(null);
@@ -81,10 +78,8 @@ public class RelatoriosCampeonato extends JPanel{
 		meio.setBorder(null);
 		add(meio);
 		
-		abas.setSize(meio.getSize());
-		abas.setLocation(0, 10);
-		meio.add(abas);
-		abas.add("Página 1", new RelatorioMediaParticipanteModalidade(meio.getSize()));
+		meio.add(new RelatorioCampeonato(meio.getSize()));
+		
 		
 	}
 }
