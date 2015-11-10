@@ -159,8 +159,8 @@ public class DialogLocalizarCampeonato {
 		tcm.getColumn(0).setPreferredWidth(50);
 		tcm.getColumn(0).setMinWidth(50);
 		tcm.getColumn(0).setResizable(false);
-		tcm.getColumn(1).setPreferredWidth(320);
-		tcm.getColumn(1).setMinWidth(320);
+		tcm.getColumn(1).setPreferredWidth(550);
+		tcm.getColumn(1).setMinWidth(550);
 		tcm.getColumn(1).setResizable(false);
 		
 
@@ -223,6 +223,7 @@ public class DialogLocalizarCampeonato {
 			if (tabela.getSelectedRow() > -1) {
 				Campeonato camp = CampeonatoDao.getCampeonato(Integer.parseInt(String.valueOf(tabela.getValueAt(tabela.getSelectedRow(), 0))));
 				 if (camp != null) {
+					 campeonatoSelecionado = camp;
 					dialog.dispose();
 				} else {
 					Menssage.setMenssage("Campeonato não Selecionado",

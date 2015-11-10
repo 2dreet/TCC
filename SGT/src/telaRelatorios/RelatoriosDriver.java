@@ -23,6 +23,8 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
+import relatorios.RelatorioCampeonato;
+import relatorios.RelatorioPerifericos;
 import componente.ComboBox;
 import componente.DadoComIcone;
 import componente.Menssage;
@@ -47,12 +49,8 @@ public class RelatoriosDriver extends JPanel{
 	private JPanel header;
 	private JLabel lblHeader;
 	private JPanel meio;
-	private JTabbedPane abas;
 	
 	public RelatoriosDriver(Dimension tamanho){
-		
-		abas = new JTabbedPane();
-		
 		setSize(tamanho);
 		setLayout(null);
 		setBackground(null);
@@ -65,7 +63,7 @@ public class RelatoriosDriver extends JPanel{
 		header.setBorder(null);
 		add(header);
 
-		lblHeader = new JLabel("Relatórios Drivers");
+		lblHeader = new JLabel("Relatórios Periféricos");
 		lblHeader.setHorizontalAlignment(SwingConstants.CENTER);
 		lblHeader.setBounds(0, 0, header.getWidth(), header.getHeight());
 		lblHeader.setFont(UtilitarioTela.getFont(14));
@@ -80,8 +78,6 @@ public class RelatoriosDriver extends JPanel{
 		meio.setBorder(null);
 		add(meio);
 		
-		abas.setSize(meio.getSize());
-		abas.setLocation(0, 0);
-		meio.add(abas);
+		meio.add(new RelatorioPerifericos(meio.getSize()));
 	}
 }

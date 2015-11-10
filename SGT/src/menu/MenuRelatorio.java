@@ -121,7 +121,7 @@ public class MenuRelatorio extends JPanel {
 				alterarBanimento();
 			}
 		});
-		jp2.add(btRelatorioBanimento);
+		//jp2.add(btRelatorioBanimento);
 		
 		
 		JPanel jp3 = new JPanel();
@@ -145,7 +145,7 @@ public class MenuRelatorio extends JPanel {
 				alterarDriver();
 			}
 		});
-		jp3.add(btRelatorioDriver);
+		jp2.add(btRelatorioDriver);
 		
 		JPanel jp4 = new JPanel();
 		jp4.setBounds(0, 120, getWidth(), 40);
@@ -168,7 +168,7 @@ public class MenuRelatorio extends JPanel {
 				alterarJogador();
 			}
 		});
-		jp4.add(btRelatorioJogador);
+		//jp4.add(btRelatorioJogador);
 		
 		JPanel jp5 = new JPanel();
 		jp5.setBounds(0, 160, getWidth(), 40);
@@ -191,7 +191,7 @@ public class MenuRelatorio extends JPanel {
 				alterarTime();
 			}
 		});
-		jp5.add(btRelatorioTime);
+		//jp5.add(btRelatorioTime);
 		
 		getIcon(btRelatorioCampeonato, false);
 		getIcon(btRelatorioBanimento, false);

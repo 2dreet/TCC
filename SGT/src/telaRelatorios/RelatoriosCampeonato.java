@@ -56,7 +56,7 @@ public class RelatoriosCampeonato extends JPanel{
 		setBackground(null);
 		
 		header = new JPanel();
-		header.setSize(500, 30);
+		header.setSize(600, 30);
 		header.setLocation((getWidth() / 2) - 250, 10);
 		header.setLayout(null);
 		header.setBackground(Color.white);
@@ -71,7 +71,7 @@ public class RelatoriosCampeonato extends JPanel{
 		header.add(lblHeader);
 
 		meio = new JPanel();
-		meio.setSize(500, getHeight());
+		meio.setSize(600, getHeight());
 		meio.setLocation((getWidth() / 2) - 250, 40);
 		meio.setLayout(null);
 		meio.setBackground(UtilitarioTela.getFundoCrud());

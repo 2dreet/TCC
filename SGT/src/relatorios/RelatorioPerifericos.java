@@ -60,6 +60,7 @@ import componente.Menssage;
 import dao.BanimentoDao;
 import dao.MarcaDao;
 import dao.ModalidadeDao;
+import dao.PerifericoDao;
 import dao.RelatorioDao;
 import dao.TimeDao;
 import dialog.DialogCrudBanimento;
@@ -70,6 +71,7 @@ import entidade.Campeonato;
 import entidade.Jogador;
 import entidade.Marca;
 import entidade.Modalidade;
+import entidade.Periferico;
 import entidade.Time;
 import utilitario.BordaSombreada;
 import utilitario.MascaraCrud;
@@ -82,7 +84,7 @@ import menu.MenuJogador;
 
 import javax.swing.JCheckBox;
 
-public class RelatorioCampeonato extends JPanel {
+public class RelatorioPerifericos extends JPanel {
 
 	private JLabel lblHeader;
 	private JPanel meio;
@@ -91,6 +93,8 @@ public class RelatorioCampeonato extends JPanel {
 	private JTextField txCampeonato;
 	private ComboBox cbModalidade;
 	private ComboBox cbModelo;
+	private ComboBox cbPeriferico;
+	private ComboBox cbMarca;
 	private ComboBox cbFaixaEtaria;
 	private FastReportBuilder drb;
 	private Campeonato campeonato;
@@ -100,15 +104,16 @@ public class RelatorioCampeonato extends JPanel {
 	private JRViewer jr;
 	private JFrame fr = null;
 	int totalPaginas = 0;
+	private final JCheckBox agrFaixaEteria = new JCheckBox("Idade");
 
-	public RelatorioCampeonato(Dimension tamanho) {
+	public RelatorioPerifericos(Dimension tamanho) {
 
 		setSize(tamanho);
 		setLayout(null);
 		setBackground(null);
 
 		meio = new JPanel();
-		meio.setSize(600, getHeight() - 50);
+		meio.setSize(500, getHeight() - 50);
 		meio.setLocation((getWidth() / 2) - 250, 0);
 		meio.setLayout(null);
 		meio.setBackground(UtilitarioTela.getFundoCrud());
@@ -206,70 +211,55 @@ public class RelatorioCampeonato extends JPanel {
 		});
 		meio.add(txDataFinal);
 
-		JLabel lbCampeonato = new JLabel("Campeonato :");
+		JLabel lbCampeonato = new JLabel("Periférico :");
 		lbCampeonato.setBounds(20, 105, 200, 20);
 		lbCampeonato.setFont(UtilitarioTela.getFont(14));
 		lbCampeonato.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbCampeonato);
+		
+		cbPeriferico = new ComboBox(new Dimension(350, 25));
+		DefaultComboBoxModel comboModelPeriferico = (DefaultComboBoxModel) cbPeriferico
+				.getModel();
+		comboModelPeriferico.removeAllElements();
+		List<Periferico> listPeriferico = PerifericoDao.getListaPeriferico();
+		for (int i = 0; i < listPeriferico.size(); i++) {
+			comboModelPeriferico.addElement(listPeriferico.get(i));
+		}
 
-		txCampeonato = new JTextField();
-		txCampeonato.setColumns(50);
-		txCampeonato.setBounds(130, 105, 200, 25);
-		txCampeonato.setLayout(null);
-		txCampeonato.setBorder(UtilitarioTela.jTextFieldNormal());
-		txCampeonato.setEditable(false);
-		meio.add(txCampeonato);
+		cbPeriferico.setLocation(130, 105);
+		meio.add(cbPeriferico);
+		
+		JLabel lbMarca = new JLabel("Marca :");
+		lbMarca.setBounds(20, 140, 200, 20);
+		lbMarca.setFont(UtilitarioTela.getFont(14));
+		lbMarca.setForeground(UtilitarioTela.getFontColorCrud());
+		meio.add(lbMarca);
+		
+		cbMarca = new ComboBox(new Dimension(350, 25));
+		DefaultComboBoxModel comboModelMarca = (DefaultComboBoxModel) cbMarca
+				.getModel();
+		comboModelMarca.removeAllElements();
+		List<Marca> listMarca = MarcaDao.getListaMarca();
+		for (int i = 0; i < listMarca.size(); i++) {
+			comboModelMarca.addElement(listMarca.get(i));
+		}
 
-		JButton btLocalizar = new JButton("Localizar");
-		btLocalizar.setBounds(340, 105, 100, 25);
-		btLocalizar.setBorderPainted(false);
-		btLocalizar.setBackground(UtilitarioTela.getFontColorCrud());
-		btLocalizar.setForeground(UtilitarioTela.getFontColorPadrao());
-		btLocalizar.setLayout(null);
-		btLocalizar.setHorizontalAlignment(SwingConstants.LEFT);
-		btLocalizar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if (localizarCampeonato()) {
-					txCampeonato.setText(campeonato.getDescricao());
-					meio.repaint();
-				} else {
-
-				}
-			}
-		});
-		meio.add(btLocalizar);
-
-		JButton btLimpar = new JButton("Limpar");
-		btLimpar.setBounds(450, 105, 80, 25);
-		btLimpar.setBorderPainted(false);
-		btLimpar.setBackground(UtilitarioTela.getFontColorCrud());
-		btLimpar.setForeground(UtilitarioTela.getFontColorPadrao());
-		btLimpar.setLayout(null);
-		btLimpar.setHorizontalAlignment(SwingConstants.LEFT);
-		btLimpar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				campeonato = null;
-				txCampeonato.setText("");
-				meio.repaint();
-			}
-		});
-		meio.add(btLimpar);
-
+		cbMarca.setLocation(130, 140);
+		meio.add(cbMarca);
+		
 		JLabel lbModelo = new JLabel("Modelo :");
-		lbModelo.setBounds(20, 140, 100, 20);
+		lbModelo.setBounds(20, 175, 100, 20);
 		lbModelo.setFont(UtilitarioTela.getFont(14));
 		lbModelo.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbModelo);
 
 		Map<Integer, String> modelos = new HashMap<Integer, String>();
 		modelos.put(0, new String(
-				"Quantos jogadores participam em média de campeonato"));
-		modelos.put(1, new String("Quais jogadores participaram de campeonato"));
+				"Quais periféricos utilizados por modalidade"));
+		modelos.put(1, new String("Quais periféricos utilizados por idade"));
 		modelos.put(2, new String(
-				"Quais computadores participaram de campeonato"));
-		modelos.put(3, new String("Quais as modalidades mais jogas"));
-		modelos.put(4, new String("Tempo médio de campeonato"));
-
+				"Quais periféricos utilizados por jogadores"));
+		
 		cbModelo = new ComboBox(new Dimension(350, 25));
 		DefaultComboBoxModel comboModelTipo = (DefaultComboBoxModel) cbModelo
 				.getModel();
@@ -278,11 +268,11 @@ public class RelatorioCampeonato extends JPanel {
 			comboModelTipo.addElement(modelos.get(i));
 		}
 
-		cbModelo.setLocation(130, 140);
+		cbModelo.setLocation(130, 175);
 		meio.add(cbModelo);
 
 		JLabel lbIdade = new JLabel("Idades :");
-		lbIdade.setBounds(20, 180, 100, 20);
+		lbIdade.setBounds(20, 210, 100, 20);
 		lbIdade.setFont(UtilitarioTela.getFont(14));
 		lbIdade.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbIdade);
@@ -300,11 +290,11 @@ public class RelatorioCampeonato extends JPanel {
 			faixaE.addElement(faixa.get(i));
 		}
 
-		cbFaixaEtaria.setLocation(130, 180);
+		cbFaixaEtaria.setLocation(130, 210);
 		meio.add(cbFaixaEtaria);
 
 		JButton btGerar = new JButton("Gerar Relatório");
-		btGerar.setBounds(20, 220, 200, 30);
+		btGerar.setBounds(20, 250, 200, 30);
 		btGerar.setBorderPainted(false);
 		btGerar.setBackground(UtilitarioTela.getFontColorCrud());
 		btGerar.setForeground(UtilitarioTela.getFontColorPadrao());
@@ -329,7 +319,6 @@ public class RelatorioCampeonato extends JPanel {
 		dl.localizarCampeonato(meio);
 		if (dl.getCampeonatoSelecionado() != null) {
 			campeonato = dl.getCampeonatoSelecionado();
-			return true;
 		}
 		return false;
 	}
@@ -439,159 +428,127 @@ public class RelatorioCampeonato extends JPanel {
 				if (cbModalidade.getSelectedIndex() > 0) {
 					modalidade = (Modalidade) cbModalidade.getSelectedItem();
 				}
-				rs = RelatorioDao.getJogadoresQuantidadeCampeonato(campeonato,
-						txDataInicial.getText(), txDataFinal.getText(),
-						modalidade);
-
-				drb.setTitle("Média de Participante Por Modalidade");
-
-				drb.addColumn("Campeonato", "campeonato",
-						String.class.getName(), 200, false);
-				drb.addColumn("Modalidade", "modalidade",
-						String.class.getName(), 200, false);
-				drb.addColumn("Sexo", "sexo", String.class.getName(), 100, true);
-
-				drb.addColumn("Idade", "idade", String.class.getName(), 50,
-						true);
-				drb.addColumn("Quantidade", "qtdSexo", Integer.class.getName(),
-						70, true);
-
-				drb.getColumn(0).setHeaderStyle(headerAlignCenter);
-				drb.getColumn(1).setHeaderStyle(headerAlignCenter);
-				drb.getColumn(2).setHeaderStyle(headerAlignCenter);
-				drb.getColumn(3).setHeaderStyle(headerAlignCenter);
-				drb.getColumn(4).setHeaderStyle(headerAlignCenter);
-				drb.addGlobalFooterVariable(drb.getColumn(4),
-						DJCalculation.SUM, headerAlignCenter);
-
-				drb.setGrandTotalLegend("Total");
-				drb.setGrandTotalLegendStyle(headerAlignCenter);
-
-			} else if (modelo == 1) {
-
-				Modalidade modalidade = null;
-				String faixaEtaria = null;
-				if (cbModalidade.getSelectedIndex() > 0) {
-					modalidade = (Modalidade) cbModalidade.getSelectedItem();
+				Periferico periferico = null;
+				if (cbPeriferico.getSelectedIndex() > 0) {
+					periferico = (Periferico) cbPeriferico.getSelectedItem();
 				}
+				Marca marca = null;
+				if (cbMarca.getSelectedIndex() > 0) {
+					marca = (Marca) cbMarca.getSelectedItem();
+				}
+				String faixaEtaria =null;
 				if (cbFaixaEtaria.getSelectedIndex() == 1) {
 					faixaEtaria = " < 18";
 				} else if (cbFaixaEtaria.getSelectedIndex() == 2) {
 					faixaEtaria = " >= 18";
 				}
-				rs = RelatorioDao.getJogadoresCampeonato(campeonato,
-						faixaEtaria, txDataInicial.getText(),
-						txDataFinal.getText(), modalidade);
+				
+				rs = RelatorioDao.getPerifericosUtilizadosModalidade(faixaEtaria,
+						txDataInicial.getText(),
+						txDataFinal.getText(), modalidade, periferico, marca);
 
-				drb.setTitle("Jogadores Campeonato");
+				drb.setTitle("Periféricos por Modalidade");
 
-				drb.addColumn("Campeonato", "campeonato",
-						String.class.getName(), 200, false);
-				drb.addColumn("Modalidade", "modalidade",
-						String.class.getName(), 200, false);
-				drb.addColumn("Jogador", "jogador", String.class.getName(),
-						200, false);
+				drb.addColumn("Periférico", "periferico",String.class.getName(), 200, false);
+				drb.addColumn("Marca", "marca",String.class.getName(), 200, false);
+				drb.addColumn("Modalidade", "modalidade", String.class.getName(), 100,true);
 				drb.addColumn("Sexo", "sexo", String.class.getName(), 100, true);
-					drb.addColumn("Idade", "idade", String.class.getName(), 50,
-							true);
-				drb.addColumn("Quantidade", "qtdSexo", Integer.class.getName(),
-						70, true);
+				drb.addColumn("Idade", "idade", String.class.getName(), 50,true);
+				drb.addColumn("Quantidade", "totalJogadores", Integer.class.getName(),70, true);
 
 				drb.getColumn(0).setHeaderStyle(headerAlignCenter);
 				drb.getColumn(1).setHeaderStyle(headerAlignCenter);
 				drb.getColumn(2).setHeaderStyle(headerAlignCenter);
 				drb.getColumn(3).setHeaderStyle(headerAlignCenter);
 				drb.getColumn(4).setHeaderStyle(headerAlignCenter);
-				drb.addGlobalFooterVariable(drb.getColumn(4),
-						DJCalculation.SUM, headerAlignCenter);
+				drb.getColumn(5).setHeaderStyle(headerAlignCenter);
 
+				drb.addGlobalFooterVariable(drb.getColumn(5),
+							DJCalculation.SUM, headerAlignCenter);
+				drb.setGrandTotalLegend("Total");
+				drb.setGrandTotalLegendStyle(headerAlignCenter);
+
+			} else if (modelo == 1) {
+
+				String faixaEtaria =null;
+				if (cbFaixaEtaria.getSelectedIndex() == 1) {
+					faixaEtaria = " < 18";
+				} else if (cbFaixaEtaria.getSelectedIndex() == 2) {
+					faixaEtaria = " >= 18";
+				}
+				
+				rs = RelatorioDao.getPerifericosUtilizadosIdade(faixaEtaria,
+						txDataInicial.getText(),
+						txDataFinal.getText());
+
+				drb.setTitle("Periféricos por Idade");
+
+				drb.addColumn("Periférico", "periferico",String.class.getName(), 200, false);
+				drb.addColumn("Marca", "marca",String.class.getName(), 200, false);
+				drb.addColumn("Sexo", "sexo", String.class.getName(), 100, true);
+				drb.addColumn("Idade", "idade", String.class.getName(), 50,true);
+				drb.addColumn("Quantidade", "totalJogadores", Integer.class.getName(),70, true);
+
+				drb.getColumn(0).setHeaderStyle(headerAlignCenter);
+				drb.getColumn(1).setHeaderStyle(headerAlignCenter);
+				drb.getColumn(2).setHeaderStyle(headerAlignCenter);
+				drb.getColumn(3).setHeaderStyle(headerAlignCenter);
+				drb.getColumn(4).setHeaderStyle(headerAlignCenter);
+				
+				drb.addGlobalFooterVariable(drb.getColumn(4),
+							DJCalculation.SUM, headerAlignCenter);
 				drb.setGrandTotalLegend("Total");
 				drb.setGrandTotalLegendStyle(headerAlignCenter);
 
 			} else if (modelo == 2) {
 
-				Modalidade modalidade = null;
-				if (cbModalidade.getSelectedIndex() > 0) {
-					modalidade = (Modalidade) cbModalidade.getSelectedItem();
-				}
-				rs = RelatorioDao.getPcCampeonato(campeonato,
-						txDataInicial.getText(), txDataFinal.getText(),
-						modalidade);
-
-				drb.setTitle("Computadores Campeonato");
-
-				drb.addColumn("Campeonato", "campeonato",
-						String.class.getName(), 200, false);
-				drb.addColumn("Modalidade", "modalidade",
-						String.class.getName(), 200, false);
-				drb.addColumn("Computador", "descricao",
-						String.class.getName(), 200, false);
-				drb.addColumn("Ip", "ip", String.class.getName(), 100, true);
-
-				drb.getColumn(0).setHeaderStyle(headerAlignCenter);
-				drb.getColumn(1).setHeaderStyle(headerAlignCenter);
-				drb.getColumn(2).setHeaderStyle(headerAlignCenter);
-				drb.getColumn(3).setHeaderStyle(headerAlignCenter);
-
-				drb.addGlobalFooterVariable(drb.getColumn(3),
-						DJCalculation.COUNT, headerAlignCenter);
-
-				drb.setGrandTotalLegend("Total");
-				drb.setGrandTotalLegendStyle(headerAlignCenter);
-
-			} else if (modelo == 3) {
 
 				Modalidade modalidade = null;
 				if (cbModalidade.getSelectedIndex() > 0) {
 					modalidade = (Modalidade) cbModalidade.getSelectedItem();
 				}
-				rs = RelatorioDao.getPcCampeonato(campeonato,
-						txDataInicial.getText(), txDataFinal.getText(),
-						modalidade);
+				Periferico periferico = null;
+				if (cbPeriferico.getSelectedIndex() > 0) {
+					periferico = (Periferico) cbPeriferico.getSelectedItem();
+				}
+				Marca marca = null;
+				if (cbMarca.getSelectedIndex() > 0) {
+					marca = (Marca) cbMarca.getSelectedItem();
+				}
+				String faixaEtaria =null;
+				if (cbFaixaEtaria.getSelectedIndex() == 1) {
+					faixaEtaria = " < 18";
+				} else if (cbFaixaEtaria.getSelectedIndex() == 2) {
+					faixaEtaria = " >= 18";
+				}
+				
+				rs = RelatorioDao.getPerifericosUtilizadosJogadores(faixaEtaria,
+						txDataInicial.getText(),
+						txDataFinal.getText(), modalidade, periferico, marca);
 
-				drb.setTitle("Modalidade Jogada");
+				drb.setTitle("Periféricos por Jogadores");
 
-				drb.addColumn("Modalidade", "modalidade",
-						String.class.getName(), 200, false);
+				drb.addColumn("Periférico", "periferico",String.class.getName(), 200, false);
+				drb.addColumn("Marca", "marca",String.class.getName(), 200, false);
+				drb.addColumn("Modalidade", "modalidade", String.class.getName(), 100,true);
+				drb.addColumn("Jogador", "nome",String.class.getName(), 200, false);
 				drb.addColumn("Sexo", "sexo", String.class.getName(), 100, true);
-				drb.addColumn("Idade", "idade", String.class.getName(), 50,
-						true);
-				drb.addColumn("Quantidade", "qtdSexo", Integer.class.getName(),
-						70, true);
+				drb.addColumn("Idade", "idade", String.class.getName(), 50,true);
+				
 
 				drb.getColumn(0).setHeaderStyle(headerAlignCenter);
 				drb.getColumn(1).setHeaderStyle(headerAlignCenter);
 				drb.getColumn(2).setHeaderStyle(headerAlignCenter);
 				drb.getColumn(3).setHeaderStyle(headerAlignCenter);
+				drb.getColumn(4).setHeaderStyle(headerAlignCenter);
+				drb.getColumn(5).setHeaderStyle(headerAlignCenter);
 
-				drb.addGlobalFooterVariable(drb.getColumn(3),
-						DJCalculation.SUM, headerAlignCenter);
-
+				drb.addGlobalFooterVariable(drb.getColumn(5),
+							DJCalculation.COUNT, headerAlignCenter);
 				drb.setGrandTotalLegend("Total");
 				drb.setGrandTotalLegendStyle(headerAlignCenter);
 
-			} else if (modelo == 4) {
-				Modalidade modalidade = null;
-				if (cbModalidade.getSelectedIndex() > 0) {
-					modalidade = (Modalidade) cbModalidade.getSelectedItem();
-				}
-				rs = RelatorioDao.getTempoMedio(campeonato,
-						txDataInicial.getText(), txDataFinal.getText(),
-						modalidade);
-
-				drb.setTitle("Tempo Médio Modalidade");
-
-				drb.addColumn("Modalidade", "modalidade",
-						String.class.getName(), 200, false);
-				drb.addColumn("Chave", "chave", String.class.getName(), 100,
-						true);
-				drb.addColumn("Tempo Médio", "tempoMedio",
-						String.class.getName(), 100, true);
-
-				drb.getColumn(0).setHeaderStyle(headerAlignCenter);
-				drb.getColumn(1).setHeaderStyle(headerAlignCenter);
-				drb.getColumn(2).setHeaderStyle(headerAlignCenter);
-			}
+			} 
 			DynamicReport dr = drb.build();
 
 			JRResultSetDataSource jrRS = new JRResultSetDataSource(rs);
@@ -611,7 +568,7 @@ public class RelatorioCampeonato extends JPanel {
 				}
 			}
 		} catch (JRException ex) {
-			Logger.getLogger(RelatorioCampeonato.class.getName()).log(
+			Logger.getLogger(RelatorioPerifericos.class.getName()).log(
 					Level.SEVERE, null, ex);
 		}
 		return fr;
