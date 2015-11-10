@@ -161,10 +161,10 @@ public class CrudJogadorPeriferico extends JPanel{
 				}
 			}
 		});
-		meio.add(btAlt);
+		//meio.add(btAlt);
 		
 		btDel = new JButton("Remover");
-		btDel.setBounds(230, 315, 100, 30);
+		btDel.setBounds(120, 315, 100, 30);
 		btDel.setFocusPainted(false);
 		btDel.setBackground(UtilitarioTela.getColorCrud(ParametroCrud.getModoCrudDeletar()));
 		btDel.setLayout(null);
