@@ -15,7 +15,7 @@ public class RelatorioDao {
 
 	public static ResultSet getJogadoresQuantidadeCampeonato(
 			Campeonato campeonato,  String dataInicial,
-			String dataFinal, Modalidade modalidade) {
+			String dataFinal, Modalidade modalidade, String faixaEtaria) {
 		String sql = "SELECT c.descricao as campeonato, m.descricao as modalidade, IF(sexo = 1, 'Masculino','Feminino') as sexo ,";
 		
 			sql += " CAST((TO_DAYS(NOW())- TO_DAYS(dataNascimento)) / 365.25 as SIGNED) AS idade,";
@@ -46,6 +46,11 @@ public class RelatorioDao {
 			sql += " AND m.codigoModalidade = "
 					+ modalidade.getCodigoModalidade() + " ";
 		}
+		
+		if (faixaEtaria != null) {
+			sql += " AND CAST((TO_DAYS(NOW())- TO_DAYS(dataNascimento)) / 365.25 as SIGNED) "
+					+ faixaEtaria;
+		}
 
 		sql += " GROUP BY sexo,m.codigoModalidade,idade";
 		
@@ -55,10 +60,9 @@ public class RelatorioDao {
 	public static ResultSet getJogadoresCampeonato(Campeonato campeonato,
 			String faixaEtaria, String dataInicial, String dataFinal,
 			Modalidade modalidade) {
-		String sql = "SELECT c.descricao as campeonato, m.descricao as modalidade, IF(sexo = 1, 'Masculino','Feminino') as sexo , u.nome";
-		if (faixaEtaria != null) {
+		String sql = "SELECT c.descricao as campeonato, m.descricao as modalidade, IF(sexo = 1, 'Masculino','Feminino') as sexo , u.nome as jogador, ";
+		
 			sql += " CAST((TO_DAYS(NOW())- TO_DAYS(dataNascimento)) / 365.25 as SIGNED) AS idade,";
-		}
 		sql += " count(*)qtdSexo"
 				+ " FROM jogador_partida jp INNER JOIN jogador j ON jp.codigoJogador = j.codigoJogador "
 				+ " INNER JOIN usuario u ON j.codigoUsuario = u.codigoUsuario "
@@ -92,7 +96,7 @@ public class RelatorioDao {
 					+ faixaEtaria;
 		}
 
-		sql += " GROUP BY sexo,m.codigoModalidade";
+		sql += " GROUP BY j.codigoUsuario";
 
 		return EntityManagerLocal.getResultSet(sql);
 	}
@@ -126,6 +130,8 @@ public class RelatorioDao {
 					+ modalidade.getCodigoModalidade() + " ";
 		}
 
+		sql += " GROUP BY pc.codigoPc";
+		
 		return EntityManagerLocal.getResultSet(sql);
 	}
 
@@ -177,7 +183,8 @@ public class RelatorioDao {
 				+ "FROM campeonato c "
 				+ " INNER JOIN modalidade m ON m.codigoModalidade = c.codigoModalidade "
 				+ " INNER JOIN chave ch ON ch.codigoChave = c.codigoChave  "
-				+ " WHERE c.codigoCampeonato > 0 ";
+				+ " WHERE c.codigoCampeonato > 0"
+				+ " AND c.dataFim is not null ";
 		if (campeonato != null) {
 			sql += " AND c.codigoCampeonato = "
 					+ campeonato.getCodigoCampeonato() + " ";

@@ -222,6 +222,7 @@ public class RelatorioPerifericos extends JPanel {
 				.getModel();
 		comboModelPeriferico.removeAllElements();
 		List<Periferico> listPeriferico = PerifericoDao.getListaPeriferico();
+		comboModelPeriferico.addElement(new String("< Todos >"));
 		for (int i = 0; i < listPeriferico.size(); i++) {
 			comboModelPeriferico.addElement(listPeriferico.get(i));
 		}
@@ -240,6 +241,7 @@ public class RelatorioPerifericos extends JPanel {
 				.getModel();
 		comboModelMarca.removeAllElements();
 		List<Marca> listMarca = MarcaDao.getListaMarca();
+		comboModelMarca.addElement(new String("< Todos >"));
 		for (int i = 0; i < listMarca.size(); i++) {
 			comboModelMarca.addElement(listMarca.get(i));
 		}
@@ -303,7 +305,7 @@ public class RelatorioPerifericos extends JPanel {
 		btGerar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					gerarRelatorio().setVisible(true);
+					gerarRelatorio();
 				} catch (Throwable e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -323,9 +325,11 @@ public class RelatorioPerifericos extends JPanel {
 		return false;
 	}
 
-	private JFrame gerarRelatorio() throws Throwable {
+	private void gerarRelatorio() throws Throwable {
 		int modelo = cbModelo.getSelectedIndex();
 
+		rs = null;
+		
 		Style headerAlignRight = new Style();
 		headerAlignRight.setFont(Font.ARIAL_MEDIUM_BOLD);
 		headerAlignRight.setHorizontalAlign(HorizontalAlign.RIGHT);
@@ -549,6 +553,14 @@ public class RelatorioPerifericos extends JPanel {
 				drb.setGrandTotalLegendStyle(headerAlignCenter);
 
 			} 
+			
+			if(!rs.next()){
+				Menssage.setMenssage("Sem Dados", "Sem Dados!", ParametroCrud.getModoCrudAlterar(), meio);
+				return ;
+			} else{
+				rs.beforeFirst();
+			}
+			
 			DynamicReport dr = drb.build();
 
 			JRResultSetDataSource jrRS = new JRResultSetDataSource(rs);
@@ -565,13 +577,14 @@ public class RelatorioPerifericos extends JPanel {
 					fr.setSize(new Dimension(800, 600));
 					fr.setExtendedState(JFrame.MAXIMIZED_BOTH);
 					fr.setContentPane(jr);
+					fr.setVisible(true);
 				}
 			}
 		} catch (JRException ex) {
 			Logger.getLogger(RelatorioPerifericos.class.getName()).log(
 					Level.SEVERE, null, ex);
 		}
-		return fr;
+		
 	}
 
 }

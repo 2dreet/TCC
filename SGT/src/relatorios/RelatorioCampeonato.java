@@ -313,7 +313,7 @@ public class RelatorioCampeonato extends JPanel {
 		btGerar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					gerarRelatorio().setVisible(true);
+					gerarRelatorio();
 				} catch (Throwable e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -334,9 +334,9 @@ public class RelatorioCampeonato extends JPanel {
 		return false;
 	}
 
-	private JFrame gerarRelatorio() throws Throwable {
+	private void gerarRelatorio() throws Throwable {
 		int modelo = cbModelo.getSelectedIndex();
-
+		rs = null;
 		Style headerAlignRight = new Style();
 		headerAlignRight.setFont(Font.ARIAL_MEDIUM_BOLD);
 		headerAlignRight.setHorizontalAlign(HorizontalAlign.RIGHT);
@@ -436,12 +436,18 @@ public class RelatorioCampeonato extends JPanel {
 			if (modelo == 0) {
 
 				Modalidade modalidade = null;
+				String faixaEtaria = null;
 				if (cbModalidade.getSelectedIndex() > 0) {
 					modalidade = (Modalidade) cbModalidade.getSelectedItem();
 				}
+				if (cbFaixaEtaria.getSelectedIndex() == 1) {
+					faixaEtaria = " < 18";
+				} else if (cbFaixaEtaria.getSelectedIndex() == 2) {
+					faixaEtaria = " >= 18";
+				}
 				rs = RelatorioDao.getJogadoresQuantidadeCampeonato(campeonato,
 						txDataInicial.getText(), txDataFinal.getText(),
-						modalidade);
+						modalidade, faixaEtaria);
 
 				drb.setTitle("Média de Participante Por Modalidade");
 
@@ -502,8 +508,9 @@ public class RelatorioCampeonato extends JPanel {
 				drb.getColumn(2).setHeaderStyle(headerAlignCenter);
 				drb.getColumn(3).setHeaderStyle(headerAlignCenter);
 				drb.getColumn(4).setHeaderStyle(headerAlignCenter);
-				drb.addGlobalFooterVariable(drb.getColumn(4),
-						DJCalculation.SUM, headerAlignCenter);
+				
+				drb.addGlobalFooterVariable(drb.getColumn(5),
+						DJCalculation.COUNT, headerAlignCenter);
 
 				drb.setGrandTotalLegend("Total");
 				drb.setGrandTotalLegendStyle(headerAlignCenter);
@@ -541,11 +548,18 @@ public class RelatorioCampeonato extends JPanel {
 
 			} else if (modelo == 3) {
 
+				String faixaEtaria = null;
+				
 				Modalidade modalidade = null;
 				if (cbModalidade.getSelectedIndex() > 0) {
 					modalidade = (Modalidade) cbModalidade.getSelectedItem();
 				}
-				rs = RelatorioDao.getPcCampeonato(campeonato,
+				if (cbFaixaEtaria.getSelectedIndex() == 1) {
+					faixaEtaria = " < 18";
+				} else if (cbFaixaEtaria.getSelectedIndex() == 2) {
+					faixaEtaria = " >= 18";
+				}
+				rs = RelatorioDao.getModalidadesMaisJogadas(campeonato,faixaEtaria,
 						txDataInicial.getText(), txDataFinal.getText(),
 						modalidade);
 
@@ -592,6 +606,14 @@ public class RelatorioCampeonato extends JPanel {
 				drb.getColumn(1).setHeaderStyle(headerAlignCenter);
 				drb.getColumn(2).setHeaderStyle(headerAlignCenter);
 			}
+			
+			if(!rs.next()){
+				Menssage.setMenssage("Sem Dados", "Sem Dados!", ParametroCrud.getModoCrudAlterar(), meio);
+				return ;
+			} else{
+				rs.beforeFirst();
+			}
+			
 			DynamicReport dr = drb.build();
 
 			JRResultSetDataSource jrRS = new JRResultSetDataSource(rs);
@@ -608,13 +630,14 @@ public class RelatorioCampeonato extends JPanel {
 					fr.setSize(new Dimension(800, 600));
 					fr.setExtendedState(JFrame.MAXIMIZED_BOTH);
 					fr.setContentPane(jr);
+					fr.setVisible(true);
 				}
 			}
 		} catch (JRException ex) {
 			Logger.getLogger(RelatorioCampeonato.class.getName()).log(
 					Level.SEVERE, null, ex);
 		}
-		return fr;
+		
 	}
 
 }
