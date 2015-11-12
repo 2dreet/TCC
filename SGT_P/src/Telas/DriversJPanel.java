@@ -114,14 +114,14 @@ public class DriversJPanel extends JPanel{
 			}
 		});
 		btnAudio.setBounds(50, 180, 60, 60);
-		meio.add(btnAudio);
+		//meio.add(btnAudio);
 		
 		JLabel lbls = new JLabel("SteelSeries");
 		lbls.setHorizontalAlignment(SwingConstants.LEFT);
 		lbls.setBounds(120, 180, 60, 60);
 		lbls.setFont(UtilitarioTela.getFont(14));
 		lbls.setForeground(UtilitarioTela.getFontColorCrud());
-		meio.add(lbls);
+		//meio.add(lbls);
 		
 	}
 }
