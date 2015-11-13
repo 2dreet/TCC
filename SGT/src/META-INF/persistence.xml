@@ -27,11 +27,5 @@
 		
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		
-		<properties> 
-			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" /> 
-			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/sgtg" /> 
-			<property name="javax.persistence.jdbc.user" value="jclan" /> 
-			<property name="javax.persistence.jdbc.password" value="jcuser" />
-		</properties>
 	</persistence-unit>
 </persistence>

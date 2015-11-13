@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import utilitario.Conectar;
 import utilitario.ExecutarComandos;
 import utilitario.UtilitarioTela;
 
@@ -56,7 +57,7 @@ public class DriversJPanel extends JPanel{
 		btnMouse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					ExecutarComandos.execCommand("control main.cpl");
+					ExecutarComandos.execCommand(Conectar.razer);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -81,7 +82,7 @@ public class DriversJPanel extends JPanel{
 		btnTeclado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					ExecutarComandos.execCommand("control keyboard");
+					ExecutarComandos.execCommand(Conectar.steel);
 				} catch (IOException ex) {
 					// TODO Auto-generated catch block
 					ex.printStackTrace();

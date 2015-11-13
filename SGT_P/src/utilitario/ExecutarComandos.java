@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import componente.Menssage;
+
 public class ExecutarComandos {
 
 	public synchronized static String execCommand(final String commandLine) throws IOException {  
@@ -38,12 +40,15 @@ public class ExecutarComandos {
 	        input.close();  
 	          
 	    } catch (IOException e) {  
-	        result = String.format("Falha ao executar comando %s. Erro: %s", commandLine, e.toString());  
+	        String msgErro = ("Falha ao executar comando\nSoftware Não encontrado ou não instalado\nConferir Arquivo config.txt");
+	        Menssage.setMenssage("Erro", msgErro,
+					ParametroCrud.getModoCrudDeletar(), null);
+	        return null;
 	    }  
 	  
 	    // Se não executou com sucesso, lança a falha  
 	    if (!success) {  
-	        throw new IOException(result);  
+	       return null;
 	    }  
 	  
 	    return result;  

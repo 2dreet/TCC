@@ -4,20 +4,24 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
+import utilitario.Conectar;
+
 public class EntityManagerLocal {
 
 	public static EntityManagerFactory emf;
 	public static EntityManager em;
 	private static String driver = "com.mysql.jdbc.Driver";
-	private static String url = "jdbc:mysql://localhost:3306/sgtg"; 
-	private static String usuario = "root"; 
-	private static String senha = "jcuser";
+	private static String url = "jdbc:mysql://"+Conectar.host+":3306/sgtg"; 
+	private static String usuario = Conectar.usuario; 
+	private static String senha = Conectar.senha;
 	
 	public static void closeEntityManager() {
 		em.close();
@@ -25,10 +29,26 @@ public class EntityManagerLocal {
 	}
 
 	private static void openEntityManager() {
-		emf = Persistence.createEntityManagerFactory("GTGS");
+		emf = Persistence.createEntityManagerFactory("GTGS", getProperties());
 		em = emf.createEntityManager();
 	}
 
+	public static Map getProperties() {
+        System.err.println("-- GET PROPERTIES MySQL --");
+        HashMap hm = new HashMap();
+        hm.put("javax.persistence.jdbc.user", Conectar.usuario);
+        hm.put("javax.persistence.jdbc.password", Conectar.senha);
+        hm.put("javax.persistence.jdbc.url", "jdbc:mysql://" + Conectar.host + ":3306/sgtg");
+        hm.put("javax.persistence.jdbc.driver", "com.mysql.jdbc.Driver");
+
+        hm.put("javax.persistence.jdbc.autoReconnect", "true");
+        hm.put("eclipselink.logging.session", "false");
+        hm.put("eclipselink.logging.level", "OFF");
+        hm.put("eclipselink.weaving", "static");
+        hm.put("eclipselink.query-results-cache", "false");
+        return hm;
+    }
+	
 	public static EntityManager getEntityManager() {
 		if (emf == null || em == null) {
 			openEntityManager();

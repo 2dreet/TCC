@@ -8,6 +8,7 @@ import dao.PermissaoDao;
 import entidade.Permissao;
 import tela.Home;
 import tela.TelaLogin;
+import utilitario.Conectar;
 import utilitario.Login;
 import utilitario.ValidadorCrud;
 
@@ -15,6 +16,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		try {
+			Conectar.conectar();
 			ParametroDao.atualizaBanco();
 			TelaLogin tl = new TelaLogin();
 			tl.setVisible(true);

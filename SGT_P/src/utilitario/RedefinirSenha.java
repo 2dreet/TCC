@@ -15,6 +15,13 @@ import javax.swing.SwingConstants;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
+import utilitario.BordaSombreada;
+import utilitario.ParametroCrud;
+import utilitario.Parametros;
+import utilitario.UtilitarioImagem;
+import utilitario.UtilitarioTela;
+import utilitario.ValidadorCrud;
+
 import java.awt.Component;
 
 import javax.swing.border.BevelBorder;
@@ -33,6 +40,7 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.UIManager;
 
+import Telas.HomeJogador;
 import componente.Menssage;
 import dao.EntityManagerLocal;
 import dao.UsuarioDao;
@@ -86,7 +94,7 @@ public class RedefinirSenha extends JDialog {
 		header.add(lbHeader);
 
 		JButton btFechar = new JButton("");
-		btFechar.setIcon(new ImageIcon(RedefinirSenha.class
+		btFechar.setIcon(new ImageIcon(HomeJogador.class
 				.getResource("/imagem/cancelBlack.png")));
 		btFechar.setSize(30, 30);
 		btFechar.setLocation(header.getSize().width - 30, 0);
@@ -162,10 +170,10 @@ public class RedefinirSenha extends JDialog {
 					login.requestFocus();
 				} else if(senha.getText() == null || senha.getText().isEmpty()){
 					senha.requestFocus();
-				}else if(senha.getText().equals(login.getText())){
-					if(!senha.getText().equals(senhaOld)){
+				}else if(senha.getText().trim().equals(login.getText().trim())){
+					if(!senha.getText().trim().equals(senhaOld.trim())){
 						EntityManagerLocal.begin();
-						usuario.setSenha(login.getText());
+						usuario.setSenha(login.getText().trim());
 						EntityManagerLocal.merge(usuario);
 						EntityManagerLocal.commit();
 						EntityManagerLocal.clear();

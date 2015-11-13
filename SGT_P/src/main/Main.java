@@ -1,6 +1,7 @@
 package main;
 import java.net.InetAddress;
 
+import utilitario.Conectar;
 import utilitario.Login;
 import utilitario.RetornoCliente;
 import Telas.Home;
@@ -15,14 +16,11 @@ public class Main {
 
 	public static void main(String[] args) {
 		try {
-			Login.usuario = JogadorDao.getJogador(2).getUsuario();
-			Login.partida = PartidaDao.getPartida(3);
-			Home home = new Home();
-			home.setVisible(true);
-//			RetornoCliente.aberto();
-//			RetornoCliente.logado();
-//			TelaLogin tl = new TelaLogin();
-//			tl.setVisible(true);
+			Conectar.conectar();
+			RetornoCliente.aberto();
+			RetornoCliente.logado();
+			TelaLogin tl = new TelaLogin();
+			tl.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(0);

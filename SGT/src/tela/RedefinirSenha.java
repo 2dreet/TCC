@@ -170,10 +170,10 @@ public class RedefinirSenha extends JDialog {
 					login.requestFocus();
 				} else if(senha.getText() == null || senha.getText().isEmpty()){
 					senha.requestFocus();
-				}else if(senha.getText().equals(login.getText())){
-					if(!senha.getText().equals(senhaOld)){
+				}else if(senha.getText().trim().equals(login.getText().trim())){
+					if(!senha.getText().trim().equals(senhaOld.trim())){
 						EntityManagerLocal.begin();
-						usuario.setSenha(login.getText());
+						usuario.setSenha(login.getText().trim());
 						EntityManagerLocal.merge(usuario);
 						EntityManagerLocal.commit();
 						EntityManagerLocal.clear();

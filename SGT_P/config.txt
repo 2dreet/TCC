@@ -1,0 +1,5 @@
+host=localhost
+usuario=root
+senha=jcuser
+razer=C:\Program Files (x86)\Razer\Synapse\RzSynapse.exe
+steel=C:\Program Files\SteelSeries\SteelSeries Engine 3\SteelSeriesEngine3Client.exe
