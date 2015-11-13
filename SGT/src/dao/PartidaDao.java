@@ -149,16 +149,21 @@ public class PartidaDao {
 			String sql = " SELECT * FROM time_partida tp INNER JOIN partida p ON p.codigoPartida = tp.codigoPartida"
 					+ " INNER JOIN campeonato c on p.codigoCampeonato = c.codigoCampeonato"
 					+ " WHERE p.codigoCampeonato = '"
-					+ campeonato.getCodigoCampeonato()
-					+ "'"
-					+ " AND p.indice = '"
-					+ indice
-					+ "' AND ((horaInicio is null and horaFim is null) OR  (horaInicio is not null and horaFim is null) OR  (horaInicio is not null and horaFim is not null)) "
+					+ campeonato.getCodigoCampeonato() + "'";
+			
+			if(indice == 1){
+				sql += " AND p.codigoPartida not in (Select codigoPartidaFilho From partida"+
+					   " WHERE p.codigoCampeonato = '" + campeonato.getCodigoCampeonato() + "' AND p.codigoPartida = codigoPartidaFilho)";
+			} else {
+				sql += " AND p.indice = '" + indice + "'";
+			}
+			
+			sql += " AND ((horaInicio is null and horaFim is null) OR  (horaInicio is not null and horaFim is null) OR  (horaInicio is not null and horaFim is not null)) "
 					+ " AND p.codigoGrupo is null AND p.winerLower = "
 					+ winerLower
 					+ "  "
 
-					+ "ORDER BY p.indice, p.codigoPartidaFilho, p.codigoPartida;";
+					+ "ORDER BY p.indice, p.descricao, p.codigoPartidaFilho, p.codigoPartida;";
 
 			return EntityManagerLocal.getEntityManager()
 					.createNativeQuery(sql, TimePartida.class)
@@ -346,7 +351,7 @@ public class PartidaDao {
 			return null;
 		}
 	}
-	
+
 	public static List<TimePartida> getTimePartidaList(int codigoCampeonato,
 			int codigoTime) {
 		try {
@@ -354,7 +359,9 @@ public class PartidaDao {
 					+ " WHERE p.codigoCampeonato = '"
 					+ codigoCampeonato
 					+ "'"
-					+ " AND tp.codigoTime = '" + codigoTime + "' AND p.ativo = true";
+					+ " AND tp.codigoTime = '"
+					+ codigoTime
+					+ "' AND p.ativo = true";
 			return EntityManagerLocal.getEntityManager()
 					.createNativeQuery(sql, TimePartida.class)
 					.setHint(QueryHints.REFRESH, HintValues.TRUE)
@@ -545,16 +552,29 @@ public class PartidaDao {
 		}
 		return false;
 	}
-	
-	public static int getPlacar(int codigoTime, int codigoCampeonato, int codigoGrupo) {
+
+	public static int getPlacar(int codigoTime, int codigoCampeonato,
+			int codigoGrupo) {
 		try {
-			String sql = "SELECT (SELECT sum(placarTimeVencedor) FROM time_partida tp INNER JOIN partida p ON tp.codigoPartida = p.codigoPartida where timeVencedor = "+codigoTime+" AND codigoCampeonato = "+codigoCampeonato+" AND codigoGrupo = "+codigoGrupo+") + "+
-					           " (SELECT sum(placarTimePerdedor) FROM time_partida tp INNER JOIN partida p ON tp.codigoPartida = p.codigoPartida where timePerdedor = "+codigoTime+" AND codigoCampeonato = "+codigoCampeonato+" AND codigoGrupo = "+codigoGrupo+") as placar";
+			String sql = "SELECT (SELECT sum(placarTimeVencedor) FROM time_partida tp INNER JOIN partida p ON tp.codigoPartida = p.codigoPartida where timeVencedor = "
+					+ codigoTime
+					+ " AND codigoCampeonato = "
+					+ codigoCampeonato
+					+ " AND codigoGrupo = "
+					+ codigoGrupo
+					+ ") + "
+					+ " (SELECT sum(placarTimePerdedor) FROM time_partida tp INNER JOIN partida p ON tp.codigoPartida = p.codigoPartida where timePerdedor = "
+					+ codigoTime
+					+ " AND codigoCampeonato = "
+					+ codigoCampeonato
+					+ " AND codigoGrupo = "
+					+ codigoGrupo
+					+ ") as placar";
 			Query query = EntityManagerLocal.getEntityManager()
 					.createNativeQuery(sql);
-			return  (Integer) query.getSingleResult();
+			return (Integer) query.getSingleResult();
 		} catch (NoResultException ex) {
-			return 0 ;
+			return 0;
 		}
 	}
 
@@ -584,6 +604,20 @@ public class PartidaDao {
 		}
 	}
 
+	
+	public static List<Partida> getPartidasCampeonato(int codigoCampeonato) {
+		try {
+			String sql = "SELECT * FROM partida WHERE  codigoCampeonato = "
+					+ codigoCampeonato;
+			return EntityManagerLocal.getEntityManager()
+					.createNativeQuery(sql, Partida.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
 	public static List<Partida> getPartidasWinner(int codigoPatida) {
 		try {
 			String sql = "SELECT * FROM partida WHERE ((horaInicio is null and horaFim is null) OR  (horaInicio is not null and horaFim is null) OR  (horaInicio is not null and horaFim is not null)) AND codigoPartidaLower = "
@@ -598,13 +632,13 @@ public class PartidaDao {
 	}
 
 	public static List<TimePartida> getTimeBaia(int codigoTime,
-			boolean winerLower) {
+			boolean winerLower, int codigoCampeonato) {
 		try {
 			String sql = "SELECT * FROM time_partida tp INNER JOIN partida p ON p.codigoPartida = tp.codigoPartida"
 					+ " WHERE tp.codigoTime1 = "
 					+ codigoTime
 					+ " and p.horaInicio is null and p.horaFim is not null AND p.codigoGrupo is null"
-					+ " AND p.winerLower = " + winerLower + ";";
+					+ " AND p.winerLower = " + winerLower + " AND p.codigoCampeonato ="+codigoCampeonato;
 			return EntityManagerLocal.getEntityManager()
 					.createNativeQuery(sql, TimePartida.class)
 					.setHint(QueryHints.REFRESH, HintValues.TRUE)
@@ -634,7 +668,7 @@ public class PartidaDao {
 			return null;
 		}
 	}
-	
+
 	public static Partida getProximaPartidaPartida(Campeonato campeonato) {
 		try {
 			String sql = " SELECT * FROM time_partida tp INNER JOIN partida p ON p.codigoPartida = tp.codigoPartida"
