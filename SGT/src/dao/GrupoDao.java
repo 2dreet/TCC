@@ -25,7 +25,7 @@ public class GrupoDao {
 		try{
 			String sql = "SELECT * FROM time_grupo tg INNER JOIN grupo g"
 					+ "	ON tg.codigoGrupo = g.codigoGrupo "
-					+ " where g.codigoCampeonato = '"+codigoCampeonato+"' AND g.ativo = true AND g.codigoGrupo = '"+codigoGrupo+"' ORDER BY pontuacao DESC;";
+					+ " where g.codigoCampeonato = '"+codigoCampeonato+"' AND g.codigoGrupo = '"+codigoGrupo+"' ORDER BY pontuacao DESC;";
 			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, TimeGrupo.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
 		}catch(Exception e){
 			e.printStackTrace();

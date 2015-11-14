@@ -67,6 +67,7 @@ public class DadosGenericos {
 	}
 	
 	public static void main(String [] args){
+		Conectar.conectar();
 		gerarTimes();
 		gerarPc();
 	}

@@ -68,7 +68,8 @@ public class CampeonatoTimeDao {
 		try{
 			String sql = "SELECT * FROM campeonato_time ct INNER JOIN time t"
 					+ "	ON ct.codigoTime = t.codigoTime "
-					+ "  where ct.codigoCampeonato = '"+codigoCampeonato+"' AND t.ativo = true AND ct.codigoTime not in(SELECT codigoTime FROM time_grupo);";
+					+ "  where ct.codigoCampeonato = '"+codigoCampeonato+"' AND t.ativo = true AND ct.codigoTime not in("
+							+ "SELECT tg.codigoTime FROM time_grupo tg INNER JOIN grupo g ON g.codigoGrupo = tg.codigoGrupo where codigoCampeonato = "+codigoCampeonato+");";
 			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, Time.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -88,7 +89,8 @@ public class CampeonatoTimeDao {
 	
 	public static List<CampeonatoTime> getListaCampeonatoTimeCampSemGrupo(int codigoCampeonato){
 		try{
-			String sql = "SELECT * FROM campeonato_time where codigoCampeonato = '"+codigoCampeonato+"' AND codigoTime not in(SELECT codigoTime FROM time_grupo);";
+			String sql = "SELECT * FROM campeonato_time where codigoCampeonato = '"+codigoCampeonato+"' AND codigoTime not in("
+		+ "SELECT tg.codigoTime FROM time_grupo tg INNER JOIN grupo g ON g.codigoGrupo = tg.codigoGrupo where codigoCampeonato = "+codigoCampeonato+");";
 			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, CampeonatoTime.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -103,7 +105,7 @@ public class CampeonatoTimeDao {
 				sql += " AND codigoTime <> "+time.getTime().getCodigoTime();
 			}
 			sql +=" ORDER BY pontuacao";
-			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, CampeonatoTime.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
+			return EntityManagerLocal.getEntityManager().createNativeQuery(sql, TimeGrupo.class).setHint(QueryHints.REFRESH, HintValues.TRUE).getResultList();
 		}catch(Exception e){
 			e.printStackTrace();
 			return null;

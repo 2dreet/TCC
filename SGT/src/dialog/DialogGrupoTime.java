@@ -213,6 +213,8 @@ public class DialogGrupoTime {
 				"Selecionar os Times para a Faze de "+campeonatoSelecionado.getChave().getDescricao(),
 				ParametroCrud.getModoCrudDeletar(), meio);
 		
+		atualizarTabela();
+		
 		dialog.getContentPane().add(panel);
 		dialog.setVisible(true);
 	}

@@ -118,11 +118,11 @@ public class DialogJogadorPartida {
 		tcm.getColumn(0).setPreferredWidth(80);
 		tcm.getColumn(0).setMinWidth(80);
 		tcm.getColumn(0).setResizable(false);
-		tcm.getColumn(1).setPreferredWidth(458);
-		tcm.getColumn(1).setMinWidth(458);
+		tcm.getColumn(1).setPreferredWidth(300);
+		tcm.getColumn(1).setMinWidth(300);
 		tcm.getColumn(1).setResizable(false);
-		tcm.getColumn(2).setPreferredWidth(100);
-		tcm.getColumn(2).setMinWidth(100);
+		tcm.getColumn(2).setPreferredWidth(200);
+		tcm.getColumn(2).setMinWidth(200);
 		tcm.getColumn(2).setResizable(false);
 
 		UtilitarioTabela.pintarColona(UtilitarioTabela.getFundoHeaderPadrao(),

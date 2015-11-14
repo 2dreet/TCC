@@ -377,7 +377,7 @@ public class CrudCampeonato extends JPanel {
 									|| campeonatoSelecionado.getChave()
 											.getCodigoChave() == 1) {
 								// Winner Lower MATA MATA
-								if (listaTime.size() >= 2) {
+								if (listaTime.size() >= 4) {
 									if (GerenciadorPartida
 											.adicionarPatidas(campeonatoSelecionado)) {
 										Menssage.setMenssage(
@@ -396,7 +396,7 @@ public class CrudCampeonato extends JPanel {
 								} else {
 									Menssage.setMenssage(
 											"Times insuficientes",
-											"Deve adicionar no Minimo 2 Times para iniciar o campeonato!",
+											"Deve adicionar no Minimo 4 Times para iniciar o campeonato!",
 											ParametroCrud.getModoCrudDeletar(),
 											meio);
 								}
@@ -756,7 +756,9 @@ public class CrudCampeonato extends JPanel {
 		campeonatoSelecionado.setDataInicio(new Date());
 		EntityManagerLocal.merge(campeonatoSelecionado);
 		EntityManagerLocal.commit();
+		menuPai.campSelecionado = campeonatoSelecionado;
 		menuPai.liberarCrud();
+		menuPai.repaint();
 		menuPai.abreMenuPartida(campeonatoSelecionado);
 	}
 

@@ -837,6 +837,22 @@ public class TelaWinnerLower extends JFrame {
 					}
 					n++;
 				}
+			}else if(PartidaDao.getPartidasCampeonato(campeonatoSelecionado.getCodigoCampeonato()).size() == 1) {
+				
+				JPanel jpanelPai1 = getJPanel(10, k + (70 * n),
+						partida);
+					pm.setPanelPai1(jpanelPai1);
+					panel.add(jpanelPai1);
+				
+				
+				int x = jpanelPai1.getX() + jpanelPai1.getWidth() + 50;
+				int y = jpanelPai1.getY();
+				
+				pm.setPanelPai1(jpanelPai1);
+				
+				partidaFilhos.add(pm);
+				partidasAcima.add(pm);
+				
 			}
 			k = k + 50;
 		}

@@ -78,27 +78,27 @@ public class DialogLocalizarNovaChave {
 		
 		JLabel lbHeader = new JLabel("Nova Chave");
 		lbHeader.setHorizontalAlignment(SwingConstants.CENTER);
-		lbHeader.setBounds(2, 10, 660, 30);
+		lbHeader.setBounds(2, 10, 300, 30);
 		lbHeader.setFont(UtilitarioTela.getFont(14));
 		lbHeader.setForeground(UtilitarioTela.getFontColorCrud());
 		lbHeader.setBorder(new BordaSombreada(false, true, false, false));
 		panel.add(lbHeader);
 		
 		JPanel meio = new JPanel();
-		meio.setSize(660, 350);
+		meio.setSize(300, 150);
 		meio.setLayout(null);
 		meio.setLocation(2, 40);
 		meio.setBackground(new Color(224, 224, 224));
 		panel.add(meio);
 		
 		JLabel lbNome = new JLabel("Selecione a nova Chave");
-		lbNome.setBounds(10, 10, 55, 20);
+		lbNome.setBounds(10, 10, 250, 20);
 		lbNome.setFont(UtilitarioTela.getFont(14));
 		lbNome.setForeground(UtilitarioTela.getFontColorCrud());
 		meio.add(lbNome);
 		
 		JButton btSelecionar = new JButton("Mata - Mata");
-		btSelecionar.setBounds(120, meio.getHeight() - 35, 180, 25);
+		btSelecionar.setBounds(5, 50, 120, 25);
 		btSelecionar.setForeground(UtilitarioTela.getColorErro());
 		btSelecionar.setFont(UtilitarioTela.getFont(14));
 		btSelecionar.setFocusPainted(false);
@@ -110,11 +110,13 @@ public class DialogLocalizarNovaChave {
 				EntityManagerLocal.begin();
 				EntityManagerLocal.merge(campeonatoSelecionado);
 				EntityManagerLocal.commit();
+				dialog.dispose();
 			}
 		});
+		meio.add(btSelecionar);
 
 		JButton btLimparSelecao = new JButton("Winner Lower");
-		btLimparSelecao.setBounds(350, meio.getHeight() - 35, 180, 25);
+		btLimparSelecao.setBounds(130, 50, 150, 25);
 		btLimparSelecao.setFont(UtilitarioTela.getFont(14));
 		btLimparSelecao.setFocusPainted(false);
 		btLimparSelecao.setForeground(new Color(46, 49, 56));
@@ -126,8 +128,10 @@ public class DialogLocalizarNovaChave {
 				EntityManagerLocal.begin();
 				EntityManagerLocal.merge(campeonatoSelecionado);
 				EntityManagerLocal.commit();
+				dialog.dispose();
 			}
 		});
+		meio.add(btLimparSelecao);
 		
 		dialog.getContentPane().add(panel);
 		dialog.setVisible(true);

@@ -70,7 +70,7 @@ public class HomeJogador extends JPanel {
 		add(menuLateral);
 		menuLateral.setLayout(null);
 		
-		JLabel baner2 = new JLabel("News");
+		JLabel baner2 = new JLabel(Login.usuario.getNome());
 		baner2.setHorizontalAlignment(SwingConstants.CENTER);
 		baner2.setBounds(0, 0, 200, 30);
 		baner2.setBorder(null);

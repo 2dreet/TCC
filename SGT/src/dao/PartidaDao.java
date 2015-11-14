@@ -556,23 +556,28 @@ public class PartidaDao {
 	public static int getPlacar(int codigoTime, int codigoCampeonato,
 			int codigoGrupo) {
 		try {
-			String sql = "SELECT (SELECT sum(placarTimeVencedor) FROM time_partida tp INNER JOIN partida p ON tp.codigoPartida = p.codigoPartida where timeVencedor = "
+			String sql = "SELECT ifnull((SELECT sum(placarTimeVencedor) FROM time_partida tp INNER JOIN partida p ON tp.codigoPartida = p.codigoPartida where timeVencedor = "
 					+ codigoTime
 					+ " AND codigoCampeonato = "
 					+ codigoCampeonato
 					+ " AND codigoGrupo = "
 					+ codigoGrupo
-					+ ") + "
-					+ " (SELECT sum(placarTimePerdedor) FROM time_partida tp INNER JOIN partida p ON tp.codigoPartida = p.codigoPartida where timePerdedor = "
+					+ "),0) + "
+					+ " ifnull((SELECT sum(placarTimePerdedor) FROM time_partida tp INNER JOIN partida p ON tp.codigoPartida = p.codigoPartida where timePerdedor = "
 					+ codigoTime
 					+ " AND codigoCampeonato = "
 					+ codigoCampeonato
 					+ " AND codigoGrupo = "
 					+ codigoGrupo
-					+ ") as placar";
+					+ "),0) as placar";
 			Query query = EntityManagerLocal.getEntityManager()
 					.createNativeQuery(sql);
-			return (Integer) query.getSingleResult();
+			String valor = ""+ query.getSingleResult();
+			if(valor == null){
+				return 0 ;
+			}
+			return Integer.parseInt(valor);
+			
 		} catch (NoResultException ex) {
 			return 0;
 		}

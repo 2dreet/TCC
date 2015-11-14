@@ -71,7 +71,7 @@ public class TelaGrupo extends JFrame {
 	private Object[][] colunas = new Object[][] { new String[] { "Logo" },
 			new String[] { "Nome" }, new String[] { "Pontos" } };
 	private int posicaoInicialLower;
-	
+
 	public Partida partidaEmAndamento;
 
 	public TelaGrupo(Campeonato campeonato) {
@@ -110,30 +110,29 @@ public class TelaGrupo extends JFrame {
 						javax.swing.BoxLayout.LINE_AXIS));
 		panel = new JPanel();
 		panel.setLayout(null);
-		if(campeonato.getChave().getCodigoChave() == 3){
-			montarGrupos(campeonato);
-		}
-		panel.setPreferredSize(new java.awt.Dimension(maiorX + 300, maiorY + 300));
+
+		montarGrupos(campeonato);
+		panel.setPreferredSize(new java.awt.Dimension(maiorX + 300,
+				maiorY + 300));
 		scrollPane.setViewportView(panel);
 		repaint();
 	}
 
-	public void montarGrupos(Campeonato campeonato){
-		List<Grupo> grupos = GrupoDao.getListaGrupo(campeonato.getCodigoCampeonato());
+	public void montarGrupos(Campeonato campeonato) {
+		List<Grupo> grupos = GrupoDao.getListaGrupo(campeonato
+				.getCodigoCampeonato());
 		int l = 0;
 		int posicao = 50;
-		for(Grupo g :grupos){
-			
-			
+		for (Grupo g : grupos) {
+
 			JLabel label = new JLabel(g.getDescricao());
 			label.setHorizontalAlignment(SwingConstants.CENTER);
-			label.setSize(355,20);
+			label.setSize(355, 20);
 			label.setFont(UtilitarioTela.getFont(16));
 			label.setForeground(UtilitarioTela.getFontColorCrud());
-			label.setLocation(10 + (l*370), posicao);
+			label.setLocation(10 + (l * 370), posicao);
 			panel.add(label);
-			
-			
+
 			JTable tabela = new JTable();
 			tabela.setModel(UtilitarioTabela.getModelo(colunas));
 
@@ -150,7 +149,8 @@ public class TelaGrupo extends JFrame {
 			tcm.getColumn(2).setMinWidth(50);
 			tcm.getColumn(2).setResizable(false);
 
-			UtilitarioTabela.pintarColona(UtilitarioTabela.getFundoHeaderPadrao(),
+			UtilitarioTabela.pintarColona(
+					UtilitarioTabela.getFundoHeaderPadrao(),
 					UtilitarioTabela.getFontColotHeaderPadrao(), tcm, colunas);
 			UtilitarioTabela.pintarLinha(new Color(255, 153, 153), Color.black,
 					tabela);
@@ -161,38 +161,37 @@ public class TelaGrupo extends JFrame {
 			tabela.setFont(UtilitarioTela.getFont(14));
 			tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			JScrollPane scroll = new JScrollPane(tabela);
-			scroll.setBounds(10 + (l*370), posicao+20, 355, 230);
+			scroll.setBounds(10 + (l * 370), posicao + 20, 355, 230);
 			panel.add(scroll);
-			
-			List<TimeGrupo> listaTime = GrupoDao
-					.getListaTimeGrupo(campeonatoSelecionado
-							.getCodigoCampeonato(), g.getCodigoGrupo());
+
+			List<TimeGrupo> listaTime = GrupoDao.getListaTimeGrupo(
+					campeonatoSelecionado.getCodigoCampeonato(),
+					g.getCodigoGrupo());
 			DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
 			modelo.setNumRows(0);
 			if (listaTime != null) {
 				for (TimeGrupo t : listaTime) {
 					modelo.addRow(new Object[] {
-							new DadoComIcone("", UtilitarioImagem.converterImage(t
-									.getTime().getLogo())),
+							new DadoComIcone("", UtilitarioImagem
+									.converterImage(t.getTime().getLogo())),
 							String.valueOf(t.getTime().getDescricao()),
-							t.getPontuacao()});
+							t.getPontuacao() });
 
 				}
 			}
-			
-			if(l < 2){
-				l ++;
-			}else{
+
+			if (l < 2) {
+				l++;
+			} else {
 				posicao = posicao + 280;
-				l=0;
+				l = 0;
 			}
 		}
-		
-		
+
 	}
-	
+
 	public static void main(String[] args) {
-		Campeonato campeonato = CampeonatoDao.getCampeonato(2);
+		Campeonato campeonato = CampeonatoDao.getCampeonato(12);
 		TelaGrupo tm = new TelaGrupo(campeonato);
 		tm.atualizarTela(campeonato);
 		tm.setVisible(true);

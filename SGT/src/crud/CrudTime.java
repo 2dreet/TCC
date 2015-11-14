@@ -305,11 +305,10 @@ public class CrudTime extends JPanel {
 	public void setarCampos() {
 		txDescricao.setText(timeSelecionado.getDescricao());
 		if (timeSelecionado.getLogo() != null) {
-			logo = new File("logo/" + timeSelecionado.getLogo());
+			logo = null;
 			pLogo.removeAll();
-			txLogo.setText(logo.getAbsolutePath());
-			JLabel lbLogo = new JLabel(new ImageIcon("logo/"
-					+ timeSelecionado.getLogo()));
+			txLogo.setText("");
+			JLabel lbLogo = new JLabel(UtilitarioImagem.converterImage(timeSelecionado.getLogo()));
 			lbLogo.setBounds(2, 2, 50, 50);
 			pLogo.add(lbLogo);
 			pLogo.repaint();
@@ -767,7 +766,6 @@ public class CrudTime extends JPanel {
 				menssage = "Time Alterado com Sucesso!";
 				if (logo != null) {
 					try {
-						
 						timeSelecionado.setLogo(UtilitarioImagem.converterImageByte(logo));
 					} catch (Exception e) {
 						e.printStackTrace();
