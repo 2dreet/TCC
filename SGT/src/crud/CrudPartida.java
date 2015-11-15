@@ -500,6 +500,7 @@ public class CrudPartida extends JPanel {
 						Menssage.setMenssage("Partidas Geradas",
 								"As Partidas foram Geradas",
 								ParametroCrud.getModoCrudNovo(), meio);
+						btProximaPartida.setVisible(true);
 						return mostrarProximaPartida();
 					}
 				} else {

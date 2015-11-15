@@ -84,7 +84,7 @@ public class PartidaDao {
 			String sql = " SELECT * FROM partida p INNER join campeonato c on p.codigoCampeonato = c.codigoCampeonato"
 					+ " where p.codigoCampeonato = '"
 					+ codigoCampeonato
-					+ "' AND c.codigoChave = 2 AND p.winerLower = false "
+					+ "' AND c.codigoChave = 2 AND p.winerLower = false AND p.codigoGrupo is null "
 					+ " GROUP BY indice ORDER BY indice";
 			List<Partida> lista = EntityManagerLocal.getEntityManager()
 					.createNativeQuery(sql, Partida.class)
@@ -612,7 +612,7 @@ public class PartidaDao {
 	
 	public static List<Partida> getPartidasCampeonato(int codigoCampeonato) {
 		try {
-			String sql = "SELECT * FROM partida WHERE  codigoCampeonato = "
+			String sql = "SELECT * FROM partida WHERE codigoGrupo is null AND  codigoCampeonato = "
 					+ codigoCampeonato;
 			return EntityManagerLocal.getEntityManager()
 					.createNativeQuery(sql, Partida.class)
@@ -714,6 +714,26 @@ public class PartidaDao {
 		} catch (NoResultException ex) {
 			return null;
 		}
+	}
+	
+	public static boolean campeonatoGrupo(Campeonato campeonato){
+		try {
+			String sql = " SELECT * FROM partida "
+					+ " WHERE codigoCampeonato = '"
+					+ campeonato.getCodigoCampeonato()
+					+ "'"
+					+ " AND codigoGrupo is not null ";
+			List<Partida> p = EntityManagerLocal.getEntityManager()
+					.createNativeQuery(sql, Partida.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE)
+					.getResultList();
+			if(p!=null && p.size() > 0 ){
+				return true;
+			}
+		} catch (NoResultException ex) {
+			return false;
+		}
+		return false;
 	}
 
 }

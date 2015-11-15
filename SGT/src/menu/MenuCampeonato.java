@@ -349,6 +349,8 @@ public class MenuCampeonato extends JPanel {
 		
 		if(campeonatoFinalizado()){
 			btClassificacao.setEnabled(true);
+		
+			btDeletar.setEnabled(true);
 		} else{	
 			btClassificacao.setEnabled(false);
 		}

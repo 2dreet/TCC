@@ -59,7 +59,7 @@ public class TelaWinnerLower extends JFrame {
 	private JPanel panel;
 
 	private int posicaoInicialLower;
-	
+
 	public Partida partidaEmAndamento;
 
 	public TelaWinnerLower(Campeonato campeonato) {
@@ -98,37 +98,41 @@ public class TelaWinnerLower extends JFrame {
 
 		List<TimePartida> listaTimePartidaLower = PartidaDao
 				.getPartidasParaTabelaMataMata(campeonato, 1, true);
-		
+
 		List<TimePartida> listaTimeBaiaWinner = PartidaDao
 				.getPartidasParaTabelaMataMataSozinho(campeonato, 1, true);
 
-		
 		List<TimePartida> listaTimeBaia = PartidaDao
 				.getPartidasParaTabelaMataMataSozinho(campeonato, 1, true);
 
-		if(listaTimeBaiaWinner != null && listaTimeBaiaWinner.size() > 0){
-			for(TimePartida tp : listaTimeBaiaWinner){
-				listaTimePartida.add(PartidaDao.getTimePartida(campeonato.getCodigoCampeonato(), tp.getPartida().getPartidaFilho().getCodigoPartida()));
+		if (listaTimeBaiaWinner != null && listaTimeBaiaWinner.size() > 0) {
+			for (TimePartida tp : listaTimeBaiaWinner) {
+				listaTimePartida.add(PartidaDao.getTimePartida(
+						campeonato.getCodigoCampeonato(), tp.getPartida()
+								.getPartidaFilho().getCodigoPartida()));
 			}
 		}
-		
-		if(listaTimeBaia != null && listaTimeBaia.size() > 0){
-			for(TimePartida tp : listaTimeBaia){
-				listaTimePartidaLower.add(PartidaDao.getTimePartida(campeonato.getCodigoCampeonato(), tp.getPartida().getPartidaFilho().getCodigoPartida()));
+
+		if (listaTimeBaia != null && listaTimeBaia.size() > 0) {
+			for (TimePartida tp : listaTimeBaia) {
+				listaTimePartidaLower.add(PartidaDao.getTimePartida(
+						campeonato.getCodigoCampeonato(), tp.getPartida()
+								.getPartidaFilho().getCodigoPartida()));
 			}
 		}
-		
+
 		getContentPane().setLayout(
 				new javax.swing.BoxLayout(getContentPane(),
 						javax.swing.BoxLayout.LINE_AXIS));
 		panel = new JPanel();
 		panel.setLayout(null);
-		pojo = montarArvore(campeonato, listaTimePartida, pojo);
+		pojo = montarArvore(campeonato, listaTimePartida, pojo, 1);
 		posicaoInicialLower = maiorX + 130;
-		if(campeonato.getChave().getCodigoChave() == 2){
+		if (campeonato.getChave().getCodigoChave() == 2) {
 			montarArvoreLower(campeonato, listaTimePartidaLower, pojo);
 		}
-		panel.setPreferredSize(new java.awt.Dimension(maiorX + 300, maiorY + 300));
+		panel.setPreferredSize(new java.awt.Dimension(maiorX + 300,
+				maiorY + 300));
 		scrollPane.setViewportView(panel);
 		repaint();
 	}
@@ -151,64 +155,87 @@ public class TelaWinnerLower extends JFrame {
 		panel.setLayout(null);
 		panel.setBackground(UtilitarioTela.getFontColorCrud());
 
-		if(partida.getIndice() == 1){
+		if (partida.getIndice() == 1) {
 			maiorX = maiorX + x + 120;
 		}
-		
+
 		JPanel descricao = new JPanel();
 		descricao.setSize(200, 20);
-		descricao.setLocation(0,0);
+		descricao.setLocation(0, 0);
 		descricao.setLayout(null);
-		if(partidaEmAndamento == partida){
+		if (partidaEmAndamento == partida) {
 			descricao.setBackground(UtilitarioTela.getColorCrud(ParametroCrud
-				.getModoCrudNovo()));
-		}else{
-			if(isPartidaBaia(partida)){
+					.getModoCrudNovo()));
+		} else {
+			if (isPartidaBaia(partida)) {
 				descricao.setBackground(UtilitarioTela.getFontColorPadrao());
-			} else if(partida.getHoraFim()!=null){
-				descricao.setBackground(UtilitarioTela.getColorCrud(ParametroCrud
-					.getModoCrudAlterar()));
+			} else if (partida.getHoraFim() != null) {
+				descricao.setBackground(UtilitarioTela
+						.getColorCrud(ParametroCrud.getModoCrudAlterar()));
 			} else {
-				descricao.setBackground(new Color(102,178,255));
+				descricao.setBackground(new Color(102, 178, 255));
 			}
 		}
 		panel.add(descricao);
-		
+
 		String descricaoTxt = "";
-		
-		if(!partida.getWinerLower() && !PartidaDao.isPartidaFilho(partida.getCodigoPartida())){
+
+		if (!partida.getWinerLower()
+				&& !PartidaDao.isPartidaFilho(partida.getCodigoPartida())) {
 			descricaoTxt = partida.getDescricao();
-		} else if(!partida.getWinerLower() && PartidaDao.isPartidaFilho(partida.getCodigoPartida())){
-			List<Partida> pais = PartidaDao.getPartidasPai(partida.getCodigoPartida());
-			if(pais.size() == 2){
-				descricaoTxt = partida.getDescricao() + " x ( "+pais.get(0).getDescricao()+" x "+pais.get(1).getDescricao()+" )";
-			} else if(pais.size() == 1){
-				descricaoTxt = partida.getDescricao() + " x ( "+pais.get(0).getDescricao() +")";
+		} else if (!partida.getWinerLower()
+				&& PartidaDao.isPartidaFilho(partida.getCodigoPartida())) {
+			List<Partida> pais = PartidaDao.getPartidasPai(partida
+					.getCodigoPartida());
+			if (pais.size() == 2) {
+				descricaoTxt = partida.getDescricao() + " x ( "
+						+ pais.get(0).getDescricao() + " x "
+						+ pais.get(1).getDescricao() + " )";
+			} else if (pais.size() == 1) {
+				descricaoTxt = partida.getDescricao() + " x ( "
+						+ pais.get(0).getDescricao() + ")";
 			}
-		} else if(partida.getWinerLower() && !PartidaDao.isPartidaFilho(partida.getCodigoPartida())){
-			List<Partida> pais = PartidaDao.getPartidasWinner(partida.getCodigoPartida());
-			if(pais.size() == 2){
-				descricaoTxt = partida.getDescricao() + " x ( W: "+pais.get(0).getDescricao()+" x W: "+pais.get(1).getDescricao()+" )";
-			} else if(pais.size() == 1){
-				descricaoTxt = partida.getDescricao() + " x ( W: "+pais.get(0).getDescricao()+" )";
+		} else if (partida.getWinerLower()
+				&& !PartidaDao.isPartidaFilho(partida.getCodigoPartida())) {
+			List<Partida> pais = PartidaDao.getPartidasWinner(partida
+					.getCodigoPartida());
+			if (pais.size() == 2) {
+				descricaoTxt = partida.getDescricao() + " x ( W: "
+						+ pais.get(0).getDescricao() + " x W: "
+						+ pais.get(1).getDescricao() + " )";
+			} else if (pais.size() == 1) {
+				descricaoTxt = partida.getDescricao() + " x ( W: "
+						+ pais.get(0).getDescricao() + " )";
 			}
-		} else if(partida.getWinerLower() && PartidaDao.isPartidaFilho(partida.getCodigoPartida())){
-			List<Partida> pais = PartidaDao.getPartidasWinner(partida.getCodigoPartida());
-			List<Partida> paisNormal = PartidaDao.getPartidasPai(partida.getCodigoPartida());
-			if(pais.size() == 1 && paisNormal.size() == 2){
-				descricaoTxt = partida.getDescricao() + " x ( W: "+pais.get(0).getDescricao()+" x ("+paisNormal.get(0).getDescricao()+"x"+paisNormal.get(1).getDescricao()+") )";
-			} else if(pais.size() == 1 && paisNormal.size() == 1){
-				descricaoTxt = partida.getDescricao() + " x ( W: "+pais.get(0).getDescricao()+" x ("+paisNormal.get(0).getDescricao()+") )";
-			}else if(pais.size() == 2 && paisNormal.size() ==0){
-				descricaoTxt = partida.getDescricao() + " x ( W: "+pais.get(0).getDescricao()+" x W:"+pais.get(1).getDescricao()+" )";
+		} else if (partida.getWinerLower()
+				&& PartidaDao.isPartidaFilho(partida.getCodigoPartida())) {
+			List<Partida> pais = PartidaDao.getPartidasWinner(partida
+					.getCodigoPartida());
+			List<Partida> paisNormal = PartidaDao.getPartidasPai(partida
+					.getCodigoPartida());
+			if (pais.size() == 1 && paisNormal.size() == 2) {
+				descricaoTxt = partida.getDescricao() + " x ( W: "
+						+ pais.get(0).getDescricao() + " x ("
+						+ paisNormal.get(0).getDescricao() + "x"
+						+ paisNormal.get(1).getDescricao() + ") )";
+			} else if (pais.size() == 1 && paisNormal.size() == 1) {
+				descricaoTxt = partida.getDescricao() + " x ( W: "
+						+ pais.get(0).getDescricao() + " x ("
+						+ paisNormal.get(0).getDescricao() + ") )";
+			} else if (pais.size() == 2 && paisNormal.size() == 0) {
+				descricaoTxt = partida.getDescricao() + " x ( W: "
+						+ pais.get(0).getDescricao() + " x W:"
+						+ pais.get(1).getDescricao() + " )";
 			} else {
 				pais = PartidaDao.getPartidasPai(partida.getCodigoPartida());
-				if(pais.size() == 2){
-					descricaoTxt = partida.getDescricao() + " x ( "+pais.get(0).getDescricao()+" x "+pais.get(1).getDescricao()+" )";
+				if (pais.size() == 2) {
+					descricaoTxt = partida.getDescricao() + " x ( "
+							+ pais.get(0).getDescricao() + " x "
+							+ pais.get(1).getDescricao() + " )";
 				}
 			}
 		}
-		
+
 		JLabel lblDescricao = new JLabel(descricaoTxt);
 		lblDescricao.setSize(200, 20);
 		lblDescricao.setLocation(0, 0);
@@ -216,7 +243,6 @@ public class TelaWinnerLower extends JFrame {
 		lblDescricao.setForeground(UtilitarioTela.getFontColorCrud());
 		descricao.add(lblDescricao);
 
-		
 		JPanel partidaFinal = new JPanel();
 		partidaFinal.setSize(100, 30);
 		partidaFinal.setLocation(x + 220, y + 40);
@@ -306,7 +332,8 @@ public class TelaWinnerLower extends JFrame {
 			lb1.setLocation(5, 0);
 			panel.add(panelTimeBaia);
 			time1Add = true;
-		} else if (tp.getTime2() != null && isTimeBaia(tp.getTime2(), tp.getPartida())) {
+		} else if (tp.getTime2() != null
+				&& isTimeBaia(tp.getTime2(), tp.getPartida())) {
 			lb2.setForeground(UtilitarioTela.getFontColorCrud());
 			panelTimeBaia.setLocation(0, lb2.getY());
 			lb2.setLocation(5, 0);
@@ -327,16 +354,19 @@ public class TelaWinnerLower extends JFrame {
 	}
 
 	public boolean isTimeBaia(Time time, Partida partida) {
-		List<TimePartida> baia = PartidaDao.getTimeBaia(time.getCodigoTime(), partida.getWinerLower(), partida.getCampeonato().getCodigoCampeonato());
+		List<TimePartida> baia = PartidaDao.getTimeBaia(time.getCodigoTime(),
+				partida.getWinerLower(), partida.getCampeonato()
+						.getCodigoCampeonato());
 		if (baia != null && baia.size() > 0) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	public boolean isPartidaBaia(Partida partida) {
-		
-		if (!PartidaDao.isPartidaFilho(partida.getCodigoPartida()) && partida.getIndice() > 1) {
+
+		if (!PartidaDao.isPartidaFilho(partida.getCodigoPartida())
+				&& partida.getIndice() > 1) {
 			return true;
 		}
 		return false;
@@ -411,13 +441,13 @@ public class TelaWinnerLower extends JFrame {
 
 					if (jpanelPai1 == null && jpanelPai2 != null) {
 						List<Partida> listaAuxPai2 = PartidaDao
-								.getPartidasPaiLower(partidaPai1.getPartidaFilho()
-										.getCodigoPartida());
+								.getPartidasPaiLower(partidaPai1
+										.getPartidaFilho().getCodigoPartida());
 						if (listaAuxPai2.size() > 0) {
 							naoPassouAinda = true;
 						}
 						partidaPai1 = listaAuxPai.get(1);
-						partidaPai2= listaAuxPai.get(0);
+						partidaPai2 = listaAuxPai.get(0);
 						jpanelPai1 = null;
 						jpanelPai2 = null;
 						for (PojoMataMata pmAux : partidaFilhos) {
@@ -432,15 +462,16 @@ public class TelaWinnerLower extends JFrame {
 
 					if (jpanelPai2 == null) {
 						List<Partida> listaAuxPai2 = PartidaDao
-								.getPartidasPaiLower(partidaPai2.getPartidaFilho()
-										.getCodigoPartida());
-						if(PartidaDao.isPartidaFilho(partidaPai2.getCodigoPartida())){
+								.getPartidasPaiLower(partidaPai2
+										.getPartidaFilho().getCodigoPartida());
+						if (PartidaDao.isPartidaFilho(partidaPai2
+								.getCodigoPartida())) {
 							naoPassouAinda = true;
 						}
 					} else if (jpanelPai1 == null) {
 						List<Partida> listaAuxPai2 = PartidaDao
-								.getPartidasPaiLower(partidaPai1.getPartidaFilho()
-										.getCodigoPartida());
+								.getPartidasPaiLower(partidaPai1
+										.getPartidaFilho().getCodigoPartida());
 						if (listaAuxPai2.size() > 0) {
 							naoPassouAinda = true;
 						}
@@ -530,9 +561,8 @@ public class TelaWinnerLower extends JFrame {
 						// .println("--------------------------------------------------");
 						n++;
 					}
-					
 
-				} else if(listaAuxPai.size() > 0){
+				} else if (listaAuxPai.size() > 0) {
 					boolean naoPassouAinda = false;
 					partidaPai1 = listaAuxPai.get(0);
 					JPanel jpanelPai1 = null;
@@ -544,8 +574,8 @@ public class TelaWinnerLower extends JFrame {
 
 					if (jpanelPai1 == null) {
 						List<Partida> listaAuxPai2 = PartidaDao
-								.getPartidasPaiLower(partidaPai1.getPartidaFilho()
-										.getCodigoPartida());
+								.getPartidasPaiLower(partidaPai1
+										.getPartidaFilho().getCodigoPartida());
 						if (listaAuxPai2.size() > 0
 								&& listaAuxPai2.get(0).getPartidaFilho()
 										.getPartidaFilho() == null) {
@@ -564,7 +594,7 @@ public class TelaWinnerLower extends JFrame {
 							panel.add(jpanelPai1);
 							k = k + 10;
 						}
-						
+
 						int x = jpanelPai1.getX() + jpanelPai1.getWidth() + 50;
 						int y = jpanelPai1.getY();
 						JPanel filho = getJPanel(x, y,
@@ -594,7 +624,7 @@ public class TelaWinnerLower extends JFrame {
 						// System.out
 						// .println("--------------------------------------------------");
 					}
-				}  
+				}
 			}
 			k = k + 50;
 		}
@@ -605,7 +635,7 @@ public class TelaWinnerLower extends JFrame {
 	}
 
 	public List<PojoMataMata> montarArvore(Campeonato campeonato,
-			List<TimePartida> listaTimePartida, List<PojoMataMata> partidaFilhos) {
+			List<TimePartida> listaTimePartida, List<PojoMataMata> partidaFilhos, int coluna) {
 		int tamanhoPai = listaTimePartida.size();
 		Partida partida;
 		Partida partidaPai1;
@@ -626,6 +656,9 @@ public class TelaWinnerLower extends JFrame {
 					boolean naoPassouAinda = false;
 					partidaPai1 = listaAuxPai.get(0);
 					partidaPai2 = listaAuxPai.get(1);
+					if((!partidaPai1.getDescricao().contains("A") && coluna == 1) || (!partidaPai2.getDescricao().contains("A") && coluna == 1)){
+						naoPassouAinda = true;
+					}
 					JPanel jpanelPai1 = null;
 					JPanel jpanelPai2 = null;
 					for (PojoMataMata pmAux : partidaFilhos) {
@@ -653,7 +686,10 @@ public class TelaWinnerLower extends JFrame {
 						}
 					}
 
-					if (jpanelPai1 == null && jpanelPai2 != null && PartidaDao.isPartidaFilho(partidaPai1.getCodigoPartida())) {
+					if (jpanelPai1 == null
+							&& jpanelPai2 != null
+							&& PartidaDao.isPartidaFilho(partidaPai1
+									.getCodigoPartida())) {
 						List<Partida> listaAuxPai2 = PartidaDao
 								.getPartidasPai(partidaPai1.getPartidaFilho()
 										.getCodigoPartida());
@@ -680,9 +716,10 @@ public class TelaWinnerLower extends JFrame {
 										.getCodigoPartida());
 						if (listaAuxPai2.size() > 0
 								&& listaAuxPai2.get(0).getPartidaFilho()
-										.getPartidaFilho() == null && PartidaDao.getPartidasCampeonato(campeonatoSelecionado.getCodigoCampeonato()).size() > 3) {
+										.getPartidaFilho() == null
+								&& !listaAuxPai2.get(0).getDescricao()
+										.contains("A") && coluna > 1) {
 							naoPassouAinda = true;
-							
 						}
 					} else if (jpanelPai1 == null) {
 						List<Partida> listaAuxPai2 = PartidaDao
@@ -690,7 +727,9 @@ public class TelaWinnerLower extends JFrame {
 										.getCodigoPartida());
 						if (listaAuxPai2.size() > 0
 								&& listaAuxPai2.get(0).getPartidaFilho()
-										.getPartidaFilho() == null && PartidaDao.getPartidasCampeonato(campeonatoSelecionado.getCodigoCampeonato()).size() > 3) {
+										.getPartidaFilho() == null
+								&& !listaAuxPai2.get(0).getDescricao()
+										.contains("A") && coluna > 1) {
 							naoPassouAinda = true;
 						}
 					}
@@ -699,6 +738,15 @@ public class TelaWinnerLower extends JFrame {
 						pm.setFilho(partidaPai1.getPartidaFilho());
 						pm.setPartidaPai1(partidaPai1);
 						pm.setPartidaPai2(partidaPai2);
+
+						if (jpanelPai2 != null && jpanelPai1 == null
+								&& partidaPai1.getDescricao().contains("A") && coluna > 1) {
+							jpanelPai1 = jpanelPai2;
+							Partida partidaold = partidaPai1;
+							partidaPai1 = partidaPai2;
+							partidaPai2 = partidaold;
+							jpanelPai2 = null;
+						}
 
 						if (jpanelPai1 == null && jpanelPai2 == null) {
 							jpanelPai1 = getJPanel(10, k + (70 * n),
@@ -711,15 +759,15 @@ public class TelaWinnerLower extends JFrame {
 							pm.setPanelPai2(jpanelPai2);
 							panel.add(jpanelPai2);
 						} else if (jpanelPai2 == null) {
-							if (partidasAcima.size() > 1) {
+							
 								k = k + 50;
 								jpanelPai2 = getJPanel(jpanelPai1.getX(),
 										jpanelPai1.getY() + (110), partidaPai2);
 								pm.setPanelPai2(jpanelPai2);
 								panel.add(jpanelPai2);
-							}
+							 
 						} else if (jpanelPai1 == null) {
-							if (partidasAcima.size() > 1) {
+							if (partidasAcima.size() >= 1) {
 								k = k + 50;
 								jpanelPai1 = getJPanel(jpanelPai2.getX(),
 										jpanelPai2.getY() + (110), partidaPai1);
@@ -798,14 +846,14 @@ public class TelaWinnerLower extends JFrame {
 					if (!naoPassouAinda) {
 						pm.setFilho(partidaPai1.getPartidaFilho());
 						pm.setPartidaPai1(partidaPai1);
-						
+
 						if (jpanelPai1 == null) {
 							jpanelPai1 = getJPanel(10, k + (70 * n),
 									partidaPai1);
 							pm.setPanelPai1(jpanelPai1);
 							panel.add(jpanelPai1);
 						}
-						
+
 						int x = jpanelPai1.getX() + jpanelPai1.getWidth() + 50;
 						int y = jpanelPai1.getY();
 						JPanel filho = getJPanel(x, y,
@@ -837,27 +885,12 @@ public class TelaWinnerLower extends JFrame {
 					}
 					n++;
 				}
-			}else if(PartidaDao.getPartidasCampeonato(campeonatoSelecionado.getCodigoCampeonato()).size() == 1) {
-				
-				JPanel jpanelPai1 = getJPanel(10, k + (70 * n),
-						partida);
-					pm.setPanelPai1(jpanelPai1);
-					panel.add(jpanelPai1);
-				
-				
-				int x = jpanelPai1.getX() + jpanelPai1.getWidth() + 50;
-				int y = jpanelPai1.getY();
-				
-				pm.setPanelPai1(jpanelPai1);
-				
-				partidaFilhos.add(pm);
-				partidasAcima.add(pm);
-				
-			}
+			} 
 			k = k + 50;
 		}
 		if (continua) {
-			return montarArvore(campeonato, newLista, partidaFilhos);
+			coluna++;
+			return montarArvore(campeonato, newLista, partidaFilhos, coluna);
 		}
 		return partidaFilhos;
 	}
@@ -878,13 +911,13 @@ public class TelaWinnerLower extends JFrame {
 		panel.add(p2);
 
 		JPanel l = new JPanel();
-		if(p2.getY() < p1.getY()){
+		if (p2.getY() < p1.getY()) {
 			l.setSize(2, p1.getY() - p2.getY() + 2);
 			l.setLocation(p1.getX() + p1.getWidth(), yP2 + 55);
 			l.setLayout(null);
 			l.setBackground(UtilitarioTela.getFontColorPadrao());
-			panel.add(l);	
-		}else{
+			panel.add(l);
+		} else {
 			l.setSize(2, p2.getY() - p1.getY() + 2);
 			l.setLocation(p2.getX() + p2.getWidth(), yP1 + 55);
 			l.setLayout(null);
@@ -910,7 +943,7 @@ public class TelaWinnerLower extends JFrame {
 
 	public static void main(String[] args) {
 		Conectar.conectar();
-		Campeonato campeonato = CampeonatoDao.getCampeonato(11);
+		Campeonato campeonato = CampeonatoDao.getCampeonato(6);
 		TelaWinnerLower tm = new TelaWinnerLower(campeonato);
 		tm.atualizarTela(campeonato);
 		tm.setVisible(true);

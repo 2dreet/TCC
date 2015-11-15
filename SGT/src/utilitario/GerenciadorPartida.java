@@ -250,7 +250,7 @@ public class GerenciadorPartida {
 			i++;
 			iax = 0;
 			if (listaPartida.size() > 0) {
-				if (listaPartida.size() > 1) {
+				if (listaPartida.size() > 1 || indices.length > 1) {
 					listaPartida = criarPartidasMataMataFilhoLower(
 							listaPartida, indices[i], campeonato, i, indices);
 				}
@@ -490,7 +490,7 @@ public class GerenciadorPartida {
 							indicesWinner[indiceWinner]);
 			Partida partidaSobrando = null;
 			Partida partidaTimeSobrando = null;
-			if (lista.size() > 1) {
+			if (lista.size() > 1 || indicesWinner.length > 1) {
 
 				if (listaTime.size() < lista.size()) {
 					int a = 0;
