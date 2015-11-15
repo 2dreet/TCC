@@ -308,7 +308,8 @@ public class CrudTime extends JPanel {
 			logo = null;
 			pLogo.removeAll();
 			txLogo.setText("");
-			JLabel lbLogo = new JLabel(UtilitarioImagem.converterImage(timeSelecionado.getLogo()));
+			JLabel lbLogo = new JLabel(
+					UtilitarioImagem.converterImage(timeSelecionado.getLogo()));
 			lbLogo.setBounds(2, 2, 50, 50);
 			pLogo.add(lbLogo);
 			pLogo.repaint();
@@ -389,7 +390,8 @@ public class CrudTime extends JPanel {
 
 		int linha = 20;
 
-		JLabel lbLogoV = new JLabel(UtilitarioImagem.converterImage(timeSelecionado.getLogo()));
+		JLabel lbLogoV = new JLabel(
+				UtilitarioImagem.converterImage(timeSelecionado.getLogo()));
 		lbLogoV.setFont(UtilitarioTela.getFont(14));
 		lbLogoV.setForeground(UtilitarioTela.getFontColorCrud());
 		lbLogoV.setBounds(2, 2, 50, 50);
@@ -481,32 +483,36 @@ public class CrudTime extends JPanel {
 		scrollTitular.setBounds(1, 20, 646, 110);
 		pTitulares.add(scrollTitular);
 
-		JButton btDelTitular = new JButton("Remover Titular");
-		btDelTitular.setBounds(2, pTitulares.getHeight() - 25, 150, 25);
-		btDelTitular.setFont(UtilitarioTela.getFont(12));
-		btDelTitular.setFocusPainted(false);
-		btDelTitular.setBackground(UtilitarioTela.getFontColorPadrao());
-		btDelTitular.setIcon((new ImageIcon(CrudTime.class
-				.getResource("/imagem/diverssos/del.png"))));
-		btDelTitular.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if (tabelaTitular.getRowCount() > 0) {
-					if (tabelaTitular.getSelectedRow() > -1) {
-						removerJogadorTitular();
+		if (modoCrud != ParametroCrud.getModoCrudDeletar()) {
+
+			JButton btDelTitular = new JButton("Remover Titular");
+			btDelTitular.setBounds(2, pTitulares.getHeight() - 25, 150, 25);
+			btDelTitular.setFont(UtilitarioTela.getFont(12));
+			btDelTitular.setFocusPainted(false);
+			btDelTitular.setBackground(UtilitarioTela.getFontColorPadrao());
+			btDelTitular.setIcon((new ImageIcon(CrudTime.class
+					.getResource("/imagem/diverssos/del.png"))));
+			btDelTitular.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					if (tabelaTitular.getRowCount() > 0) {
+						if (tabelaTitular.getSelectedRow() > -1) {
+							removerJogadorTitular();
+						} else {
+							Menssage.setMenssage("Jogador não Selecionado",
+									"Deve selecionar um Jogador!",
+									ParametroCrud.getModoCrudDeletar(), meio);
+						}
 					} else {
 						Menssage.setMenssage("Jogador não Selecionado",
 								"Deve selecionar um Jogador!",
 								ParametroCrud.getModoCrudDeletar(), meio);
 					}
-				} else {
-					Menssage.setMenssage("Jogador não Selecionado",
-							"Deve selecionar um Jogador!",
-							ParametroCrud.getModoCrudDeletar(), meio);
 				}
-			}
-		});
-		pTitulares.add(btDelTitular);
-		meio.add(pTitulares);
+			});
+			pTitulares.add(btDelTitular);
+			meio.add(pTitulares);
+
+		}
 
 		// Reservas
 		linha += 167;
@@ -556,36 +562,37 @@ public class CrudTime extends JPanel {
 		tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scroll = new JScrollPane(tabela);
 		scroll.setBounds(1, 20, 646, 120);
-
-		JButton btAddTitular = new JButton("Adicionar Titular");
-		btAddTitular.setBounds(2, pReservas.getHeight() - 25, 150, 25);
-		btAddTitular.setFont(UtilitarioTela.getFont(12));
-		btAddTitular.setForeground(UtilitarioTela.getFontColorSelecao(false));
-		btAddTitular.setFocusPainted(false);
-		btAddTitular.setBackground(UtilitarioTela.getFontColorCrud());
-		btAddTitular.setIcon((new ImageIcon(CrudTime.class
-				.getResource("/imagem/diverssos/add.png"))));
-		btAddTitular.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if (tabela.getRowCount() > 0) {
-					if (tabela.getSelectedRow() > -1) {
-						adicionarJogadorTitular();
+		if (modoCrud != ParametroCrud.getModoCrudDeletar()) {
+			JButton btAddTitular = new JButton("Adicionar Titular");
+			btAddTitular.setBounds(2, pReservas.getHeight() - 25, 150, 25);
+			btAddTitular.setFont(UtilitarioTela.getFont(12));
+			btAddTitular.setForeground(UtilitarioTela
+					.getFontColorSelecao(false));
+			btAddTitular.setFocusPainted(false);
+			btAddTitular.setBackground(UtilitarioTela.getFontColorCrud());
+			btAddTitular.setIcon((new ImageIcon(CrudTime.class
+					.getResource("/imagem/diverssos/add.png"))));
+			btAddTitular.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					if (tabela.getRowCount() > 0) {
+						if (tabela.getSelectedRow() > -1) {
+							adicionarJogadorTitular();
+						} else {
+							Menssage.setMenssage("Jogador não Selecionado",
+									"Deve selecionar um Jogador!",
+									ParametroCrud.getModoCrudDeletar(), meio);
+						}
 					} else {
 						Menssage.setMenssage("Jogador não Selecionado",
 								"Deve selecionar um Jogador!",
 								ParametroCrud.getModoCrudDeletar(), meio);
 					}
-				} else {
-					Menssage.setMenssage("Jogador não Selecionado",
-							"Deve selecionar um Jogador!",
-							ParametroCrud.getModoCrudDeletar(), meio);
 				}
-			}
-		});
-		pReservas.add(btAddTitular);
-		pReservas.add(scroll);
-		meio.add(pReservas);
-
+			});
+			pReservas.add(btAddTitular);
+			pReservas.add(scroll);
+			meio.add(pReservas);
+		
 		if (modoCrud == ParametroCrud.getModoVisualizar()) {
 			JButton btAddJogador = new JButton("Adicionar Jogador");
 			btAddJogador.setBounds(162, pReservas.getHeight() - 25, 170, 25);
@@ -611,11 +618,14 @@ public class CrudTime extends JPanel {
 								modoCrud, meio);
 						confirmado = MenssageConfirmacao.isConfirmado();
 						if (confirmado) {
-							if(JogadorBanimentoDao.jogadorBanido(jogador.getCodigoJogador())){
-								Menssage.setMenssage("Jogador Banido",
+							if (JogadorBanimentoDao.jogadorBanido(jogador
+									.getCodigoJogador())) {
+								Menssage.setMenssage(
+										"Jogador Banido",
 										"Jogador Selecionado não pode ser adicionado no time. Pois o Jogador está Banido!",
-										ParametroCrud.getModoCrudDeletar(), meio);
-							}else{
+										ParametroCrud.getModoCrudDeletar(),
+										meio);
+							} else {
 								EntityManagerLocal.begin();
 								jogador.setTime(timeSelecionado);
 								EntityManagerLocal.merge(jogador);
@@ -681,6 +691,7 @@ public class CrudTime extends JPanel {
 				}
 			});
 		}
+		}
 		atualizarTabela();
 	}
 
@@ -708,8 +719,8 @@ public class CrudTime extends JPanel {
 	}
 
 	public void atualizarTabelaTitular() {
-		listaJogadorTitular = JogadorDao.getListaJogadorTitularTime(timeSelecionado
-				.getCodigoTime());
+		listaJogadorTitular = JogadorDao
+				.getListaJogadorTitularTime(timeSelecionado.getCodigoTime());
 		DefaultTableModel modelo = (DefaultTableModel) tabelaTitular.getModel();
 		modelo.setNumRows(0);
 		if (listaJogadorTitular != null) {
@@ -752,7 +763,7 @@ public class CrudTime extends JPanel {
 						time.setLogo(UtilitarioImagem.converterImageByte(logo));
 					} catch (Exception e) {
 						e.printStackTrace();
-						
+
 					}
 				}
 				time.setDescricao(txDescricao.getText());
@@ -766,10 +777,11 @@ public class CrudTime extends JPanel {
 				menssage = "Time Alterado com Sucesso!";
 				if (logo != null) {
 					try {
-						timeSelecionado.setLogo(UtilitarioImagem.converterImageByte(logo));
+						timeSelecionado.setLogo(UtilitarioImagem
+								.converterImageByte(logo));
 					} catch (Exception e) {
 						e.printStackTrace();
-						
+
 					}
 				}
 

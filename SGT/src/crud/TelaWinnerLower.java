@@ -232,6 +232,10 @@ public class TelaWinnerLower extends JFrame {
 					descricaoTxt = partida.getDescricao() + " x ( "
 							+ pais.get(0).getDescricao() + " x "
 							+ pais.get(1).getDescricao() + " )";
+				} else {
+					descricaoTxt = partida.getDescricao() + " x ( "
+							+ paisNormal.get(0).getDescricao() + " x  ( W: "
+							+ pais.get(0).getDescricao() + " ))";
 				}
 			}
 		}
@@ -943,7 +947,7 @@ public class TelaWinnerLower extends JFrame {
 
 	public static void main(String[] args) {
 		Conectar.conectar();
-		Campeonato campeonato = CampeonatoDao.getCampeonato(6);
+		Campeonato campeonato = CampeonatoDao.getCampeonato(1);
 		TelaWinnerLower tm = new TelaWinnerLower(campeonato);
 		tm.atualizarTela(campeonato);
 		tm.setVisible(true);

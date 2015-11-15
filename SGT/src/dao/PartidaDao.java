@@ -115,7 +115,6 @@ public class PartidaDao {
 					+ indice
 					+ "'"
 					+ " AND p.horaFim is null"
-					+ " AND c.codigoChave = 2 "
 					+ " AND p.winerLower = false ORDER BY p.indice, p.codigoPartidaFilho, p.codigoPartida";
 			return EntityManagerLocal.getEntityManager()
 					.createNativeQuery(sql, TimePartida.class)
